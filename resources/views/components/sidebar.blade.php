@@ -38,11 +38,21 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link active" href="{{ route('dashboard') }}">
+                        <a class="menu-link  @if(Route::currentRouteName() == 'dashboard') active @endif" href="{{ route('dashboard') }}">
                             <span class="menu-icon">
                                 <i class="ki-outline ki-abstract-13 fs-2"></i>
                             </span>
                             <span class="menu-title">Thống kê</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link @if(Route::currentRouteName() == 'customer') active @endif" href="{{ route('customer') }}">
+                            <span class="menu-icon">
+                                <i class="ki-outline ki-user fs-2"></i>
+                            </span>
+                            <span class="menu-title">Khách hàng</span>
                         </a>
                         <!--end:Menu link-->
                     </div>

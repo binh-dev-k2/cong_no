@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::
         namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
             Route::get('/', 'DashboardController@index')->name('dashboard');
-          
+            Route::get('/customer', 'CustomerController@index')->name('customer');
         });
 
 Auth::routes();

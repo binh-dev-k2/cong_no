@@ -17,11 +17,11 @@ class CreateCardTable extends Migration
             $table->id();
             $table->string('card_number');
             $table->string('account_number');
-            $table->unsignedBigInteger('bank_id');
-            $table->unsignedBigInteger('customer_id');
+            $table->string('bank_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->string('note')->nullable();
-            $table->dateTime('date_due')->nullable();
-            $table->dateTime('date_return')->nullable();
+            $table->date('date_due')->nullable();
+            $table->date('date_return')->nullable();
             $table->string('card_name');
             $table->string('login_info');
             $table->timestamps();

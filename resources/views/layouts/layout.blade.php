@@ -88,11 +88,13 @@ License: For each use you must have a valid license purchased only from above li
 		@yield('modals')
 		<!--end::Modals-->
 		<!--begin::Javascript-->
-		<script>var hostUrl = "assets/";</script>
+		<script>
+        var hostUrl = "assets/";
+        </script>
 		<!--begin::Global Javascript Bundle(mandatory for all pages)-->
 		<script src="assets/plugins/global/plugins.bundle.js"></script>
 		<script src="assets/js/scripts.bundle.js"></script>
-		
+
         @yield('script')
 		<!--end::Custom Javascript-->
 		<!--end::Javascript-->

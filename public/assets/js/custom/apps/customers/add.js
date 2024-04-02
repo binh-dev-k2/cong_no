@@ -22,50 +22,15 @@ var KTModalCustomersAdd = (function () {
                         name: {
                             validators: {
                                 notEmpty: {
-                                    message: "Customer name is required",
+                                    message: "Tên khách hàng không được để trống",
                                 },
                             },
                         },
-                        email: {
+                        phone: {
                             validators: {
                                 notEmpty: {
-                                    message: "Customer email is required",
+                                    message: "Số điện thoại không được để trống",
                                 },
-                            },
-                        },
-                        "first-name": {
-                            validators: {
-                                notEmpty: { message: "First name is required" },
-                            },
-                        },
-                        "last-name": {
-                            validators: {
-                                notEmpty: { message: "Last name is required" },
-                            },
-                        },
-                        country: {
-                            validators: {
-                                notEmpty: { message: "Country is required" },
-                            },
-                        },
-                        address1: {
-                            validators: {
-                                notEmpty: { message: "Address 1 is required" },
-                            },
-                        },
-                        city: {
-                            validators: {
-                                notEmpty: { message: "City is required" },
-                            },
-                        },
-                        state: {
-                            validators: {
-                                notEmpty: { message: "State is required" },
-                            },
-                        },
-                        postcode: {
-                            validators: {
-                                notEmpty: { message: "Postcode is required" },
                             },
                         },
                     },
@@ -78,58 +43,13 @@ var KTModalCustomersAdd = (function () {
                         }),
                     },
                 })),
-                $(form.querySelector('[name="country"]')).on(
-                    "change",
-                    function () {
-                        formValidate.revalidateField("country");
-                    }
-                ),
                 btn_submit.addEventListener("click", function (e) {
-                    e.preventDefault(),
+                    e.preventDefault();
                         formValidate &&
-                            formValidate.validate().then(function (e) {
-                                console.log("validated!"),
-                                    "Valid" == e
-                                        ? (btn_submit.setAttribute(
-                                              "data-kt-indicator",
-                                              "on"
-                                          ),
-                                          (btn_submit.disabled = !0),
-                                          setTimeout(function () {
-                                              btn_submit.removeAttribute(
-                                                  "data-kt-indicator"
-                                              ),
-                                                  Swal.fire({
-                                                      text: "Form has been successfully submitted!",
-                                                      icon: "success",
-                                                      buttonsStyling: !1,
-                                                      confirmButtonText:
-                                                          "Ok, got it!",
-                                                      customClass: {
-                                                          confirmButton:
-                                                              "btn btn-primary",
-                                                      },
-                                                  }).then(function (e) {
-                                                      e.isConfirmed &&
-                                                          (i.hide(),
-                                                          (btn_submit.disabled =
-                                                              !1),
-                                                          (window.location =
-                                                              form.getAttribute(
-                                                                  "data-kt-redirect"
-                                                              )));
-                                                  });
-                                          }, 2e3))
-                                        : Swal.fire({
-                                              text: "Sorry, looks like there are some errors detected, please try again.",
-                                              icon: "error",
-                                              buttonsStyling: !1,
-                                              confirmButtonText: "Ok, got it!",
-                                              customClass: {
-                                                  confirmButton:
-                                                      "btn btn-primary",
-                                              },
-                                          });
+                            formValidate.validate().then((status) => {
+                                if (status === "Valid") {
+
+                                }
                             });
                 }),
                 btn_cancel.addEventListener("click", function (t) {
@@ -193,7 +113,7 @@ var KTModalCustomersAdd = (function () {
                         "input[name='card_number_find']"
                     ).value;
                     console.log(card_number);
-                    if (card_number.length == 0) {
+                    if (card_number.length === 0) {
                         Swal.fire({
                             text: "Bạn chưa điền số tài khoản hoặc số thẻ ngân hàng.",
                             icon: "error",
@@ -217,9 +137,8 @@ var KTModalCustomersAdd = (function () {
                             })
                             .then(function (response) {
                                 let card = response.data.data.card;
-                                let find_result = list_card.find(e => e.bank_id == card.bank_id);
-                                console.log(find_result);
-                                if(find_result == undefined) {
+                                let find_result = list_card.find(e => e.card_number === card.card_number);
+                                if(find_result === undefined) {
                                     list_card.push(card);
                                     document.dispatchEvent(changeListCardEvent);
                                 }else {

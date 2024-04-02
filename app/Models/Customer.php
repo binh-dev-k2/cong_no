@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Bank extends Model
+class Customer extends Model
 {
     use HasFactory;
-     protected $table = "banks";
+
+    protected $table = "customer";
 
     protected $guarded = [];
-    public function cards() : hasMany
+
+    public function getCard(): HasMany
     {
-        return $this->hasMany(Card::class, 'bank_id', 'code');
+        return $this->hasMany(Card::class, 'customer_id', 'id');
     }
 }

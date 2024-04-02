@@ -160,7 +160,7 @@ var FormAddCard = (function () {
                                     btn_submit_add_new_card.removeAttribute(
                                         "data-kt-indicator"
                                     );
-                                    
+
                                 })
                                 .catch((err) => {
                                     btn_submit_add_new_card.removeAttribute(
@@ -191,6 +191,7 @@ var FormAddCard = (function () {
                                             },
                                         });
                                     } else {
+
                                         Swal.fire({
                                             text: err.message,
                                             icon: "error",

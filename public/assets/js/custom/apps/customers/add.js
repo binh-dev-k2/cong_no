@@ -112,7 +112,6 @@ var KTModalCustomersAdd = (function () {
                     let card_number = form.querySelector(
                         "input[name='card_number_find']"
                     ).value;
-                    console.log(card_number);
                     if (card_number.length === 0) {
                         Swal.fire({
                             text: "Bạn chưa điền số tài khoản hoặc số thẻ ngân hàng.",
@@ -124,7 +123,6 @@ var KTModalCustomersAdd = (function () {
                             },
                         });
                     } else {
-                        console.log(find_card_route);
                         const headers = {
                             Authorization: `Bearer ${token}`,
                         };

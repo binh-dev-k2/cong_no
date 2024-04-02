@@ -136,6 +136,7 @@ var KTModalCustomersAdd = (function () {
                             .then(function (response) {
                                 let card = response.data.data.card;
                                 let find_result = list_card.find(e => e.card_number === card.card_number);
+                                console.log(list_card);
                                 if(find_result === undefined) {
                                     list_card.push(card);
                                     document.dispatchEvent(changeListCardEvent);
@@ -187,10 +188,10 @@ var KTModalCustomersAdd = (function () {
                             element.card_number;
                         card_clone.querySelector(".btn_delete").setAttribute('card_id', element.card_number);
                         card_clone.querySelector(".btn_delete").addEventListener("click", function() {
-                            let list_card_new = list_card.filter((item) => {
-                                item.code != element.card_number;
-                            })
-                            list_card = list_card_new;
+                            let index = list_card.findIndex(item => item.card_number === element.card_number);
+                            if (index !== -1) {
+                                list_card.splice(index, 1);
+                            }
                             document.dispatchEvent(changeListCardEvent);
                         });
                         $("#list_card_added").append(card_clone);

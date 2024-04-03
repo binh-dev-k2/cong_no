@@ -27,4 +27,6 @@ class CardController extends Controller
         $data = $this->card_service->save($request);
         return $this->successJsonResponse(200, $data);
     }
+
+
 }

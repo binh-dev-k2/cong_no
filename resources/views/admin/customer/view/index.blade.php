@@ -240,6 +240,7 @@
         var token = "{{ session('authToken') }}";
         var find_card_route = "{{ route('api.card_find') }}"
         var store_card_route = "{{ route('api.card_store') }}"
+        var add_customer_route = "{{ route('api.customer_store') }}"
         var list_card = [];
         var changeListCardEvent = new CustomEvent('changeListCardEvent', {});
     </script>

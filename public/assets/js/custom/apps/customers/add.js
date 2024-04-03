@@ -1,4 +1,6 @@
 "use strict";
+
+
 var KTModalCustomersAdd = (function () {
     var btn_submit, btn_cancel, btn_close, formValidate, form, i, btn_card_add;
     return {
@@ -18,97 +20,100 @@ var KTModalCustomersAdd = (function () {
                     "#kt_modal_add_customer_close"
                 )),
                 (formValidate = FormValidation.formValidation(form, {
-                    fields: {
-                        name: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Tên khách hàng không được để trống",
-                                },
-                            },
-                        },
-                        phone: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Số điện thoại không được để trống",
-                                },
+                fields: {
+                    name: {
+                        validators: {
+                            notEmpty: {
+                                message: "Tên khách hàng không được để trống",
                             },
                         },
                     },
-                    plugins: {
-                        trigger: new FormValidation.plugins.Trigger(),
-                        bootstrap: new FormValidation.plugins.Bootstrap5({
-                            rowSelector: ".fv-row",
-                            eleInvalidClass: "",
-                            eleValidClass: "",
-                        }),
+                    phone: {
+                        validators: {
+                            notEmpty: {
+                                message: "Số điện thoại không được để trống",
+                            },
+                            phone: {
+                                country: "VN",
+                                message: "Số điện thoại không hợp lệ",
+                            },
+                            numberic:{
+                                message: "Số điện thoại không hợp lệ",
+                            }
+                        },
                     },
-                })),
-                btn_submit.addEventListener("click", function (e) {
-                    e.preventDefault();
-                        formValidate &&
-                            formValidate.validate().then((status) => {
-                                if (status === "Valid") {
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap: new FormValidation.plugins.Bootstrap5({
+                        rowSelector: ".fv-row",
+                        eleInvalidClass: "",
+                        eleValidClass: "",
+                    }),
+                },
+            })
+            //         .on("core.form.valid", function() {
+            //         const listContainer = document.getElementById("list_card_added");
+            //         console.log(listContainer.childElementCount);
+            //         if (listContainer.childElementCount === 0) {
+            //         formValidate.updateFieldStatus("kt_modal_add_customer_billing_info", "Invalid", "notEmpty");
+            //     } else {
+            //         formValidate.updateFieldStatus("kt_modal_add_customer_billing_info", "Valid", "notEmpty");
+            //     }
+            // })
+            ),
 
-                                }
-                            });
-                }),
-                btn_cancel.addEventListener("click", function (t) {
-                    t.preventDefault(),
-                        Swal.fire({
-                            text: "Are you sure you would like to cancel?",
-                            icon: "warning",
-                            showCancelButton: !0,
-                            buttonsStyling: !1,
-                            confirmButtonText: "Yes, cancel it!",
-                            cancelButtonText: "No, return",
-                            customClass: {
-                                confirmButton: "btn btn-primary",
-                                cancelButton: "btn btn-active-light",
-                            },
-                        }).then(function (t) {
-                            t.value
-                                ? (form.reset(), i.hide())
-                                : "cancel" === t.dismiss &&
-                                  Swal.fire({
-                                      text: "Your form has not been cancelled!.",
-                                      icon: "error",
-                                      buttonsStyling: !1,
-                                      confirmButtonText: "Ok, got it!",
-                                      customClass: {
-                                          confirmButton: "btn btn-primary",
-                                      },
-                                  });
-                        });
-                }),
-                btn_close.addEventListener("click", function (t) {
-                    t.preventDefault(),
-                        Swal.fire({
-                            text: "Are you sure you would like to cancel?",
-                            icon: "warning",
-                            showCancelButton: !0,
-                            buttonsStyling: !1,
-                            confirmButtonText: "Yes, cancel it!",
-                            cancelButtonText: "No, return",
-                            customClass: {
-                                confirmButton: "btn btn-primary",
-                                cancelButton: "btn btn-active-light",
-                            },
-                        }).then(function (t) {
-                            t.value
-                                ? (form.reset(), i.hide())
-                                : "cancel" === t.dismiss &&
-                                  Swal.fire({
-                                      text: "Your form has not been cancelled!.",
-                                      icon: "error",
-                                      buttonsStyling: !1,
-                                      confirmButtonText: "Ok, got it!",
-                                      customClass: {
-                                          confirmButton: "btn btn-primary",
-                                      },
-                                  });
-                        });
-                }),
-                btn_card_add.addEventListener("click", function () {
+
+            btn_cancel.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        text: "Are you sure you would like to cancel?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Yes, cancel it!",
+                        cancelButtonText: "No, return",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-active-light",
+                        },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            i.hide();
+                            form.reset();
+                            list_card = [];
+                            document.dispatchEvent(changeListCardEvent);
+                        }
+
+                    });
+                });
+
+            btn_close.addEventListener("click", function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    text: "Are you sure you would like to cancel?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes, cancel it!",
+                    cancelButtonText: "No, return",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light",
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        i.hide();
+                        form.reset();
+                        list_card = [];
+                        document.dispatchEvent(changeListCardEvent);
+                    }
+                });
+            });
+
+
+
+            btn_card_add.addEventListener("click", function () {
                     let card_number = form.querySelector(
                         "input[name='card_number_find']"
                     ).value;
@@ -136,7 +141,6 @@ var KTModalCustomersAdd = (function () {
                             .then(function (response) {
                                 let card = response.data.data.card;
                                 let find_result = list_card.find(e => e.card_number === card.card_number);
-                                console.log(list_card);
                                 if(find_result === undefined) {
                                     list_card.push(card);
                                     document.dispatchEvent(changeListCardEvent);
@@ -153,7 +157,6 @@ var KTModalCustomersAdd = (function () {
                                 }
                             })
                             .catch(function (error) {
-                                // Xử lý lỗi ở đây
                                 const errorMessage = [
                                     "",
                                     "Thẻ không tồn tại trong hệ thống, hãy thêm mới",
@@ -196,7 +199,101 @@ var KTModalCustomersAdd = (function () {
                         });
                         $("#list_card_added").append(card_clone);
                     }
+                }),
+                btn_submit.addEventListener("click", function (e) {
+                e.preventDefault();
+                formValidate && formValidate.validate().then((status) => {
+                    if (status === "Valid") {
+                        let data = {
+                            customer_name: form.querySelector("input[name='name']").value,
+                            customer_phone: form.querySelector("input[name='phone']").value,
+                            card_added_number: list_card.map((e) => e.card_number),
+                        };
+                        console.log(list_card, data);
+                        const headers = {
+                            Authorization: `Bearer ${token}`,
+                        };
+                        axios
+                            .post(add_customer_route, data, {
+                                headers: headers,
+                            })
+                            .then((response)=>
+                                Swal.fire({
+                                    text: "Thêm khách hàng thành công",
+                                    icon: "success",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    },
+                                }).then( function (result) {
+                                    if (result.isConfirmed) {
+                                        i.hide();
+                                        form.reset();
+                                        list_card = [];
+                                        document.dispatchEvent(changeListCardEvent);
+
+                                    }
+
+                                })
+                            )
+                            .catch((err) =>{
+                                let messages = err.response.data;
+                                let errorMessage = [];
+                                if (err.response.status === 422) {
+                                    for (const key in messages) {
+                                        if (
+                                            Object.hasOwnProperty.call(
+                                                messages,
+                                                key
+                                            )
+                                        ) {
+                                            const element = messages[key];
+                                            errorMessage.push(element);
+                                        }
+                                    }
+                                    Swal.fire({
+                                        text: errorMessage.join(", "),
+                                        icon: "error",
+                                        buttonsStyling: !1,
+                                        confirmButtonText: "Quay lại ",
+                                        customClass: {
+                                            confirmButton:
+                                                "btn btn-primary",
+                                        },
+                                    });
+                                } else{
+                                    for (const key in messages) {
+                                        if (Object.hasOwnProperty.call(messages, key)) {
+                                            const element = messages[key];
+                                            errorMessage.push(element);
+                                        }
+                                    }
+                                    Swal.fire({
+                                        text: errorMessage.join("<br>"),
+                                        icon: "error",
+                                        buttonsStyling: !1,
+                                        confirmButtonText: "Quay lại ",
+                                        customClass: {
+                                            confirmButton: "btn btn-primary",
+                                        },
+                                    });
+                                }
+
+                        });
+                    } else {
+                        Swal.fire({
+                            text: "Tên khách hàng và số điện thoại không được để trống",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Quay lại ",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            },
+                        });
+                    }
                 });
+            });
         },
     };
 })();

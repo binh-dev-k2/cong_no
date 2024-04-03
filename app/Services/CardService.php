@@ -50,5 +50,14 @@ class CardService
         ];
     }
 
+    function assignCustomer($card_number_list, $customer_id)
+    {
+        for ($i = 0; $i < count($card_number_list); $i++) {
+            $card = Card::where('card_number', $card_number_list[$i])->first();
+            $card->customer_id = $customer_id;
+            $card->save();
+        }
+    }
+
 
 }

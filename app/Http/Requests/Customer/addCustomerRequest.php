@@ -7,13 +7,17 @@ use Illuminate\Foundation\Http\FormRequest;
 class addCustomerRequest extends FormRequest
 {
     /**
+     * @var mixed
+     */
+
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +29,7 @@ class addCustomerRequest extends FormRequest
     {
         return [
             'customer_name' => 'required|string',
-            'customer_phone' => 'required|numeric|unique:customers,customer_phone',
+            'customer_phone' => 'required|numeric|digits:16|unique:customer,phone',
         ];
     }
 
@@ -37,6 +41,7 @@ class addCustomerRequest extends FormRequest
             'customer_phone.required' => 'Số điện thoại khách hàng là bắt buộc.',
             'customer_phone.numeric' => 'Số điện thoại khách hàng phải là số.',
             'customer_phone.unique' => 'Số điện thoại khách hàng đã tồn tại trong hệ thống.',
+            'customer_phone.digits' => 'Số điện thoại khách hàng phải gồm 10 chữ số.',
         ];
     }
 }

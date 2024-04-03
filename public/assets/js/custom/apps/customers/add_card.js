@@ -1,6 +1,6 @@
 "use strict";
 var FormAddCard = (function () {
-    var collapse_add_new_card, i, form, btn_submit_add_new_card, formValidate;
+    var collapse_add_new_card, form, btn_submit_add_new_card, formValidate;
     var optionFormat = function (item) {
         if (!item.id) {
             return item.text;
@@ -23,9 +23,6 @@ var FormAddCard = (function () {
 
     return {
         init: function () {
-            (i = new bootstrap.Modal(
-                document.querySelector("#kt_modal_add_customer")
-            )),
                 (form = document.querySelector("#kt_modal_add_customer_form")),
                 (collapse_add_new_card = form.querySelector(
                     "#collapse_add_new_card"
@@ -156,19 +153,38 @@ var FormAddCard = (function () {
                                 .post(store_card_route, data, {
                                     headers: headers,
                                 })
-                                .then((res) => {
+
+                                .then((response) => {
                                     btn_submit_add_new_card.removeAttribute(
                                         "data-kt-indicator"
                                     );
+                                    console.log(response);
+                                    if (response.status === 200) {
+                                        Swal.fire({
+                                            text: response.data.message,
+                                            icon: "success",
+                                            buttonsStyling: !1,
+                                            confirmButtonText: "Thành công!",
+                                            customClass: {
+                                                confirmButton:
+                                                    "btn btn-primary",
+                                            },
+                                        }).then(function (result) {
+                                            if (result.isConfirmed) {
+                                                form.reset();
+                                                $("#collapse_add_new_card").collapse('hide');
 
+                                            }
+                                        });
+                                    }
                                 })
                                 .catch((err) => {
                                     btn_submit_add_new_card.removeAttribute(
                                         "data-kt-indicator"
                                     );
-                                    if (err.response.status == 422) {
-                                        let messages = err.response.data.errors;
-                                        let errorMessage = [];
+                                    let messages = err.response.data;
+                                    let errorMessage = [];
+                                    if (err.response.status === 422) {
                                         for (const key in messages) {
                                             if (
                                                 Object.hasOwnProperty.call(
@@ -191,20 +207,45 @@ var FormAddCard = (function () {
                                             },
                                         });
                                     } else {
-
+                                        for (const key in messages) {
+                                            if (Object.hasOwnProperty.call(messages, key)) {
+                                                const element = messages[key];
+                                                errorMessage.push(element);
+                                            }
+                                        }
                                         Swal.fire({
-                                            text: err.message,
+                                            text: errorMessage.join("<br>"),
                                             icon: "error",
                                             buttonsStyling: !1,
                                             confirmButtonText: "Quay lại ",
                                             customClass: {
-                                                confirmButton:
-                                                    "btn btn-primary",
+                                                confirmButton: "btn btn-primary",
                                             },
                                         });
                                     }
                                 });
                         }
+                        else {
+                            btn_submit_add_new_card.removeAttribute(
+                                "data-kt-indicator"
+                            );
+                            swal.fire({
+                                text: "Dữ liệu không hợp lệ, vui lòng kiểm tra lại",
+                                icon: "error",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Quay lại",
+                                customClass: {
+                                    confirmButton: "btn btn-primary",
+                                },
+
+                            }).then(function (result) {
+                                if (result.isConfirmed) {
+                                    KTUtil.scrollTop();
+
+                                }
+                            });
+                        }
+
                     });
                 });
             // add input datepicker

@@ -29,7 +29,7 @@ class addCustomerRequest extends FormRequest
     {
         return [
             'customer_name' => 'required|string',
-            'customer_phone' => 'required|numeric|digits:16|unique:customer,phone',
+            'customer_phone' => 'required|numeric|digits:10|unique:customer,phone',
         ];
     }
 

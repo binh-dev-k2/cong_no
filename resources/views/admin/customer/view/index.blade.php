@@ -64,22 +64,6 @@
                 <!--begin::Separartor-->
                 <div class="bullet bg-secondary h-35px w-1px mx-5"></div>
                 <!--end::Separartor-->
-                <!--begin::Wrapper-->
-                <div class="d-flex align-items-center">
-                    <!--begin::Label-->
-                    <span class="fs-7 fw-bold text-gray-700 flex-shrink-0 pe-4 d-none d-md-block">Sắp xếp:</span>
-                    <!--end::Label-->
-                    <!--begin::Select-->
-                    <select class="form-select form-select-sm w-md-125px form-select-solid" data-control="select2"
-                        data-placeholder="Latest" data-hide-search="true">
-                        <option value=""></option>
-                        <option value="1" selected="selected">Latest</option>
-                        <option value="2">In Progress</option>
-                        <option value="3">Done</option>
-                    </select>
-                    <!--end::Select-->
-                </div>
-                <!--end::Wrapper-->
             </div>
             <!--end::Action group-->
         </div>
@@ -151,57 +135,16 @@
                                             data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                     </div>
                                 </th>
-                                <th class="min-w-125px">Customer Name</th>
-                                <th class="min-w-125px">Email</th>
-                                <th class="min-w-125px">Company</th>
-                                <th class="min-w-125px">Payment Method</th>
-                                <th class="min-w-125px">Created Date</th>
-                                <th class="text-end min-w-70px">Actions</th>
+                                <th class="min-w-125px">Họ và tên</th>
+                                <th class="min-w-125px">Số điện thoại</th>
+                                <th class="min-w-125px">Thẻ ngân hàng</th>
+                                <th class="min-w-125px">Ngày đến hạn</th>
+                                <th class="min-w-125px">Ngày trả thẻ</th>
+<!--                                <th class="text-end min-w-70px">Hành động</th>-->
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
-                            <tr>
-                                <td>
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="1" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <a href="apps/customers/view.html" class="text-gray-800 text-hover-primary mb-1">Emma
-                                        Smith</a>
-                                </td>
-                                <td>
-                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">smith@kpmg.com</a>
-                                </td>
-                                <td>-</td>
-                                <td data-filter="mastercard">
-                                    <img src="assets/media/svg/card-logos/mastercard.svg" class="w-35px me-3"
-                                        alt="" />**** 4118
-                                </td>
-                                <td>14 Dec 2020, 8:43 pm</td>
-                                <td class="text-end">
-                                    <a href="#"
-                                        class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-                                        <i class="ki-duotone ki-down fs-5 ms-1"></i></a>
-                                    <!--begin::Menu-->
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                        data-kt-menu="true">
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="apps/customers/view.html" class="menu-link px-3">View</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3"
-                                                data-kt-customer-table-filter="delete_row">Delete</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                    </div>
-                                    <!--end::Menu-->
-                                </td>
-                            </tr>
+
 
                         </tbody>
                     </table>
@@ -241,6 +184,8 @@
         var find_card_route = "{{ route('api.card_find') }}"
         var store_card_route = "{{ route('api.card_store') }}"
         var add_customer_route = "{{ route('api.customer_store') }}"
+        var showAllCustomers = "{{ route('api.customer_showAll') }}";
+        console.log(showAllCustomers)
         var list_card = [];
         var changeListCardEvent = new CustomEvent('changeListCardEvent', {});
     </script>
@@ -253,6 +198,7 @@
     <script src="assets/js/custom/apps/customers/list/list.js"></script>
     <script src="assets/js/custom/apps/customers/add.js"></script>
     <script src="assets/js/custom/apps/customers/add_card.js"></script>
+    <script src="assets/js/custom/apps/customers/show.js"></script>
 @endsection
 @section('modals')
     @include('admin.customer.modal.add')

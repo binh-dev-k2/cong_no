@@ -18,4 +18,9 @@ class Customer extends Model
     {
         return $this->hasMany(Card::class, 'customer_id', 'id');
     }
+
+    public function getDebt(): HasMany
+    {
+        return $this->hasMany(Debt::class, 'customer_id', 'id');
+    }
 }

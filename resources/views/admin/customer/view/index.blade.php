@@ -140,7 +140,8 @@
                                 <th class="min-w-125px">Thẻ ngân hàng</th>
                                 <th class="min-w-125px">Ngày đến hạn</th>
                                 <th class="min-w-125px">Ngày trả thẻ</th>
-<!--                                <th class="text-end min-w-70px">Hành động</th>-->
+                                <th class="text-end min-w-70px">Hành động</th>
+
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">

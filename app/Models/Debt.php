@@ -17,7 +17,7 @@ class Debt extends Model
 
     public function card()
     {
-        return $this->belongsTo(Card::class, 'card_id', 'id');
+        return $this->belongsTo(Card::class, 'card_number', 'card_number');
     }
 
 }

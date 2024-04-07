@@ -11,4 +11,9 @@ class DebtController extends Controller
     public function __construct(DebtService $debt_service) {
         $this->debt_service = $debt_service;
     }
+
+    public function getAllDebt(){
+        $data = $this->debt_service->getAllDebt();
+        return response()->json($data);
+    }
 }

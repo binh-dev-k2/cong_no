@@ -22,4 +22,9 @@ class Card extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
+
+    public function getCardHistory()
+    {
+        return $this->hasMany(CardHistory::class, 'id', 'card_id');
+    }
 }

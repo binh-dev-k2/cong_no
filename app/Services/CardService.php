@@ -21,13 +21,11 @@ class CardService
                     'card' => $card
                 ];
             }
-            // Thẻ đã được khách hàng khác sử dụng
             return [
                 'success' => false,
                 'code' => 2,
             ];
         } else {
-            // Không tìm thấy thẻ trong hệ thống
             return [
                 'success' => false,
                 'code' => 1,
@@ -59,5 +57,12 @@ class CardService
         }
     }
 
-
+    function unassignCustomer($id)
+    {
+        $cards = Card::where('customer_id', $id)->get();
+        foreach ($cards as $card) {
+            $card->customer_id = null;
+            $card->save();
+        }
+    }
 }

@@ -1,0 +1,15 @@
+#kt_debit_table tbody .enable-row {
+    text-decoration: none;
+    /* Mặc định không gạch ngang */
+}
+
+#kt_debit_table .disable-row {
+    text-decoration: line-through;
+    /* Gạch ngang khi checkbox được chọn */
+}
+
+#btn-left {
+    float: left;
+    margin-right: 10px;
+    /* Điều chỉnh khoảng cách giữa nút và các phần tử khác nếu cần */
+}

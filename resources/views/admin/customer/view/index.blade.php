@@ -140,7 +140,8 @@
                                 <th class="min-w-125px">Thẻ ngân hàng</th>
                                 <th class="min-w-125px">Ngày đến hạn</th>
                                 <th class="min-w-125px">Ngày trả thẻ</th>
-                                <th class="text-end min-w-70px">Hành động</th>
+                                <th class="text-center min-w-70px">Nhắc nhở</th>
+                                <th class="min-w-70px">Hành động</th>
 
                             </tr>
                         </thead>
@@ -186,8 +187,8 @@
         var store_card_route = "{{ route('api.card_store') }}"
         var add_customer_route = "{{ route('api.customer_store') }}"
         var showAllCustomers = "{{ route('api.customer_showAll') }}";
-        console.log(showAllCustomers)
         var list_card = [];
+        var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
         var changeListCardEvent = new CustomEvent('changeListCardEvent', {});
     </script>
     <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -199,7 +200,6 @@
     <script src="assets/js/custom/apps/customers/list/list.js"></script>
     <script src="assets/js/custom/apps/customers/add.js"></script>
     <script src="assets/js/custom/apps/customers/add_card.js"></script>
-    <script src="assets/js/custom/apps/customers/show.js"></script>
 @endsection
 @section('modals')
     @include('admin.customer.modal.add')

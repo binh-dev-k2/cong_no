@@ -182,9 +182,10 @@ var FormAddCard = (function () {
                                     btn_submit_add_new_card.removeAttribute(
                                         "data-kt-indicator"
                                     );
-                                    let messages = err.response.data;
-                                    let errorMessage = [];
+
                                     if (err.response.status === 422) {
+                                        let messages = err.response.data.errors;
+                                        let errorMessage = [];
                                         for (const key in messages) {
                                             if (
                                                 Object.hasOwnProperty.call(
@@ -207,14 +208,8 @@ var FormAddCard = (function () {
                                             },
                                         });
                                     } else {
-                                        for (const key in messages) {
-                                            if (Object.hasOwnProperty.call(messages, key)) {
-                                                const element = messages[key];
-                                                errorMessage.push(element);
-                                            }
-                                        }
                                         Swal.fire({
-                                            text: errorMessage.join("<br>"),
+                                            text: err.message,
                                             icon: "error",
                                             buttonsStyling: !1,
                                             confirmButtonText: "Quay lại ",

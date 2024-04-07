@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class addCustomerRequest extends FormRequest
 {
@@ -29,7 +30,13 @@ class addCustomerRequest extends FormRequest
     {
         return [
             'customer_name' => 'required|string',
-            'customer_phone' => 'required|numeric|digits:10|unique:customer,phone',
+            'customer_phone' => [
+                'required',
+                'numeric',
+                'digits:10',
+                'unique:customer,phone',
+                Rule::startsWith('0'),
+            ],
         ];
     }
 
@@ -42,6 +49,7 @@ class addCustomerRequest extends FormRequest
             'customer_phone.numeric' => 'Số điện thoại khách hàng phải là số.',
             'customer_phone.unique' => 'Số điện thoại khách hàng đã tồn tại trong hệ thống.',
             'customer_phone.digits' => 'Số điện thoại khách hàng phải gồm 10 chữ số.',
+            'customer_phone.startsWith' => 'Số điện thoại khách hàng phải bắt đầu bằng số 0.',
         ];
     }
 }

@@ -11,6 +11,7 @@ class CustomerService
     function ShowAll()
     {
         $customers = Customer::join('card', 'customer.id', '=', 'card.customer_id')
+//            ->join('card_remind_history', 'card.id', '=', 'card_remind_history.card_id')
             ->select('customer.name', 'customer.phone', 'card.bank_id', 'card.card_number', 'card.date_due', 'card.date_return')
             ->orderBy('customer.phone', 'desc')
             ->get();
@@ -27,6 +28,7 @@ class CustomerService
                     'card_number' => $customer->card_number,
                     'date_due' => $customer->date_due,
                     'date_return' => $customer->date_return,
+                    'remind_date' => $customer->datetime ?: null,
                 ];
             } else {
                 if ($customer->card_number !== $groupedData[$phone]['card_number']) {
@@ -55,6 +57,21 @@ class CustomerService
             'name' => $request->customer_name,
             'phone' => $request->customer_phone
         ]);
+        if ($result) {
+            return [
+                'success' => true,
+                'data' => $result
+            ];
+        }
+        return [
+            'success' => false,
+            'code' => 1
+        ];
+    }
+
+    function delete($phone)
+    {
+        $result = Customer::where('phone', $phone)->delete();
         if ($result) {
             return [
                 'success' => true,

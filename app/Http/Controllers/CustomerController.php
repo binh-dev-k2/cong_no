@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Customer\addCustomerRequest;
 use App\Models\Bank;
+use App\Models\Customer;
 use App\Services\CardService;
 use App\Services\CustomerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+
 class CustomerController extends Controller
 {
     /**
@@ -23,12 +26,29 @@ class CustomerController extends Controller
         $this->card_service = $card_service;
     }
 
-    public function index()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function index(): View
     {
         $list_bank = Bank::all();
 
         return view('admin.customer.view.index', compact('list_bank'));
     }
+
+    /**
+     * @SWG\Get(
+     *     path="/api/customer",
+     *     summary="Get all customer",
+     *     tags={"Customer"},
+     *     description="Get all customer",
+     *     @SWG\Response(response=200, description="successful operation")
+     *     @SWG\Response(response=404, description="Not Found")
+     * @return \Illuminate\Http\Response
+     */
 
     public function showAllCustomer() : JsonResponse
     {
@@ -52,6 +72,16 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    /** @SWG\Post(
+
+*     path="/api/customer/store",
+     *     summary="Add new customer",
+     *     tags={"Customer"},
+     *     description="Add new customer",
+     *     @SWG\Header(header="Authorization", type="string", description="Authorization)
+     *    @SWG\Parameter(
+     * ) */
     public function store(addCustomerRequest $request, CardService $card_service)
     {
         $data = $this->customer_service->save($request);
@@ -70,7 +100,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+       //
     }
 
     /**
@@ -99,11 +129,17 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $phone
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $phone , CardService $cardService): JsonResponse
     {
-        //
+        $customer = Customer::where('phone', $phone)->first();
+        if ($customer) {
+            $id = $customer->id;
+                $cardService->unassignCustomer($id);
+        }
+        $data = $this->customer_service->delete($phone);
+        return $this->successJsonResponse(200, $data);
     }
 }

@@ -39,7 +39,12 @@ var KTModalCustomersAdd = (function () {
                             },
                             numberic:{
                                 message: "Số điện thoại không hợp lệ",
-                            }
+                            },
+                            stringLength: {
+                                min: 10,
+                                max: 10,
+                                message: "Số điện thoại phải đủ 10 số",
+                            },
                         },
                     },
                 },
@@ -232,15 +237,15 @@ var KTModalCustomersAdd = (function () {
                                         form.reset();
                                         list_card = [];
                                         document.dispatchEvent(changeListCardEvent);
-
+                                        window.location.reload();
                                     }
 
                                 })
                             )
                             .catch((err) =>{
-                                let messages = err.response.data;
-                                let errorMessage = [];
                                 if (err.response.status === 422) {
+                                    let messages = err.response.data.errors;
+                                    let errorMessage = [];
                                     for (const key in messages) {
                                         if (
                                             Object.hasOwnProperty.call(
@@ -262,15 +267,9 @@ var KTModalCustomersAdd = (function () {
                                                 "btn btn-primary",
                                         },
                                     });
-                                } else{
-                                    for (const key in messages) {
-                                        if (Object.hasOwnProperty.call(messages, key)) {
-                                            const element = messages[key];
-                                            errorMessage.push(element);
-                                        }
-                                    }
+                                } else {
                                     Swal.fire({
-                                        text: errorMessage.join("<br>"),
+                                        text: err.message,
                                         icon: "error",
                                         buttonsStyling: !1,
                                         confirmButtonText: "Quay lại ",

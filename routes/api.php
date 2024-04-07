@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\CardController;
+use App\Http\Controllers\api\DebtController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('card/store', [CardController::class, 'store'])->name('api.card_store');
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer_store');
     Route::get('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');
+    Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');
+    Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
+    Route::post('customer/debt/showAll/', [DebtController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');
 
 
 });
 Route::get('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');
-
+Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
+Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');

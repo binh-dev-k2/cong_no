@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Services\DebtService;
+use Illuminate\Http\Request;
 
 class DebtController extends Controller
 {
@@ -12,8 +13,8 @@ class DebtController extends Controller
         $this->debt_service = $debt_service;
     }
 
-    public function getAllDebt(){
-        $data = $this->debt_service->getAllDebt();
+    public function getAllDebt(Request $request){
+        $data = $this->debt_service->filterDataTable($request->all());
         return response()->json($data);
     }
 }

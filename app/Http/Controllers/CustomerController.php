@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Customer\addCustomerRequest;
+use App\Http\Requests\Customer\AddCustomerRequest;
+use App\Http\Requests\CustomerRequest;
 use App\Models\Bank;
 use App\Models\Customer;
 use App\Services\CardService;
@@ -18,12 +19,13 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $customer_service;
-    public $card_service;
+    public $customerService;
+    public $cardService;
 
-    public function __construct(CustomerService $customer_service, CardService $card_service) {
-        $this->customer_service = $customer_service;
-        $this->card_service = $card_service;
+    public function __construct(CustomerService $customerService, CardService $cardService)
+    {
+        $this->customerService = $customerService;
+        $this->cardService = $cardService;
     }
 
     /**
@@ -34,9 +36,9 @@ class CustomerController extends Controller
 
     public function index(): View
     {
-        $list_bank = Bank::all();
+        $banks = Bank::get();
 
-        return view('admin.customer.view.index', compact('list_bank'));
+        return view('customer.index', compact('banks'));
     }
 
     /**
@@ -50,10 +52,10 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function showAllCustomer() : JsonResponse
+    public function showAllCustomer(Request $request): JsonResponse
     {
-        $data = $this->customer_service->showAll();
-        return $this->successJsonResponse('200',$data);
+        $data = $this->customerService->showAll($request->all());
+        return response()->json($data);
     }
 
     /**
@@ -75,19 +77,21 @@ class CustomerController extends Controller
 
     /** @SWG\Post(
 
-*     path="/api/customer/store",
+     *     path="/api/customer/store",
      *     summary="Add new customer",
      *     tags={"Customer"},
      *     description="Add new customer",
      *     @SWG\Header(header="Authorization", type="string", description="Authorization)
      *    @SWG\Parameter(
      * ) */
-    public function store(addCustomerRequest $request, CardService $card_service)
+    public function store(AddCustomerRequest $request, CardService $cardService)
     {
-        $data = $this->customer_service->save($request);
+        $data = $request->validated();
+
+        $data = $this->customerService->save($request);
         $card_number_list = $request->card_added_number;
         if ($data['success']) {
-            $card_service->assignCustomer($card_number_list, $data['data']->id);
+            $cardService->assignCustomer($card_number_list, $data['data']->id);
         }
         return $this->successJsonResponse(200, $data);
     }
@@ -100,7 +104,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-       //
+        //
     }
 
     /**
@@ -132,14 +136,14 @@ class CustomerController extends Controller
      * @param int $phone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $phone , CardService $cardService): JsonResponse
+    public function destroy(int $phone, CardService $cardService): JsonResponse
     {
         $customer = Customer::where('phone', $phone)->first();
         if ($customer) {
             $id = $customer->id;
-                $cardService->unassignCustomer($id);
+            $cardService->unassignCustomer($id);
         }
-        $data = $this->customer_service->delete($phone);
+        $data = $this->customerService->delete($phone);
         return $this->successJsonResponse(200, $data);
     }
 }

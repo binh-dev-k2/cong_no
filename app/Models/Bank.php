@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Bank extends Model
 {
     use HasFactory;
-     protected $table = "banks";
+
+    protected $table = "banks";
 
     protected $guarded = [];
-    public function cards() : hasMany
+
+    public function cards(): HasMany
     {
-        return $this->hasMany(Card::class, 'bank_id', 'code');
+        return $this->hasMany(Card::class, 'bank_code', 'code');
     }
 }

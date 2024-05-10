@@ -10,11 +10,11 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $table = "customer";
+    protected $table = "customers";
 
     protected $guarded = [];
 
-    public function getCard(): HasMany
+    public function cards(): HasMany
     {
         return $this->hasMany(Card::class, 'customer_id', 'id');
     }

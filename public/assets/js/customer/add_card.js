@@ -23,7 +23,7 @@ var FormAddCard = (function () {
 
     return {
         init: function () {
-                (form = document.querySelector("#kt_modal_add_customer_form")),
+            (form = document.querySelector("#kt_modal_add_customer_form")),
                 (collapse_add_new_card = form.querySelector(
                     "#collapse_add_new_card"
                 )),
@@ -47,7 +47,7 @@ var FormAddCard = (function () {
                                 },
                             },
                         },
-                        card_name: {
+                        account_name: {
                             validators: {
                                 notEmpty: {
                                     message: "Chủ tài khoản là bắt buộc",
@@ -95,7 +95,7 @@ var FormAddCard = (function () {
                                 },
                             },
                         },
-                        bank_id: {
+                        bank_code: {
                             validators: {
                                 notEmpty: {
                                     message: "ID Ngân hàng là bắt buộc",
@@ -121,8 +121,8 @@ var FormAddCard = (function () {
                     formValidate.validate().then((status) => {
                         if (status === "Valid") {
                             let data = {
-                                card_name: form.querySelector(
-                                    'input[name="card_name"]'
+                                account_name: form.querySelector(
+                                    'input[name="account_name"]'
                                 ).value,
                                 card_number: form.querySelector(
                                     'input[name="card_number"]'
@@ -139,8 +139,8 @@ var FormAddCard = (function () {
                                 login_info: form.querySelector(
                                     'input[name="login_info"]'
                                 ).value,
-                                bank_id: form.querySelector(
-                                    'select[name="bank_id"]'
+                                bank_code: form.querySelector(
+                                    'select[name="bank_code"]'
                                 ).value,
                                 note: form.querySelector(
                                     'textarea[name="note"]'
@@ -150,7 +150,7 @@ var FormAddCard = (function () {
                                 Authorization: `Bearer ${token}`,
                             };
                             axios
-                                .post(store_card_route, data, {
+                                .post(routes.storeCard, data, {
                                     headers: headers,
                                 })
 

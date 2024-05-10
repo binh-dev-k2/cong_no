@@ -16,8 +16,8 @@ class CreateBusinessMoneyTable extends Migration
         Schema::create('business_money', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('business_id');
-            $table->integer('money');
-            $table->string('note')->nullable();
+            $table->bigInteger('money');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

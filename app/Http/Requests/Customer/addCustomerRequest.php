@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests\Customer;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class addCustomerRequest extends FormRequest
+class AddCustomerRequest extends FormRequest
 {
     /**
      * @var mixed
@@ -35,7 +36,14 @@ class addCustomerRequest extends FormRequest
                 'numeric',
                 'digits:10',
                 'unique:customer,phone',
-                Rule::startsWith('0'),
+                function ($attribute, $value, $fail) {
+                    if (strlen($value) != 10) {
+                        $fail('Số điện thoại khách hàng phải gồm 10 chữ số.');
+                    }
+                    if (substr($value, 0, 1) != '0') {
+                        $fail('Số điện thoại khách hàng phải bắt đầu bằng số 0.');
+                    }
+                },
             ],
         ];
     }
@@ -48,8 +56,12 @@ class addCustomerRequest extends FormRequest
             'customer_phone.required' => 'Số điện thoại khách hàng là bắt buộc.',
             'customer_phone.numeric' => 'Số điện thoại khách hàng phải là số.',
             'customer_phone.unique' => 'Số điện thoại khách hàng đã tồn tại trong hệ thống.',
-            'customer_phone.digits' => 'Số điện thoại khách hàng phải gồm 10 chữ số.',
-            'customer_phone.startsWith' => 'Số điện thoại khách hàng phải bắt đầu bằng số 0.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+        throw new HttpResponseException(jsonResponse(1, $errors));
     }
 }

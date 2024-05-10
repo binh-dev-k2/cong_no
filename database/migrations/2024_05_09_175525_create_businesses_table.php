@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDebtTable extends Migration
+class CreateBusinessesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateDebtTable extends Migration
      */
     public function up()
     {
-        Schema::create('debt', function (Blueprint $table) {
+        Schema::create('businesses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->string('card_number');
-            $table->integer('fee_percent');
-            $table->integer('total_money');
+            $table->smallInteger('fee_percent');
+            $table->bigInteger('total_money');
             $table->enum('formality', ['R', 'D']);
-            $table->integer('maturity_fee');
-            $table->integer('withdrawal_fee');
+            $table->bigInteger('fee');
+            $table->bigInteger('pay_extra');
             $table->timestamps();
-            $table->integer('pay_extra');
-            $table->string('status');
         });
     }
 
@@ -35,6 +33,6 @@ class CreateDebtTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('debt');
+        Schema::dropIfExists('businesses');
     }
 }

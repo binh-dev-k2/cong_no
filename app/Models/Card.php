@@ -5,25 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Card extends Model
 {
     use HasFactory;
-    protected $table = "card";
+
+    protected $table = "cards";
 
     protected $guarded = [];
 
-    public function Bank():BelongsTo
+    public function bank(): BelongsTo
     {
-        return $this->belongsTo(Bank::class, 'bank_id', 'code');
+        return $this->belongsTo(Bank::class, 'bank_code', 'code');
     }
 
-    public function Customer() :BelongsTo
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-    public function getCardHistory()
+    public function cardHistories(): HasMany
     {
         return $this->hasMany(CardHistory::class, 'id', 'card_id');
     }

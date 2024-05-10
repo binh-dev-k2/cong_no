@@ -20,17 +20,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('card/find', [CardController::class, 'find'])->name('api.card_find');
-    Route::post('card/store', [CardController::class, 'store'])->name('api.card_store');
+    Route::get('card/find', [CardController::class, 'findByCardNumber'])->name('api.card.find');
+    Route::post('card/store', [CardController::class, 'store'])->name('api.card.store');
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer_store');
-    Route::get('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');
+    Route::post('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');
     Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');
     Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
     Route::post('customer/debt/showAll/', [DebtController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');
-
-
 });
+
 Route::get('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');
 Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
 Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');

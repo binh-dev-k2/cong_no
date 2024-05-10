@@ -3,51 +3,51 @@
 namespace App\Services;
 
 use App\Http\Requests\Customer\addCustomerRequest;
+use App\Models\Card;
 use App\Models\Customer;
 
 class CustomerService
 {
 
-    function ShowAll()
+    function ShowAll($data)
     {
-        $customers = Customer::join('card', 'customer.id', '=', 'card.customer_id')
-//            ->join('card_remind_history', 'card.id', '=', 'card_remind_history.card_id')
-            ->select('customer.name', 'customer.phone', 'card.bank_id', 'card.card_number', 'card.date_due', 'card.date_return')
-            ->orderBy('customer.phone', 'desc')
-            ->get();
-        $groupedData = [];
+        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
+        $pageLength = $data['length'] ?? 10;
+        $skip = ($pageNumber - 1) * $pageLength;
 
-        foreach ($customers as $customer) {
-            $phone = $customer->phone;
+        $query = Card::query();
 
-            if (!isset($groupedData[$phone])) {
-                $groupedData[$phone] = [
-                    'name' => $customer->name,
-                    'phone' => $customer->phone,
-                    'bank_id' => $customer->bank_id,
-                    'card_number' => $customer->card_number,
-                    'date_due' => $customer->date_due,
-                    'date_return' => $customer->date_return,
-                    'remind_date' => $customer->datetime ?: null,
-                ];
-            } else {
-                if ($customer->card_number !== $groupedData[$phone]['card_number']) {
-                    $groupedData[$phone]['card_number'] .= ', ' . $customer->card_number;
-                }
-                if ($customer->bank_id !== $groupedData[$phone]['bank_id']) {
-                    $groupedData[$phone]['bank_id'] .= ', ' . $customer->bank_id;
-                }
-                if ($customer->date_due !== $groupedData[$phone]['date_due']) {
-                    $groupedData[$phone]['date_due'] .= ', ' . $customer->date_due;
-                }
-
-                if ($customer->date_return !== $groupedData[$phone]['date_return']) {
-                    $groupedData[$phone]['date_return'] .= ', ' . $customer->date_return;
-                }
-            }
+        if (isset($data['search'])) {
+            $search = $data['search'];
+            $query->whereHas('customer', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })->orWhere('account_number', 'like', "%{$search}%");
         }
 
-        return collect(array_values($groupedData));
+        switch ($data['order'][0]['column']) {
+            case '0':
+                $orderBy = 'id';
+                break;
+
+            default:
+                $orderBy = 'id';
+                break;
+        }
+
+        $query->orderBy('customer_id', 'desc')->orderBy($orderBy, $data['order'][0]['dir'] ?? 'desc');
+
+        $recordsFiltered = $recordsTotal = $query->count();
+        $customers = $query->skip($skip)
+            ->with(['customer'])
+            ->take($pageLength)
+            ->get();
+
+        return [
+            "draw" => $data['draw'] ?? 1,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            'data' => $customers
+        ];
     }
 
 

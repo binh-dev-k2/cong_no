@@ -24,12 +24,13 @@ class AddCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'card_number' => 'required|numeric|digits:16|unique:card,card_number',
-            'account_number' => 'required|numeric|unique:card,account_number',
+            'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
+            'account_number' => 'required|numeric|unique:cards,account_number',
             'date_due' => 'required|date_format:Y-m-d',
             'date_return' => 'required|date_format:Y-m-d',
             'login_info' => 'required|string',
-            'bank_id'=> 'required|string|exists:banks,code'
+            'bank_code'=> 'required|string|exists:banks,code',
+            'account_name' => 'required|string',
         ];
     }
     function messages()
@@ -48,8 +49,8 @@ class AddCardRequest extends FormRequest
             'login_info.string' => 'Thông tin đăng nhập phải là chuỗi ký tự.',
             'card_number.unique' => 'Số thẻ ngân hàng đã tồn tại trong hệ thống.',
             'account_number.unique' => 'Số tài khoản ngân hàng đã tồn tại trong hệ thống.',
-            'bank_id.exists' => 'Ngân hàng không hợp lệ.',
-            'bank_id.required' => 'Ngân hàng  là bắt buộc.'
+            'bank_code.exists' => 'Ngân hàng không hợp lệ.',
+            'bank_code.required' => 'Ngân hàng  là bắt buộc.'
         ];
     }
 }

@@ -15,7 +15,6 @@ class CardService
         })->with('bank')->first();
         if ($card) {
             if ($card->customer_id == null) {
-
                 return [
                     'success' => true,
                     'card' => $card
@@ -31,6 +30,17 @@ class CardService
                 'code' => 1,
             ];
         }
+    }
+
+    public function getByCardNumber(int $cardNumber)
+    {
+        return Card::where(function ($query) use ($cardNumber) {
+            $query->where('card_number', "like", "%$cardNumber%")
+                ->orWhere('account_number', "like", "%$cardNumber%");
+        })
+            ->where('customer_id', null)
+            ->with('bank')
+            ->get();
     }
 
     function save(AddCardRequest $request)

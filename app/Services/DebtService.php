@@ -19,7 +19,7 @@ class DebtService{
                 'withdrawal_fee' => $debt->withdrawal_fee,
                 'total' => $debt->total_money,
                 'pay_extra' => $debt->pay_extra,
-                'status' => $this->checkDebt($debt->id),
+                'status' => $debt->status == 0 ? "Chưa thanh toán" : "Đã thanh toán" ,
             ];
 
             $formatted_debts[] = $formatted_debt;
@@ -29,12 +29,12 @@ class DebtService{
     }
 
 
-    function checkDebt($id){
-        $debt = Debt::find($id);
-        if($debt->status == 0){
-            return "Chưa thanh toán";
-        }else{
-            return "Đã thanh toán";
-        }
-    }
+    // function checkDebt($id){
+    //     $debt = Debt::find($id);
+    //     if($debt->status == 0){
+    //         return "Chưa thanh toán";
+    //     }else{
+    //         return "Đã thanh toán";
+    //     }
+    // }
 }

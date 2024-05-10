@@ -2,48 +2,73 @@
 
 
 var KTModalCustomersAdd = (function () {
-    let btn_submit, btn_cancel, btn_close, formValidate, form, i, btn_card_add, list_card, card_number_find, timeout_card_find, list_blank_cards, list_added_cards, select_card;
+    let btn_submit, btn_cancel, btn_close, formValidate, form, i, list_card, timeout_card_find, btn_add_customer;
+
     const headers = {
         Authorization: `Bearer ${token}`,
     };
 
-    var optionFormat = function (item) {
+    const optionFormat = function (item) {
         if (!item.id) {
             return item.text;
         }
-        console.log(item);
 
-        var span = document.createElement('span');
-        var imgUrl = item.element.getAttribute('data-src');
-        var template = '';
-
-        template += `<img src="${imgUrl}" class="h-20px me-2" />`;
-        template += item.text;
+        let span = document.createElement('span');
+        let template = `<img src="${item.bank_logo}" class="h-20px mb-1" />${item.text}`;
 
         span.innerHTML = template;
 
         return $(span);
     }
 
+    var initGetBlankCards = function () {
+        $("#select_add_card").select2({
+            templateSelection: optionFormat,
+            templateResult: optionFormat,
+            placeholder: {
+                id: '',
+                text: 'None Selected'
+            },
+            closeOnSelect: false,
+            multiple: true,
+            ajax: {
+                url: routes.blankCards,
+                dataType: 'json',
+                type: "GET",
+                headers: headers,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (item) {
+                            return {
+                                text: item.card_number,
+                                id: item.id,
+                                bank_logo: item.bank.logo
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    }
+
     return {
         init: function () {
             i = new bootstrap.Modal(document.querySelector("#kt_modal_add_customer"))
+            btn_add_customer = document.querySelector(".btn-add-customer")
             form = document.querySelector("#kt_modal_add_customer_form")
             btn_submit = form.querySelector("#kt_modal_add_customer_submit")
             btn_cancel = form.querySelector("#kt_modal_add_customer_cancel")
-            btn_card_add = form.querySelector("#btn_modal_card_add")
             btn_close = form.querySelector("#kt_modal_add_customer_close")
-            // card_number_find = form.querySelector("input[name='card_number_find']")
 
-            document.querySelector("#kt_modal_add_customer")
-                .addEventListener('click', function () {
-                    select_card = $("#select_card").select2({
-                        templateSelection: optionFormat,
-                        templateResult: optionFormat,
-                        closeOnSelect: false,
-                        allowClear: true,
-                    });
-                })
+            btn_add_customer.addEventListener('click', function () {
+                initGetBlankCards()
+                $("#select_add_card").val(0)
+            })
 
             formValidate = FormValidation.formValidation(form, {
                 fields: {
@@ -97,12 +122,12 @@ var KTModalCustomersAdd = (function () {
             btn_cancel.addEventListener("click", function (event) {
                 event.preventDefault();
                 Swal.fire({
-                    text: "Are you sure you would like to cancel?",
+                    text: "Bạn chắc chắn rằng muốn thoát khỏi form này?",
                     icon: "warning",
                     showCancelButton: true,
                     buttonsStyling: false,
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, return",
+                    confirmButtonText: "Xác nhận!",
+                    cancelButtonText: "Quay lại",
                     customClass: {
                         confirmButton: "btn btn-primary",
                         cancelButton: "btn btn-active-light",
@@ -111,22 +136,19 @@ var KTModalCustomersAdd = (function () {
                     if (result.isConfirmed) {
                         i.hide();
                         form.reset();
-                        list_card = [];
-                        document.dispatchEvent(changeListCardEvent);
                     }
-
                 });
             });
 
             btn_close.addEventListener("click", function (event) {
                 event.preventDefault();
                 Swal.fire({
-                    text: "Are you sure you would like to cancel?",
+                    text: "Bạn chắc chắn rằng muốn thoát khỏi form này?",
                     icon: "warning",
                     showCancelButton: true,
                     buttonsStyling: false,
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, return",
+                    confirmButtonText: "Xác nhận!",
+                    cancelButtonText: "Quay lại",
                     customClass: {
                         confirmButton: "btn btn-primary",
                         cancelButton: "btn btn-active-light",
@@ -135,104 +157,9 @@ var KTModalCustomersAdd = (function () {
                     if (result.isConfirmed) {
                         i.hide();
                         form.reset();
-                        list_card = [];
-                        document.dispatchEvent(changeListCardEvent);
                     }
                 });
             });
-
-            // card_number_find.addEventListener("input", function () {
-            //     clearTimeout(timeout_card_find)
-
-            //     timeout_card_find = setTimeout(() => {
-            //         axios.get(routes.findCard, {
-            //             params: {
-            //                 card_number,
-            //             },
-            //             headers,
-            //         })
-            //     }, 300)
-            // })
-
-            // btn_card_add.addEventListener("click", function () {
-            //     let card_number = form.querySelector(
-            //         "input[name='card_number_find']"
-            //     ).value;
-            //     if (card_number.length === 0) {
-            //         Swal.fire({
-            //             text: "Bạn chưa điền số tài khoản hoặc số thẻ ngân hàng.",
-            //             icon: "error",
-            //             buttonsStyling: !1,
-            //             confirmButtonText: "Quay lại ",
-            //             customClass: {
-            //                 confirmButton: "btn btn-primary",
-            //             },
-            //         });
-            //     } else {
-            //         axios.get(routes.findCard, {
-            //             params: {
-            //                 card_number,
-            //             },
-            //             headers,
-            //         })
-            //             .then(function (response) {
-            //                 let card = response.data.data.card;
-            //                 let find_result = list_card.find(e => e.card_number === card.card_number);
-            //                 if (find_result === undefined) {
-            //                     list_card.push(card);
-            //                     document.dispatchEvent(changeListCardEvent);
-            //                 } else {
-            //                     Swal.fire({
-            //                         text: "Thẻ đã được thêm trước đó",
-            //                         icon: "error",
-            //                         buttonsStyling: !1,
-            //                         confirmButtonText: "Quay lại ",
-            //                         customClass: {
-            //                             confirmButton: "btn btn-primary",
-            //                         },
-            //                     });
-            //                 }
-            //             })
-            //             .catch(function (error) {
-            //                 const errorMessage = [
-            //                     "",
-            //                     "Thẻ không tồn tại trong hệ thống, hãy thêm mới",
-            //                     "Thẻ đã được chỉ định cho khách hàng khác",
-            //                 ];
-            //                 const errorCode = error.response.data.data.code;
-            //                 Swal.fire({
-            //                     text: errorMessage[errorCode],
-            //                     icon: "error",
-            //                     buttonsStyling: !1,
-            //                     confirmButtonText: "Quay lại ",
-            //                     customClass: {
-            //                         confirmButton: "btn btn-primary",
-            //                     },
-            //                 });
-            //             });
-            //     }
-            // })
-
-            document.addEventListener("changeListCardEvent", function () {
-                $("#list_card_added").html("");
-                for (let index = 0; index < list_card.length; index++) {
-                    const element = list_card[index];
-                    let card_clone = document.getElementById("template_card").content.cloneNode(true);
-                    card_clone.querySelector("img").src = element.bank.logo;
-                    card_clone.querySelector(".account_name").textContent = element.account_name;
-                    card_clone.querySelector(".card_added_input").value = element.card_number;
-                    card_clone.querySelector(".card_number").textContent = element.card_number;
-                    card_clone.querySelector(".btn_delete").setAttribute('card_id', element.card_number);
-                    card_clone.querySelector(".btn_delete").addEventListener("click", function () {
-                        let index = list_card.findIndex(item => item.card_number === element.card_number);
-                        if (index !== -1) {
-                            list_card.splice(index, 1);
-                        }
-                        document.dispatchEvent(changeListCardEvent);
-                    });
-                    $("#list_card_added").append(card_clone);
-                }
-            })
 
             btn_submit.addEventListener("click", function (e) {
                 e.preventDefault();
@@ -241,59 +168,31 @@ var KTModalCustomersAdd = (function () {
                         let data = {
                             customer_name: form.querySelector("input[name='name']").value,
                             customer_phone: form.querySelector("input[name='phone']").value,
-                            card_added_number: list_card.map((e) => e.card_number),
+                            card_ids: $("#select_add_card").select2("val"),
                         };
-                        console.log(list_card, data);
+                        // console.log(data);
 
-                        axios.post(routes.addCustomer, data, headers)
-                            .then((response) =>
-                                Swal.fire({
-                                    text: "Thêm khách hàng thành công",
-                                    icon: "success",
-                                    buttonsStyling: !1,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-primary",
-                                    },
-                                }).then(function (result) {
-                                    if (result.isConfirmed) {
-                                        i.hide();
-                                        form.reset();
-                                        list_card = [];
-                                        document.dispatchEvent(changeListCardEvent);
-                                        window.location.reload();
-                                    }
-
-                                })
-                            )
-                            .catch((err) => {
-                                if (err.response.status === 422) {
-                                    let messages = err.response.data.errors;
-                                    let errorMessage = [];
-                                    for (const key in messages) {
-                                        if (
-                                            Object.hasOwnProperty.call(
-                                                messages,
-                                                key
-                                            )
-                                        ) {
-                                            const element = messages[key];
-                                            errorMessage.push(element);
-                                        }
-                                    }
+                        axios.post(routes.addCustomer, data, { headers })
+                            .then((res) => {
+                                if (res.data.code == 0) {
                                     Swal.fire({
-                                        text: errorMessage.join(", "),
-                                        icon: "error",
+                                        text: "Thêm khách hàng thành công",
+                                        icon: "success",
                                         buttonsStyling: !1,
-                                        confirmButtonText: "Quay lại ",
+                                        confirmButtonText: "Ok, got it!",
                                         customClass: {
-                                            confirmButton:
-                                                "btn btn-primary",
-                                        },
-                                    });
+                                            confirmButton: "btn btn-primary",
+                                        }
+                                    }).then(function (result) {
+                                        if (result.isConfirmed) {
+                                            i.hide();
+                                            form.reset();
+                                            datatable.draw()
+                                        }
+                                    })
                                 } else {
                                     Swal.fire({
-                                        text: err.message,
+                                        text: res.data.data.join(", "),
                                         icon: "error",
                                         buttonsStyling: !1,
                                         confirmButtonText: "Quay lại ",
@@ -302,18 +201,17 @@ var KTModalCustomersAdd = (function () {
                                         },
                                     });
                                 }
-
+                            }).catch((err) => {
+                                Swal.fire({
+                                    text: err.message,
+                                    icon: "error",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Quay lại ",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    },
+                                });
                             });
-                    } else {
-                        Swal.fire({
-                            text: "Tên khách hàng và số điện thoại không được để trống",
-                            icon: "error",
-                            buttonsStyling: !1,
-                            confirmButtonText: "Quay lại ",
-                            customClass: {
-                                confirmButton: "btn btn-primary",
-                            },
-                        });
                     }
                 });
             });

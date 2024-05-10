@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Card;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AddCardRequest extends FormRequest
 {
@@ -29,7 +31,7 @@ class AddCardRequest extends FormRequest
             'date_due' => 'required|date_format:Y-m-d',
             'date_return' => 'required|date_format:Y-m-d',
             'login_info' => 'required|string',
-            'bank_code'=> 'required|string|exists:banks,code',
+            'bank_code' => 'required|string|exists:banks,code',
             'account_name' => 'required|string',
         ];
     }
@@ -52,5 +54,11 @@ class AddCardRequest extends FormRequest
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+        throw new HttpResponseException(jsonResponse(1, $errors));
     }
 }

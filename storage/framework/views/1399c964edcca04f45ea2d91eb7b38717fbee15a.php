@@ -2,7 +2,7 @@
 
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
-            <form class="form" action="#" id="kt_modal_add_customer_form" data-kt-redirect="apps/customers/list.html">
+            <form class="form" action="#" id="kt_modal_add_customer_form">
                 <div class="modal-header" id="kt_modal_add_customer_header">
                     <h2 class="fw-bold">Thêm khách hàng mới</h2>
                     <div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary">
@@ -42,26 +42,14 @@
                         </div>
 
                         <div class="fv-row mb-7">
-                            <label for="select_card" class="required fs-6 fw-semibold mb-2">Nhập số tài khoản hoặc số thẻ</label>
-                            
+                            <label for="select_add_card" class="required fs-6 fw-semibold mb-2">
+                                Nhập số tài khoản hoặc số thẻ
+                            </label>
 
-                            <select class="form-select form-select-solid" data-placeholder="..." id="select_card">
-                                <option></option>
-                                <?php $__currentLoopData = $blankCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($card->id); ?>"
-                                        data-src="https://api.vietqr.io/img/<?php echo e($card->bank_code); ?>.png">
-                                        <?php echo e($card->card_number); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <select class="form-select form-select-solid" id="select_add_card" multiple>
+                                <option value="" disabled></option>
+                                
                             </select>
-                        </div>
-
-                        <div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse"
-                            href="#kt_modal_add_customer_billing_info" role="button" aria-expanded="false"
-                            aria-controls="kt_customer_view_details">
-                            Thông tin ngân hàng
-                            <span class="ms-2 rotate-180">
-                                <i class="ki-duotone ki-down fs-3"></i>
-                            </span>
                         </div>
 
                         <div id="kt_modal_add_customer_billing_info" class="collapse show">
@@ -100,11 +88,12 @@
                                         name="account_number" id="account_number" />
                                 </div>
                                 <div class="d-flex flex-column mb-7 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2" for="select_bank_list">Ngân
-                                        hàng</label>
-                                    <select class="form-select form-select-transparent" placeholder="Chọn ngân hàng"
-                                        id="select_bank_list" name="bank_code">
-                                        <option></option>
+                                    <label class="required fs-6 fw-semibold mb-2" for="select_bank_list">
+                                        Ngân hàng
+                                    </label>
+                                    <select class="form-select form-select-transparent" data-hide-search="false"
+                                        placeholder="Chọn ngân hàng" id="select_bank_list" name="bank_code">
+                                        
                                         <?php $__currentLoopData = $banks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $bank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option <?php if($key == 0): ?> selected <?php endif; ?>
                                                 value="<?php echo e($bank->code); ?>"
@@ -153,8 +142,7 @@
                                         name="login_info" id="login_info" />
                                 </div>
                                 <div class="d-flex flex-column mb-3 fv-row">
-                                    <label class="fs-6 fw-semibold mb-2" for="note">Ghi
-                                        chú</label>
+                                    <label class="fs-6 fw-semibold mb-2" for="note">Ghi chú</label>
                                     <textarea class="form-control form-control-solid" rows="2" name="note" id="note"></textarea>
                                 </div>
                                 <div class="d-flex justify-content-center mb-3 fv-row ">
@@ -175,10 +163,9 @@
                     </div>
                 </div>
                 <div class="modal-footer flex-center">
-                    <button type="reset" id="kt_modal_add_customer_cancel"
-                        class="btn btn-light me-3">Discard</button>
+                    <button type="reset" id="kt_modal_add_customer_cancel" class="btn btn-light me-3">Đóng</button>
                     <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
-                        <span class="indicator-label">Submit</span>
+                        <span class="indicator-label">Xác nhận</span>
                     </button>
                 </div>
             </form>

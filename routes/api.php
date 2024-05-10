@@ -24,11 +24,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('card/find', [CardController::class, 'find'])->name('api.card.find');
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store');
-    Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer_store');
+    Route::get('card/blank-cards', [CardController::class, 'getBlankCards'])->name('api.card.blankCards');
+    Route::post('card/update-note', [CardController::class, 'updateNote'])->name('api.card.updateNote');
+
+    Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store');
     Route::post('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');
     Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');
-    Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
     Route::post('customer/debt/showAll/', [DebtController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');
+
+    Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
 });
 
 Route::get('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');

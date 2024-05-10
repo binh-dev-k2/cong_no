@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Customer\AddCustomerRequest;
-use App\Http\Requests\CustomerRequest;
 use App\Models\Bank;
 use App\Models\Customer;
 use App\Services\CardService;
@@ -37,9 +36,8 @@ class CustomerController extends Controller
     public function index(): View
     {
         $banks = Bank::get();
-        $blankCards = $this->cardService->getBlankCards();
 
-        return view('customer.index', compact('banks', 'blankCards'));
+        return view('customer.index', compact('banks'));
     }
 
     /**
@@ -85,16 +83,12 @@ class CustomerController extends Controller
      *     @SWG\Header(header="Authorization", type="string", description="Authorization)
      *    @SWG\Parameter(
      * ) */
-    public function store(AddCustomerRequest $request, CardService $cardService)
+    public function store(AddCustomerRequest $request)
     {
         $data = $request->validated();
 
-        $data = $this->customerService->save($request);
-        $card_number_list = $request->card_added_number;
-        if ($data['success']) {
-            $cardService->assignCustomer($card_number_list, $data['data']->id);
-        }
-        return $this->successJsonResponse(200, $data);
+        $result = $this->customerService->create($data);
+        return jsonResponse($result ? 0 : 1);
     }
 
     /**

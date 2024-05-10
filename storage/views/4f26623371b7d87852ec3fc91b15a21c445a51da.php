@@ -144,7 +144,7 @@
             findCard: "<?php echo e(route('api.card.find')); ?>",
             getBlankCards: "<?php echo e(route('api.card.getBlankCards')); ?>",
             storeCard: "<?php echo e(route('api.card.store')); ?>",
-            addCustomer: "<?php echo e(route('api.customer_store')); ?>",
+            addCustomer: "<?php echo e(route('api.customer.store')); ?>",
             getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
             deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
         }

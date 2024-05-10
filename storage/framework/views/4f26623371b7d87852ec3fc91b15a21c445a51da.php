@@ -7,6 +7,10 @@
             padding: 0.5rem !important;
             margin: 0 !important;
         }
+
+        .select2-selection__choice {
+            background-color: white !important;
+        }
     </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
@@ -64,7 +68,6 @@
                             <input type="text" data-kt-customer-table-filter="search"
                                 class="form-control form-control-solid w-250px ps-12" placeholder="Tìm kiếm" />
                         </div>
-
                     </div>
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
@@ -74,7 +77,7 @@
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </i>Export</button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
@@ -107,7 +110,7 @@
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
                                 <th class="text-center min-w-125px">Ngày trả thẻ</th>
                                 <th class="text-center min-w-70px">Ghi chú</th>
-                                <th class="text-center min-w-70px">Hành động</th>
+                                <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
@@ -117,39 +120,24 @@
             </div>
         </div>
     </div>
-    <template id="template_card">
-        <div class="d-flex align-items-center mb-7">
-            <div class="symbol symbol-50px me-5">
-                <img src="/metronic8/demo1/assets/media/avatars/300-6.jpg" class="img-fluid" style="object-fit: contain"
-                    alt="">
-            </div>
-            <div class="flex-grow-1 d-flex justify-content-between">
-                <div>
-                    <p href="#" class="text-gray-900 fw-bold text-hover-primary fs-6 text-uppercase account_name">
-                    </p>
-                    <input type="hidden" name="card[]" class="card_added_input">
-                    <span class="text-muted d-block fw-bold card_number">09128822738732</span>
-                </div>
-                <div>
-                    <p class="btn btn-danger hover-scale btn_delete">Xóa</p>
-                </div>
-            </div>
-    </template>
-<?php $__env->stopSection(); ?>
 
+    <?php echo $__env->make('customer.components.note', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('customer.components.remind', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     <script>
         var token = "<?php echo e(session('authToken')); ?>";
         var routes = {
             findCard: "<?php echo e(route('api.card.find')); ?>",
+            blankCards: "<?php echo e(route('api.card.blankCards')); ?>",
             storeCard: "<?php echo e(route('api.card.store')); ?>",
-            addCustomer: "<?php echo e(route('api.customer_store')); ?>",
+            addCustomer: "<?php echo e(route('api.customer.store')); ?>",
             getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
             deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
+            updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>"
         }
-
         var delete_customer_route = "<?php echo e(route('api.customer_delete', ':phone')); ?>";
-        var changeListCardEvent = new CustomEvent('changeListCardEvent', {});
+        var datatable;
     </script>
     <script src="<?php echo e(asset('assets/plugins/custom/datatables/datatables.bundle.js')); ?>"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
@@ -157,7 +145,6 @@
     <script src="<?php echo e(asset('assets/js/customer/add.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add_card.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
-
 <?php $__env->startSection('modal'); ?>
     <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>

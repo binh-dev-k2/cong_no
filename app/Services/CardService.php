@@ -4,32 +4,13 @@ namespace App\Services;
 
 use App\Http\Requests\Card\AddCardRequest;
 use App\Models\Card;
+use Illuminate\Support\Facades\Log;
 
 class CardService
 {
-    function FindByNumberUnassigned($card_number)
+    public function updateNote(array $data)
     {
-        $card = Card::where(function ($query) use ($card_number) {
-            $query->where('card_number', $card_number)
-                ->orWhere('account_number', $card_number);
-        })->with('bank')->first();
-        if ($card) {
-            if ($card->customer_id == null) {
-                return [
-                    'success' => true,
-                    'card' => $card
-                ];
-            }
-            return [
-                'success' => false,
-                'code' => 2,
-            ];
-        } else {
-            return [
-                'success' => false,
-                'code' => 1,
-            ];
-        }
+        return Card::where('id', $data['id'])->update(['note' => $data['note']]);
     }
 
     public function getBlankCards()
@@ -54,12 +35,14 @@ class CardService
         ];
     }
 
-    function assignCustomer($card_number_list, $customer_id)
+    function assignCustomer($cardIds, $customerId)
     {
-        for ($i = 0; $i < count($card_number_list); $i++) {
-            $card = Card::where('card_number', $card_number_list[$i])->first();
-            $card->customer_id = $customer_id;
-            $card->save();
+        try {
+            return Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
         }
     }
 

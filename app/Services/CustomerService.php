@@ -5,9 +5,22 @@ namespace App\Services;
 use App\Http\Requests\Customer\addCustomerRequest;
 use App\Models\Card;
 use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CustomerService
 {
+    protected $cardService;
+
+    public function __construct()
+    {
+        $this->cardService = $this->cardServiceProperty();
+    }
+
+    public function cardServiceProperty()
+    {
+        return app(CardService::class);
+    }
 
     function datatable(array $data)
     {
@@ -51,22 +64,30 @@ class CustomerService
     }
 
 
-    function save(addCustomerRequest $request)
+    function create($data)
     {
-        $result = Customer::create([
-            'name' => $request->customer_name,
-            'phone' => $request->customer_phone
-        ]);
-        if ($result) {
-            return [
-                'success' => true,
-                'data' => $result
-            ];
+        try {
+            DB::beginTransaction();
+
+            $customer = Customer::create([
+                'name' => $data['customer_name'],
+                'phone' => $data['customer_phone']
+            ]);
+
+            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
+
+            if ($result) {
+                DB::commit();
+                return true;
+            }
+
+            DB::rollBack();
+            return false;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
         }
-        return [
-            'success' => false,
-            'code' => 1
-        ];
     }
 
     function delete($phone)

@@ -35,7 +35,7 @@ class AddCustomerRequest extends FormRequest
                 'required',
                 'numeric',
                 'digits:10',
-                'unique:customer,phone',
+                'unique:customers,phone',
                 function ($attribute, $value, $fail) {
                     if (strlen($value) != 10) {
                         $fail('Số điện thoại khách hàng phải gồm 10 chữ số.');
@@ -45,6 +45,7 @@ class AddCustomerRequest extends FormRequest
                     }
                 },
             ],
+            'card_ids' => 'required|array|exists:cards,id'
         ];
     }
 

@@ -9,7 +9,7 @@ use App\Models\Customer;
 class CustomerService
 {
 
-    function ShowAll($data)
+    function datatable(array $data)
     {
         $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
         $pageLength = $data['length'] ?? 10;
@@ -38,7 +38,7 @@ class CustomerService
 
         $recordsFiltered = $recordsTotal = $query->count();
         $customers = $query->skip($skip)
-            ->with(['customer'])
+            ->with(['customer', 'bank'])
             ->take($pageLength)
             ->get();
 

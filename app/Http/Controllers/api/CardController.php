@@ -30,14 +30,6 @@ class CardController extends Controller
         return $this->failJsonResponse(400, $data);
     }
 
-    public function findByCardNumber(FindCardRequest $request)
-    {
-        $data = $request->validated();
-        $result = $this->cardService->getByCardNumber($data['card_number']);
-
-        return jsonResponse(0, $result);
-    }
-
     function store(AddCardRequest $request)
     {
         $data = $this->cardService->save($request);

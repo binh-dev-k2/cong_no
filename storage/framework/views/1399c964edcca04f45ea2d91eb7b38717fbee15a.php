@@ -43,20 +43,15 @@
 
                         <div class="fv-row mb-7">
                             <label for="select_card" class="required fs-6 fw-semibold mb-2">Nhập số tài khoản hoặc số thẻ</label>
-                            {{-- <div class="d-flex">
-                                <input type="number" class="form-control form-control-solid" placeholder=""
-                                    name="card_number_find" />
-                                <button type="button" class="btn btn-lg btn-primary"
-                                    id="btn_modal_card_add">Thêm</button>
-                            </div> --}}
+                            
 
                             <select class="form-select form-select-solid" data-placeholder="..." id="select_card">
                                 <option></option>
-                                @foreach ($blankCards as $card)
-                                    <option value="{{ $card->id }}"
-                                        data-src="https://api.vietqr.io/img/{{ $card->bank_code }}.png">
-                                        {{ $card->card_number }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $blankCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($card->id); ?>"
+                                        data-src="https://api.vietqr.io/img/<?php echo e($card->bank_code); ?>.png">
+                                        <?php echo e($card->card_number); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
 
@@ -110,12 +105,12 @@
                                     <select class="form-select form-select-transparent" placeholder="Chọn ngân hàng"
                                         id="select_bank_list" name="bank_code">
                                         <option></option>
-                                        @foreach ($banks as $key => $bank)
-                                            <option @if ($key == 0) selected @endif
-                                                value="{{ $bank->code }}"
-                                                data-kt-select2-country="{{ $bank->logo }}">
-                                                {{ $bank->shortName }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $banks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $bank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option <?php if($key == 0): ?> selected <?php endif; ?>
+                                                value="<?php echo e($bank->code); ?>"
+                                                data-kt-select2-country="<?php echo e($bank->logo); ?>">
+                                                <?php echo e($bank->shortName); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                                 <div class="row g-9 mb-7">
@@ -190,3 +185,4 @@
         </div>
     </div>
 </div>
+<?php /**PATH D:\CodeTools\laragon\www\WORK\quan_ly_cong_no\resources\views/customer/modal/add.blade.php ENDPATH**/ ?>

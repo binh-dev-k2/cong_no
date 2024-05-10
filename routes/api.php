@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('card/find', [CardController::class, 'findByCardNumber'])->name('api.card.find');
+    Route::get('card/find', [CardController::class, 'find'])->name('api.card.find');
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store');
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer_store');
     Route::post('customer/showAll/', [CustomerController::class, 'showAllCustomer'])->name('api.customer_showAll');

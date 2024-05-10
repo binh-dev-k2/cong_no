@@ -32,13 +32,9 @@ class CardService
         }
     }
 
-    public function getByCardNumber(int $cardNumber)
+    public function getBlankCards()
     {
-        return Card::where(function ($query) use ($cardNumber) {
-            $query->where('card_number', "like", "%$cardNumber%")
-                ->orWhere('account_number', "like", "%$cardNumber%");
-        })
-            ->where('customer_id', null)
+        return Card::where('customer_id', null)
             ->with('bank')
             ->get();
     }

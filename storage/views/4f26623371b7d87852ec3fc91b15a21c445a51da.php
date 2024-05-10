@@ -1,16 +1,15 @@
-@extends('layouts.layout')
-@section('title')
+<?php $__env->startSection('title'); ?>
     Trang thống kê
-@endsection
-@section('header')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('header'); ?>
     <style>
         tr td {
             padding: 0.5rem !important;
             margin: 0 !important;
         }
     </style>
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
             <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
@@ -20,7 +19,7 @@
                 </h1>
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{ route('dashboard') }}" class="text-muted text-hover-primary">Thống kê</a>
+                        <a href="<?php echo e(route('dashboard')); ?>" class="text-muted text-hover-primary">Thống kê</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-500 w-5px h-2px"></span>
@@ -136,29 +135,32 @@
                 </div>
             </div>
     </template>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
     <script>
-        var token = "{{ session('authToken') }}";
+        var token = "<?php echo e(session('authToken')); ?>";
         var routes = {
-            findCard: "{{ route('api.card.find') }}",
-            storeCard: "{{ route('api.card.store') }}",
-            addCustomer: "{{ route('api.customer_store') }}",
-            getAllCustomers: "{{ route('api.customer_showAll') }}",
-            deleteCustomer: "{{ route('api.customer_delete', ':phone') }}",
+            findCard: "<?php echo e(route('api.card.find')); ?>",
+            getBlankCards: "<?php echo e(route('api.card.getBlankCards')); ?>",
+            storeCard: "<?php echo e(route('api.card.store')); ?>",
+            addCustomer: "<?php echo e(route('api.customer_store')); ?>",
+            getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
+            deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
         }
 
-        var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
+        var delete_customer_route = "<?php echo e(route('api.customer_delete', ':phone')); ?>";
         var changeListCardEvent = new CustomEvent('changeListCardEvent', {});
     </script>
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <script src="<?php echo e(asset('assets/plugins/custom/datatables/datatables.bundle.js')); ?>"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
-    <script src="{{ asset('assets/js/customer/list.js') }}"></script>
-    <script src="{{ asset('assets/js/customer/add.js') }}"></script>
-    <script src="{{ asset('assets/js/customer/add_card.js') }}"></script>
-@endsection
+    <script src="<?php echo e(asset('assets/js/customer/list.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/customer/add.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/customer/add_card.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
 
-@section('modal')
-    @include('customer.modal.add')
-@endsection
+<?php $__env->startSection('modal'); ?>
+    <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\CodeTools\laragon\www\WORK\quan_ly_cong_no\resources\views/customer/index.blade.php ENDPATH**/ ?>

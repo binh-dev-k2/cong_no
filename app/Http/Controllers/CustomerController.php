@@ -37,8 +37,9 @@ class CustomerController extends Controller
     public function index(): View
     {
         $banks = Bank::get();
+        $blankCards = $this->cardService->getBlankCards();
 
-        return view('customer.index', compact('banks'));
+        return view('customer.index', compact('banks', 'blankCards'));
     }
 
     /**
@@ -54,8 +55,8 @@ class CustomerController extends Controller
 
     public function showAllCustomer(Request $request): JsonResponse
     {
-        $data = $this->customerService->showAll($request->all());
-        return response()->json($data);
+        $result = $this->customerService->datatable($request->all());
+        return response()->json($result);
     }
 
     /**

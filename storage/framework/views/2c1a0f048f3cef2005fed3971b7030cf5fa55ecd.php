@@ -3,7 +3,7 @@
 
 <head>
     <base href="../" />
-    <title>@yield('title') - Quản lý công nợ</title>
+    <title><?php echo $__env->yieldContent('title'); ?> - Quản lý công nợ</title>
     <meta charset="utf-8" />
     <meta name="description" content="Hệ thống quản lý công nợ." />
     <meta name="keywords" content="Hệ thống quản lý công nợ" />
@@ -12,15 +12,15 @@
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Hệ thống quản lý công nợ" />
     <meta property="og:site_name" content="Hệ thống quản lý công nợ" />
-    <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="shortcut icon" href="<?php echo e(asset('media/logos/favicon.ico')); ?>" />
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-    {{-- <link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" /> --}}
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+    
+    <link href="<?php echo e(asset('assets/plugins/global/plugins.bundle.css')); ?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo e(asset('assets/css/style.bundle.css')); ?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo e(asset('assets/plugins/custom/datatables/datatables.bundle.css')); ?>" rel="stylesheet"
         type="text/css" />
-    @yield('header')
+    <?php echo $__env->yieldContent('header'); ?>
     <script>
         // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }
     </script>
@@ -56,18 +56,18 @@
                 data-kt-sticky-activate="{default: true, lg: true}" data-kt-sticky-name="app-header-minimize"
                 data-kt-sticky-offset="{default: '200px', lg: '0'}" data-kt-sticky-animation="false">
 
-                @include('layouts.partials.header')
+                <?php echo $__env->make('layouts.partials.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </div>
             <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
 
-                @include('layouts.partials.sidebar')
+                <?php echo $__env->make('layouts.partials.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
                     <div class="d-flex flex-column flex-column-fluid">
 
-                        @yield('content')
+                        <?php echo $__env->yieldContent('content'); ?>
                     </div>
 
-                    @include('layouts.partials.footer')
+                    <?php echo $__env->make('layouts.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 </div>
             </div>
         </div>
@@ -77,14 +77,15 @@
         <i class="ki-outline ki-arrow-up"></i>
     </div>
 
-    @yield('modal')
+    <?php echo $__env->yieldContent('modal'); ?>
 
     <script>
         var hostUrl = "assets/";
     </script>
-    <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
-    @yield('script')
+    <script src="<?php echo e(asset('assets/plugins/global/plugins.bundle.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/scripts.bundle.js')); ?>"></script>
+    <?php echo $__env->yieldContent('script'); ?>
 </body>
 
 </html>
+<?php /**PATH D:\CodeTools\laragon\www\WORK\quan_ly_cong_no\resources\views/layouts/layout.blade.php ENDPATH**/ ?>

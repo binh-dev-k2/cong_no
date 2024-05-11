@@ -2,6 +2,7 @@
 
 var CustomerList = function () {
     let timeoutSearch;
+    const drawer_note = document.querySelector("#drawer_note");
 
     var updateToolbar = () => {
         const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
@@ -153,22 +154,23 @@ var CustomerList = function () {
 
     const initNoteDrawer = () => {
         let drawer_btns = document.querySelectorAll('.drawer-note-btn');
-        const drawer_element = document.querySelector("#drawer_note");
-        const drawer = KTDrawer.getInstance(drawer_element);
+        const drawer = KTDrawer.getInstance(drawer_note);
         drawer_btns.forEach((btn) => {
             btn.addEventListener('click', function () {
                 console.log(this.getAttribute('data-note'));
-                drawer_element.querySelector('input[name="drawer-id"]').value = this.getAttribute('data-id')
-                drawer_element.querySelector('textarea.drawer-note').value = this.getAttribute('data-note')
+                drawer_note.querySelector('input[name="drawer-id"]').value = this.getAttribute('data-id')
+                drawer_note.querySelector('textarea.drawer-note').value = this.getAttribute('data-note')
                 drawer.toggle();
             })
         })
+    }
 
+    const saveNoteDrawer = () => {
         const drawer_save_note = document.querySelector('.drawer-save-note');
         drawer_save_note.addEventListener('click', function (e) {
             e.preventDefault()
-            const id = drawer_element.querySelector('input[name="drawer-id"]').value
-            const note = drawer_element.querySelector('textarea.drawer-note').value
+            const id = drawer_note.querySelector('input[name="drawer-id"]').value
+            const note = drawer_note.querySelector('textarea.drawer-note').value
             const headers = {
                 Authorization: `Bearer ${token}`,
             };
@@ -326,7 +328,7 @@ var CustomerList = function () {
                         data: 'date_due',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
                         }
                     },
                     {
@@ -334,7 +336,7 @@ var CustomerList = function () {
                         data: 'date_return',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
                         }
                     },
                     {
@@ -343,7 +345,7 @@ var CustomerList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex justify-content-between align-items-center">
-                                        <p class="text-truncate mb-0" style="max-width: 200px">${data ?? ''}</p>
+                                        <p class="text-truncate mb-0 me-2" style="max-width: 200px">${data ?? ''}</p>
                                         <button class="btn btn-primary drawer-note-btn" data-id="${row.id}" data-note="${data ?? ''}">Xem</button>
                                     </div>`;
                         }
@@ -391,6 +393,7 @@ var CustomerList = function () {
                 initNoteDrawer()
             })
 
+            saveNoteDrawer()
         }
     };
 

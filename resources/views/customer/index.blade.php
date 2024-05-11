@@ -140,11 +140,15 @@
         var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
         var datatable;
     </script>
+<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
     <script src="{{ asset('assets/js/customer/list.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add_card.js') }}"></script>
+
+
+
 @endsection
 @section('modal')
     @include('customer.modal.add')

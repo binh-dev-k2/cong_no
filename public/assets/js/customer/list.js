@@ -1,6 +1,7 @@
 "use strict";
 
 var CustomerList = function () {
+
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
     let dt_name = '', dt_phone = ''
@@ -230,11 +231,13 @@ var CustomerList = function () {
     }
 
     return {
+
         initDatatable: async function () {
             datatable = $("#kt_customers_table").DataTable({
                 fixedColumns: {
                     leftColumns: 1,
-                    rightColumns: 1
+                    // rightColumns: 1
+
                 },
                 // scrollCollapse: true,
                 // scrollX: true,
@@ -367,7 +370,7 @@ var CustomerList = function () {
                         className: 'text-end',
                         render: function (data, type, row) {
                             return `
-                                    <button class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+                                    <button  class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end >
                                         Hành động
                                         <span class="svg-icon fs-5 m-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -398,12 +401,15 @@ var CustomerList = function () {
 
             // Re-init functions
             datatable.on('draw', function () {
+
                 initDeleteSelected();
                 handleSearchDatatable()
                 initNoteDrawer()
+                KTMenu.createInstances()
             })
 
             saveNoteDrawer()
+
         }
     };
 

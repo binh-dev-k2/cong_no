@@ -28,7 +28,8 @@ class CustomerService
         $pageLength = $data['length'] ?? 10;
         $skip = ($pageNumber - 1) * $pageLength;
 
-        $query = Card::query();
+        $query = Card::query()
+        ->whereHas('customer');
 
         if (isset($data['search'])) {
             $search = $data['search'];

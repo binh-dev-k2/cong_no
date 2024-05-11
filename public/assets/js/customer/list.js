@@ -3,6 +3,7 @@
 var CustomerList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
+    let dt_name = '', dt_phone = ''
 
     var updateToolbar = () => {
         const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
@@ -276,7 +277,12 @@ var CustomerList = function () {
                         data: 'customer.name',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`
+                            console.log(data, dt_name);
+                            if (data != dt_name) {
+                                dt_name = data
+                                return `<span>${data ?? ''}</span>`
+                            }
+                            return `<span></span>`
                         }
                     },
                     {
@@ -284,7 +290,11 @@ var CustomerList = function () {
                         data: 'customer.phone',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            if (data != dt_phone) {
+                                dt_phone = data
+                                return `<span>${data ?? ''}</span>`
+                            }
+                            return `<span></span>`
                         }
                     },
                     {

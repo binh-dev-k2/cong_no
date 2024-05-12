@@ -25,4 +25,9 @@ class Debt extends Model
     {
         return $this->belongsTo(Card::class, 'card_number', 'card_number');
     }
+
+    public function business(): BelongsTo
+    {
+        return $this->belongsTo(Business::class, 'formality', 'formality');
+    }
 }

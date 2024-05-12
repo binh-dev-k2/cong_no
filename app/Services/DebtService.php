@@ -31,6 +31,7 @@ class DebtService
     }
 
 
+
     // function checkDebt($id){
     //     $debt = Debt::find($id);
     //     if($debt->status == 0){

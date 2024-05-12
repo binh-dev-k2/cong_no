@@ -2,7 +2,7 @@
 
 
 var KTModalCustomersAdd = (function () {
-    let btn_submit, btn_cancel, btn_close, formValidate, form, i, list_card, timeout_card_find, btn_add_customer;
+    let btn_submit, btn_cancel, btn_close, formValidate, form, i, list_card, timeout_card_find, btn_add_customer, list_card_ids;
 
     const headers = {
         Authorization: `Bearer ${token}`,
@@ -21,7 +21,7 @@ var KTModalCustomersAdd = (function () {
         return $(span);
     }
 
-    var initGetBlankCards = function () {
+    const initGetBlankCards = function () {
         $("#select_add_card").select2({
             templateSelection: optionFormat,
             templateResult: optionFormat,
@@ -34,13 +34,10 @@ var KTModalCustomersAdd = (function () {
             ajax: {
                 url: routes.blankCards,
                 dataType: 'json',
+                delay: 250,
                 type: "GET",
+                cache: true,
                 headers: headers,
-                data: function (term) {
-                    return {
-                        term: term
-                    };
-                },
                 processResults: function (data) {
                     return {
                         results: $.map(data.data, function (item) {
@@ -66,8 +63,8 @@ var KTModalCustomersAdd = (function () {
             btn_close = form.querySelector("#kt_modal_add_customer_close")
 
             btn_add_customer.addEventListener('click', function () {
+                $("#select_add_card").empty()
                 initGetBlankCards()
-                $("#select_add_card").val(0)
             })
 
             formValidate = FormValidation.formValidation(form, {
@@ -108,16 +105,6 @@ var KTModalCustomersAdd = (function () {
                     }),
                 },
             })
-            //         .on("core.form.valid", function() {
-            //         const listContainer = document.getElementById("list_card_added");
-            //         console.log(listContainer.childElementCount);
-            //         if (listContainer.childElementCount === 0) {
-            //         formValidate.updateFieldStatus("kt_modal_add_customer_billing_info", "Invalid", "notEmpty");
-            //     } else {
-            //         formValidate.updateFieldStatus("kt_modal_add_customer_billing_info", "Valid", "notEmpty");
-            //     }
-            // })
-
 
             btn_cancel.addEventListener("click", function (event) {
                 event.preventDefault();
@@ -172,7 +159,7 @@ var KTModalCustomersAdd = (function () {
                         };
                         // console.log(data);
 
-                        axios.post(routes.addCustomer, data, { headers })
+                        axios.post(routes.storeCustomer, data, { headers: headers })
                             .then((res) => {
                                 if (res.data.code == 0) {
                                     Swal.fire({
@@ -187,6 +174,7 @@ var KTModalCustomersAdd = (function () {
                                         if (result.isConfirmed) {
                                             i.hide();
                                             form.reset();
+                                            $("#select_add_card").empty()
                                             datatable.draw()
                                         }
                                     })

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,10 +13,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::
-        namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
-            Route::get('/', 'DashboardController@index')->name('dashboard');
-            Route::get('/customer', 'CustomerController@index')->name('customer');
-        });
+
+Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
+    Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/customer', 'CustomerController@index')->name('customer');
+    Route::get('/business', 'BusinessController@index')->name('business');
+});
 
 Auth::routes();

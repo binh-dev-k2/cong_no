@@ -11,6 +11,10 @@
         .select2-selection__choice {
             background-color: white !important;
         }
+
+        .flatpickr-monthDropdown-months {
+            max-width: 100px;
+        }
     </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
@@ -65,8 +69,8 @@
                                 <span class="path1"></span>
                                 <span class="path2"></span>
                             </i>
-                            <input type="text" data-kt-customer-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-12" placeholder="Tìm kiếm" />
+                            <input type="text" id="customer_search" class="form-control form-control-solid w-250px ps-12"
+                                placeholder="Tìm kiếm" />
                         </div>
                     </div>
                     <div class="card-toolbar">
@@ -83,10 +87,10 @@
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
                             <div class="fw-bold me-5">
-                                <span class="me-2" data-kt-customer-table-select="selected_count"></span>Selected
+                                <span class="me-2" data-kt-customer-table-select="selected_count"></span>Hàng được chọn
                             </div>
                             <button type="button" class="btn btn-danger"
-                                data-kt-customer-table-select="delete_selected">Delete Selected</button>
+                                data-kt-customer-table-select="delete_selected">Xóa</button>
                         </div>
                     </div>
                 </div>
@@ -101,7 +105,7 @@
                                             data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                     </div>
                                 </th>
-                                <th class="text-center min-w-125px">Họ và tên</th>
+                                <th class="text-center min-w-125px">Tên</th>
                                 <th class="text-center min-w-125px">Số điện thoại</th>
                                 <th class="text-center min-w-125px">Ngân hàng</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
@@ -123,7 +127,10 @@
 
     <?php echo $__env->make('customer.components.note', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.components.remind', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('customer.modal.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('script'); ?>
     <script>
         var token = "<?php echo e(session('authToken')); ?>";
@@ -131,7 +138,8 @@
             findCard: "<?php echo e(route('api.card.find')); ?>",
             blankCards: "<?php echo e(route('api.card.blankCards')); ?>",
             storeCard: "<?php echo e(route('api.card.store')); ?>",
-            addCustomer: "<?php echo e(route('api.customer.store')); ?>",
+            storeCustomer: "<?php echo e(route('api.customer.store')); ?>",
+            updateCustomer: "<?php echo e(route('api.customer.update')); ?>",
             getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
             deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
             updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>"
@@ -144,9 +152,6 @@
     <script src="<?php echo e(asset('assets/js/customer/list.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add_card.js')); ?>"></script>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('modal'); ?>
-    <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\CodeTools\laragon\www\WORK\quan_ly_cong_no\resources\views/customer/index.blade.php ENDPATH**/ ?>

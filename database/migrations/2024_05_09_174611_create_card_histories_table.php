@@ -16,6 +16,7 @@ class CreateCardHistoriesTable extends Migration
         Schema::create('card_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('card_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

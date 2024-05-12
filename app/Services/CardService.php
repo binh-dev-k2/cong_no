@@ -8,16 +8,60 @@ use Illuminate\Support\Facades\Log;
 
 class CardService
 {
+    function filterDatatable(array $data)
+    {
+        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
+        $pageLength = $data['length'] ?? 10;
+        $skip = ($pageNumber - 1) * $pageLength;
+
+        $query = Card::query()
+            ->whereHas('customer');
+
+        if (isset($data['search'])) {
+            $search = $data['search'];
+            $query->whereHas('customer', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })->orWhere('account_number', 'like', "%{$search}%");
+        }
+
+        // switch ($data['order'][0]['column']) {
+        //     case '0':
+        //         $orderBy = 'id';
+        //         break;
+
+        //     default:
+        //         $orderBy = 'id';
+        //         break;
+        // }
+
+        $query->orderBy('customer_id', 'desc');
+
+        $recordsFiltered = $recordsTotal = $query->count();
+        $customers = $query->skip($skip)
+            ->with(['customer.cards.bank', 'bank', 'cardHistories.user'])
+            ->take($pageLength)
+            ->get();
+
+        return [
+            "draw" => $data['draw'] ?? 1,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            'data' => $customers
+        ];
+    }
+
     public function updateNote(array $data)
     {
         return Card::where('id', $data['id'])->update(['note' => $data['note']]);
     }
 
-    public function getBlankCards()
+    public function getBlankCards($data)
     {
-        return Card::where('customer_id', null)
-            ->with('bank')
-            ->get();
+        $query = Card::where('customer_id', null);
+        if (isset($data['ids'])) {
+            $query->orWhereIn('id', $data['ids']);
+        }
+        return $query->with('bank')->get();
     }
 
     function save(AddCardRequest $request)

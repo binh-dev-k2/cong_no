@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Customer\AddCustomerRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Bank;
 use App\Models\Customer;
 use App\Services\CardService;
@@ -51,28 +52,11 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function showAllCustomer(Request $request): JsonResponse
+    public function datatable(Request $request): JsonResponse
     {
-        $result = $this->customerService->datatable($request->all());
+        $result = $this->cardService->filterDatatable($request->all());
         return response()->json($result);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
     /** @SWG\Post(
 
@@ -91,46 +75,14 @@ class CustomerController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function update(UpdateCustomerRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $result = $this->customerService->update($data);
+        return jsonResponse($result ? 0 : 1);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $phone
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(int $phone, CardService $cardService): JsonResponse
     {
         $customer = Customer::where('phone', $phone)->first();

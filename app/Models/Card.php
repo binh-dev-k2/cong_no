@@ -27,6 +27,6 @@ class Card extends Model
 
     public function cardHistories(): HasMany
     {
-        return $this->hasMany(CardHistory::class, 'id', 'card_id');
+        return $this->hasMany(CardHistory::class, 'card_id', 'id');
     }
 }

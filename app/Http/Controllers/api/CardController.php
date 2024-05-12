@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Card\AddCardRequest;
 use App\Http\Requests\Card\UpdateNoteRequest;
 use App\Services\CardService;
+use Illuminate\Http\Request;
 
 class CardController extends Controller
 {
@@ -22,9 +23,9 @@ class CardController extends Controller
         return $this->successJsonResponse(200, $data);
     }
 
-    public function getBlankCards()
+    public function getBlankCards(Request $request)
     {
-        $blankCards = $this->cardService->getBlankCards();
+        $blankCards = $this->cardService->getBlankCards($request->all());
         return jsonResponse(0, $blankCards);
     }
 

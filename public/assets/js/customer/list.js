@@ -1,10 +1,14 @@
 "use strict";
 
 var CustomerList = function () {
-
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
+    const drawer_remind = document.querySelector("#drawer_remind");
     let dt_name = '', dt_phone = ''
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     var updateToolbar = () => {
         const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
@@ -145,13 +149,13 @@ var CustomerList = function () {
     };
 
     const handleSearchDatatable = () => {
-        document.querySelector('[data-kt-customer-table-filter="search"]')
-            .addEventListener("keyup", (function (e) {
-                clearTimeout(timeoutSearch)
-                timeoutSearch = setTimeout(function () {
-                    datatable.draw();
-                }, 500)
-            }));
+        $('#customer_search').on("keyup", (function (e) {
+            console.log(e);
+            clearTimeout(timeoutSearch)
+            timeoutSearch = setTimeout(function () {
+                datatable.draw();
+            }, 500)
+        }));
     }
 
     const initNoteDrawer = () => {
@@ -217,21 +221,200 @@ var CustomerList = function () {
         })
     }
 
+    const formatTime = (time) => {
+        const dateTime = new Date(time);
+
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+        const day = String(dateTime.getDate()).padStart(2, "0");
+        const hours = String(dateTime.getHours()).padStart(2, "0");
+        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+    }
+
     const initRemindDrawer = () => {
         let drawer_btns = document.querySelectorAll('.drawer-remind-btn');
-        const drawer_element = document.querySelector("#drawer_remind");
-        const drawer = KTDrawer.getInstance(drawer_element);
+        const drawer = KTDrawer.getInstance(drawer_remind);
 
         drawer_btns.forEach((btn) => {
             btn.addEventListener('click', function () {
-                drawer_element.querySelector('input[name="drawer-id"]').value = this.getAttribute('data-id')
+                const row = btn.closest('tr');
+                const data = datatable.row(row).data();
+                console.log(data);
+                drawer_element.querySelector('input[name="card_id"]').value = data.id
+
+                const html = data.card_histories.map((history) => (
+                    `
+                    <div class="timeline-item">
+                        <div class="timeline-label"></div>
+                        <div class="timeline-badge">
+                            <i class="fa fa-genderless text-primary fs-1"></i>
+                        </div>
+                        <div class="fw-mormal timeline-content text-muted ps-3">
+                            <div class="fw-bold fs-6 text-gray-800">Nhắc bởi: ${history.user.name} - ${history.user.email}</div>
+                            Thời gian: ${formatTime(history.created_at)}
+                        </div>
+                    </div>
+                    `)
+                )
+                drawer_element.querySelector('.timeline-label').innerHTML = html.join('');
                 drawer.toggle();
             })
         })
     }
 
-    return {
+    const alertRemindDrawer = () => {
+        const drawer_remind_alert = document.querySelector('.drawer-remind-alert');
+        drawer_remind_alert.addEventListener('click', function (e) {
+            e.preventDefault()
+            const id = drawer_remind.querySelector('input[name="card_id"]').value
 
+        })
+    }
+
+    //EDIT
+    const formEdit = document.querySelector('#edit_customer_form');
+    let listCard = []
+
+    const optionFormat = function (item) {
+        console.log(item);
+        if (!item.id) {
+            return item.text;
+        }
+
+        let span = document.createElement('span');
+        let bankLogo = ''
+        if (item.bank_logo) {
+            bankLogo = item.bank_logo
+        } else {
+            bankLogo = item.element.bank_logo
+        }
+        let template = `<img src="${bankLogo}" class="h-20px mb-1" />${item.text}`;
+
+        span.innerHTML = template;
+
+        return $(span);
+    }
+
+    const initEditGetBlankCards = function () {
+        $("#select_edit_card").select2({
+            templateSelection: optionFormat,
+            templateResult: optionFormat,
+            placeholder: {
+                id: '',
+                text: 'None Selected'
+            },
+            closeOnSelect: false,
+            multiple: true,
+            ajax: {
+                url: routes.blankCards,
+                dataType: 'json',
+                delay: 250,
+                type: "GET",
+                headers: headers,
+                processResults: function (data) {
+                    const mappingData = $.map(data.data, function (item) {
+                        return {
+                            text: item.card_number,
+                            id: item.id,
+                            bank_logo: item.bank.logo,
+                        };
+                    });
+
+                    const listCardData = listCard.map(function (item) {
+                        return {
+                            text: item.card_number,
+                            id: item.id,
+                            bank_logo: item.bank.logo
+                        };
+                    });
+
+                    return {
+                        results: [...mappingData, ...listCardData]
+                    };
+                }
+            }
+        });
+    }
+
+    const initEdit = () => {
+        let btnEdits = document.querySelectorAll('.btn-edit-customer');
+
+        btnEdits.forEach((btn) => {
+            btn.addEventListener('click', function () {
+                const row = btn.closest('tr')
+                const data = datatable.row(row).data();
+                formEdit.querySelector('input[name="id"]').value = data.id;
+                formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
+                formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
+                listCard = data.customer.cards
+                $("#select_edit_card").empty()
+                listCard.forEach(card => {
+                    let opt = new Option(card.card_number, card.id, false, false);
+                    opt.bank_logo = card.bank.logo
+                    $("#select_edit_card").append(opt);
+                });
+                $("#select_edit_card").val(listCard.map((item) => item.id)).change();
+            })
+        })
+
+        $('#edit_customer_form').submit(function (e) {
+            e.preventDefault();
+            const data = {
+                id: formEdit.querySelector("input[name='id']").value,
+                customer_name: formEdit.querySelector("input[name='name']").value,
+                customer_phone: formEdit.querySelector("input[name='phone']").value,
+                card_ids: $("#select_edit_card").select2("val"),
+            };
+
+            axios.post(routes.updateCustomer, data, { headers: headers })
+                .then((res) => {
+                    if (res.data.code == 0) {
+                        Swal.fire({
+                            text: "Sửa thông tin khách hàng thành công",
+                            icon: "success",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            }
+                        }).then(function (result) {
+                            if (result.isConfirmed) {
+                                i.hide();
+                                form.reset();
+                                $("#select_add_card").empty()
+                                datatable.draw()
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            text: res.data.data.join(", "),
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Quay lại ",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            },
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        text: err.message,
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "Quay lại ",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                        },
+                    });
+                });
+        })
+    }
+
+
+
+    return {
         initDatatable: async function () {
             datatable = $("#kt_customers_table").DataTable({
                 fixedColumns: {
@@ -239,14 +422,12 @@ var CustomerList = function () {
                     // rightColumns: 1
 
                 },
-                // scrollCollapse: true,
-                // scrollX: true,
                 searchDelay: 500,
                 processing: true,
                 serverSide: true,
-                order: [
-                    // [2, 'desc']
-                ],
+                // order: [
+                //     [2, 'desc']
+                // ],
                 stateSave: true,
                 select: {
                     style: 'multi',
@@ -260,7 +441,7 @@ var CustomerList = function () {
                         request.setRequestHeader("Authorization", `Bearer ${token}`);
                     },
                     data: function (d) {
-                        d.search = $('input[data-kt-customer-table-filter]').val();
+                        d.search = $('#customer_search').val();
                     }
                 },
                 columnDefs: [
@@ -280,7 +461,6 @@ var CustomerList = function () {
                         data: 'customer.name',
                         orderable: false,
                         render: function (data, type, row) {
-                            console.log(data, dt_name);
                             if (data != dt_name) {
                                 dt_name = data
                                 return `<span>${data ?? ''}</span>`
@@ -370,7 +550,7 @@ var CustomerList = function () {
                         className: 'text-end',
                         render: function (data, type, row) {
                             return `
-                                    <button  class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end >
+                                    <button class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
                                         Hành động
                                         <span class="svg-icon fs-5 m-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -383,13 +563,19 @@ var CustomerList = function () {
                                     </button>
                                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                         <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
+                                            <a href="javascript:void(0);" class="menu-link px-3 btn-edit-customer" data-bs-toggle="modal"
+                                            data-bs-target="#modal_edit_customer">
                                                 Sửa
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3" data-kt-docs-table-filter="delete_row">
+                                            <a href="javascript:void(0);" class="menu-link px-3" data-kt-docs-table-filter="delete_row">
                                                 Xóa
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
+                                            <a href="javascript:void(0);" class="menu-link px-3 drawer-remind-btn">
+                                                Nhắc nợ
                                             </a>
                                         </div>
                                     </div>
@@ -401,13 +587,14 @@ var CustomerList = function () {
 
             // Re-init functions
             datatable.on('draw', function () {
-
                 initDeleteSelected();
                 handleSearchDatatable()
                 initNoteDrawer()
+                initRemindDrawer()
+                initEdit()
                 KTMenu.createInstances()
             })
-
+            initEditGetBlankCards()
             saveNoteDrawer()
 
         }

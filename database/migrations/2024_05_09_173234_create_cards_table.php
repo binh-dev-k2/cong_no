@@ -26,9 +26,10 @@ class CreateCardsTable extends Migration
             $table->string('note')->nullable();
             $table->smallInteger('fee_percent');
             $table->bigInteger('total_money');
-            $table->enum('formality', ['business', 'debt']);
+            $table->enum('formality', ['D', 'R']);
 //            $table->bigInteger('fee');
             $table->bigInteger('pay_extra');
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
     Trang thống kê
 @endsection
 @section('header')
+
     <style>
         tr td {
             padding: 0.5rem !important;
@@ -155,4 +156,5 @@
     <script src="{{ asset('assets/js/customer/list.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add_card.js') }}"></script>
+
 @endsection

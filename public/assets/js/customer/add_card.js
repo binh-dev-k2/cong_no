@@ -1,14 +1,15 @@
 "use strict";
-var FormAddCard = (function () {
-    var collapse_add_new_card, form, btn_submit_add_new_card, formValidate;
-    var optionFormat = function (item) {
+const FormAddCard = (function () {
+    let collapse_add_new_card, form, btn_submit_add_new_card, formValidate;
+    console.log(token)
+    const optionFormat = function (item) {
         if (!item.id) {
             return item.text;
         }
 
-        var span = document.createElement("span");
-        var imgUrl = item.element.getAttribute("data-kt-select2-country");
-        var template = "";
+        const span = document.createElement("span");
+        const imgUrl = item.element.getAttribute("data-kt-select2-country");
+        let template = "";
 
         template +=
             '<img src="' +
@@ -102,6 +103,34 @@ var FormAddCard = (function () {
                                 },
                             },
                         },
+                        fee_percent: {
+                            validators: {
+                                notEmpty: {
+                                    message: "Phần trăm phí là bắt buộc",
+                                },
+                            },
+                        },
+                        total_money: {
+                            validators: {
+                                notEmpty: {
+                                    message: "Tổng số tiền là bắt buộc",
+                                },
+                            },
+                        },
+                        formality: {
+                            validators: {
+                                notEmpty: {
+                                    message: "Hình thức là bắt buộc",
+                                },
+                            },
+                        },
+                        pay_extra: {
+                            validators: {
+                                notEmpty: {
+                                    message: "Tiền trả thêm là bắt buộc",
+                                },
+                            },
+                        },
                     },
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
@@ -141,6 +170,18 @@ var FormAddCard = (function () {
                                 ).value,
                                 bank_code: form.querySelector(
                                     'select[name="bank_code"]'
+                                ).value,
+                                fee_percent: form.querySelector(
+                                    'input[name="fee_percent"]'
+                                ).value,
+                                total_money: form.querySelector(
+                                    'input[name="total_money"]'
+                                ).value,
+                                formality: form.querySelector(
+                                    'select[name="formality"]'
+                                ).value,
+                                pay_extra: form.querySelector(
+                                    'input[name="pay_extra"]'
                                 ).value,
                                 note: form.querySelector(
                                     'textarea[name="note"]'
@@ -219,8 +260,7 @@ var FormAddCard = (function () {
                                         });
                                     }
                                 });
-                        }
-                        else {
+                        } else {
                             btn_submit_add_new_card.removeAttribute(
                                 "data-kt-indicator"
                             );

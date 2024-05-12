@@ -586,6 +586,14 @@ var CustomerList = function () {
                         }
                     },
                     {
+                        targets: 10,
+                        data: 'card_histories',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<span>${data.length > 0 ? 'Đã nhắc' : 'Chưa nhắc'}</span>`;
+                        }
+                    },
+                    {
                         targets: -1,
                         data: null,
                         orderable: false,

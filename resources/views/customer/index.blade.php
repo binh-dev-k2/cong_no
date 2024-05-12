@@ -115,6 +115,7 @@
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
                                 <th class="text-center min-w-125px">Ngày trả thẻ</th>
                                 <th class="text-center min-w-70px">Ghi chú</th>
+                                <th class="text-center min-w-70px">Nhắc nợ</th>
                                 <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>

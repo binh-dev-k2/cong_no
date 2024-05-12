@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {
-            var row = this.closest('tr'); // Lấy hàng chứa checkbox
+            var row = this.closest('tr');
             if (this.checked) {
-                row.classList.replace('enable-row', 'disable-row'); // Thêm class 'checked' cho hàng
+                row.classList.replace('enable-row', 'disable-row');
             } else {
-                row.classList.replace('disable-row', 'enable-row'); // Xóa class 'checked' cho hàng
+                row.classList.replace('disable-row', 'enable-row');
             }
         });
     });

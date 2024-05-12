@@ -141,81 +141,9 @@
 
                                 </tr>
                             </thead>
-                            <tbody class="fw-semibold text-gray-600">
-                                <tr class="enable-row">
-                                    <td>
-                                        <a href="apps/customers/view.html"
-                                            class="text-gray-800 text-hover-primary mb-1">EmmaNU
-                                            Smith</a>
-                                    </td>
-                                    <td>
-                                        <a href="apps/customers/view.html"
-                                            class="text-gray-800 text-hover-primary mb-1">EmmaNU
-                                            Smith</a>
-                                    </td>
-                                    <td>
-                                        <a href="apps/customers/view.html"
-                                            class="text-gray-800 text-hover-primary mb-1">EmmaNU
-                                            Smith</a>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-gray-600 text-hover-primary mb-1">smith@kpmg.com</a>
-                                    </td>
-                                    <td>-</td>
-                                    <td data-filter="mastercard">
-                                        <img src="assets/media/svg/card-logos/mastercard.svg" class="w-35px me-3"
-                                            alt="" />**** 4118
-                                    </td>
+                            <tbody class="fw-semibold text-gray-600"></tbody>
 
-                                    <td>
 
-                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="checkbox" value="1" />
-                                        </div>
-
-                                    </td>
-
-                    </div>
-
-                    <!--end::Menu-->
-                    </td>
-                    </tr>
-                    <tr class="enable-row">
-                        <td>
-                            <a href="apps/customers/view.html" class="text-gray-800 text-hover-primary mb-1">EmmaNU
-                                Smith</a>
-                        </td>
-                        <td>
-                            <a href="apps/customers/view.html" class="text-gray-800 text-hover-primary mb-1">EmmaNU
-                                Smith</a>
-                        </td>
-                        <td>
-                            <a href="apps/customers/view.html" class="text-gray-800 text-hover-primary mb-1">EmmaNU
-                                Smith</a>
-                        </td>
-                        <td>
-                            <a href="#" class="text-gray-600 text-hover-primary mb-1">smith@kpmg.com</a>
-                        </td>
-                        <td>-</td>
-                        <td data-filter="mastercard">
-                            <img src="assets/media/svg/card-logos/mastercard.svg" class="w-35px me-3"
-                                alt="" />****
-                            4118
-                        </td>
-
-                        <td>
-
-                            <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox" value="1" />
-                            </div>
-
-                        </td>
-
-                </div>
-                <!--end::Menu-->
-                </td>
-                </tr>
-                </tbody>
                 </table>
                 <!--end::Table-->
 
@@ -253,5 +181,18 @@
     </template>
 @endsection
 @section('script')
-    <script src="assets/js/custom/apps/debit/check_debit.js"></script>
+        <script>
+            let token = "{{ session('authToken')}}";
+            let routes = {
+                getAllDebitCards: "{{ route('api.debit.getAll')}}",
+            }
+
+
+            let datatable
+        </script>
+        <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+        <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+        <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
+        <script src="{{asset('assets/js/debit/check_debit.js')}}"></script>
+        <script src="{{ asset('assets/js/debit/list.js') }}"></script>
 @endsection

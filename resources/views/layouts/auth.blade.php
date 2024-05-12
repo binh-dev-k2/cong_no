@@ -18,7 +18,7 @@
     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <script>
-        // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }
+
     </script>
 </head>
 
@@ -49,7 +49,7 @@
             </div>
 
             <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2"
-                style="background-image: url(assets/media/misc/auth-bg.png)">
+                style="background-image: url(asset/)>
                 <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
                     <a href="index.html" class="mb-0 mb-lg-12">
                         {{-- <img alt="Logo" src="assets/media/logos/custom-1.png" class="h-60px h-lg-75px" /> --}}

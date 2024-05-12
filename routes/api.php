@@ -4,6 +4,7 @@ use App\Http\Controllers\api\CardController;
 use App\Http\Controllers\api\DebtController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DebitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

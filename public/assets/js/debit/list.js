@@ -1,6 +1,6 @@
 "use strict";
 
-var CustomerList = function () {
+var DebitsList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
     let dt_name = '', dt_phone = ''
@@ -149,21 +149,8 @@ var CustomerList = function () {
                 clearTimeout(timeoutSearch)
                 timeoutSearch = setTimeout(function () {
                     datatable.draw();
-                }, 500)
+                }, 300)
             }));
-    }
-
-    const initRemindDrawer = () => {
-        let drawer_btns = document.querySelectorAll('.drawer-remind-btn');
-        const drawer_element = document.querySelector("#drawer_remind");
-        const drawer = KTDrawer.getInstance(drawer_element);
-
-        drawer_btns.forEach((btn) => {
-            btn.addEventListener('click', function () {
-                drawer_element.querySelector('input[name="drawer-id"]').value = this.getAttribute('data-id')
-                drawer.toggle();
-            })
-        })
     }
 
     return {
@@ -247,12 +234,12 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: -1,
-                        data: null,
+                        targets: 6,
+                        data: 'id',
                         orderable: false,
                         render: function (data, type, row) {
                             return ` <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox" value="1" />
+                                <input class="form-check-input" type="checkbox" value=${data ?? ''} />
                             </div>`;
                         }
                     },
@@ -262,7 +249,7 @@ var CustomerList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 initDeleteSelected();
-                handleSearchDatatable()
+                handleSearchDatatable();
             })
         }
     };
@@ -270,5 +257,5 @@ var CustomerList = function () {
 }();
 
 KTUtil.onDOMContentLoaded((function () {
-    CustomerList.initDatatable();
+    DebitsList.initDatatable();
 }));

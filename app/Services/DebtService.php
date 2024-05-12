@@ -30,8 +30,7 @@ class DebtService
         return $formatted_debts;
     }
 
-
-
+    
     // function checkDebt($id){
     //     $debt = Debt::find($id);
     //     if($debt->status == 0){

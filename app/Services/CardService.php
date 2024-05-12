@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Http\Requests\Card\AddCardRequest;
 use App\Models\Card;
 use App\Models\CardHistory;
+use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CardService
@@ -91,9 +93,15 @@ class CardService
     function assignCustomer($cardIds, $customerId)
     {
         try {
-            return Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
+            DB::beginTransaction();
+            $this->unassignCustomer($customerId);
+            $result = Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
+
+            DB::commit();
+            return true;
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;
         }

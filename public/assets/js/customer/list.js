@@ -5,6 +5,7 @@ var CustomerList = function () {
     const drawer_note = document.querySelector("#drawer_note");
     const drawer_remind = document.querySelector("#drawer_remind");
     let dt_name = '', dt_phone = ''
+    const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
 
     const headers = {
         Authorization: `Bearer ${token}`,
@@ -51,7 +52,6 @@ var CustomerList = function () {
             if (updateToolbar() === 1) {
                 var customerName = document.querySelector('tbody [type="checkbox"]:checked')
                     .closest('tr').querySelector('td:nth-child(2)').innerText;
-                console.log(customerName);
                 return Swal.fire({
                     text: `Bạn có muốn xóa khách hàng ${customerName} không?`,
                     icon: "warning",
@@ -150,7 +150,6 @@ var CustomerList = function () {
 
     const handleSearchDatatable = () => {
         $('#customer_search').on("keyup", (function (e) {
-            console.log(e);
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
                 datatable.draw();
@@ -163,7 +162,6 @@ var CustomerList = function () {
         const drawer = KTDrawer.getInstance(drawer_note);
         drawer_btns.forEach((btn) => {
             btn.addEventListener('click', function () {
-                console.log(this.getAttribute('data-note'));
                 drawer_note.querySelector('input[name="drawer-id"]').value = this.getAttribute('data-id')
                 drawer_note.querySelector('textarea.drawer-note').value = this.getAttribute('data-note')
                 drawer.toggle();
@@ -314,7 +312,6 @@ var CustomerList = function () {
     let listCard = []
 
     const optionFormat = function (item) {
-        console.log(item);
         if (!item.id) {
             return item.text;
         }
@@ -381,11 +378,12 @@ var CustomerList = function () {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr')
                 const data = datatable.row(row).data();
-                formEdit.querySelector('input[name="id"]').value = data.id;
+                formEdit.querySelector('input[name="id"]').value = data.customer.id;
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
                 listCard = data.customer.cards
                 $("#select_edit_card").empty()
+                console.log(listCard);
                 listCard.forEach(card => {
                     let opt = new Option(card.card_number, card.id, false, false);
                     opt.bank_logo = card.bank.logo
@@ -419,8 +417,8 @@ var CustomerList = function () {
                             }
                         }).then(function (result) {
                             if (result.isConfirmed) {
-                                i.hide();
-                                form.reset();
+                                editModal.hide();
+                                formEdit.reset();
                                 $("#select_add_card").empty()
                                 datatable.draw()
                             }
@@ -449,6 +447,14 @@ var CustomerList = function () {
                 });
         })
     }
+
+    $("#modal_edit_customer_close").click(function () {
+        editModal.hide();
+    })
+
+    $("#modal_edit_customer_cancel").click(function () {
+        editModal.hide();
+    })
 
     return {
         initDatatable: async function () {

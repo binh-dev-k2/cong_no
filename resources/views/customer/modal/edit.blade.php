@@ -5,7 +5,7 @@
             <form class="form" action="#" id="edit_customer_form">
                 <div class="modal-header" id="modal_edit_customer_header">
                     <h2 class="fw-bold">Sửa thông tin khách hàng</h2>
-                    <div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+                    <div id="modal_edit_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary">
                         <i class="ki-duotone ki-cross fs-1">
                             <span class="path1"></span>
                             <span class="path2"></span>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="modal-footer flex-center">
-                    <button type="reset" id="kt_modal_add_customer_cancel" class="btn btn-light me-3">Đóng</button>
+                    <button type="reset" id="modal_edit_customer_cancel" class="btn btn-light me-3">Đóng</button>
                     <button type="submit" id="modal_edit_customer_submit" class="btn btn-primary">
                         <span class="indicator-label">Xác nhận</span>
                     </button>

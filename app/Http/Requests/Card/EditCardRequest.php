@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddCardRequest extends FormRequest
+class EditCardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,23 +26,26 @@ class AddCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
-            'account_number' => 'required|numeric|unique:cards,account_number',
+            'id' => 'required|numeric',
+            'card_number' => 'required|numeric|digits:16',
+            'account_number' => 'required|numeric',
             'date_due' => 'required|date_format:Y-m-d',
             'date_return' => 'required|date_format:Y-m-d',
             'login_info' => 'required|string',
-            'bank_code' => 'required|string|exists:banks,code',
+            'bank_code' => 'required|string',
             'account_name' => 'required|string',
             'fee_percent' => 'required|numeric',
             'total_money' => 'required|numeric',
             'formality' => "required|string",
-            'pay_extra' => "required|numeric"
+            'pay_extra' => "required|numeric",
+            'note' => 'nullable|string|max:255',
 
         ];
     }
     function messages()
     {
         return [
+            'id' => 'required|numeric',
             'card_number.required' => 'Số thẻ ngân hàng là bắt buộc.',
             'card_number.numeric' => 'Số thẻ ngân hàng phải là số.',
             'card_number.digits' => 'Số thẻ ngân hàng phải gồm 16 chữ số.',
@@ -54,8 +57,6 @@ class AddCardRequest extends FormRequest
             'date_return.date' => 'Ngày trả không hợp lệ.',
             'login_info.required' => 'Thông tin đăng nhập là bắt buộc.',
             'login_info.string' => 'Thông tin đăng nhập phải là chuỗi ký tự.',
-            'card_number.unique' => 'Số thẻ ngân hàng đã tồn tại trong hệ thống.',
-            'account_number.unique' => 'Số tài khoản ngân hàng đã tồn tại trong hệ thống.',
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
             'fee_percent.required' => 'Phần trăm phí là bắt buộc.',

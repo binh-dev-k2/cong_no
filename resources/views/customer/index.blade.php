@@ -132,6 +132,7 @@
     @include('customer.components.remind')
     @include('customer.modal.add')
     @include('customer.modal.edit')
+    @include('customer.modal.editCard')
 @endsection
 
 @section('script')
@@ -147,6 +148,7 @@
             deleteCustomer: "{{ route('api.customer_delete', ':phone') }}",
             updateCardNote: "{{ route('api.card.updateNote') }}",
             remindCard: "{{ route('api.card.remindCard') }}",
+            editCard: "{{ route('api.card.edit') }}",
         }
         var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
         var datatable;

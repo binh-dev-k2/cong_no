@@ -78,7 +78,6 @@ class CustomerController extends Controller
     public function update(UpdateCustomerRequest $request)
     {
         $data = $request->validated();
-
         $result = $this->customerService->update($data);
         return jsonResponse($result ? 0 : 1);
     }

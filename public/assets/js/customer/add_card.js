@@ -178,7 +178,7 @@ const FormAddCard = (function () {
                                     'input[name="total_money"]'
                                 ).value,
                                 formality: form.querySelector(
-                                    'select[name="formality"]'
+                                    'select[name="select_formality"]'
                                 ).value,
                                 pay_extra: form.querySelector(
                                     'input[name="pay_extra"]'

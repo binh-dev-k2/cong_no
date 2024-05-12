@@ -51,8 +51,6 @@
                                 <option value="" disabled></option>
                             </select>
                         </div>
-
-                        @include('customer.modal.add_card')
                     </div>
                 </div>
                 <div class="modal-footer flex-center">

@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('card/blank-cards', [CardController::class, 'getBlankCards'])->name('api.card.blankCards');
     Route::post('card/update-note', [CardController::class, 'updateNote'])->name('api.card.updateNote');
     Route::post('card/remind', [CardController::class, 'remindCard'])->name('api.card.remindCard');
+    Route::post('card/edit', [CardController::class, 'edit'])->name('api.card.edit');
 
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store');
     Route::post('customer/update', [CustomerController::class, 'update'])->name('api.customer.update');
@@ -39,3 +40,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
 Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');
+Route::post('customer/debt/showAll/', [DebtController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');

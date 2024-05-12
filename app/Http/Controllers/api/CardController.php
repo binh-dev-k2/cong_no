@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Card\AddCardRequest;
+use App\Http\Requests\Card\RemindCardRequest;
 use App\Http\Requests\Card\UpdateNoteRequest;
 use App\Services\CardService;
 use Illuminate\Http\Request;
@@ -33,6 +34,13 @@ class CardController extends Controller
     {
         $data = $request->validated();
         $result = $this->cardService->updateNote($data);
+        return jsonResponse($result ? 0 : 1);
+    }
+
+    public function remindCard(RemindCardRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->cardService->remindCard($data);
         return jsonResponse($result ? 0 : 1);
     }
 }

@@ -143,7 +143,8 @@
             updateCustomer: "{{ route('api.customer.update') }}",
             getAllCustomers: "{{ route('api.customer_showAll') }}",
             deleteCustomer: "{{ route('api.customer_delete', ':phone') }}",
-            updateCardNote: "{{ route('api.card.updateNote') }}"
+            updateCardNote: "{{ route('api.card.updateNote') }}",
+            remindCard: "{{ route('api.card.remindCard') }}",
         }
         var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
         var datatable;

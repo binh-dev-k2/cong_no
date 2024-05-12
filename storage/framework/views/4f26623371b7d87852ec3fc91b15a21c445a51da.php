@@ -142,7 +142,8 @@
             updateCustomer: "<?php echo e(route('api.customer.update')); ?>",
             getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
             deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
-            updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>"
+            updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>",
+            remindCard: "<?php echo e(route('api.card.remindCard')); ?>",
         }
         var delete_customer_route = "<?php echo e(route('api.customer_delete', ':phone')); ?>";
         var datatable;

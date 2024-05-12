@@ -241,8 +241,7 @@ var CustomerList = function () {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
-                console.log(data);
-                drawer_element.querySelector('input[name="card_id"]').value = data.id
+                drawer_remind.querySelector('input[name="card_id"]').value = data.id
 
                 const html = data.card_histories.map((history) => (
                     `
@@ -258,7 +257,7 @@ var CustomerList = function () {
                     </div>
                     `)
                 )
-                drawer_element.querySelector('.timeline-label').innerHTML = html.join('');
+                drawer_remind.querySelector('.timeline-label').innerHTML = html.join('');
                 drawer.toggle();
             })
         })
@@ -270,6 +269,43 @@ var CustomerList = function () {
             e.preventDefault()
             const id = drawer_remind.querySelector('input[name="card_id"]').value
 
+            axios.post(routes.remindCard, { id: id }, { headers: headers })
+                .then((res) => {
+                    if (res.data.code == 0) {
+                        Swal.fire({
+                            text: "Nhắc nhở thành công",
+                            icon: "success",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            }
+                        }).then(function () {
+                            KTDrawer.getInstance(drawer_remind).toggle()
+                            datatable.draw()
+                        })
+                    } else {
+                        Swal.fire({
+                            text: res.data.data.join(", "),
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Quay lại ",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            },
+                        });
+                    }
+                }).catch((err) => {
+                    Swal.fire({
+                        text: err.message,
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "Quay lại ",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                        },
+                    });
+                });
         })
     }
 
@@ -358,7 +394,9 @@ var CustomerList = function () {
                 $("#select_edit_card").val(listCard.map((item) => item.id)).change();
             })
         })
+    }
 
+    const submitEditForm = () => {
         $('#edit_customer_form').submit(function (e) {
             e.preventDefault();
             const data = {
@@ -411,8 +449,6 @@ var CustomerList = function () {
                 });
         })
     }
-
-
 
     return {
         initDatatable: async function () {
@@ -561,11 +597,16 @@ var CustomerList = function () {
                                             </svg>
                                         </span>
                                     </button>
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4" data-kt-menu="true">
                                         <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 btn-edit-customer" data-bs-toggle="modal"
                                             data-bs-target="#modal_edit_customer">
-                                                Sửa
+                                                Sửa khách hàng
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
+                                            <a href="javascript:void(0);" class="menu-link px-3 btn-edit-customer">
+                                                Sửa thẻ
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
@@ -596,7 +637,8 @@ var CustomerList = function () {
             })
             initEditGetBlankCards()
             saveNoteDrawer()
-
+            submitEditForm()
+            alertRemindDrawer()
         }
     };
 

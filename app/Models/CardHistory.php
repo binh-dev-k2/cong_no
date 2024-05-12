@@ -12,6 +12,8 @@ class CardHistory extends Model
 
     protected $table = "card_histories";
 
+    protected $guarded = [];
+
     public function card(): BelongsTo
     {
         return $this->belongsTo(Card::class, 'card_id', 'id');

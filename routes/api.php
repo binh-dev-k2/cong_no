@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store');
     Route::get('card/blank-cards', [CardController::class, 'getBlankCards'])->name('api.card.blankCards');
     Route::post('card/update-note', [CardController::class, 'updateNote'])->name('api.card.updateNote');
+    Route::post('card/remind', [CardController::class, 'remindCard'])->name('api.card.remindCard');
 
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store');
     Route::post('customer/update', [CustomerController::class, 'update'])->name('api.customer.update');

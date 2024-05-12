@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\Card\AddCardRequest;
 use App\Models\Card;
+use App\Models\CardHistory;
 use Illuminate\Support\Facades\Log;
 
 class CardService
@@ -62,6 +63,14 @@ class CardService
             $query->orWhereIn('id', $data['ids']);
         }
         return $query->with('bank')->get();
+    }
+
+    public function remindCard($data)
+    {
+        return CardHistory::create([
+            'card_id' => $data['id'],
+            'user_id' => auth()->user()->id
+        ]);
     }
 
     function save(AddCardRequest $request)

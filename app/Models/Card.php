@@ -15,6 +15,9 @@ class Card extends Model
 
     protected $guarded = [];
 
+    public const STATUS_BUSINESS = 1;
+    public const STATUS_DEBT = 2;
+
     public function bank(): BelongsTo
     {
         return $this->belongsTo(Bank::class, 'bank_code', 'code');

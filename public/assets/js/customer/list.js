@@ -631,7 +631,7 @@ var CustomerList = function () {
                         data: 'customer.name',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (row.customer && row.customer.phone != dt_phone && type === 'display') {
+                            if (row.customer && row.customer.phone !== dt_phone && type === 'display') {
                                 dt_phone = row.customer.phone
                                 flag = true
                                 return `<span>${data ?? ''}</span>`
@@ -646,7 +646,7 @@ var CustomerList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             if (flag) {
-                                return `<span>${data ?? ''}</span>`
+                                return `<span class="phone-number">${data ?? ''}</span>`
                             }
                             return `<span></span>`
                         }

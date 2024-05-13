@@ -152,8 +152,6 @@ var CustomerList = function () {
         $('#customer_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
-                dt_phone = ''
-                flag = false
                 datatable.draw();
             }, 500)
         }));
@@ -645,6 +643,8 @@ var CustomerList = function () {
 
             // Re-init functions
             datatable.on('draw', function () {
+                flag = false
+                dt_phone = null;
                 initDeleteSelected();
                 initNoteDrawer()
                 initRemindDrawer()

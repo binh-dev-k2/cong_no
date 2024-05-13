@@ -38,7 +38,6 @@ var CustomerList = function () {
         $('#business_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
-                prevId = null
                 datatable.draw();
             }, 500)
         }));
@@ -281,6 +280,7 @@ var CustomerList = function () {
 
             // Re-init functions
             datatable.on('draw', function () {
+                prevId = null
                 initComplete()
                 initEditPayExtra()
                 KTMenu.createInstances()

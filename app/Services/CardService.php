@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\Card\AddCardRequest;
+use App\Http\Requests\Card\EditCardRequest;
 use App\Models\Card;
 use App\Models\CardHistory;
 use App\Models\Customer;
@@ -91,6 +92,43 @@ class CardService
             'success' => false,
             'code' => 1
         ];
+    }
+
+    function update($data)
+    {
+        try {
+            DB::beginTransaction();
+
+            $card = Card::where('id', $data['id'])->first();
+            if (!$card) {
+                return false;
+            }
+            $card->update([
+                'account_name' => $data['account_name'],
+                'account_number' => $data['account_number'],
+                'bank_code' => $data['bank_code'],
+                'card_number' => $data['card_number'],
+                'date_due' => $data['date_due'],
+                'date_return' => $data['date_return'],
+                'fee_percent' => $data['fee_percent'],
+                'formality' => $data['formality'],
+                'login_info' => $data['login_info'],
+                'note' => $data['note'],
+                'pay_extra' => $data['pay_extra'],
+                'total_money' => $data['total_money'],
+            ]);
+
+            if ($card) {
+                DB::commit();
+                return true;
+            }
+            DB::rollBack();
+            return false;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
+        }
     }
 
     function assignCustomer($cardIds, $customerId)

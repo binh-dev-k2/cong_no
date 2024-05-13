@@ -83,13 +83,39 @@
                 placeholder="Nhập thông tin đăng nhập vào tài khoản ngân hàng" name="login_info" id="login_info" />
         </div>
         <div class="d-flex flex-column mb-3 fv-row">
+            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
+            <input type="text" class="form-control form-control-solid"
+                   placeholder="Nhập phần trăm phí" name="fee_percent" id="fee_percent" />
+        </div>
+        <div class="d-flex flex-column mb-3 fv-row">
+            <label class="required fs-6 fw-semibold mb-2" for="total_money">Tổng số tiền</label>
+            <input type="text" class="form-control form-control-solid"
+                   placeholder="Nhập tổng số tiền" name="total_money" id="total_money" />
+        </div>
+        <div class="d-flex flex-column mb-3 fv-row">
+            <label class="required fs-6 fw-semibold mb-2" for="select_formality">
+                Hình thức
+            </label>
+            <select class="form-select form-select-solid"
+                    data-placeholder="Chọn hình thức" name="select_formality" id="select_formality">
+                <option value="">Chọn hình thức</option>
+                <option value="D">D</option>
+                <option value="R">R</option>
+            </select>
+        </div>
+        <div class="d-flex flex-column mb-3 fv-row">
+            <label class="required fs-6 fw-semibold mb-2" for="pay_extra">Tiền trả thêm</label>
+            <input type="text" class="form-control form-control-solid"
+                   placeholder="Nhập số tiền trả thêm" name="pay_extra" id="pay_extra" />
+        </div>
+        <div class="d-flex flex-column mb-3 fv-row">
             <label class="fs-6 fw-semibold mb-2" for="note">Ghi chú</label>
             <textarea class="form-control form-control-solid" rows="2" name="note" id="note"></textarea>
         </div>
         <div class="d-flex justify-content-center mb-3 fv-row ">
             <button type="submit" href="#" id="submit_add_new_card" class="btn btn-primary me-10">
                 <span class="indicator-label">
-                    <i class="ki-duotone ki-add-item                        ">
+                    <i class="ki-duotone ki-add-item">
                         <span class="path1"></span>
                         <span class="path2"></span>
                         <span class="path3"></span>

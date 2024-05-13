@@ -161,7 +161,7 @@ var KTModalCustomersAdd = (function () {
 
                         axios.post(routes.storeCustomer, data, { headers: headers })
                             .then((res) => {
-                                if (res.data.code == 0) {
+                                if (res.data.code === 0) {
                                     Swal.fire({
                                         text: "Thêm khách hàng thành công",
                                         icon: "success",

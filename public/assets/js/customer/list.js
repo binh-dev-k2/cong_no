@@ -6,12 +6,13 @@ var CustomerList = function () {
     const drawer_remind = document.querySelector("#drawer_remind");
     let flag = false, dt_phone = ''
     const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
+    const editCardModal = new bootstrap.Modal(document.querySelector('#modal_edit_card'));
 
     const headers = {
         Authorization: `Bearer ${token}`,
     };
 
-    var updateToolbar = () => {
+    const updateToolbar = () => {
         const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
         const selectedToolbar = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
         const selectedCount = document.querySelector('[data-kt-customer-table-select="selected_count"]');
@@ -37,7 +38,7 @@ var CustomerList = function () {
 
         return checkedCount;
     };
-    var initDeleteSelected = () => {
+    const initDeleteSelected = () => {
         const checkboxes = document.querySelectorAll('[type="checkbox"]');
         const deleteSelectedBtn = document.querySelector('[data-kt-customer-table-select="delete_selected"]');
         checkboxes.forEach((checkbox => {
@@ -64,8 +65,7 @@ var CustomerList = function () {
                         cancelButton: "btn fw-bold btn-active-light-primary"
                     }
                 });
-            }
-            else if (updateToolbar() > 1) {
+            } else if (updateToolbar() > 1) {
                 return Swal.fire({
                     text: "Bạn có muốn xóa tất cả khách hàng đã chọn?",
                     icon: "warning",
@@ -88,16 +88,19 @@ var CustomerList = function () {
                 };
                 if (result.value) {
                     var list_selected = [];
-                    var checkboxed = document.querySelectorAll('tbody [type="checkbox"]');
+                    var checkboxed = document.querySelectorAll('tbody  [type="checkbox"]');
                     checkboxed.forEach((checkbox => {
                         if (checkbox.checked) {
                             list_selected = [...list_selected, checkbox.closest('tr')
-                                .querySelector('.button-edit').getAttribute('data-target')];
+                                .querySelector('.phone-number').innerText];
+
                         }
                     }));
+                    console.log(list_selected);
+
                     const deletePromises = list_selected.map((customerPhone) => {
                         const url = delete_customer_route.replace(':phone', customerPhone);
-                        return axios.delete(url, { headers: headers });
+                        return axios.delete(url, {headers: headers});
                     });
                     Promise.all(deletePromises)
                         .then((response) => {
@@ -181,7 +184,7 @@ var CustomerList = function () {
 
             axios.post(routes.updateCardNote, { id: parseInt(id), note: note }, { headers: headers })
                 .then((response) => {
-                    if (response.data.code == 0) {
+                    if (response.data.code === 0) {
                         Swal.fire({
                             text: 'Cập nhật ghi chú thành công!',
                             icon: "success",
@@ -269,7 +272,7 @@ var CustomerList = function () {
 
             axios.post(routes.remindCard, { id: id }, { headers: headers })
                 .then((res) => {
-                    if (res.data.code == 0) {
+                    if (res.data.code === 0) {
                         Swal.fire({
                             text: "Nhắc nhở thành công",
                             icon: "success",
@@ -309,6 +312,7 @@ var CustomerList = function () {
 
     //EDIT
     const formEdit = document.querySelector('#edit_customer_form');
+    const formEditCard = document.querySelector('#edit_card_form');
     let listCard = []
 
     const optionFormat = function (item) {
@@ -336,7 +340,7 @@ var CustomerList = function () {
             templateResult: optionFormat,
             placeholder: {
                 id: '',
-                text: 'None Selected'
+                text: 'Chưa được chọn'
             },
             closeOnSelect: false,
             multiple: true,
@@ -378,7 +382,8 @@ var CustomerList = function () {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr')
                 const data = datatable.row(row).data();
-                formEdit.querySelector('input[name="id"]').value = data.customer.id;
+                console.log(data);
+                formEdit.querySelector('input[name="id"]').value =  data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
                 listCard = data.customer.cards
@@ -406,7 +411,7 @@ var CustomerList = function () {
 
             axios.post(routes.updateCustomer, data, { headers: headers })
                 .then((res) => {
-                    if (res.data.code == 0) {
+                    if (res.data.code === 0) {
                         Swal.fire({
                             text: "Sửa thông tin khách hàng thành công",
                             icon: "success",
@@ -448,6 +453,127 @@ var CustomerList = function () {
         })
     }
 
+    const initEditCard = () => {
+        let btnEdits = document.querySelectorAll('.btn-edit-card');
+
+        btnEdits.forEach((btn) => {
+            btn.addEventListener('click', function () {
+                const row = btn.closest('tr')
+                const data = datatable.row(row).data();
+                formEditCard.querySelector('input[name="id"]').value =  data.id ?? '';
+                formEditCard.querySelector('input[name="account_name"]').value = data.account_name ?? '';
+                formEditCard.querySelector('input[name="card_number"]').value = data.card_number ?? '';
+                formEditCard.querySelector('input[name="account_number"]').value = data.account_number ?? '';
+                formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
+                formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
+                formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
+                formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
+                formEditCard.querySelector('input[name="total_money"]').value = data.total_money ?? '';
+                formEditCard.querySelector('select[name="select_formality"]').value = data.formality ?? '';
+                formEditCard.querySelector('input[name="pay_extra"]').value = data.pay_extra ?? '';
+                formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
+            })
+        })
+    }
+
+    const submitEditCardForm = () => {
+        $('#edit_card_form').submit(function (e) {
+            e.preventDefault();
+            let data = {
+                id: formEditCard.querySelector(
+                    "input[name='id']").value,
+                account_name: formEditCard.querySelector(
+                    'input[name="account_name"]'
+                ).value,
+                card_number: formEditCard.querySelector(
+                    'input[name="card_number"]'
+                ).value,
+                account_number: formEditCard.querySelector(
+                    'input[name="account_number"]'
+                ).value,
+                date_due: formEditCard.querySelector(
+                    'input[name="date_due"]'
+                ).value,
+                date_return: formEditCard.querySelector(
+                    'input[name="date_return"]'
+                ).value,
+                login_info: formEditCard.querySelector(
+                    'input[name="login_info"]'
+                ).value,
+                bank_code: formEditCard.querySelector(
+                    'select[name="bank_code"]'
+                ).value,
+                fee_percent: formEditCard.querySelector(
+                    'input[name="fee_percent"]'
+                ).value,
+                total_money: formEditCard.querySelector(
+                    'input[name="total_money"]'
+                ).value,
+                formality: formEditCard.querySelector(
+                    'select[name="select_formality"]'
+                ).value,
+                pay_extra: formEditCard.querySelector(
+                    'input[name="pay_extra"]'
+                ).value,
+                note: formEditCard.querySelector(
+                    'textarea[name="note"]'
+                ).value,
+            };
+
+            axios.post(
+                routes.editCard, data,
+                { headers: headers })
+                .then((res) => {
+                    if (res.data.code === 0) {
+                        Swal.fire({
+                            text: "Sửa thông tin thẻ thành công",
+                            icon: "success",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            }
+                        }).then(function (result) {
+                            if (result.isConfirmed) {
+                                editCardModal.hide();
+                                formEditCard.reset();
+                                $("#select_add_card").empty()
+                                datatable.draw()
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            text: res.data.data.join(", "),
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Quay lại ",
+                            customClass: {
+                                confirmButton: "btn btn-primary",
+                            },
+                        });
+                    }
+                }).catch((err) => {
+                Swal.fire({
+                    text: err.message,
+                    icon: "error",
+                    buttonsStyling: !1,
+                    confirmButtonText: "Quay lại ",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                    },
+                });
+            });
+        })
+    }
+
+    $("#modal_edit_card_close").click(function () {
+        editCardModal.hide();
+    })
+
+    $("#modal_edit_card_cancel").click(function () {
+        editCardModal.hide();
+    })
+
     $("#modal_edit_customer_close").click(function () {
         editModal.hide();
     })
@@ -455,6 +581,8 @@ var CustomerList = function () {
     $("#modal_edit_customer_cancel").click(function () {
         editModal.hide();
     })
+
+
 
     return {
         initDatatable: async function () {
@@ -489,12 +617,12 @@ var CustomerList = function () {
                 columnDefs: [
                     {
                         targets: 0,
-                        data: 'id',
+                        data: 'customer.id',
                         orderable: false,
                         render: function (data, type, row) {
                             return `
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="${data}" />
+                                        <input class="form-check-input" type="checkbox" />
                                     </div>`;
                         }
                     },
@@ -620,7 +748,8 @@ var CustomerList = function () {
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
-                                            <a href="javascript:void(0);" class="menu-link px-3 btn-edit-customer">
+                                            <a href="javascript:void(0);" class="menu-link px-3 btn-edit-card" data-bs-toggle="modal"
+                                            data-bs-target="#modal_edit_card">
                                                 Sửa thẻ
                                             </a>
                                         </div>
@@ -646,15 +775,18 @@ var CustomerList = function () {
                 flag = false
                 dt_phone = null;
                 initDeleteSelected();
+                handleSearchDatatable()
                 initNoteDrawer()
                 initRemindDrawer()
                 initEdit()
+                initEditCard()
                 KTMenu.createInstances()
             })
             handleSearchDatatable()
             initEditGetBlankCards()
             saveNoteDrawer()
             submitEditForm()
+            submitEditCardForm()
             alertRemindDrawer()
         }
     };

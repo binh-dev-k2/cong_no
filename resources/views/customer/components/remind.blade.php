@@ -4,7 +4,7 @@
     <div class="card rounded-0 w-100">
         <div class="card-header pe-5">
             <div class="card-title">
-                Lịch sử nhắc nhở
+                Lịch sử nhắc nợ
             </div>
             <div class="card-toolbar">
             </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="card-footer">
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary drawer-remind-alert">Nhắc nhở</button>
+                <button type="button" class="btn btn-primary drawer-remind-alert">Nhắc nợ</button>
             </div>
         </div>
     </div>

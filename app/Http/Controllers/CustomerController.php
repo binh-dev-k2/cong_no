@@ -54,7 +54,7 @@ class CustomerController extends Controller
 
     public function datatable(Request $request): JsonResponse
     {
-        $result = $this->cardService->filterDatatable($request->all());
+        $result = $this->cardService->filterDatatableCustomer($request->all());
         return response()->json($result);
     }
 

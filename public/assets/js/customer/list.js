@@ -4,7 +4,7 @@ var CustomerList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
     const drawer_remind = document.querySelector("#drawer_remind");
-    let dt_name = '', dt_phone = ''
+    let flag = false, dt_phone = ''
     const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
 
     const headers = {
@@ -152,6 +152,8 @@ var CustomerList = function () {
         $('#customer_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
+                dt_phone = ''
+                flag = false
                 datatable.draw();
             }, 500)
         }));
@@ -503,10 +505,12 @@ var CustomerList = function () {
                         data: 'customer.name',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data != dt_name) {
-                                dt_name = data
+                            if (row.customer && row.customer.phone != dt_phone && type === 'display') {
+                                dt_phone = row.customer.phone
+                                flag = true
                                 return `<span>${data ?? ''}</span>`
                             }
+                            flag = false
                             return `<span></span>`
                         }
                     },
@@ -515,8 +519,7 @@ var CustomerList = function () {
                         data: 'customer.phone',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data != dt_phone) {
-                                dt_phone = data
+                            if (flag) {
                                 return `<span>${data ?? ''}</span>`
                             }
                             return `<span></span>`
@@ -643,12 +646,12 @@ var CustomerList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 initDeleteSelected();
-                handleSearchDatatable()
                 initNoteDrawer()
                 initRemindDrawer()
                 initEdit()
                 KTMenu.createInstances()
             })
+            handleSearchDatatable()
             initEditGetBlankCards()
             saveNoteDrawer()
             submitEditForm()

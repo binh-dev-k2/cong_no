@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBusinessMoneyTable extends Migration
+class CreateCardMoneyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateBusinessMoneyTable extends Migration
      */
     public function up()
     {
-        Schema::create('business_money', function (Blueprint $table) {
+        Schema::create('card_money', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('business_id');
+            $table->unsignedBigInteger('card_id');
             $table->bigInteger('money');
             $table->text('note')->nullable();
             $table->timestamps();

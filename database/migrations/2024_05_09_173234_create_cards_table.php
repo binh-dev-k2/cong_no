@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Card;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +25,14 @@ class CreateCardsTable extends Migration
             $table->date('date_return')->nullable();
             $table->string('account_name');
             $table->string('note')->nullable();
+
+            $table->smallInteger('fee_percent');
+            $table->bigInteger('total_money');
+            $table->enum('formality', ['R', 'D']);
+            // $table->bigInteger('fee');
+            $table->bigInteger('pay_extra')->nullable();
+            $table->tinyInteger('type')->default(Card::TYPE_BUSINESS);
+            $table->tinyInteger('status')->default(Card::STATUS_UNPAID);
             $table->timestamps();
         });
     }

@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Debt;
 
 
-class DebtService{
+class DebtService
+{
     function getAllDebt()
     {
         $list_debt = Debt::with('customer', 'card')->get();
@@ -19,7 +21,7 @@ class DebtService{
                 'withdrawal_fee' => $debt->withdrawal_fee,
                 'total' => $debt->total_money,
                 'pay_extra' => $debt->pay_extra,
-                'status' => $debt->status == 0 ? "Chưa thanh toán" : "Đã thanh toán" ,
+                'status' => $debt->status == 0 ? "Chưa thanh toán" : "Đã thanh toán",
             ];
 
             $formatted_debts[] = $formatted_debt;

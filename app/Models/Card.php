@@ -15,8 +15,11 @@ class Card extends Model
 
     protected $guarded = [];
 
-    public const STATUS_BUSINESS = 1;
-    public const STATUS_DEBT = 2;
+    public const TYPE_BUSINESS = 1;
+    public const TYPE_DEBT = 2;
+
+    public const STATUS_UNPAID = 1;
+    public const STATUS_PAID = 2;
 
     public function bank(): BelongsTo
     {
@@ -31,5 +34,10 @@ class Card extends Model
     public function cardHistories(): HasMany
     {
         return $this->hasMany(CardHistory::class, 'card_id', 'id');
+    }
+
+    public function money(): HasMany
+    {
+        return $this->hasMany(CardMoney::class, 'card_id', 'id');
     }
 }

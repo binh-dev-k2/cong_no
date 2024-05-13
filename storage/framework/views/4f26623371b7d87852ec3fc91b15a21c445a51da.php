@@ -136,7 +136,6 @@
     <script>
         var token = "<?php echo e(session('authToken')); ?>";
         var routes = {
-            findCard: "<?php echo e(route('api.card.find')); ?>",
             blankCards: "<?php echo e(route('api.card.blankCards')); ?>",
             storeCard: "<?php echo e(route('api.card.store')); ?>",
             storeCustomer: "<?php echo e(route('api.customer.store')); ?>",

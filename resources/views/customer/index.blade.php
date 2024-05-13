@@ -137,7 +137,6 @@
     <script>
         var token = "{{ session('authToken') }}";
         var routes = {
-            findCard: "{{ route('api.card.find') }}",
             blankCards: "{{ route('api.card.blankCards') }}",
             storeCard: "{{ route('api.card.store') }}",
             storeCustomer: "{{ route('api.customer.store') }}",

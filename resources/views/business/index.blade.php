@@ -50,16 +50,6 @@
                         </div>
                     </div>
                     <div class="card-toolbar">
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal"
-                                data-bs-target="#business_modal_export">
-                                <i class="ki-duotone ki-exit-up fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>Export</button>
-                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
-                                data-bs-target="#business_modal_add">Thêm nghiệp vụ</button>
-                        </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
                             <div class="fw-bold me-5">
@@ -81,14 +71,14 @@
                                             data-kt-check-target="#business_table .form-check-input" value="1" />
                                     </div>
                                 </th>
-                                <th class="text-center min-w-125px">Ngày</th>
-                                <th class="text-center min-w-125px">Họ và tên</th>
+                                <th class="text-center min-w-125px">Ngày tạo</th>
+                                <th class="text-center min-w-125px">Tên - SĐT</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
-                                <th class="text-center min-w-125px">Phí (%)</th>
-                                <th class="text-center min-w-125px">Số tiền</th>
-                                <th class="text-center min-w-125px">Hình thức</th>
-                                <th class="text-center min-w-125px">Phí (Đáo/Rút)</th>
-                                <th class="text-center min-w-125px">Trả thêm</th>
+                                <th class="text-center min-w-50px">Phí (%)</th>
+                                <th class="text-center min-w-125px">Số tiền(vnđ)</th>
+                                <th class="text-center min-w-75px">Hình thức</th>
+                                <th class="text-center min-w-125px">Phí Đáo/Rút(vnđ)</th>
+                                <th class="text-center min-w-125px">Trả thêm(vnđ)</th>
                                 <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>
@@ -109,21 +99,13 @@
     <script>
         var token = "{{ session('authToken') }}";
         var routes = {
-            findCard: "{{ route('api.card.find') }}",
-            blankCards: "{{ route('api.card.blankCards') }}",
-            storeCard: "{{ route('api.card.store') }}",
-            addCustomer: "{{ route('api.customer.store') }}",
-            getAllCustomers: "{{ route('api.customer_showAll') }}",
-            deleteCustomer: "{{ route('api.customer_delete', ':phone') }}",
-            updateCardNote: "{{ route('api.card.updateNote') }}"
+            datatable: "{{ route('api.business.datatable') }}",
+            businessComplete: "{{ route('api.business.complete') }}",
+            businessUpdatePayExtra: "{{ route('api.business.updatePayExtra') }}",
         }
-        var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
         var datatable;
     </script>
 
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
-    <script src="{{ asset('assets/js/customer/list.js') }}"></script>
-    <script src="{{ asset('assets/js/customer/add.js') }}"></script>
-    <script src="{{ asset('assets/js/customer/add_card.js') }}"></script>
+    <script src="{{ asset('assets/js/business/list.js') }}"></script>
 @endsection

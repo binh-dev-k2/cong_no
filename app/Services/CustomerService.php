@@ -81,16 +81,26 @@ class CustomerService
 
     function delete($phone)
     {
-        $result = Customer::where('phone', $phone)->delete();
-        if ($result) {
-            return [
-                'success' => true,
-                'data' => $result
-            ];
+        try {
+            DB::beginTransaction();
+            $customer = Customer::where('phone', $phone)->first();
+            if (!$customer) {
+                return false;
+            }
+
+            $result = $customer->delete();
+            if ($result) {
+                $this->cardService->unassignCustomer($customer->id);
+                DB::commit();
+                return true;
+            }
+
+            DB::rollBack();
+            return false;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
         }
-        return [
-            'success' => false,
-            'code' => 1
-        ];
     }
 }

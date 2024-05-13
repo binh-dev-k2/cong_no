@@ -1,5 +1,4 @@
 "use strict";
-
 var CustomerList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
@@ -88,13 +87,16 @@ var CustomerList = function () {
                 };
                 if (result.value) {
                     var list_selected = [];
-                    var checkboxed = document.querySelectorAll('tbody [type="checkbox"]');
+                    var checkboxed = document.querySelectorAll('tbody  [type="checkbox"]');
                     checkboxed.forEach((checkbox => {
                         if (checkbox.checked) {
                             list_selected = [...list_selected, checkbox.closest('tr')
-                                .querySelector('.button-edit').getAttribute('data-target')];
+                                .querySelector('.phone-number').innerText];
+
                         }
                     }));
+                    console.log(list_selected);
+
                     const deletePromises = list_selected.map((customerPhone) => {
                         const url = delete_customer_route.replace(':phone', customerPhone);
                         return axios.delete(url, {headers: headers});
@@ -614,12 +616,12 @@ var CustomerList = function () {
                 columnDefs: [
                     {
                         targets: 0,
-                        data: 'id',
+                        data: 'customer.id',
                         orderable: false,
                         render: function (data, type, row) {
                             return `
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="${data}" />
+                                        <input class="form-check-input" type="checkbox" />
                                     </div>`;
                         }
                     },
@@ -642,7 +644,7 @@ var CustomerList = function () {
                         render: function (data, type, row) {
                             if (data !== dt_phone) {
                                 dt_phone = data
-                                return `<span>${data ?? ''}</span>`
+                                return `<span class="phone-number">${data ?? ''}</span>`
                             }
                             return `<span></span>`
                         }

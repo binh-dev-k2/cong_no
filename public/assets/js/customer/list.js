@@ -91,8 +91,7 @@ var CustomerList = function () {
                     var checkboxed = document.querySelectorAll('tbody  [type="checkbox"]');
                     checkboxed.forEach((checkbox => {
                         if (checkbox.checked) {
-                            list_selected = [...list_selected, checkbox.closest('tr')
-                                .querySelector('.phone-number').innerText];
+                            list_selected = [...list_selected, checkbox.closest('tr').querySelector('.phone-number').innerText];
 
                         }
                     }));
@@ -648,7 +647,7 @@ var CustomerList = function () {
                             if (flag) {
                                 return `<span class="phone-number">${data ?? ''}</span>`
                             }
-                            return `<span></span>`
+                            return `<span class="phone-number"></span>`
                         }
                     },
                     {

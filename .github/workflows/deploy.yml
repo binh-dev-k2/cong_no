@@ -3,7 +3,7 @@ name: 🚀 Deploy cong no website on service
 on:
   push:
     branches:
-      - dev
+      - live
 
 jobs:
   deploy:

@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title'); ?>
     Trang thống kê
 <?php $__env->stopSection(); ?>
@@ -142,12 +143,11 @@
             storeCustomer: "<?php echo e(route('api.customer.store')); ?>",
             updateCustomer: "<?php echo e(route('api.customer.update')); ?>",
             getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
-            deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
+            deleteCustomers: "<?php echo e(route('api.customer_delete')); ?>",
             updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>",
             remindCard: "<?php echo e(route('api.card.remindCard')); ?>",
             editCard: "<?php echo e(route('api.card.edit')); ?>",
         }
-        var delete_customer_route = "<?php echo e(route('api.customer_delete', ':phone')); ?>";
         var datatable;
     </script>
     <script src="<?php echo e(asset('assets/plugins/custom/datatables/datatables.bundle.js')); ?>"></script>

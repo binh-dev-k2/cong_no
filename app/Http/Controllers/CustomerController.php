@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Customer\AddCustomerRequest;
+use App\Http\Requests\Customer\DeleteCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Bank;
 use App\Models\Customer;
@@ -82,14 +83,11 @@ class CustomerController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
-    public function destroy(int $phone, CardService $cardService): JsonResponse
+    public function destroy(DeleteCustomerRequest $request)
     {
-        $customer = Customer::where('phone', $phone)->first();
-        if ($customer) {
-            $id = $customer->id;
-            $cardService->unassignCustomer($id);
-        }
-        $data = $this->customerService->delete($phone);
-        return $this->successJsonResponse(200, $data);
+        $customer_ids = $request->validated();
+        $customer_ids = $customer_ids['list_selected'];
+        $result = $this->customerService->delete($customer_ids);
+        return jsonResponse($result ? 0 : 1);
     }
 }

@@ -114,7 +114,6 @@
             storeCard: "{{ route('api.card.store') }}",
             addCustomer: "{{ route('api.customer.store') }}",
             getAllCustomers: "{{ route('api.customer_showAll') }}",
-            deleteCustomer: "{{ route('api.customer_delete', ':phone') }}",
             updateCardNote: "{{ route('api.card.updateNote') }}"
         }
         var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";

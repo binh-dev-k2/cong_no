@@ -32,9 +32,9 @@ class CardController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
-    public function getBlankCards(Request $request)
+    public function getBlankCards()
     {
-        $blankCards = $this->cardService->getBlankCards($request->all());
+        $blankCards = $this->cardService->getBlankCards();
         return jsonResponse(0, $blankCards);
     }
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\Customer\addCustomerRequest;
 use App\Models\Card;
+use App\Models\CardHistory;
 use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +23,7 @@ class CustomerService
         return app(CardService::class);
     }
 
-    function create($data)
+    public function create($data)
     {
         try {
             DB::beginTransaction();
@@ -32,15 +33,23 @@ class CustomerService
                 'phone' => $data['customer_phone']
             ]);
 
-            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
-
-            if ($result) {
-                DB::commit();
-                return true;
+            if (!$customer) {
+                Log::error("Failed to create customer with data: " . json_encode($data));
+                DB::rollBack();
+                return false;
             }
 
-            DB::rollBack();
-            return false;
+            // Gán thẻ cho khách hàng
+            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
+
+            if (!$result) {
+                Log::error("Failed to assign cards to customer with ID: " . $customer->id);
+                DB::rollBack();
+                return false;
+            }
+
+            DB::commit();
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
@@ -57,20 +66,29 @@ class CustomerService
                 return false;
             }
 
-            $customer->update([
+            // Cập nhật thông tin khách hàng
+            $customerUpdated = $customer->update([
                 'name' => $data['customer_name'],
                 'phone' => $data['customer_phone']
             ]);
 
-            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
-
-            if ($result) {
-                DB::commit();
-                return true;
+            if (!$customerUpdated) {
+                Log::error("Failed to update customer with ID: " . $data['id']);
+                DB::rollBack();
+                return false;
             }
 
-            DB::rollBack();
-            return false;
+            // Gán khách hàng với các thẻ
+            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
+
+            if (!$result) {
+                Log::error("Failed to assign cards to customer with ID: " . $data['id']);
+                DB::rollBack();
+                return false;
+            }
+
+            DB::commit();
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
@@ -82,22 +100,37 @@ class CustomerService
     {
         try {
             DB::beginTransaction();
-            $customers = Customer::whereIn('id', $customer_ids)->delete();
-            if (!$customers) {
+
+            // Xóa khách hàng
+            $customersDeleted = Customer::whereIn('id', $customer_ids)->delete();
+            if (!$customersDeleted) {
+                DB::rollBack();
+                Log::error("Failed to delete customers with IDs: " . implode(', ', $customer_ids));
                 return false;
             }
-            $result = $this->cardService->unassignCustomer($customer_ids);
-            if ($result){
-                DB::commit();
-                return true;
+
+            // Hủy gán khách hàng theo card
+            $unassignResult = $this->cardService->unassignCustomer($customer_ids);
+            if (!$unassignResult) {
+                DB::rollBack();
+                Log::error("Failed to unassign customers from cardService with IDs: " . implode(', ', $customer_ids));
+                return false;
             }
-            DB::rollBack();
-            return false;
+
+            // Xóa lịch sử thẻ của khách hàng
+            $cardHistoryDeleted = CardHistory::whereIn('customer_id', $customer_ids)->delete();
+            if (!$cardHistoryDeleted) {
+                DB::rollBack();
+                Log::error("Failed to delete card history for customers with IDs: " . implode(', ', $customer_ids));
+                return false;
+            }
+
+            DB::commit();
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;
         }
     }
-
 }

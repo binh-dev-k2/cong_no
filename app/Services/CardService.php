@@ -61,13 +61,9 @@ class CardService
         return Card::where('id', $data['id'])->update(['note' => $data['note']]);
     }
 
-    public function getBlankCards($data)
+    public function getBlankCards()
     {
-        $query = Card::where('customer_id', null);
-        if (isset($data['ids'])) {
-            $query->orWhereIn('id', $data['ids']);
-        }
-        return $query->with('bank')->get();
+        return Card::where('customer_id', null)->with('bank')->get();
     }
 
     public function remindCard($data)
@@ -179,6 +175,9 @@ class CardService
                 DB::commit();
                 return true;
             }
+
+            DB::rollBack();
+            return false;
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();

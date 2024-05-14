@@ -30,7 +30,6 @@ class CardController extends Controller
         $data = $request->validated();
         $result = $this->cardService->update($data);
         return jsonResponse($result ? 0 : 1);
-//        return $data;
     }
 
     public function getBlankCards(Request $request)

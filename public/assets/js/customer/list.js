@@ -628,10 +628,13 @@ var CustomerList = function () {
                         data: 'customer.id',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
+                            if (row.customer.phone !== dt_phone && type === 'display') {
+                                return `
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
                                         <input class="form-check-input" type="checkbox" name="customer-id" value="${data}"/>
                                     </div>`;
+                            }
+                            return `<div></div>`
                         }
                     },
                     {

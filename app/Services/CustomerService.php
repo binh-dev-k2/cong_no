@@ -52,7 +52,6 @@ class CustomerService
     {
         try {
             DB::beginTransaction();
-
             $customer = Customer::where('id', $data['id'])->first();
             if (!$customer) {
                 return false;
@@ -79,22 +78,19 @@ class CustomerService
         }
     }
 
-    function delete($phone)
+    public function delete(array $customer_ids)
     {
         try {
             DB::beginTransaction();
-            $customer = Customer::where('phone', $phone)->first();
-            if (!$customer) {
+            $customers = Customer::whereIn('id', $customer_ids)->delete();
+            if (!$customers) {
                 return false;
             }
-
-            $result = $customer->delete();
-            if ($result) {
-                $this->cardService->unassignCustomer($customer->id);
+            $result = $this->cardService->unassignCustomer($customer_ids);
+            if ($result){
                 DB::commit();
                 return true;
             }
-
             DB::rollBack();
             return false;
         } catch (\Throwable $th) {
@@ -103,4 +99,5 @@ class CustomerService
             return false;
         }
     }
+
 }

@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store');
     Route::post('customer/update', [CustomerController::class, 'update'])->name('api.customer.update');
     Route::post('customer/datatable', [CustomerController::class, 'datatable'])->name('api.customer_showAll');
-    Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');
+    Route::delete('customer/delete/', [CustomerController::class, 'destroy'])->name('api.customer_delete');
     Route::post('customer/debt/showAll/', [DebtController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');
 
     //business
@@ -51,5 +51,5 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('debt/showAll/', [DebtController::class, 'getAllDebt'])->name('api.debt_showAll');
-Route::delete('customer/delete/{phone}', [CustomerController::class, 'destroy'])->name('api.customer_delete');
+Route::delete('customer/delete/', [CustomerController::class, 'destroy'])->name('api.customer_delete');
 Route::post('customer/debt/showAll/', [DebtController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');

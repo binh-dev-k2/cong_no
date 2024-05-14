@@ -159,9 +159,10 @@ class CardService
             DB::beginTransaction();
             $this->unassignCustomer($customerId);
             $result = Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
-
-            DB::commit();
-            return true;
+            if ($result) {
+                DB::commit();
+                return true;
+            }
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -172,7 +173,19 @@ class CardService
 
     function unassignCustomer($id)
     {
-        return Card::where('customer_id', $id)->update(['customer_id' => null]);
+        try {
+            DB::beginTransaction();
+            $result = Card::whereIn('customer_id', $id)->update(['customer_id' => null]);
+            if ($result) {
+                DB::commit();
+                return true;
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
+        }
     }
 
 

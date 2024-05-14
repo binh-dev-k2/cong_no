@@ -1,5 +1,4 @@
 "use strict";
-
 var CustomerList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
@@ -91,17 +90,21 @@ var CustomerList = function () {
                     var checkboxed = document.querySelectorAll('tbody  [type="checkbox"]');
                     checkboxed.forEach((checkbox => {
                         if (checkbox.checked) {
-                            list_selected = [...list_selected, checkbox.closest('tr').querySelector('.phone-number').innerText];
+                            list_selected = [...list_selected, checkbox.closest('tr')
+                                .querySelector('input[name="customer-id"]').value];
 
                         }
                     }));
-                    console.log(list_selected);
-
-                    const deletePromises = list_selected.map((customerPhone) => {
-                        const url = delete_customer_route.replace(':phone', customerPhone);
-                        return axios.delete(url, { headers: headers });
-                    });
-                    Promise.all(deletePromises)
+                    let data ={
+                        list_selected: list_selected
+                    }
+                    console.log(data)
+                    // const deletePromises = list_selected.map((customerID) => {
+                    //     const url = delete_customer_route.replace('customer_id', customerID);
+                    //     return axios.delete(url, {headers: headers});
+                    // });
+                    // Promise.all(deletePromises)
+                    axios.delete(routes.deleteCustomers,{ headers: headers, data: data})
                         .then((response) => {
                             var notiMessage = '';
                             if (updateToolbar() === 1) {
@@ -627,7 +630,7 @@ var CustomerList = function () {
                         render: function (data, type, row) {
                             return `
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" />
+                                        <input class="form-check-input" type="checkbox" name="customer-id" value="${data}"/>
                                     </div>`;
                         }
                     },

@@ -143,12 +143,11 @@
             storeCustomer: "{{ route('api.customer.store') }}",
             updateCustomer: "{{ route('api.customer.update') }}",
             getAllCustomers: "{{ route('api.customer_showAll') }}",
-            deleteCustomer: "{{ route('api.customer_delete', ':phone') }}",
+            deleteCustomers: "{{ route('api.customer_delete') }}",
             updateCardNote: "{{ route('api.card.updateNote') }}",
             remindCard: "{{ route('api.card.remindCard') }}",
             editCard: "{{ route('api.card.edit') }}",
         }
-        var delete_customer_route = "{{ route('api.customer_delete', ':phone') }}";
         var datatable;
     </script>
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>

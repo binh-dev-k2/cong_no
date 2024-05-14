@@ -17,6 +17,7 @@ class CreateCardHistoriesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('card_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('customer_id');
             $table->timestamps();
         });
     }

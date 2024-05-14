@@ -26,7 +26,8 @@ class RemindCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:cards,id'
+            'id' => 'required|exists:cards,id',
+            'customer_id' => 'required|exists:customers,id'
         ];
     }
 

@@ -12,6 +12,7 @@
         <div class="card-body hover-scroll-overlay-y">
             <div class="div">
                 <input type="hidden" name="card_id">
+                <input type="hidden" name="customer_id">
             </div>
             <div class="timeline-label"></div>
         </div>

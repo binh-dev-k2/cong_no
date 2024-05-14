@@ -95,7 +95,7 @@ var CustomerList = function () {
 
                         }
                     }));
-                    let data ={
+                    let data = {
                         list_selected: list_selected
                     }
                     console.log(data)
@@ -104,7 +104,7 @@ var CustomerList = function () {
                     //     return axios.delete(url, {headers: headers});
                     // });
                     // Promise.all(deletePromises)
-                    axios.delete(routes.deleteCustomers,{ headers: headers, data: data})
+                    axios.delete(routes.deleteCustomers, { headers: headers, data: data })
                         .then((response) => {
                             var notiMessage = '';
                             if (updateToolbar() === 1) {
@@ -248,6 +248,7 @@ var CustomerList = function () {
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
                 drawer_remind.querySelector('input[name="card_id"]').value = data.id
+                drawer_remind.querySelector('input[name="customer_id"]').value = data.customer.id
 
                 const html = data.card_histories.map((history) => (
                     `
@@ -274,8 +275,9 @@ var CustomerList = function () {
         drawer_remind_alert.addEventListener('click', function (e) {
             e.preventDefault()
             const id = drawer_remind.querySelector('input[name="card_id"]').value
+            const customer_id = drawer_remind.querySelector('input[name="customer_id"]').value
 
-            axios.post(routes.remindCard, { id: id }, { headers: headers })
+            axios.post(routes.remindCard, { id: id, customer_id: customer_id }, { headers: headers })
                 .then((res) => {
                     if (res.data.code === 0) {
                         Swal.fire({

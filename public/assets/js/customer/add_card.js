@@ -1,7 +1,6 @@
 "use strict";
 const FormAddCard = (function () {
     let collapse_add_new_card, form, btn_submit_add_new_card, formValidate;
-    console.log(token)
     const optionFormat = function (item) {
         if (!item.id) {
             return item.text;
@@ -199,7 +198,6 @@ const FormAddCard = (function () {
                                     btn_submit_add_new_card.removeAttribute(
                                         "data-kt-indicator"
                                     );
-                                    console.log(response);
                                     if (response.status === 200) {
                                         Swal.fire({
                                             text: response.data.message,

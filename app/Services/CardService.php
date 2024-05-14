@@ -74,7 +74,8 @@ class CardService
     {
         return CardHistory::create([
             'card_id' => $data['id'],
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
+            'customer_id' => $data['customer_id']
         ]);
     }
 

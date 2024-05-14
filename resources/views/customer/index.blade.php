@@ -37,7 +37,7 @@
                 </ul>
             </div>
             <div class="d-flex align-items-center overflow-auto">
-                <div class="d-flex align-items-center flex-shrink-0">
+                {{-- <div class="d-flex align-items-center flex-shrink-0">
                     <span class="fs-7 fw-bold text-gray-700 flex-shrink-0 pe-4 d-none d-md-block">Lọc :</span>
                     <div class="flex-shrink-0">
                         <ul class="nav">
@@ -57,7 +57,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
                 <div class="bullet bg-secondary h-35px w-1px mx-5"></div>
             </div>
         </div>

@@ -84,12 +84,12 @@
         </div>
         <div class="d-flex flex-column mb-3 fv-row">
             <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
-            <input type="text" class="form-control form-control-solid"
+            <input type="number" class="form-control form-control-solid"
                    placeholder="Nhập phần trăm phí" name="fee_percent" id="fee_percent" />
         </div>
         <div class="d-flex flex-column mb-3 fv-row">
             <label class="required fs-6 fw-semibold mb-2" for="total_money">Tổng số tiền</label>
-            <input type="text" class="form-control form-control-solid"
+            <input type="number" class="form-control form-control-solid"
                    placeholder="Nhập tổng số tiền" name="total_money" id="total_money" />
         </div>
         <div class="d-flex flex-column mb-3 fv-row">
@@ -99,13 +99,13 @@
             <select class="form-select form-select-solid"
                     data-placeholder="Chọn hình thức" name="select_formality" id="select_formality">
                 <option value="">Chọn hình thức</option>
-                <option value="D">D</option>
-                <option value="R">R</option>
+                <option value="D">Đáo</option>
+                <option value="R">Rút</option>
             </select>
         </div>
         <div class="d-flex flex-column mb-3 fv-row">
-            <label class="required fs-6 fw-semibold mb-2" for="pay_extra">Tiền trả thêm</label>
-            <input type="text" class="form-control form-control-solid"
+            <label class="fs-6 fw-semibold mb-2" for="pay_extra">Tiền trả thêm</label>
+            <input type="number" class="form-control form-control-solid"
                    placeholder="Nhập số tiền trả thêm" name="pay_extra" id="pay_extra" />
         </div>
         <div class="d-flex flex-column mb-3 fv-row">

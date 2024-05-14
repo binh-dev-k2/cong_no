@@ -6,6 +6,7 @@ use App\Http\Requests\Card\AddCardRequest;
 use App\Http\Requests\Card\EditCardRequest;
 use App\Models\Card;
 use App\Models\CardHistory;
+use App\Models\CardMoney;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -81,17 +82,31 @@ class CardService
 
     function save(AddCardRequest $request)
     {
-        $result = Card::create($request->all());
-        if ($result) {
+        try {
+            DB::beginTransaction();
+            $card = Card::create($request->all());
+            if ($card) {
+                $this->calculateFee($card->id, $card->total_money);
+                DB::commit();
+                return [
+                    'success' => true,
+                    'data' => $card
+                ];
+            }
+
+            DB::rollBack();
             return [
-                'success' => true,
-                'data' => $result
+                'success' => false,
+                'code' => 1
+            ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return [
+                'success' => false,
+                'code' => 1
             ];
         }
-        return [
-            'success' => false,
-            'code' => 1
-        ];
     }
 
     function update($data)
@@ -103,7 +118,8 @@ class CardService
             if (!$card) {
                 return false;
             }
-            $card->update([
+
+            $result = $card->update([
                 'account_name' => $data['account_name'],
                 'account_number' => $data['account_number'],
                 'bank_code' => $data['bank_code'],
@@ -118,7 +134,8 @@ class CardService
                 'total_money' => $data['total_money'],
             ]);
 
-            if ($card) {
+            if ($result) {
+                $this->calculateFee($card->id, $data['total_money']);
                 DB::commit();
                 return true;
             }
@@ -129,6 +146,11 @@ class CardService
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;
         }
+    }
+
+    public function randomMoney()
+    {
+        return random_int(34000000, 35000000);
     }
 
     function assignCustomer($cardIds, $customerId)
@@ -150,11 +172,7 @@ class CardService
 
     function unassignCustomer($id)
     {
-        $cards = Card::where('customer_id', $id)->get();
-        foreach ($cards as $card) {
-            $card->customer_id = null;
-            $card->save();
-        }
+        return Card::where('customer_id', $id)->update(['customer_id' => null]);
     }
 
 
@@ -187,8 +205,8 @@ class CardService
         $query->orderBy('customer_id', 'desc');
 
         $recordsFiltered = $recordsTotal = $query->count();
-        $customers = $query->skip($skip)
-            ->with(['customer', 'bank', 'money'])
+        $businnesses = $query->skip($skip)
+            ->with(['customer', 'bank'])
             ->take($pageLength)
             ->get();
 
@@ -196,7 +214,7 @@ class CardService
             "draw" => $data['draw'] ?? 1,
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
-            'data' => $customers
+            'data' => $businnesses
         ];
     }
 
@@ -205,12 +223,53 @@ class CardService
         return Card::where('id', $id)->update(['type' => Card::TYPE_DEBT]);
     }
 
-    public function businessUpdateNote($data)
-    {
-    }
-
     public function businessUpdatePayExtra($data)
     {
         return Card::where('id', $data['id'])->update(['pay_extra' => $data['pay_extra']]);
+    }
+
+    public function calculateFee($cardId, $totalMoney)
+    {
+        CardMoney::whereIn('card_id', [$cardId])->delete();
+        $data = [];
+
+        while ($totalMoney > 0) {
+            $randomMoney = $this->randomMoney();
+            if ($totalMoney >= $randomMoney) {
+                $data[] = [
+                    'card_id' => $cardId,
+                    'money' => $randomMoney
+                ];
+                $totalMoney -= $randomMoney;
+            } else {
+                $check = false;
+                foreach ($data as &$d) {
+                    if ($d['money'] + $totalMoney <= 35000000) {
+                        $d['money'] += $totalMoney;
+                        $check = true;
+                        break;
+                    }
+                }
+                if (!$check) {
+                    $data[] = [
+                        'card_id' => $cardId,
+                        'money' => $totalMoney
+                    ];
+                }
+                $totalMoney = 0;
+            }
+        }
+
+        return CardMoney::insert($data);
+    }
+
+    public function businessUpdateMoneyNote($data)
+    {
+        return CardMoney::where('id', $data['id'])->update(['note' => $data['note']]);
+    }
+
+    public function businessGetMoney($id)
+    {
+        return CardMoney::where('card_id', $id)->get();
     }
 }

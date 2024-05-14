@@ -1,7 +1,7 @@
 "use strict";
 
 var CustomerList = function () {
-    let timeoutSearch, prevId;
+    let timeoutSearch, prevId = null;
 
     const headers = {
         Authorization: `Bearer ${token}`,
@@ -38,6 +38,7 @@ var CustomerList = function () {
         $('#business_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
+                prevId = null
                 datatable.draw();
             }, 500)
         }));
@@ -91,10 +92,24 @@ var CustomerList = function () {
     const initViewMoney = () => {
         const viewMoneyBtns = document.querySelectorAll('.btn-view-money');
         viewMoneyBtns.forEach((btn) => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', () => {
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
-                console.log(data);
+                const id = data.id
+
+                axios.post(routes.businessViewMoney, { id: id }, { headers: headers })
+                    .then((res) => {
+                        if (res.status === 200) {
+                            $('#money-modal .modal-dialog').html(res.data);
+                            $('#money-modal').modal('show');
+                        } else {
+                            notify("Có lỗi xảy ra...", 'error')
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        notify(err.message, 'error')
+                    })
             })
         })
     }
@@ -128,7 +143,7 @@ var CustomerList = function () {
     }
 
     const caculateFee = (totalMoney, feePercent) => {
-        return parseFloat(parseFloat(feePercent / 100) * totalMoney).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).slice(0, -1)
+        return parseFloat(parseFloat(feePercent / 100) * totalMoney).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1)
     }
 
     const notify = (text, type = 'success', showCancelButton = false) => {
@@ -198,7 +213,7 @@ var CustomerList = function () {
                         data: 'customer',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data && data.id != prevId && type === 'display') {
+                            if (type === 'display' && data.id != prevId) {
                                 prevId = data.id
                                 return `<span>${data.name} - ${data.phone}</span>`
                             }
@@ -231,7 +246,7 @@ var CustomerList = function () {
                         data: 'total_money',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).slice(0, -1)}</span>`;
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1)}</span>`;
                         }
                     },
                     {
@@ -257,7 +272,7 @@ var CustomerList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex align-items-center justify-content-between container-pay-extra">
-                                        <span class="me-2">${data.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).slice(0, -1) ?? 0}</span>
+                                        <span class="me-2">${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                         <button class="btn btn-warning btn-edit-pay-extra">Sửa</button>
                                     </div>
                                     `;
@@ -275,13 +290,13 @@ var CustomerList = function () {
                                     `;
                         },
                     },
-                ]
+                ],
             });
 
             // Re-init functions
             datatable.on('draw', function () {
-                prevId = null
                 initComplete()
+                initViewMoney()
                 initEditPayExtra()
                 KTMenu.createInstances()
             })

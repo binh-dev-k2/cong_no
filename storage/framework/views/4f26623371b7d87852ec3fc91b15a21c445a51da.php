@@ -2,6 +2,7 @@
     Trang thống kê
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('header'); ?>
+
     <style>
         tr td {
             padding: 0.5rem !important;
@@ -105,8 +106,7 @@
                                             data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                     </div>
                                 </th>
-                                <th class="text-center min-w-125px">Tên</th>
-                                <th class="text-center min-w-125px">Số điện thoại</th>
+                                <th class="text-center min-w-125px">Tên - SĐT</th>
                                 <th class="text-center min-w-125px">Ngân hàng</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-125px">Số tài khoản</th>
@@ -130,6 +130,7 @@
     <?php echo $__env->make('customer.components.remind', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('customer.modal.editCard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
@@ -144,6 +145,7 @@
             deleteCustomer: "<?php echo e(route('api.customer_delete', ':phone')); ?>",
             updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>",
             remindCard: "<?php echo e(route('api.card.remindCard')); ?>",
+            editCard: "<?php echo e(route('api.card.edit')); ?>",
         }
         var delete_customer_route = "<?php echo e(route('api.customer_delete', ':phone')); ?>";
         var datatable;
@@ -153,6 +155,7 @@
     <script src="<?php echo e(asset('assets/js/customer/list.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add_card.js')); ?>"></script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\CodeTools\laragon\www\WORK\quan_ly_cong_no\resources\views/customer/index.blade.php ENDPATH**/ ?>

@@ -126,8 +126,8 @@ const FormAddCard = (function () {
                         },
                         pay_extra: {
                             validators: {
-                                notEmpty: {
-                                    message: "Tiền trả thêm là bắt buộc",
+                                numeric: {
+                                    message: "Tiền trả thêm phải là số",
                                 },
                             },
                         },

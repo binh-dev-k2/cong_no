@@ -93,6 +93,12 @@
         @include('customer.components.note')
         @include('customer.components.remind')
     --}}
+
+    <div class="modal fade" id="money-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -102,6 +108,7 @@
             datatable: "{{ route('api.business.datatable') }}",
             businessComplete: "{{ route('api.business.complete') }}",
             businessUpdatePayExtra: "{{ route('api.business.updatePayExtra') }}",
+            businessViewMoney: "{{ route('api.business.viewMoney') }}",
         }
         var datatable;
     </script>

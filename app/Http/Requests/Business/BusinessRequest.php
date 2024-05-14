@@ -34,9 +34,9 @@ class BusinessRequest extends FormRequest
                     'id' => 'required|exists:cards,id'
                 ];
 
-            case 'updateNote':
+            case 'updateMoneyNote':
                 return [
-                    'id' => 'required|exists:card_histories,id',
+                    'id' => 'required|exists:card_money,id',
                     'note' => 'required|string'
                 ];
 
@@ -44,6 +44,11 @@ class BusinessRequest extends FormRequest
                 return [
                     'id' => 'required|exists:cards,id',
                     'pay_extra' => 'required|numeric'
+                ];
+
+            case 'viewMoney':
+                return [
+                    'id' => 'required|exists:cards,id',
                 ];
         }
     }

@@ -26,7 +26,7 @@ class EditCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|numeric',
+            'id' => 'required|numeric|exists:cards,id',
             'card_number' => 'required|numeric|digits:16',
             'account_number' => 'required|numeric',
             'date_due' => 'required|date_format:Y-m-d',
@@ -37,7 +37,7 @@ class EditCardRequest extends FormRequest
             'fee_percent' => 'required|numeric',
             'total_money' => 'required|numeric',
             'formality' => "required|string",
-            'pay_extra' => "required|numeric",
+            'pay_extra' => "nullable|numeric",
             'note' => 'nullable|string|max:255',
 
         ];
@@ -64,7 +64,6 @@ class EditCardRequest extends FormRequest
             'total_money.required' => 'Số tiền là bắt buộc.',
             'total_money.numeric' => 'Số tiền phải là số.',
             'formality.required' => 'Hình thức thanh toán là bắt buộc.',
-            'pay_extra.required' => 'Phí thanh toán là bắt buộc.',
             'pay_extra.numeric' => 'Phí thanh toán phải là số.',
         ];
     }

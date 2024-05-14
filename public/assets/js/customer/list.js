@@ -4,7 +4,7 @@ var CustomerList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
     const drawer_remind = document.querySelector("#drawer_remind");
-    let flag = false, dt_phone = ''
+    let dt_phone = ''
     const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
     const editCardModal = new bootstrap.Modal(document.querySelector('#modal_edit_card'));
 
@@ -99,7 +99,7 @@ var CustomerList = function () {
 
                     const deletePromises = list_selected.map((customerPhone) => {
                         const url = delete_customer_route.replace(':phone', customerPhone);
-                        return axios.delete(url, {headers: headers});
+                        return axios.delete(url, { headers: headers });
                     });
                     Promise.all(deletePromises)
                         .then((response) => {
@@ -123,6 +123,7 @@ var CustomerList = function () {
                             }).then((function () {
                                 checkboxes.forEach((checkbox => {
                                     if (checkbox.checked) {
+                                        dt_phone = null;
                                         datatable.row($(checkbox.closest("tbody tr"))).remove().draw();
                                     }
                                 }));
@@ -154,6 +155,7 @@ var CustomerList = function () {
         $('#customer_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
+                dt_phone = null;
                 datatable.draw();
             }, 500)
         }));
@@ -194,6 +196,7 @@ var CustomerList = function () {
                             }
                         }).then((function () {
                             // drawer.toggle();
+                            dt_phone = null;
                             datatable.draw();
                         }));
                     } else {
@@ -273,7 +276,7 @@ var CustomerList = function () {
                 .then((res) => {
                     if (res.data.code === 0) {
                         Swal.fire({
-                            text: "Nhắc nhở thành công",
+                            text: "Nhắc nợ thành công",
                             icon: "success",
                             buttonsStyling: !1,
                             confirmButtonText: "Ok, got it!",
@@ -282,6 +285,7 @@ var CustomerList = function () {
                             }
                         }).then(function () {
                             KTDrawer.getInstance(drawer_remind).toggle()
+                            dt_phone = null;
                             datatable.draw()
                         })
                     } else {
@@ -382,7 +386,7 @@ var CustomerList = function () {
                 const row = btn.closest('tr')
                 const data = datatable.row(row).data();
                 console.log(data);
-                formEdit.querySelector('input[name="id"]').value =  data.customer_id ?? '';
+                formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
                 listCard = data.customer.cards
@@ -424,6 +428,7 @@ var CustomerList = function () {
                                 editModal.hide();
                                 formEdit.reset();
                                 $("#select_add_card").empty()
+                                dt_phone = null;
                                 datatable.draw()
                             }
                         })
@@ -459,7 +464,7 @@ var CustomerList = function () {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr')
                 const data = datatable.row(row).data();
-                formEditCard.querySelector('input[name="id"]').value =  data.id ?? '';
+                formEditCard.querySelector('input[name="id"]').value = data.id ?? '';
                 formEditCard.querySelector('input[name="account_name"]').value = data.account_name ?? '';
                 formEditCard.querySelector('input[name="card_number"]').value = data.card_number ?? '';
                 formEditCard.querySelector('input[name="account_number"]').value = data.account_number ?? '';
@@ -537,6 +542,7 @@ var CustomerList = function () {
                                 editCardModal.hide();
                                 formEditCard.reset();
                                 $("#select_add_card").empty()
+                                dt_phone = null;
                                 datatable.draw()
                             }
                         })
@@ -552,16 +558,16 @@ var CustomerList = function () {
                         });
                     }
                 }).catch((err) => {
-                Swal.fire({
-                    text: err.message,
-                    icon: "error",
-                    buttonsStyling: !1,
-                    confirmButtonText: "Quay lại ",
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                    },
+                    Swal.fire({
+                        text: err.message,
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "Quay lại ",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                        },
+                    });
                 });
-            });
         })
     }
 
@@ -627,31 +633,18 @@ var CustomerList = function () {
                     },
                     {
                         targets: 1,
-                        data: 'customer.name',
+                        data: 'customer',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (row.customer && row.customer.phone !== dt_phone && type === 'display') {
+                            if (row.customer.phone !== dt_phone && type === 'display') {
                                 dt_phone = row.customer.phone
-                                flag = true
-                                return `<span>${data ?? ''}</span>`
+                                return `<span>${row.customer.name} - ${row.customer.phone}</span>`
                             }
-                            flag = false
                             return `<span></span>`
                         }
                     },
                     {
                         targets: 2,
-                        data: 'customer.phone',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            if (flag) {
-                                return `<span class="phone-number">${data ?? ''}</span>`
-                            }
-                            return `<span class="phone-number"></span>`
-                        }
-                    },
-                    {
-                        targets: 3,
                         data: 'bank.shortName',
                         orderable: false,
                         render: function (data, type, row) {
@@ -663,7 +656,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 4,
+                        targets: 3,
                         data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
@@ -671,7 +664,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 4,
                         data: 'account_number',
                         orderable: false,
                         render: function (data, type, row) {
@@ -679,7 +672,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 6,
+                        targets: 5,
                         data: 'login_info',
                         orderable: false,
                         render: function (data, type, row) {
@@ -687,7 +680,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 7,
+                        targets: 6,
                         data: 'date_due',
                         orderable: false,
                         render: function (data, type, row) {
@@ -695,7 +688,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 8,
+                        targets: 7,
                         data: 'date_return',
                         orderable: false,
                         render: function (data, type, row) {
@@ -703,7 +696,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 9,
+                        targets: 8,
                         data: 'note',
                         orderable: false,
                         render: function (data, type, row) {
@@ -714,7 +707,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 10,
+                        targets: 9,
                         data: 'card_histories',
                         orderable: false,
                         render: function (data, type, row) {
@@ -771,8 +764,6 @@ var CustomerList = function () {
 
             // Re-init functions
             datatable.on('draw', function () {
-                flag = false
-                dt_phone = null;
                 initDeleteSelected();
                 handleSearchDatatable()
                 initNoteDrawer()

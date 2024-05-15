@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Business\BusinessRequest;
+use App\Models\Business;
 use App\Services\BusinessService;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,13 @@ class BusinessController extends Controller
         return response()->json($result);
     }
 
+    public function store(BusinessRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->businessService->store($data);
+        return jsonResponse($result ? 0 : 1);
+    }
+
     public function complete(BusinessRequest $request)
     {
         $data = $request->validated();
@@ -55,14 +63,7 @@ class BusinessController extends Controller
     public function updateMoneyNote(BusinessRequest $request)
     {
         $data = $request->validated();
-        $result = $this->businessService->businessUpdateMoneyNote($data);
+        $result = $this->businessService->updateNoteBusinessMoney($data);
         return jsonResponse($result ? 0 : 1, $result ? 'Thành công' : 'Thất bại');
-    }
-
-    public function store(BusinessRequest $request)
-    {
-        $data = $request->validated();
-        $result = $this->businessService->store($data);
-        return jsonResponse($result ? 0 : 1);
     }
 }

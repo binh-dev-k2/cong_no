@@ -15,6 +15,11 @@ class Business extends Model
 
     public function money()
     {
-        return $this->hasMany(BusinessMoney::class, 'card_id', 'id');
+        return $this->hasMany(BusinessMoney::class, 'business_id', 'id');
+    }
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class, 'card_number', 'card_number');
     }
 }

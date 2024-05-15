@@ -106,7 +106,14 @@
                 </div>
                 <div class="modal-footer flex-center">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                    <button type="submit" class="btn btn-primary" data-kt-indicator="on">
+                        <span class="indicator-label">
+                            Xác nhận
+                        </span>
+                        <span class="indicator-progress">
+                            Loading... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -122,6 +129,21 @@
         let timeOutSearchCard = null;
         const $modalBusiness = $('#modal_business');
         const $results = $modalBusiness.find('.search-results');
+
+        const notify = (text, type = 'success', showCancelButton = false) => {
+            return Swal.fire({
+                text: text,
+                icon: type,
+                buttonsStyling: !1,
+                showCancelButton: showCancelButton,
+                confirmButtonText: "Xác nhận",
+                cancelButtonText: "Đóng",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-light"
+                }
+            })
+        }
 
         $modalBusiness.find('input[name="card_number"]').on('keyup', function() {
             clearTimeout(timeOutSearchCard);
@@ -173,12 +195,11 @@
 
         $modalBusiness.on('submit', 'form', function(e) {
             e.preventDefault();
-            console.log("aaa");
             const body = {
                 card_number: $modalBusiness.find('input[name="card_number"]').val(),
-                name: $modalBusiness.find('input[name="card_number"]').val(),
-                phone: $modalBusiness.find('input[name="card_number"]').val(),
-                fee_percent: parseInt($modalBusiness.find('input[name="card_number"]').val()),
+                name: $modalBusiness.find('input[name="name"]').val(),
+                phone: $modalBusiness.find('input[name="phone"]').val(),
+                fee_percent: parseInt($modalBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalBusiness.find('input[name="formality"]').val(),
                 total_money: parseInt($modalBusiness.find('input[name="total_money"]').val()),
             }
@@ -189,12 +210,19 @@
                     headers: headers
                 })
                 .then((res) => {
-                    console.log(res);
+                    if (res.data.code == 0) {
+                        notify("Thêm mới nghiệp vụ thành công!", 'success');
+                        $modalBusiness.modal('hide');
+                        datatable.draw();
+                        $modalBusiness.find('form')[0].reset();
+                    } else {
+                        notify(res.data.data.join(', '), 'error');
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
+                    notify(err.message, 'error');
                 })
-
         })
     })
 </script>

@@ -11,6 +11,8 @@ class Debt extends Model
     use HasFactory;
     protected $table = "debts";
 
+    protected $guarded = [];
+
     public const STATUS_UNPAID = 0;
     public const STATUS_PAID = 1;
 

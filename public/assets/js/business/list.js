@@ -1,7 +1,7 @@
 "use strict";
 
 var CustomerList = function () {
-    let timeoutSearch, prevId = null;
+    var timeoutSearch, prevPhone = null;
 
     const headers = {
         Authorization: `Bearer ${token}`,
@@ -38,7 +38,7 @@ var CustomerList = function () {
         $('#business_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
-                prevId = null
+                prevPhone = null
                 datatable.draw();
             }, 500)
         }));
@@ -79,7 +79,10 @@ var CustomerList = function () {
                     axios.post(routes.businessUpdatePayExtra, { id: data.id, pay_extra: value }, { headers: headers })
                         .then((res) => {
                             if (res.data.code == 0) {
-                                notify('Lưu thành công!', 'success').then(() => { datatable.draw(); })
+                                notify('Lưu thành công!', 'success').then(() => {
+                                    prevPhone = null;
+                                    datatable.draw();
+                                })
                             } else {
                                 notify(res.data.data.join(", "), 'error')
                             }
@@ -120,7 +123,7 @@ var CustomerList = function () {
             btn.addEventListener('click', (e) => {
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
-
+                
                 notify('Hoàn thành thẻ này?', 'warning', true).then((result) => {
                     if (result.isConfirmed) {
                         axios.post(routes.businessComplete, { id: data.id }, { headers: headers })
@@ -140,10 +143,6 @@ var CustomerList = function () {
 
             })
         })
-    }
-
-    const caculateFee = (totalMoney, feePercent) => {
-        return parseFloat(parseFloat(feePercent / 100) * totalMoney).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1)
     }
 
     const notify = (text, type = 'success', showCancelButton = false) => {
@@ -210,12 +209,12 @@ var CustomerList = function () {
                     },
                     {
                         targets: 2,
-                        data: 'customer',
+                        data: null,
                         orderable: false,
                         render: function (data, type, row) {
-                            if (type === 'display' && data.id != prevId) {
-                                prevId = data.id
-                                return `<span>${data.name} - ${data.phone}</span>`
+                            if (type === 'display' && row.phone != prevPhone) {
+                                prevPhone = row.phone
+                                return `<span>${row.name} - ${row.phone}</span>`
                             }
                             return `<span></span>`
                         }
@@ -226,7 +225,7 @@ var CustomerList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="https://api.vietqr.io/img/${row.bank_code}.png" class="h-30px" alt="${row.bank_code}">
+                                        <img src="${row.card.bank.logo}" class="h-30px" alt="${row.card.bank.bank_code}">
                                         ${row.card_number}
                                     </div>
                                     `;
@@ -246,7 +245,7 @@ var CustomerList = function () {
                         data: 'total_money',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1)}</span>`;
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? ''}</span>`;
                         }
                     },
                     {
@@ -263,7 +262,7 @@ var CustomerList = function () {
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${caculateFee(row.total_money, row.fee_percent)}</span>`;
+                            return `<span>${row.fee.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1)}</span>`;
                         }
                     },
                     {

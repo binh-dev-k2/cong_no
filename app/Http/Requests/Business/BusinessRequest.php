@@ -29,26 +29,36 @@ class BusinessRequest extends FormRequest
         $action = $arr[1];
 
         switch ($action) {
+            case 'store':
+                return [
+                    'card_number' => 'required|digits:16',
+                    'name' => 'required|string',
+                    'phone' => 'required|digits:10',
+                    'fee_percent' => 'required|numeric',
+                    'formality' => 'required|string',
+                    'total_money' => 'required|numeric',
+                ];
+
             case 'complete':
                 return [
-                    'id' => 'required|exists:cards,id'
+                    'id' => 'required|exists:businesses,id'
                 ];
 
             case 'updateMoneyNote':
                 return [
-                    'id' => 'required|exists:card_money,id',
+                    'id' => 'required|exists:business_money,id',
                     'note' => 'required|string'
                 ];
 
             case 'updatePayExtra':
                 return [
-                    'id' => 'required|exists:cards,id',
+                    'id' => 'required|exists:businesses,id',
                     'pay_extra' => 'required|numeric'
                 ];
 
             case 'viewMoney':
                 return [
-                    'id' => 'required|exists:cards,id',
+                    'id' => 'required|exists:businesses,id',
                 ];
         }
     }

@@ -77,14 +77,14 @@
         <i class="ki-outline ki-arrow-up"></i>
     </div>
 
-    <?php echo $__env->yieldContent('modal'); ?>
-
     <script>
         var hostUrl = "assets/";
-    </script>
+        </script>
     <script src="<?php echo e(asset('assets/plugins/global/plugins.bundle.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/scripts.bundle.js')); ?>"></script>
     <?php echo $__env->yieldContent('script'); ?>
+
+    <?php echo $__env->yieldContent('modal'); ?>
 </body>
 
 </html>

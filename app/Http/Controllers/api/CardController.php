@@ -51,4 +51,11 @@ class CardController extends Controller
         $result = $this->cardService->remindCard($data);
         return jsonResponse($result ? 0 : 1);
     }
+
+    public function find(Request $request)
+    {
+        $data = $request->input();
+        $result = $this->cardService->find($data['search']);
+        return jsonResponse(0, $result);
+    }
 }

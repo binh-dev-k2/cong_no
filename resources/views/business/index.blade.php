@@ -50,6 +50,10 @@
                         </div>
                     </div>
                     <div class="card-toolbar">
+                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
+                                data-bs-target="#modal_business">Thêm nghiệp vụ</button>
+                        </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
                             <div class="fw-bold me-5">
@@ -61,7 +65,8 @@
                     </div>
                 </div>
                 <div class="card-body pt-0">
-                    <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
+                    <table
+                        class="table table-reponsive align-middle table-striped table-row-dashed table-bordered fs-6 gy-5"
                         id="business_table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
@@ -91,14 +96,17 @@
     </div>
     {{--
         @include('customer.components.note')
-        @include('customer.components.remind')
-    --}}
+        --}}
 
     <div class="modal fade" id="money-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
 
         </div>
     </div>
+@endsection
+
+@section('modal')
+    @include('business.modal.business')
 @endsection
 
 @section('script')

@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     //card
-    Route::get('card/find', [CardController::class, 'find'])->name('api.card.find');
+    Route::post('card/find', [CardController::class, 'find'])->name('api.card.find');
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store');
     Route::get('card/blank-cards', [CardController::class, 'getBlankCards'])->name('api.card.blankCards');
     Route::post('card/update-note', [CardController::class, 'updateNote'])->name('api.card.updateNote');
@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('business/update-pay-extra', [BusinessController::class, 'updatePayExtra'])->name('api.business.updatePayExtra');
     Route::post('business/view-money', [BusinessController::class, 'viewMoney'])->name('api.business.viewMoney');
     Route::post('business/update-money-note', [BusinessController::class, 'updateMoneyNote'])->name('api.business.updateMoneyNote');
+    Route::post('business/store', [BusinessController::class, 'store'])->name('api.business.store');
 
 
     //debt

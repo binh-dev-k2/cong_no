@@ -56,6 +56,11 @@ class CardService
         ];
     }
 
+    public function find($search)
+    {
+        return Card::where('card_number', 'like', '%' . $search . '%')->with(['customer', 'bank'])->get();
+    }
+
     public function updateNote(array $data)
     {
         return Card::where('id', $data['id'])->update(['note' => $data['note']]);
@@ -121,15 +126,16 @@ class CardService
                 'card_number' => $data['card_number'],
                 'date_due' => $data['date_due'],
                 'date_return' => $data['date_return'],
-//                'formality' => $data['formality'],
+                'fee_percent' => $data['fee_percent'],
+                //                'formality' => $data['formality'],
                 'login_info' => $data['login_info'],
                 'note' => $data['note'],
-//                'pay_extra' => $data['pay_extra'],
-//                'total_money' => $data['total_money'],
+                //                'pay_extra' => $data['pay_extra'],
+                //                'total_money' => $data['total_money'],
             ]);
 
             if ($result) {
-//                $this->calculateFee($card->id, $data['total_money']);
+                //                $this->calculateFee($card->id, $data['total_money']);
                 DB::commit();
                 return true;
             }
@@ -183,54 +189,6 @@ class CardService
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;
         }
-    }
-
-
-    // BUSINESS
-    public function filterDatatableBusiness(array $data)
-    {
-        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
-        $pageLength = $data['length'] ?? 10;
-        $skip = ($pageNumber - 1) * $pageLength;
-
-        $query = Card::query()->where('type', Card::TYPE_BUSINESS)->whereHas('customer');
-
-        if (isset($data['search'])) {
-            $search = $data['search'];
-            $query->whereHas('customer', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })->orWhere('account_number', 'like', "%{$search}%");
-        }
-
-        // switch ($data['order'][0]['column']) {
-        //     case '0':
-        //         $orderBy = 'id';
-        //         break;
-
-        //     default:
-        //         $orderBy = 'id';
-        //         break;
-        // }
-
-        $query->orderBy('customer_id', 'desc');
-
-        $recordsFiltered = $recordsTotal = $query->count();
-        $businnesses = $query->skip($skip)
-            ->with(['customer', 'bank'])
-            ->take($pageLength)
-            ->get();
-
-        return [
-            "draw" => $data['draw'] ?? 1,
-            "recordsTotal" => $recordsTotal,
-            "recordsFiltered" => $recordsFiltered,
-            'data' => $businnesses
-        ];
-    }
-
-    public function businessComplete(int $id)
-    {
-        return Card::where('id', $id)->update(['type' => Card::TYPE_DEBT]);
     }
 
     public function businessUpdatePayExtra($data)

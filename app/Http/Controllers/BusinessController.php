@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Business\BusinessRequest;
-use App\Services\CardService;
-use Illuminate\Http\JsonResponse;
+use App\Services\BusinessService;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
 {
-    public $cardService;
+    public $businessService;
 
     public function __construct()
     {
-        $this->cardService = $this->cardServiceProperty();
+        $this->businessService = $this->businessServiceProperty();
     }
 
-    public function cardServiceProperty()
+    public function businessServiceProperty()
     {
-        return app(CardService::class);
+        return app(BusinessService::class);
     }
 
     public function index()
@@ -26,37 +25,44 @@ class BusinessController extends Controller
         return view('business.index');
     }
 
-    public function datatable(Request $request): JsonResponse
+    public function datatable(Request $request)
     {
-        $result = $this->cardService->filterDatatableBusiness($request->all());
+        $result = $this->businessService->filterDatatable($request->all());
         return response()->json($result);
     }
 
     public function complete(BusinessRequest $request)
     {
         $data = $request->validated();
-        $result = $this->cardService->businessComplete($data['id']);
+        $result = $this->businessService->complete($data['id']);
         return jsonResponse($result ? 0 : 1);
     }
 
     public function updatePayExtra(BusinessRequest $request)
     {
         $data = $request->validated();
-        $result = $this->cardService->businessUpdatePayExtra($data);
+        $result = $this->businessService->updatePayExtra($data);
         return jsonResponse($result ? 0 : 1);
     }
 
     public function viewMoney(BusinessRequest $request)
     {
         $data = $request->validated();
-        $money = $this->cardService->businessGetMoney($data['id']);
+        $money = $this->businessService->getBusinessMoney($data['id']);
         return view('business.modal.money', compact('money'));
     }
 
     public function updateMoneyNote(BusinessRequest $request)
     {
         $data = $request->validated();
-        $result = $this->cardService->businessUpdateMoneyNote($data);
+        $result = $this->businessService->businessUpdateMoneyNote($data);
         return jsonResponse($result ? 0 : 1, $result ? 'Thành công' : 'Thất bại');
+    }
+
+    public function store(BusinessRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->businessService->store($data);
+        return jsonResponse($result ? 0 : 1);
     }
 }

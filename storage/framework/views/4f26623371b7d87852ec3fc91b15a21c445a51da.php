@@ -38,25 +38,7 @@
                 </ul>
             </div>
             <div class="d-flex align-items-center overflow-auto">
-                <div class="d-flex align-items-center flex-shrink-0">
-                    <span class="fs-7 fw-bold text-gray-700 flex-shrink-0 pe-4 d-none d-md-block">Lọc :</span>
-                    <div class="flex-shrink-0">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-sm btn-color-muted btn-active-color-primary btn-active-light active fw-semibold fs-7 px-4 me-1"
-                                    data-bs-toggle="tab" href="#">7 ngày tới</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-sm btn-color-muted btn-active-color-primary btn-active-light fw-semibold fs-7 px-4 me-1"
-                                    data-bs-toggle="tab" href="">15 ngày tới</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-sm btn-color-muted btn-active-color-primary btn-active-light fw-semibold fs-7 px-4"
-                                    data-bs-toggle="tab" href="#">30 ngày tới</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                
                 <div class="bullet bg-secondary h-35px w-1px mx-5"></div>
             </div>
         </div>

@@ -35,9 +35,4 @@ class Card extends Model
     {
         return $this->hasMany(CardHistory::class, 'card_id', 'id');
     }
-
-    public function money(): HasMany
-    {
-        return $this->hasMany(CardMoney::class, 'card_id', 'id');
-    }
 }

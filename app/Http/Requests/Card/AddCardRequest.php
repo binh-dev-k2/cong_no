@@ -29,14 +29,16 @@ class AddCardRequest extends FormRequest
             'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
             'account_number' => 'required|numeric|unique:cards,account_number',
             'date_due' => 'required|date_format:Y-m-d',
-            'date_return' => 'required|date_format:Y-m-d',
-            'login_info' => 'required|string',
+//            'date_return' => 'required|date_format:Y-m-d',
+            'date_return' => 'nullable|date_format:Y-m-d',
+//            'login_info' => 'required|string',
+            'login_info' => 'nullable',
             'bank_code' => 'required|string|exists:banks,code',
             'account_name' => 'required|string',
             'fee_percent' => 'required|numeric',
-            'total_money' => 'required|numeric',
-            'formality' => "required|string",
-            'pay_extra' => "nullable|numeric"
+//            'total_money' => 'required|numeric',
+//            'formality' => "required|string",
+//            'pay_extra' => "nullable|numeric"
 
         ];
     }

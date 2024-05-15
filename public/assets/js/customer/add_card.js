@@ -78,9 +78,9 @@ const FormAddCard = (function () {
                         },
                         date_return: {
                             validators: {
-                                notEmpty: {
-                                    message: "Ngày trả là bắt buộc",
-                                },
+                                // notEmpty: {
+                                //     message: "Ngày trả là bắt buộc",
+                                // },
                                 date: {
                                     format: "YYYY-MM-DD",
                                     message:
@@ -88,13 +88,13 @@ const FormAddCard = (function () {
                                 },
                             },
                         },
-                        login_info: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Thông tin đăng nhập là bắt buộc",
-                                },
-                            },
-                        },
+                        // login_info: {
+                        //     validators: {
+                        //         notEmpty: {
+                        //             message: "Thông tin đăng nhập là bắt buộc",
+                        //         },
+                        //     },
+                        // },
                         bank_code: {
                             validators: {
                                 notEmpty: {
@@ -109,27 +109,27 @@ const FormAddCard = (function () {
                                 },
                             },
                         },
-                        total_money: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Tổng số tiền là bắt buộc",
-                                },
-                            },
-                        },
-                        formality: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Hình thức là bắt buộc",
-                                },
-                            },
-                        },
-                        pay_extra: {
-                            validators: {
-                                numeric: {
-                                    message: "Tiền trả thêm phải là số",
-                                },
-                            },
-                        },
+                        // total_money: {
+                        //     validators: {
+                        //         notEmpty: {
+                        //             message: "Tổng số tiền là bắt buộc",
+                        //         },
+                        //     },
+                        // },
+                        // formality: {
+                        //     validators: {
+                        //         notEmpty: {
+                        //             message: "Hình thức là bắt buộc",
+                        //         },
+                        //     },
+                        // },
+                        // pay_extra: {
+                        //     validators: {
+                        //         numeric: {
+                        //             message: "Tiền trả thêm phải là số",
+                        //         },
+                        //     },
+                        // },
                     },
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
@@ -173,15 +173,15 @@ const FormAddCard = (function () {
                                 fee_percent: form.querySelector(
                                     'input[name="fee_percent"]'
                                 ).value,
-                                total_money: form.querySelector(
-                                    'input[name="total_money"]'
-                                ).value,
-                                formality: form.querySelector(
-                                    'select[name="select_formality"]'
-                                ).value,
-                                pay_extra: form.querySelector(
-                                    'input[name="pay_extra"]'
-                                ).value,
+                                // total_money: form.querySelector(
+                                //     'input[name="total_money"]'
+                                // ).value,
+                                // formality: form.querySelector(
+                                //     'select[name="select_formality"]'
+                                // ).value,
+                                // pay_extra: form.querySelector(
+                                //     'input[name="pay_extra"]'
+                                // ).value,
                                 note: form.querySelector(
                                     'textarea[name="note"]'
                                 ).value,

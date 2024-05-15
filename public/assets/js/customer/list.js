@@ -477,9 +477,9 @@ var CustomerList = function () {
                 formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
                 formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
                 formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
-                formEditCard.querySelector('input[name="total_money"]').value = data.total_money ?? '';
-                formEditCard.querySelector('select[name="select_formality"]').value = data.formality ?? '';
-                formEditCard.querySelector('input[name="pay_extra"]').value = data.pay_extra ?? '';
+                // formEditCard.querySelector('input[name="total_money"]').value = data.total_money ?? '';
+                // formEditCard.querySelector('select[name="select_formality"]').value = data.formality ?? '';
+                // formEditCard.querySelector('input[name="pay_extra"]').value = data.pay_extra ?? '';
                 formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
             })
         })
@@ -515,15 +515,15 @@ var CustomerList = function () {
                 fee_percent: formEditCard.querySelector(
                     'input[name="fee_percent"]'
                 ).value,
-                total_money: formEditCard.querySelector(
-                    'input[name="total_money"]'
-                ).value,
-                formality: formEditCard.querySelector(
-                    'select[name="select_formality"]'
-                ).value,
-                pay_extra: formEditCard.querySelector(
-                    'input[name="pay_extra"]'
-                ).value,
+                // total_money: formEditCard.querySelector(
+                //     'input[name="total_money"]'
+                // ).value,
+                // formality: formEditCard.querySelector(
+                //     'select[name="select_formality"]'
+                // ).value,
+                // pay_extra: formEditCard.querySelector(
+                //     'input[name="pay_extra"]'
+                // ).value,
                 note: formEditCard.querySelector(
                     'textarea[name="note"]'
                 ).value,
@@ -700,7 +700,10 @@ var CustomerList = function () {
                         data: 'date_return',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
+                            if (data){
+                                return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
+                            }
+                            return `<span>Chưa trả</span>`;
                         }
                     },
                     {

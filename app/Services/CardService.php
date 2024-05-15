@@ -122,15 +122,15 @@ class CardService
                 'date_due' => $data['date_due'],
                 'date_return' => $data['date_return'],
                 'fee_percent' => $data['fee_percent'],
-                'formality' => $data['formality'],
+//                'formality' => $data['formality'],
                 'login_info' => $data['login_info'],
                 'note' => $data['note'],
-                'pay_extra' => $data['pay_extra'],
-                'total_money' => $data['total_money'],
+//                'pay_extra' => $data['pay_extra'],
+//                'total_money' => $data['total_money'],
             ]);
 
             if ($result) {
-                $this->calculateFee($card->id, $data['total_money']);
+//                $this->calculateFee($card->id, $data['total_money']);
                 DB::commit();
                 return true;
             }

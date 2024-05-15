@@ -118,15 +118,17 @@
                             <label class="fs-6 fw-semibold mb-2" for="note">Ghi chú</label>
                             <textarea class="form-control form-control-solid" rows="2" name="note" id="note"></textarea>
                         </div>
-                        <div class="modal-footer flex-center">
-                            <button type="reset" id="modal_edit_card_cancel"
+
+                    </div>
+                    <div class="modal-footer flex-center">
+                        <button type="reset" id="modal_edit_card_cancel"
                                 class="btn btn-light me-3">Đóng</button>
-                            <button type="submit" id="modal_edit_card_submit" class="btn btn-primary">
-                                <span class="indicator-label">Xác nhận</span>
-                            </button>
-                        </div>
+                        <button type="submit" id="modal_edit_card_submit" class="btn btn-primary">
+                            <span class="indicator-label">Xác nhận</span>
+                        </button>
                     </div>
             </form>
         </div>
     </div>
+</div>
 </div>

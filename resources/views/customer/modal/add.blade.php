@@ -1,5 +1,4 @@
 <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
-
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
             <form class="form" action="#" id="kt_modal_add_customer_form">
@@ -12,7 +11,6 @@
                         </i>
                     </div>
                 </div>
-
                 <div class="modal-body py-10 px-lg-17">
                     <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true"
                         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
@@ -56,8 +54,6 @@
                                 @endforeach --}}
                             </select>
                         </div>
-
-                        @include('customer.modal.add_card')
                     </div>
                 </div>
                 <div class="modal-footer flex-center">

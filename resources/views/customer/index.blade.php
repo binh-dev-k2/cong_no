@@ -85,6 +85,8 @@
                                 </i>Export</button>
                             <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
+                            <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_add_card">Thêm thẻ</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
@@ -129,9 +131,11 @@
 
     @include('customer.components.note')
     @include('customer.components.remind')
+    @include('customer.modal.add_card')
     @include('customer.modal.add')
     @include('customer.modal.edit')
     @include('customer.modal.editCard')
+
 @endsection
 
 @section('script')

@@ -592,6 +592,14 @@ var CustomerList = function () {
         editModal.hide();
     })
 
+    $("#modal_add_card_close").click(function () {
+        editModal.hide();
+    })
+
+    $("#modal_add_card_cancel").click(function () {
+        editModal.hide();
+    })
+
 
 
     return {

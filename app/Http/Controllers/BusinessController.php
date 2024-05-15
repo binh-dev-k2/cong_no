@@ -66,11 +66,4 @@ class BusinessController extends Controller
         $result = $this->businessService->updateNoteBusinessMoney($data);
         return jsonResponse($result ? 0 : 1, $result ? 'Thành công' : 'Thất bại');
     }
-
-    public function store(BusinessRequest $request)
-    {
-        $data = $request->validated();
-        $result = $this->businessService->store($data);
-        return jsonResponse($result ? 0 : 1);
-    }
 }

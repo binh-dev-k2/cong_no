@@ -126,7 +126,6 @@ class CardService
                 'date_due' => $data['date_due'],
                 'date_return' => $data['date_return'],
                 'fee_percent' => $data['fee_percent'],
-                //                'formality' => $data['formality'],
                 'login_info' => $data['login_info'],
                 'note' => $data['note'],
             ]);

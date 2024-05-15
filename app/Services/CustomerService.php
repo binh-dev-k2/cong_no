@@ -30,7 +30,8 @@ class CustomerService
 
             $customer = Customer::create([
                 'name' => $data['customer_name'],
-                'phone' => $data['customer_phone']
+                'phone' => $data['customer_phone'],
+                'fee_percent' => $data['fee_percent'],
             ]);
 
             if (!$customer) {
@@ -69,7 +70,8 @@ class CustomerService
             // Cập nhật thông tin khách hàng
             $customerUpdated = $customer->update([
                 'name' => $data['customer_name'],
-                'phone' => $data['customer_phone']
+                'phone' => $data['customer_phone'],
+                'fee_percent' => $data['fee_percent'],
             ]);
 
             if (!$customerUpdated) {

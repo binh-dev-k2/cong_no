@@ -45,6 +45,7 @@ class AddCustomerRequest extends FormRequest
                     }
                 },
             ],
+            'fee_percent' => 'required|numeric',
             'card_ids' => 'required|array|exists:cards,id'
         ];
     }
@@ -57,6 +58,10 @@ class AddCustomerRequest extends FormRequest
             'customer_phone.required' => 'Số điện thoại khách hàng là bắt buộc.',
             'customer_phone.numeric' => 'Số điện thoại khách hàng phải là số.',
             'customer_phone.unique' => 'Số điện thoại khách hàng đã tồn tại trong hệ thống.',
+            'fee_percent.required' => 'Phần trăm phí là bắt buộc.',
+            'fee_percent.numeric' => 'Phần trăm phí phải là số.',
+            'card_ids.required' => 'Danh sách thẻ ngân hàng là bắt buộc.',
+
         ];
     }
 

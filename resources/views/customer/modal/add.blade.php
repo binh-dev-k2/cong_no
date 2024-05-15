@@ -19,7 +19,7 @@
 
                         <div class="fv-row mb-7">
                             <label class="required fs-6 fw-semibold mb-2">Họ và tên</label>
-                            <input type="text" class="form-control form-control-solid" placeholder=""
+                            <input type="text" class="form-control form-control-solid" placeholder="Nhập họ và tên"
                                 name="name" />
                         </div>
 
@@ -35,10 +35,14 @@
                                     </i>
                                 </span>
                             </label>
-                            <input type="tel" class="form-control form-control-solid" placeholder=""
+                            <input type="tel" class="form-control form-control-solid" placeholder="Nhập số điện thoại"
                                 name="phone" />
                         </div>
 
+                        <div class="d-flex flex-column mb-3 fv-row">
+                            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
+                            <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" />
+                        </div>
                         <div class="fv-row mb-7">
                             <label for="select_add_card" class="required fs-6 fw-semibold mb-2">
                                 Nhập số tài khoản hoặc số thẻ

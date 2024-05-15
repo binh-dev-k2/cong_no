@@ -25,8 +25,6 @@ class CreateCardsTable extends Migration
             $table->date('date_return')->nullable();
             $table->string('account_name');
             $table->string('note')->nullable();
-
-            $table->integer('fee_percent');
 //            $table->bigInteger('total_money');
 //            $table->enum('formality', ['R', 'D']);
             // $table->bigInteger('fee');

@@ -394,6 +394,7 @@ var CustomerList = function () {
                 formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
+                formEdit.querySelector('input[name="fee_percent"]').value = data.customer.fee_percent ?? '';
                 listCard = data.customer.cards
                 $("#select_edit_card").empty()
                 console.log(listCard);
@@ -414,6 +415,7 @@ var CustomerList = function () {
                 id: formEdit.querySelector("input[name='id']").value,
                 customer_name: formEdit.querySelector("input[name='name']").value,
                 customer_phone: formEdit.querySelector("input[name='phone']").value,
+                fee_percent: formEdit.querySelector("input[name='fee_percent']").value,
                 card_ids: $("#select_edit_card").select2("val"),
             };
 

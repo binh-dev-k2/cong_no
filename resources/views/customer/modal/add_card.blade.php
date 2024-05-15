@@ -67,10 +67,7 @@
                             <label class="required fs-6 fw-semibold mb-2" for="login_info">Thông tin đăng nhập</label>
                             <input type="text" class="form-control form-control-solid" placeholder="Nhập thông tin đăng nhập vào tài khoản ngân hàng" name="login_info" />
                         </div>
-                        <div class="d-flex flex-column mb-3 fv-row">
-                            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
-                            <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" />
-                        </div>
+
                         <!--        <div class="d-flex flex-column mb-3 fv-row">-->
                         <!--            <label class="required fs-6 fw-semibold mb-2" for="total_money">Tổng số tiền</label>-->
                         <!--            <input type="number" class="form-control form-control-solid"-->

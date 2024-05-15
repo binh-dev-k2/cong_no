@@ -36,7 +36,7 @@ class EditCardRequest extends FormRequest
             'login_info' => 'nullable',
             'bank_code' => 'required|string',
             'account_name' => 'required|string',
-            'fee_percent' => 'required|numeric',
+//            'fee_percent' => 'required|numeric',
 //            'total_money' => 'required|numeric',
 //            'formality' => "required|string",
 //            'pay_extra' => "nullable|numeric",

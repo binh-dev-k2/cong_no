@@ -35,7 +35,6 @@ class AddCardRequest extends FormRequest
             'login_info' => 'nullable',
             'bank_code' => 'required|string|exists:banks,code',
             'account_name' => 'required|string',
-            'fee_percent' => 'required|numeric',
 //            'total_money' => 'required|numeric',
 //            'formality' => "required|string",
 //            'pay_extra' => "nullable|numeric"
@@ -60,8 +59,6 @@ class AddCardRequest extends FormRequest
             'account_number.unique' => 'Số tài khoản ngân hàng đã tồn tại trong hệ thống.',
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
-            'fee_percent.required' => 'Phần trăm phí là bắt buộc.',
-            'fee_percent.numeric' => 'Phần trăm phí phải là số.',
             'total_money.required' => 'Số tiền là bắt buộc.',
             'total_money.numeric' => 'Số tiền phải là số.',
             'formality.required' => 'Hình thức thanh toán là bắt buộc.',

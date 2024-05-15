@@ -170,9 +170,9 @@ const FormAddCard = (function () {
                                 bank_code: form.querySelector(
                                     'select[name="bank_code"]'
                                 ).value,
-                                fee_percent: form.querySelector(
-                                    'input[name="fee_percent"]'
-                                ).value,
+                                // fee_percent: form.querySelector(
+                                //     'input[name="fee_percent"]'
+                                // ).value,
                                 // total_money: form.querySelector(
                                 //     'input[name="total_money"]'
                                 // ).value,

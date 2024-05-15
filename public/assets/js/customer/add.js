@@ -155,6 +155,7 @@ var KTModalCustomersAdd = (function () {
                         let data = {
                             customer_name: form.querySelector("input[name='name']").value,
                             customer_phone: form.querySelector("input[name='phone']").value,
+                            fee_percent: form.querySelector("input[name='fee_percent']").value,
                             card_ids: $("#select_add_card").select2("val"),
                         };
                         // console.log(data);

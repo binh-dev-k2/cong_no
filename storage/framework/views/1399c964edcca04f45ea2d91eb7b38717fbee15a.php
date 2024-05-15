@@ -1,5 +1,4 @@
 <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
-
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
             <form class="form" action="#" id="kt_modal_add_customer_form">
@@ -12,7 +11,6 @@
                         </i>
                     </div>
                 </div>
-
                 <div class="modal-body py-10 px-lg-17">
                     <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true"
                         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
@@ -21,7 +19,7 @@
 
                         <div class="fv-row mb-7">
                             <label class="required fs-6 fw-semibold mb-2">Họ và tên</label>
-                            <input type="text" class="form-control form-control-solid" placeholder=""
+                            <input type="text" class="form-control form-control-solid" placeholder="Nhập họ và tên"
                                 name="name" />
                         </div>
 
@@ -37,10 +35,14 @@
                                     </i>
                                 </span>
                             </label>
-                            <input type="tel" class="form-control form-control-solid" placeholder=""
+                            <input type="tel" class="form-control form-control-solid" placeholder="Nhập số điện thoại"
                                 name="phone" />
                         </div>
 
+                        <div class="d-flex flex-column mb-3 fv-row">
+                            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
+                            <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" />
+                        </div>
                         <div class="fv-row mb-7">
                             <label for="select_add_card" class="required fs-6 fw-semibold mb-2">
                                 Nhập số tài khoản hoặc số thẻ
@@ -51,8 +53,6 @@
                                 
                             </select>
                         </div>
-
-                        <?php echo $__env->make('customer.modal.add_card', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
                 </div>
                 <div class="modal-footer flex-center">

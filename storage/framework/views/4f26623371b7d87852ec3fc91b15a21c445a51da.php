@@ -67,6 +67,8 @@
                                 </i>Export</button>
                             <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
+                            <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_add_card">Thêm thẻ</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
@@ -114,6 +116,8 @@
     <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.editCard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('customer.modal.add_card', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>

@@ -122,7 +122,6 @@ class CardService
                 'card_number' => $data['card_number'],
                 'date_due' => $data['date_due'],
                 'date_return' => $data['date_return'],
-                'fee_percent' => $data['fee_percent'],
                 'login_info' => $data['login_info'],
                 'note' => $data['note'],
             ]);

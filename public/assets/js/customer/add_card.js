@@ -2,6 +2,8 @@
 const FormAddCard = (function () {
     let form, btn_submit_add_new_card, formValidate;
     let addModal = new bootstrap.Modal(document.querySelector('#kt_modal_add_card'));
+    let btn_card_cancel = document.querySelector("#btn_card_cancel");
+    let btn_card_close = document.querySelector("#modal_add_card_close");
     const optionFormat = function (item) {
         if (!item.id) {
             return item.text;
@@ -198,7 +200,7 @@ const FormAddCard = (function () {
                                     );
                                     if (response.status === 200) {
                                         Swal.fire({
-                                            text: response.data.message,
+                                            text: "Thêm thẻ thành công",
                                             icon: "success",
                                             buttonsStyling: !1,
                                             confirmButtonText: "Thành công!",
@@ -209,6 +211,7 @@ const FormAddCard = (function () {
                                         }).then(function (result) {
                                             if (result.isConfirmed) {
                                                 form.reset();
+                                                addModal.hide();
 
                                             }
                                         });
@@ -299,13 +302,48 @@ const FormAddCard = (function () {
                     templateResult: optionFormat,
                     minimumResultsForSearch: Infinity,
                 });
-            $("#modal_add_card_close").click(function () {
-                addModal.hide();
-            })
 
-            $("#modal_add_card_cancel").click(function () {
-                addModal.hide();
-            })
+            btn_card_cancel.addEventListener("click", function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    text: "Bạn chắc chắn rằng muốn thoát khỏi form này?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Xác nhận!",
+                    cancelButtonText: "Quay lại",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light",
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        addModal.hide();
+                        form.reset();
+                    }
+                });
+            });
+
+            btn_card_close.addEventListener("click", function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    text: "Bạn chắc chắn rằng muốn thoát khỏi form này?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Xác nhận!",
+                    cancelButtonText: "Quay lại",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light",
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        addModal.hide();
+                        form.reset();
+                    }
+                });
+            });
         },
     };
 })();

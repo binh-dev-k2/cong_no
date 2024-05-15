@@ -36,12 +36,9 @@ class CardService
         //         $orderBy = 'id';
         //         break;
         // }
-
-        $startDate = Carbon::now();
-        $endDate = $startDate->copy()->addDays(7);
-
+        $startDate = Carbon::now()->format('d');
+        $endDate = Carbon::now()->addDays(7)->format('d');
         $query->whereBetween('date_due', [$startDate, $endDate])->orderBy('customer_id', 'desc');
-
         $recordsFiltered = $recordsTotal = $query->count();
         $customers = $query->skip($skip)
             ->with(['customer.cards.bank', 'bank', 'cardHistories.user'])

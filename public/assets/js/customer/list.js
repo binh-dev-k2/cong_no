@@ -699,7 +699,7 @@ var CustomerList = function () {
                         data: 'date_due',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
+                            return `<span>${data   ?? ''} hàng tháng</span>`;
                         }
                     },
                     {

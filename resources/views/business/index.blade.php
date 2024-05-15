@@ -66,7 +66,7 @@
                 </div>
                 <div class="card-body pt-0">
                     <table
-                        class="table table-reponsive align-middle table-striped table-row-dashed table-bordered fs-6 gy-5"
+                        class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
                         id="business_table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">

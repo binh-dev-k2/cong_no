@@ -71,8 +71,8 @@ const FormAddCard = (function () {
                                 },
                                 between: {
                                     min: 1,
-                                    max:30,
-                                    message: "Ngày đáo hạn phải từ 1 đến 30",
+                                    max:31,
+                                    message: "Ngày đáo hạn phải từ 1 đến 31",
                                 }
                             },
                         },

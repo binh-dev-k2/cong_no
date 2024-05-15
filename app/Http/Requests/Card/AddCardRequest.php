@@ -28,7 +28,7 @@ class AddCardRequest extends FormRequest
         return [
             'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
             'account_number' => 'required|numeric|unique:cards,account_number',
-            'date_due' => 'required|numeric|min:1|max:30',
+            'date_due' => 'required|numeric|min:1|max:31',
 //            'date_return' => 'required|date_format:Y-m-d',
             'date_return' => 'nullable|date_format:Y-m-d',
 //            'login_info' => 'required|string',

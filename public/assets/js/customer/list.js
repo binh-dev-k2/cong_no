@@ -478,7 +478,7 @@ var CustomerList = function () {
                 formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
                 formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
                 formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
-                formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
+                // formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
                 // formEditCard.querySelector('input[name="total_money"]').value = data.total_money ?? '';
                 // formEditCard.querySelector('select[name="select_formality"]').value = data.formality ?? '';
                 // formEditCard.querySelector('input[name="pay_extra"]').value = data.pay_extra ?? '';
@@ -514,9 +514,9 @@ var CustomerList = function () {
                 bank_code: formEditCard.querySelector(
                     'select[name="bank_code"]'
                 ).value,
-                fee_percent: formEditCard.querySelector(
-                    'input[name="fee_percent"]'
-                ).value,
+                // fee_percent: formEditCard.querySelector(
+                //     'input[name="fee_percent"]'
+                // ).value,
                 // total_money: formEditCard.querySelector(
                 //     'input[name="total_money"]'
                 // ).value,

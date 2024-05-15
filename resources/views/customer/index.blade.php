@@ -131,7 +131,6 @@
 
     @include('customer.components.note')
     @include('customer.components.remind')
-    @include('customer.modal.add_card')
     @include('customer.modal.add')
     @include('customer.modal.edit')
     @include('customer.modal.editCard')

@@ -100,7 +100,6 @@
                             <span class="indicator-label">Xác nhận</span>
                         </button>
                     </div>
-                </div>
             </form>
         </div>
     </div>

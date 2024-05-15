@@ -83,7 +83,7 @@
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </i>Export</button>
-                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary btn-add-customer me-2" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
                             <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_add_card">Thêm thẻ</button>

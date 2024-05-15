@@ -45,11 +45,11 @@
                                         <span class="path5"></span>
                                         <span class="path6"></span>
                                     </i>
-                                    <input class="form-control form-control-solid ps-12" placeholder="Chọn ngày" name="date_due" />
+                                    <input class="form-control form-control-solid ps-12" placeholder="Nhập ngày" name="date_due" />
                                 </div>
                             </div>
                             <div class="col-md-6 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2">Ngày trả thẻ</label>
+                                <label class="fs-6 fw-semibold mb-2">Ngày trả thẻ</label>
                                 <div class="position-relative d-flex align-items-center">
                                     <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
                                         <span class="path1"></span>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="d-flex flex-column mb-3 fv-row">
-                            <label class="required fs-6 fw-semibold mb-2" for="login_info">Thông tin đăng nhập</label>
+                            <label class="fs-6 fw-semibold mb-2" for="login_info">Thông tin đăng nhập</label>
                             <input type="text" class="form-control form-control-solid" placeholder="Nhập thông tin đăng nhập vào tài khoản ngân hàng" name="login_info" />
                         </div>
 

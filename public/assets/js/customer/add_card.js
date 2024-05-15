@@ -69,11 +69,11 @@ const FormAddCard = (function () {
                                 notEmpty: {
                                     message: "Ngày đáo hạn là bắt buộc",
                                 },
-                                date: {
-                                    format: "YYYY-MM-DD",
-                                    message:
-                                        "Ngày đáo hạn phải có định dạng YYYY-MM-DD",
-                                },
+                                between: {
+                                    min: 1,
+                                    max:30,
+                                    message: "Ngày đáo hạn phải từ 1 đến 30",
+                                }
                             },
                         },
                         date_return: {
@@ -282,13 +282,13 @@ const FormAddCard = (function () {
                     });
                 });
             // add input datepicker
-            $(
-                form.querySelector('[name="date_due"]')
-            ).flatpickr({
-                enableTime: false,
-                dateFormat: "Y-m-d",
-                locale: "vn",
-            });
+            // $(
+            //     form.querySelector('[name="date_due"]')
+            // ).flatpickr({
+            //     enableTime: false,
+            //     dateFormat: "Y-m-d",
+            //     locale: "vn",
+            // });
             // add input datepicker
             $(
                 form.querySelector('[name="date_return"]')

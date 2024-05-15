@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2">Ngày trả thẻ</label>
+                                <label class="fs-6 fw-semibold mb-2">Ngày trả thẻ</label>
                                 <div class="position-relative d-flex align-items-center">
                                     <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
                                         <span class="path1"></span>
@@ -83,17 +83,17 @@
                             </div>
                         </div>
                         <div class="d-flex flex-column mb-3 fv-row">
-                            <label class="required fs-6 fw-semibold mb-2" for="login_info">Thông
+                            <label class="fs-6 fw-semibold mb-2" for="login_info">Thông
                                 tin đăng nhập</label>
                             <input type="text" class="form-control form-control-solid"
                                 placeholder="Nhập thông tin đăng nhập vào tài khoản ngân hàng" name="login_info"
                                 id="login_info" />
                         </div>
-                        <div class="d-flex flex-column mb-3 fv-row">
-                            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
-                            <input type="number" class="form-control form-control-solid"
-                                placeholder="Nhập phần trăm phí" name="fee_percent" id="fee_percent" />
-                        </div>
+<!--                        <div class="d-flex flex-column mb-3 fv-row">-->
+<!--                            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>-->
+<!--                            <input type="number" class="form-control form-control-solid"-->
+<!--                                placeholder="Nhập phần trăm phí" name="fee_percent" id="fee_percent" />-->
+<!--                        </div>-->
 <!--                        <div class="d-flex flex-column mb-3 fv-row">-->
 <!--                            <label class="required fs-6 fw-semibold mb-2" for="total_money">Tổng số tiền</label>-->
 <!--                            <input type="number" class="form-control form-control-solid"-->

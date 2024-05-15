@@ -28,18 +28,12 @@ class EditCardRequest extends FormRequest
         return [
             'id' => 'required|numeric|exists:cards,id',
             'card_number' => 'required|numeric|digits:16',
-            'account_number' => 'required|numeric',
+            'account_number' => 'nullable|numeric',
             'date_due' => 'required|date_format:Y-m-d',
-//            'date_return' => 'required|date_format:Y-m-d',
-            'date_return' => 'nullable|date_format:Y-m-d',
-//            'login_info' => 'required|string',
-            'login_info' => 'nullable',
+            'date_return' => 'required|date_format:Y-m-d',
+            'login_info' => 'nullable|string',
             'bank_code' => 'required|string',
-            'account_name' => 'required|string',
-//            'fee_percent' => 'required|numeric',
-//            'total_money' => 'required|numeric',
-//            'formality' => "required|string",
-//            'pay_extra' => "nullable|numeric",
+            'account_name' => 'nullable|string',
             'note' => 'nullable|string|max:255',
 
         ];
@@ -47,26 +41,19 @@ class EditCardRequest extends FormRequest
     function messages()
     {
         return [
-            'id' => 'required|numeric',
+            // 'id.required' => 'Vui lòng nhập ID của thẻ.',
+            'id.exists' => 'ID của thẻ không tồn tại.',
             'card_number.required' => 'Số thẻ ngân hàng là bắt buộc.',
             'card_number.numeric' => 'Số thẻ ngân hàng phải là số.',
             'card_number.digits' => 'Số thẻ ngân hàng phải gồm 16 chữ số.',
-            'account_number.required' => 'Số tài khoản ngân hàng là bắt buộc.',
             'account_number.numeric' => 'Số tài khoản ngân hàng phải là số.',
             'date_due.required' => 'Ngày đáo hạn là bắt buộc.',
             'date_due.date' => 'Ngày đáo hạn không hợp lệ.',
             'date_return.required' => 'Ngày trả là bắt buộc.',
             'date_return.date' => 'Ngày trả không hợp lệ.',
-//            'login_info.required' => 'Thông tin đăng nhập là bắt buộc.',
             'login_info.string' => 'Thông tin đăng nhập phải là chuỗi ký tự.',
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
-            'fee_percent.required' => 'Phần trăm phí là bắt buộc.',
-            'fee_percent.numeric' => 'Phần trăm phí phải là số.',
-//            'total_money.required' => 'Số tiền là bắt buộc.',
-//            'total_money.numeric' => 'Số tiền phải là số.',
-//            'formality.required' => 'Hình thức thanh toán là bắt buộc.',
-//            'pay_extra.numeric' => 'Phí thanh toán phải là số.',
         ];
     }
 

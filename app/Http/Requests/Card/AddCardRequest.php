@@ -27,18 +27,12 @@ class AddCardRequest extends FormRequest
     {
         return [
             'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
-            'account_number' => 'required|numeric|unique:cards,account_number',
+            'account_number' => 'nullable|numeric',
             'date_due' => 'required|date_format:Y-m-d',
-//            'date_return' => 'required|date_format:Y-m-d',
-            'date_return' => 'nullable|date_format:Y-m-d',
-//            'login_info' => 'required|string',
-            'login_info' => 'nullable',
+            'date_return' => 'required|date_format:Y-m-d',
+            'login_info' => 'nullable|string',
             'bank_code' => 'required|string|exists:banks,code',
-            'account_name' => 'required|string',
-//            'total_money' => 'required|numeric',
-//            'formality' => "required|string",
-//            'pay_extra' => "nullable|numeric"
-
+            'account_name' => 'nullable|string',
         ];
     }
     public function messages()
@@ -47,22 +41,15 @@ class AddCardRequest extends FormRequest
             'card_number.required' => 'Số thẻ ngân hàng là bắt buộc.',
             'card_number.numeric' => 'Số thẻ ngân hàng phải là số.',
             'card_number.digits' => 'Số thẻ ngân hàng phải gồm 16 chữ số.',
-            'account_number.required' => 'Số tài khoản ngân hàng là bắt buộc.',
             'account_number.numeric' => 'Số tài khoản ngân hàng phải là số.',
             'date_due.required' => 'Ngày đáo hạn là bắt buộc.',
             'date_due.date' => 'Ngày đáo hạn không hợp lệ.',
             'date_return.required' => 'Ngày trả là bắt buộc.',
             'date_return.date' => 'Ngày trả không hợp lệ.',
-            'login_info.required' => 'Thông tin đăng nhập là bắt buộc.',
             'login_info.string' => 'Thông tin đăng nhập phải là chuỗi ký tự.',
             'card_number.unique' => 'Số thẻ ngân hàng đã tồn tại trong hệ thống.',
-            'account_number.unique' => 'Số tài khoản ngân hàng đã tồn tại trong hệ thống.',
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
-            'total_money.required' => 'Số tiền là bắt buộc.',
-            'total_money.numeric' => 'Số tiền phải là số.',
-            'formality.required' => 'Hình thức thanh toán là bắt buộc.',
-            'pay_extra.numeric' => 'Phí thanh toán phải là số.',
         ];
     }
 

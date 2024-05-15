@@ -31,6 +31,17 @@ class UpdateNoteRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'id.required' => 'Bạn vui lòng nhập ID nhé!',
+            'id.exists' => 'ID này không tồn tại trong hệ thống của chúng tôi. Bạn kiểm tra lại nhé!',
+            'id.numeric' => 'ID phải là số, bạn kiểm tra lại nhé!',
+            'note.string' => 'Ghi chú phải là chuỗi ký tự.',
+            'note.max' => 'Ghi chú không được vượt quá 255 ký tự.',
+        ];
+    }
+
     protected function failedValidation(Validator $validator)
     {
         $errors = $validator->errors()->all();

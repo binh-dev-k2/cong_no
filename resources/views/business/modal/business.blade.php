@@ -106,7 +106,7 @@
                 </div>
                 <div class="modal-footer flex-center">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" data-kt-indicator="on">
+                    <button type="submit" class="btn btn-primary">
                         <span class="indicator-label">
                             Xác nhận
                         </span>
@@ -195,6 +195,8 @@
 
         $modalBusiness.on('submit', 'form', function(e) {
             e.preventDefault();
+            $(this).find('button[type="submit"]').attr('data-kt-indicator', "on");
+
             const body = {
                 card_number: $modalBusiness.find('input[name="card_number"]').val(),
                 name: $modalBusiness.find('input[name="name"]').val(),
@@ -222,6 +224,9 @@
                 .catch((err) => {
                     console.log(err);
                     notify(err.message, 'error');
+                })
+                .finally(() => {
+                    $(this).find('button[type="submit"]').attr('data-kt-indicator', "off");
                 })
         })
     })

@@ -31,6 +31,16 @@ class RemindCardRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            // 'id.required' => 'Vui lòng nhập ID của thẻ.',
+            'id.exists' => 'ID của thẻ không tồn tại.',
+            'customer_id.required' => 'Vui lòng nhập ID của khách hàng.',
+            'customer_id.exists' => 'ID của khách hàng không tồn tại.'
+        ];
+    }
+
     protected function failedValidation(Validator $validator)
     {
         $errors = $validator->errors()->all();

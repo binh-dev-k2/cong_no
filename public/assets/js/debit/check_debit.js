@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var checkboxes = document.querySelectorAll('.form-check-input');
+    var checkboxes = document.querySelectorAll('');
 
     checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {

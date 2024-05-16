@@ -178,7 +178,7 @@ class CardService
     {
         try {
             DB::beginTransaction();
-            $result = Card::whereIn('customer_id', $id)->update(['customer_id' => null]);
+            $result = Card::where('customer_id', $id)->update(['customer_id' => null]);
             if ($result) {
                 DB::commit();
                 return true;

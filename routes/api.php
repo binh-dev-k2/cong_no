@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //debt
     Route::post('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');
+    Route::post('debit/updateStatus/', [DebitController::class, 'update'])->name('api.debit_updateStatus');
 });
 
 Route::get('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');

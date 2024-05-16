@@ -111,11 +111,13 @@ class DebitController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data = $request->all();
+        $result = $this->debtService->updateStatus($data);
+        return jsonResponse($result ? 0 : 1);
     }
 
     /**

@@ -2,80 +2,11 @@
 
 var DebitsList = function () {
     let timeoutSearch;
-    // var updateToolbar = () => {
-    //     const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
-    //     const selectedToolbar = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
-    //     const selectedCount = document.querySelector('[data-kt-customer-table-select="selected_count"]');
-    //     const checkboxes = document.querySelectorAll(' tbody [type="checkbox"]');
-    //     let anyChecked = false;
-    //     let checkedCount = 0;
-    //
-    //     checkboxes.forEach((checkbox => {
-    //         if (checkbox.checked) {
-    //             anyChecked = true;
-    //             checkedCount++;
-    //         }
-    //     }));
-    //
-    //     if (anyChecked) {
-    //         selectedCount.innerHTML = checkedCount;
-    //         baseToolbar.classList.add("d-none");
-    //         selectedToolbar.classList.remove("d-none");
-    //     } else {
-    //         baseToolbar.classList.remove("d-none");
-    //         selectedToolbar.classList.add("d-none");
-    //     }
-    //
-    //     return checkedCount;
-    // };
-    var initDeleteSelected = () => {
-        const checkboxes = document.querySelectorAll('[type="checkbox"]');
-        const deleteSelectedBtn = document.querySelector('[data-kt-customer-table-select="delete_selected"]');
-        checkboxes.forEach((checkbox => {
-            checkbox.addEventListener("click", (function () {
-                setTimeout((function () {
-                    updateToolbar();
-                }), 50);
-            }));
-        }));
-
-        function messageStatus() {
-            if (updateToolbar() === 1) {
-                var customerName = document.querySelector('tbody [type="checkbox"]:checked')
-                    .closest('tr').querySelector('td:nth-child(2)').innerText;
-                console.log(customerName);
-                return Swal.fire({
-                    text: `Bạn có muốn xóa khách hàng ${customerName} không?`,
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Có, xóa!",
-                    cancelButtonText: "Không, hủy bỏ",
-                    customClass: {
-                        confirmButton: "btn fw-bold btn-danger",
-                        cancelButton: "btn fw-bold btn-active-light-primary"
-                    }
-                });
-            }
-            else if (updateToolbar() > 1) {
-                return Swal.fire({
-                    text: "Bạn có muốn xóa tất cả khách hàng đã chọn?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Có, xóa!",
-                    cancelButtonText: "Không, hủy bỏ!",
-                    customClass: {
-                        confirmButton: "btn fw-bold btn-danger",
-                        cancelButton: "btn fw-bold btn-active-light-primary"
-                    }
-                });
-            }
-        }
+    const headers = {
+        Authorization: `Bearer ${token}`,
     };
-
     const handleSearchDatatable = () => {
-        document.querySelector('[data-kt-customer-table-filter="search"]')
+        document.querySelector('#debit_search')
             .addEventListener("keyup", (function (e) {
                 clearTimeout(timeoutSearch)
                 timeoutSearch = setTimeout(function () {
@@ -84,9 +15,49 @@ var DebitsList = function () {
             }));
     }
 
+    const doneDebit = () => {
+        let btnDones = document.querySelectorAll('.btn-done');
+        btnDones.forEach((btnDone) => {
+            const row = btnDone.closest('tr');
+            const data = datatable.row(row).data();
+            const dataId = {id : data.id}
+            btnDone.addEventListener('click', function () {
+                Swal.fire({
+                    text: "Bạn có chắc chắn muốn hoàn thành không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Có",
+                    cancelButtonText: "Không",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-primary",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                       axios.post(routes.updateDebitStatus, dataId,{ headers: headers})
+                           .then((response) => {
+                               Swal.fire({
+                                   text: "Cập nhật trạng thái thành công",
+                                   icon: "success",
+                                   buttonsStyling: !1,
+                                   confirmButtonText: "Ok, got it!",
+                                   customClass: {
+                                       confirmButton: "btn btn-primary",
+                                   }
+                               }).then(function () {
+                                      datatable.draw();
+                                 });
+                               })
+
+                    }
+                });
+            });
+        });
+    }
+
     return {
         initDatatable: async function () {
-
             datatable = $("#kt_debit_table").DataTable({
                 fixedColumns: {
                     leftColumns: 1,
@@ -120,16 +91,6 @@ var DebitsList = function () {
                 columnDefs: [
                     {
                         targets: 0,
-                        data: 'id',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" name="id" value="${data}"/>
-                                    </div>`;
-                        }
-                    },
-                    {
-                        targets: 1,
                         data: 'name',
                         orderable: false,
                         render: function (data, type, row) {
@@ -137,7 +98,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 2,
+                        targets: 1,
                         data: 'phone',
                         orderable: false,
                         render: function (data, type, row) {
@@ -145,23 +106,30 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 2,
                         data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<div class="d-flex flex-column align-items-center">
+                                        <img src="https://api.vietqr.io/img/${row.card.bank_code}.png" class="h-30px" alt="${row.card.bank_code}">
+                                        ${data ?? ''}
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 3,
+                        data: 'formality',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            if (data === 'D'){
+                                return `<span>Đáo</span>`;
+                            }
+                            return `<span>Rút</span>`;
                         }
                     },
                     {
                         targets: 4,
-                        data: 'formality',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
-                        }
-                    },
-                    {
-                        targets: 5,
                         data: 'fee',
                         orderable: false,
                         render: function (data, type, row) {
@@ -169,7 +137,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 6,
+                        targets: 5,
                         data: 'total_amount',
                         orderable: false,
                         render: function (data, type, row) {
@@ -177,7 +145,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 7,
+                        targets: 6,
                         data: 'pay_extra',
                         orderable: false,
                         render: function (data, type, row) {
@@ -185,7 +153,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 8,
+                        targets: 7,
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
@@ -196,7 +164,7 @@ var DebitsList = function () {
                     },
 
                     {
-                        targets: 9,
+                        targets: 8,
                         data: 'status',
                         orderable: false,
                         render: function (data, type, row) {
@@ -207,23 +175,25 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 10,
+                        targets: 9,
                         data: 'status',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<a href="#" class="btn btn-sm btn-light btn-active-light-primary">Sửa</a>`;
+                            if (data===0){
+                                return `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done" data-value="${row.id}">Hoàn thành</span>`;
+                            }
+                            return `<span></span>`;
                         }
                     }
 
                 ]
             });
-            // console.log('datatable', datatable);
-            //
-            // // Re-init functions
-            // datatable.on('draw', function () {
-            //     initDeleteSelected();
-            //     handleSearchDatatable();
-            // })
+
+            // Re-init functions
+            datatable.on('draw', function () {
+                doneDebit();
+                handleSearchDatatable();
+            })
         }
     };
 

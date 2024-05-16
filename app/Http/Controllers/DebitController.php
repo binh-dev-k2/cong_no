@@ -33,7 +33,7 @@ class DebitController extends Controller
     function index() {
         // $list_bank = Bank::all();
 
-        return view('admin.debit.index');
+        return view('debit.index');
     }
 
     /**

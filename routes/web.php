@@ -18,6 +18,7 @@ Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function (
     Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('/customer', 'CustomerController@index')->name('customer');
     Route::get('/business', 'BusinessController@index')->name('business');
+    Route::get('/debit', 'DebitController@index')->name('debit');
 });
 
 Auth::routes();

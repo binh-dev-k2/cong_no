@@ -50,6 +50,22 @@
                             <span class="menu-title">Nghiệp vụ</span>
                         </a>
                     </div>
+
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link @if (Route::currentRouteName() == 'debit') active @endif"
+                           href="{{ route('debit') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-credit-cart fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Ghi Nợ</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
                 </div>
             </div>
         </div>

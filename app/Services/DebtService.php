@@ -7,27 +7,29 @@ use App\Models\Debt;
 
 class DebtService
 {
-    function getAllDebt()
+    function datatable(array $data)
     {
-        $list_debt = Debt::with('customer', 'card')->get();
-        $formatted_debts = [];
-        foreach ($list_debt as $debt) {
-            $formatted_debt = [
-                'id' => $debt->id,
-                'formality' => $debt->formality,
-                'name' => $debt->customer->name,
-                'card_number' => $debt->card->card_number,
-                'maturity_fee' => $debt->maturity_fee,
-                'withdrawal_fee' => $debt->withdrawal_fee,
-                'total' => $debt->total_money,
-                'pay_extra' => $debt->pay_extra,
-                'status' => $debt->status == 0 ? "Chưa thanh toán" : "Đã thanh toán",
-            ];
-
-            $formatted_debts[] = $formatted_debt;
+        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
+        $pageLength = $data['length'] ?? 10;
+        $skip = ($pageNumber - 1) * $pageLength;
+        $query = Debt::query();
+        if (isset($data['search'])) {
+            $search = $data['search'];
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('card_number', 'like', "%{$search}%");
         }
-
-        return $formatted_debts;
+        $query->orderBy('id', 'desc');
+        $recordsFiltered = $recordsTotal = $query->count();
+        $debts = $query->skip($skip)
+            ->with(['bank'])
+            ->take($pageLength)
+            ->get();
+        return [
+            "draw" => $data['draw'] ?? 1,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            'data' => $debts
+        ];
     }
 
     

@@ -2,35 +2,32 @@
 
 var DebitsList = function () {
     let timeoutSearch;
-    const drawer_note = document.querySelector("#drawer_note");
-    let dt_name = '', dt_phone = ''
-
-    var updateToolbar = () => {
-        const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
-        const selectedToolbar = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
-        const selectedCount = document.querySelector('[data-kt-customer-table-select="selected_count"]');
-        const checkboxes = document.querySelectorAll(' tbody [type="checkbox"]');
-        let anyChecked = false;
-        let checkedCount = 0;
-
-        checkboxes.forEach((checkbox => {
-            if (checkbox.checked) {
-                anyChecked = true;
-                checkedCount++;
-            }
-        }));
-
-        if (anyChecked) {
-            selectedCount.innerHTML = checkedCount;
-            baseToolbar.classList.add("d-none");
-            selectedToolbar.classList.remove("d-none");
-        } else {
-            baseToolbar.classList.remove("d-none");
-            selectedToolbar.classList.add("d-none");
-        }
-
-        return checkedCount;
-    };
+    // var updateToolbar = () => {
+    //     const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
+    //     const selectedToolbar = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
+    //     const selectedCount = document.querySelector('[data-kt-customer-table-select="selected_count"]');
+    //     const checkboxes = document.querySelectorAll(' tbody [type="checkbox"]');
+    //     let anyChecked = false;
+    //     let checkedCount = 0;
+    //
+    //     checkboxes.forEach((checkbox => {
+    //         if (checkbox.checked) {
+    //             anyChecked = true;
+    //             checkedCount++;
+    //         }
+    //     }));
+    //
+    //     if (anyChecked) {
+    //         selectedCount.innerHTML = checkedCount;
+    //         baseToolbar.classList.add("d-none");
+    //         selectedToolbar.classList.remove("d-none");
+    //     } else {
+    //         baseToolbar.classList.remove("d-none");
+    //         selectedToolbar.classList.add("d-none");
+    //     }
+    //
+    //     return checkedCount;
+    // };
     var initDeleteSelected = () => {
         const checkboxes = document.querySelectorAll('[type="checkbox"]');
         const deleteSelectedBtn = document.querySelector('[data-kt-customer-table-select="delete_selected"]');
@@ -75,72 +72,6 @@ var DebitsList = function () {
                 });
             }
         }
-
-        // deleteSelectedBtn.addEventListener("click", (function () {
-        //     messageStatus().then((function (result) {
-        //         const headers = {
-        //             Authorization: `Bearer ${token}`,
-        //         };
-        //         if (result.value) {
-        //             var list_selected = [];
-        //             var checkboxed = document.querySelectorAll('tbody [type="checkbox"]');
-        //             checkboxed.forEach((checkbox => {
-        //                 if (checkbox.checked) {
-        //                     list_selected = [...list_selected, checkbox.closest('tr')
-        //                         .querySelector('.button-edit').getAttribute('data-target')];
-        //                 }
-        //             }));
-        //             const deletePromises = list_selected.map((customerPhone) => {
-        //                 const url = delete_customer_route.replace(':phone', customerPhone);
-        //                 return axios.delete(url, { headers: headers });
-        //             });
-        //             Promise.all(deletePromises)
-        //                 .then((response) => {
-        //                     var notiMessage = '';
-        //                     if (updateToolbar() === 1) {
-        //                         var customerName = document.querySelector('tbody [type="checkbox"]:checked')
-        //                             .closest('tr').querySelector('td:nth-child(2)').innerText;
-        //                         notiMessage = `Khách hàng ${customerName} đã bị xóa!`;
-        //                     } else {
-        //                         notiMessage = 'Tất cả khách hàng đã chọn đã bị xóa!';
-        //
-        //                     }
-        //                     Swal.fire({
-        //                         text: notiMessage,
-        //                         icon: "success",
-        //                         buttonsStyling: false,
-        //                         confirmButtonText: "Ok!",
-        //                         customClass: {
-        //                             confirmButton: "btn fw-bold btn-primary"
-        //                         }
-        //                     }).then((function () {
-        //                         checkboxes.forEach((checkbox => {
-        //                             if (checkbox.checked) {
-        //                                 datatable.row($(checkbox.closest("tbody tr"))).remove().draw();
-        //                             }
-        //                         }));
-        //                         document.querySelectorAll('[type="checkbox"]')[0].checked = false;
-        //                         var baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
-        //                         var selectedToolbar = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
-        //                         var selectedCount = document.querySelector('[data-kt-customer-table-select="selected_count"]');
-        //                         selectedCount.innerHTML = '';
-        //                         baseToolbar.classList.remove("d-none");
-        //                         selectedToolbar.classList.add('d-none');
-        //                     }));
-        //                 })
-        //         } else if (result.dismiss === "cancel") {
-        //             Swal.fire({
-        //                 text: "Không có khách hàng nào bị xóa.",
-        //                 icon: "error",
-        //                 buttonsStyling: false,
-        //                 confirmButtonText: "Ok!",
-        //                 customClass: {
-        //                     confirmButton: "btn fw-bold btn-primary"
-        //                 }
-        //             });
-        //         }
-        //     }));
-        // }));
     };
 
     const handleSearchDatatable = () => {
@@ -155,11 +86,13 @@ var DebitsList = function () {
 
     return {
         initDatatable: async function () {
+
             datatable = $("#kt_debit_table").DataTable({
                 fixedColumns: {
                     leftColumns: 1,
                     rightColumns: 1
                 },
+
                 // scrollCollapse: true,
                 // scrollX: true,
                 searchDelay: 500,
@@ -181,21 +114,23 @@ var DebitsList = function () {
                         request.setRequestHeader("Authorization", `Bearer ${token}`);
                     },
                     data: function (d) {
-                        d.search = $('input[data-kt-customer-table-filter]').val();
+                        d.search = $('input[data-kt-debit-table-filter]').val();
                     }
                 },
                 columnDefs: [
                     {
                         targets: 0,
-                        data: 'formality',
+                        data: 'id',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" name="id" value="${data}"/>
+                                    </div>`;
                         }
                     },
                     {
                         targets: 1,
-                        data: 'customer.name',
+                        data: 'name',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data ?? ''}</span>`;
@@ -203,7 +138,7 @@ var DebitsList = function () {
                     },
                     {
                         targets: 2,
-                        data: 'card_number',
+                        data: 'phone',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data ?? ''}</span>`;
@@ -211,7 +146,7 @@ var DebitsList = function () {
                     },
                     {
                         targets: 3,
-                        data: 'fee_percent',
+                        data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data ?? ''}</span>`;
@@ -219,7 +154,7 @@ var DebitsList = function () {
                     },
                     {
                         targets: 4,
-                        data: 'total_money',
+                        data: 'formality',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data ?? ''}</span>`;
@@ -227,7 +162,7 @@ var DebitsList = function () {
                     },
                     {
                         targets: 5,
-                        data: 'pay_extra',
+                        data: 'fee',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data ?? ''}</span>`;
@@ -235,22 +170,60 @@ var DebitsList = function () {
                     },
                     {
                         targets: 6,
-                        data: 'id',
+                        data: 'total_amount',
                         orderable: false,
                         render: function (data, type, row) {
-                            return ` <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox" value=${data ?? ''} />
-                            </div>`;
+                           return `<span>${data ?? ''}</span>`;
                         }
                     },
+                    {
+                        targets: 7,
+                        data: 'pay_extra',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<span>${data ?? ''}</span>`;
+                        }
+                    },
+                    {
+                        targets: 8,
+                        data: null,
+                        orderable: false,
+                        render: function (data, type, row) {
+                            const totalAmount = row.total_amount !== undefined ? row.total_amount : '';
+                            const payExtra = row.pay_extra !== undefined ? row.pay_extra : '';
+                            return `<span>${(totalAmount + payExtra) ?? ''}</span>`;
+                        }
+                    },
+
+                    {
+                        targets: 9,
+                        data: 'status',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            if (data===0){
+                                return `<span>Chưa thu</span>`;
+                            }
+                            return `<span>Đã thu</span>`;
+                        }
+                    },
+                    {
+                        targets: 10,
+                        data: 'status',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<a href="#" class="btn btn-sm btn-light btn-active-light-primary">Sửa</a>`;
+                        }
+                    }
+
                 ]
             });
-
-            // Re-init functions
-            datatable.on('draw', function () {
-                initDeleteSelected();
-                handleSearchDatatable();
-            })
+            // console.log('datatable', datatable);
+            //
+            // // Re-init functions
+            // datatable.on('draw', function () {
+            //     initDeleteSelected();
+            //     handleSearchDatatable();
+            // })
         }
     };
 

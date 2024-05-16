@@ -44,7 +44,7 @@
 
                         <div class="d-flex flex-column mb-3 fv-row">
                             <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
-                            <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" />
+                            <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" step="any"/>
                         </div>
 
                         <div class="fv-row mb-7">

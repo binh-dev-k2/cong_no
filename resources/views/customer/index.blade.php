@@ -115,7 +115,6 @@
                                 <th class="text-center min-w-125px">Chủ tài khoản</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-125px">Số tài khoản</th>
-                                <th class="text-center min-w-125px">TT đăng nhập</th>
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
                                 <th class="text-center min-w-70px">Nhắc nợ</th>
                                 <th class="text-center min-w-100px">Hành động</th>
@@ -131,6 +130,7 @@
 
     @include('customer.components.note')
     @include('customer.components.remind')
+    @include('customer.components.login_info')
     @include('customer.modal.add')
     @include('customer.modal.edit')
     @include('customer.modal.editCard')

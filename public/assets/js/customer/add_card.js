@@ -8,7 +8,6 @@ const FormAddCard = (function () {
         if (!item.id) {
             return item.text;
         }
-        console.log(item);
         const span = document.createElement("span");
         const imgUrl = item.element.getAttribute("data-kt-select2-country");
         let template = "";
@@ -66,9 +65,9 @@ const FormAddCard = (function () {
                         // },
                         date_due: {
                             validators: {
-                                notEmpty: {
-                                    message: "Ngày đáo hạn là bắt buộc",
-                                },
+                                // notEmpty: {
+                                //     message: "Ngày đáo hạn là bắt buộc",
+                                // },
                                 between: {
                                     min: 1,
                                     max: 31,

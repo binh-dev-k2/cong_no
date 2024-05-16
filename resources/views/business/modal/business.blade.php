@@ -73,7 +73,7 @@
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2" for="fee_percent">% phí</label>
                                 <input type="number" class="form-control form-control-solid" placeholder="Ex: 21"
-                                    name="fee_percent" id="fee_percent" required />
+                                    step="any" name="fee_percent" id="fee_percent" required />
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
@@ -201,12 +201,12 @@
                 card_number: $modalBusiness.find('input[name="card_number"]').val(),
                 name: $modalBusiness.find('input[name="name"]').val(),
                 phone: $modalBusiness.find('input[name="phone"]').val(),
-                fee_percent: parseInt($modalBusiness.find('input[name="fee_percent"]').val()),
+                fee_percent: parseFloat($modalBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalBusiness.find('input[name="formality"]').val(),
                 total_money: parseInt($modalBusiness.find('input[name="total_money"]').val()),
             }
 
-            console.log(body);
+            // console.log(body);
 
             axios.post("{{ route('api.business.store') }}", body, {
                     headers: headers

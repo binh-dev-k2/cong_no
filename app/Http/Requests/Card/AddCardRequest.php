@@ -28,7 +28,7 @@ class AddCardRequest extends FormRequest
         return [
             'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
             'account_number' => 'nullable|numeric',
-            'date_due' => 'required|numeric|min:1|max:31',
+            'date_due' => 'nullable|numeric|min:1|max:31',
             'date_return' => 'nullable|date_format:Y-m-d',
             'login_info' => 'nullable|string',
             'bank_code' => 'required|string|exists:banks,code',
@@ -42,7 +42,7 @@ class AddCardRequest extends FormRequest
             'card_number.numeric' => 'Số thẻ ngân hàng phải là số.',
             'card_number.digits' => 'Số thẻ ngân hàng phải gồm 16 chữ số.',
             'account_number.numeric' => 'Số tài khoản ngân hàng phải là số.',
-            'date_due.required' => 'Ngày đáo hạn là bắt buộc.',
+            // 'date_due.required' => 'Ngày đáo hạn là bắt buộc.',
             'date_due.numeric' => 'Ngày đáo hạn không hợp lệ.',
 //            'date_return.required' => 'Ngày trả là bắt buộc.',
             'date_return.date' => 'Ngày trả không hợp lệ.',

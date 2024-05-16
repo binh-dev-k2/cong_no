@@ -1,5 +1,4 @@
-<div id="drawer_remind" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true"
-    data-kt-drawer-toggle="#drawer_remind_button" data-kt-drawer-close="#drawer_remind_close" data-kt-drawer-width="500px">
+<div id="drawer_remind" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-width="500px">
 
     <div class="card rounded-0 w-100">
         <div class="card-header pe-5">

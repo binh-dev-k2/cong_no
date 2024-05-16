@@ -25,6 +25,7 @@ class CreateCardsTable extends Migration
             $table->date('date_return')->nullable();
             $table->string('account_name');
             $table->string('note')->nullable();
+            $table->tinyInteger('status')->default(Card::STATUS_SHOW);
             $table->timestamps();
         });
     }

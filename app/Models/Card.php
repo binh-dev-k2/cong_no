@@ -15,11 +15,8 @@ class Card extends Model
 
     protected $guarded = [];
 
-    public const TYPE_BUSINESS = 1;
-    public const TYPE_DEBT = 2;
-
-    public const STATUS_UNPAID = 1;
-    public const STATUS_PAID = 2;
+    public const STATUS_HIDDEN = 0;
+    public const STATUS_SHOW = 1;
 
     public function bank(): BelongsTo
     {

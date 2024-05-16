@@ -3,6 +3,7 @@ var CustomerList = function () {
     let timeoutSearch;
     const drawer_note = document.querySelector("#drawer_note");
     const drawer_remind = document.querySelector("#drawer_remind");
+    const drawer_login_info = document.querySelector("#drawer_login_info");
     let dt_phone = ''
     const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
     const editCardModal = new bootstrap.Modal(document.querySelector('#modal_edit_card'));
@@ -170,6 +171,20 @@ var CustomerList = function () {
             btn.addEventListener('click', function () {
                 drawer_note.querySelector('input[name="drawer-id"]').value = this.getAttribute('data-id')
                 drawer_note.querySelector('textarea.drawer-note').value = this.getAttribute('data-note')
+                drawer.toggle();
+            })
+        })
+    }
+
+    const initLoginInfoDrawer = () => {
+        let drawer_btns = document.querySelectorAll('.drawer-login-info-btn');
+        const drawer = KTDrawer.getInstance(drawer_login_info);
+        drawer_btns.forEach((btn) => {
+            btn.addEventListener('click', function () {
+                console.log(drawer_login_info);
+                const row = btn.closest('tr')
+                const data = datatable.row(row).data();
+                drawer_login_info.querySelector('textarea[name="login_info"]').value = data.login_info ?? ''
                 drawer.toggle();
             })
         })
@@ -655,8 +670,6 @@ var CustomerList = function () {
             datatable = $("#kt_customers_table").DataTable({
                 fixedColumns: {
                     leftColumns: 1,
-                    // rightColumns: 1
-
                 },
                 searchDelay: 500,
                 processing: true,
@@ -746,14 +759,6 @@ var CustomerList = function () {
                     },
                     {
                         targets: 6,
-                        data: 'login_info',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<p class="mb-0">${data ?? ''}</p>`;
-                        }
-                    },
-                    {
-                        targets: 7,
                         data: 'date_due',
                         orderable: false,
                         className: 'text-center',
@@ -762,7 +767,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 8,
+                        targets: 7,
                         data: null,
                         className: 'text-center',
                         orderable: false,
@@ -791,7 +796,7 @@ var CustomerList = function () {
                                             </svg>
                                         </span>
                                     </button>
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4" data-kt-menu="true">
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4" data-kt-menu="true">
                                         ${row.date_return ?
                                     (`<div class="menu-item px-3">
                                                 <a href="javascript:void(0);" class="menu-link px-3">
@@ -821,6 +826,11 @@ var CustomerList = function () {
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
+                                            <a href="javascript:void(0);" class="menu-link px-3 drawer-login-info-btn">
+                                                TT đăng nhập
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 drawer-note-btn" data-id="${row.id}" data-note="${row.note ?? ''}">
                                                 Ghi chú
                                             </a>
@@ -838,6 +848,7 @@ var CustomerList = function () {
                 handleSearchDatatable()
                 initNoteDrawer()
                 initRemindDrawer()
+                initLoginInfoDrawer()
                 initEdit()
                 initEditCard()
                 deleteCard()

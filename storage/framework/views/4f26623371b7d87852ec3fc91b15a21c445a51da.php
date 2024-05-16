@@ -104,12 +104,11 @@
                                             data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                     </div>
                                 </th>
-                                <th class="text-center min-w-125px">Chủ tài khoản</th>
                                 <th class="text-center min-w-125px">Tên - SĐT</th>
                                 <th class="text-center min-w-125px">Ngân hàng</th>
+                                <th class="text-center min-w-125px">Chủ tài khoản</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-125px">Số tài khoản</th>
-                                <th class="text-center min-w-125px">TT đăng nhập</th>
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
                                 <th class="text-center min-w-70px">Nhắc nợ</th>
                                 <th class="text-center min-w-100px">Hành động</th>
@@ -125,6 +124,7 @@
 
     <?php echo $__env->make('customer.components.note', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.components.remind', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('customer.components.login_info', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.editCard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

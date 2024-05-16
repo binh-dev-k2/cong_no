@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.auth')
+@section('title')
+    Đăng ký
+@endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

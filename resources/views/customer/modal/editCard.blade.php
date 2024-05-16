@@ -41,7 +41,7 @@
                                 Ngân hàng
                             </label>
                             <select class="form-select form-select-transparent" data-hide-search="false"
-                                placeholder="Chọn ngân hàng" id="select_bank_list" name="bank_code">
+                                placeholder="Chọn ngân hàng" id="select_bank_list_edit" name="bank_code">
                                 {{-- <option></option> --}}
                                 @foreach ($banks as $key => $bank)
                                     <option @if ($key == 0) selected @endif

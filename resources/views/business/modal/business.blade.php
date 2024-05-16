@@ -214,6 +214,7 @@
                 .then((res) => {
                     if (res.data.code == 0) {
                         notify("Thêm mới nghiệp vụ thành công!", 'success');
+                        prevPhone = null
                         $modalBusiness.modal('hide');
                         datatable.draw();
                         $modalBusiness.find('form')[0].reset();

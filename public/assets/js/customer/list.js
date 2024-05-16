@@ -500,7 +500,13 @@ var CustomerList = function () {
 
     const initEditCard = () => {
         let btnEdits = document.querySelectorAll('.btn-edit-card');
-
+        $(
+            formEditCard.querySelector('[name="date_return"]')
+        ).flatpickr({
+            enableTime: false,
+            dateFormat: "Y-m-d",
+            locale: "vn",
+        }),
         btnEdits.forEach((btn) => {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr')

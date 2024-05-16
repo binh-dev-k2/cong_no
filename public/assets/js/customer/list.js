@@ -737,16 +737,18 @@ var CustomerList = function () {
                         targets: 6,
                         data: 'date_due',
                         orderable: false,
+                        className: 'text-center',
                         render: function (data, type, row) {
-                            return `<span>${data   ?? ''} hàng tháng</span>`;
+                            return `<span>${data ?? ''}</span>`;
                         }
                     },
                     {
                         targets: 7,
                         data: 'date_return',
                         orderable: false,
+                        className: 'text-center',
                         render: function (data, type, row) {
-                            if (data){
+                            if (data) {
                                 return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
                             }
                             return `<span>Chưa trả</span>`;
@@ -756,6 +758,7 @@ var CustomerList = function () {
                         targets: 8,
                         data: 'note',
                         orderable: false,
+                        className: 'text-center',
                         render: function (data, type, row) {
                             return `<div class="d-flex justify-content-between align-items-center">
                                         <p class="text-truncate mb-0 me-2" style="max-width: 200px">${data ?? ''}</p>
@@ -766,6 +769,7 @@ var CustomerList = function () {
                     {
                         targets: 9,
                         data: 'card_histories',
+                        className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data.length > 0 ? 'Đã nhắc' : 'Chưa nhắc'}</span>`;

@@ -22,7 +22,7 @@
                             <input type="text" class="form-control form-control-solid" placeholder="" name="account_name" id="account_name" />
                         </div>
                         <div class="d-flex flex-column mb-7 fv-row">
-                            <label class="required fs-6 fw-semibold mb-2" for="account_number">Số tài khoản</label>
+                            <label class="fs-6 fw-semibold mb-2" for="account_number">Số tài khoản</label>
                             <input type="number" class="form-control form-control-solid" placeholder="" name="account_number" id="account_number" />
                         </div>
                         <div class="d-flex flex-column mb-7 fv-row">
@@ -45,7 +45,7 @@
                                         <span class="path5"></span>
                                         <span class="path6"></span>
                                     </i>
-                                    <input class="form-control form-control-solid ps-12" placeholder="Nhập ngày" name="date_due" />
+                                    <input class="form-control form-control-solid ps-12" placeholder="Nhập ngày" name="date_due" min="1" max="31"/>
                                 </div>
                             </div>
                             <div class="col-md-6 fv-row">

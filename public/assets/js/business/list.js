@@ -123,7 +123,7 @@ var CustomerList = function () {
             btn.addEventListener('click', (e) => {
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
-                
+
                 notify('Hoàn thành thẻ này?', 'warning', true).then((result) => {
                     if (result.isConfirmed) {
                         axios.post(routes.businessComplete, { id: data.id }, { headers: headers })
@@ -281,7 +281,7 @@ var CustomerList = function () {
                         targets: -1,
                         data: null,
                         orderable: false,
-                        className: 'text-center',
+                        className: 'text-center min-w-150px',
                         render: function (data, type, row) {
                             return `
                                     <button class="btn btn-light btn-light-primary btn-sm btn-view-money">Xem số tiền</button>

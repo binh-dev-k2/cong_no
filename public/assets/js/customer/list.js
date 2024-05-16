@@ -698,6 +698,14 @@ var CustomerList = function () {
                     },
                     {
                         targets: 1,
+                        data: 'account_name',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<p class="mb-0">${data ?? ''}</p>`;
+                        }
+                    },
+                    {
+                        targets: 2,
                         data: 'customer',
                         orderable: false,
                         render: function (data, type, row) {
@@ -709,7 +717,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 2,
+                        targets: 3,
                         data: 'bank.shortName',
                         orderable: false,
                         render: function (data, type, row) {
@@ -721,7 +729,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 4,
                         data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
@@ -729,7 +737,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 4,
+                        targets: 5,
                         data: 'account_number',
                         orderable: false,
                         render: function (data, type, row) {
@@ -737,16 +745,8 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 5,
-                        data: 'login_info',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<p class="mb-0">${data ?? ''}</p>`;
-                        }
-                    },
-                    {
                         targets: 6,
-                        data: 'account_name',
+                        data: 'login_info',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<p class="mb-0">${data ?? ''}</p>`;

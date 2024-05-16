@@ -698,14 +698,6 @@ var CustomerList = function () {
                     },
                     {
                         targets: 1,
-                        data: 'account_name',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<p class="mb-0">${data ?? ''}</p>`;
-                        }
-                    },
-                    {
-                        targets: 2,
                         data: 'customer',
                         orderable: false,
                         render: function (data, type, row) {
@@ -717,7 +709,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 2,
                         data: 'bank.shortName',
                         orderable: false,
                         render: function (data, type, row) {
@@ -726,6 +718,14 @@ var CustomerList = function () {
                                         ${data ?? ''}
                                     </div>
                                     `;
+                        }
+                    },
+                    {
+                        targets: 3,
+                        data: 'account_name',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<p class="mb-0">${data ?? ''}</p>`;
                         }
                     },
                     {

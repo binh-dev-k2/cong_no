@@ -249,7 +249,7 @@ var CustomerList = function () {
                 drawer_remind.querySelector('input[name="card_id"]').value = data.id
                 drawer_remind.querySelector('input[name="customer_id"]').value = data.customer.id
 
-                const html = data.card_histories.map((history) => (
+                const html = data.card_histories.reverse().map((history) => (
                     `
                     <div class="timeline-item">
                         <div class="timeline-label"></div>
@@ -339,6 +339,28 @@ var CustomerList = function () {
         span.innerHTML = template;
 
         return $(span);
+    }
+
+    const isRemaing = (cardHistories, dateDue) => {
+        const dateTime = new Date();
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth()).padStart(2, "0");
+        const lastMonth = new Date(year, month - 1, dateDue + 1);
+        const nextMonth = new Date(year, month, dateDue);
+
+        let check = false;
+        cardHistories.forEach((history) => {
+            const createdAt = new Date(history.created_at);
+            if (isDateInRange(createdAt, lastMonth, nextMonth)) {
+                check = true;
+            }
+        })
+
+        return check;
+    }
+
+    const isDateInRange = (dateToCheck, startDate, endDate) => {
+        return dateToCheck >= startDate && dateToCheck <= endDate;
     }
 
     const initEditGetBlankCards = function () {
@@ -475,10 +497,6 @@ var CustomerList = function () {
                 formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
                 formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
                 formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
-                // formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
-                // formEditCard.querySelector('input[name="total_money"]').value = data.total_money ?? '';
-                // formEditCard.querySelector('select[name="select_formality"]').value = data.formality ?? '';
-                // formEditCard.querySelector('input[name="pay_extra"]').value = data.pay_extra ?? '';
                 formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
             })
         })
@@ -486,7 +504,7 @@ var CustomerList = function () {
 
     const deleteCard = () => {
         let btnDeleteCards = document.querySelectorAll('.btn-delete_card');
-        btnDeleteCards.forEach((btnDel)=>{
+        btnDeleteCards.forEach((btnDel) => {
             const row = btnDel.closest('tr')
             const data = datatable.row(row).data();
             let cardNumberToDelete = row.cells[3].innerText;
@@ -553,18 +571,6 @@ var CustomerList = function () {
                 bank_code: formEditCard.querySelector(
                     'select[name="bank_code"]'
                 ).value,
-                // fee_percent: formEditCard.querySelector(
-                //     'input[name="fee_percent"]'
-                // ).value,
-                // total_money: formEditCard.querySelector(
-                //     'input[name="total_money"]'
-                // ).value,
-                // formality: formEditCard.querySelector(
-                //     'select[name="select_formality"]'
-                // ).value,
-                // pay_extra: formEditCard.querySelector(
-                //     'input[name="pay_extra"]'
-                // ).value,
                 note: formEditCard.querySelector(
                     'textarea[name="note"]'
                 ).value,
@@ -632,15 +638,6 @@ var CustomerList = function () {
     $("#modal_edit_customer_cancel").click(function () {
         editModal.hide();
     })
-
-
-
-
-
-
-
-
-
 
     return {
         initDatatable: async function () {
@@ -750,10 +747,7 @@ var CustomerList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            if (data) {
-                                return `<span>${data.split("-").reverse().join("-") ?? ''}</span>`;
-                            }
-                            return `<span>Chưa trả</span>`;
+                            return `<span>${data?.split("-").reverse().join("-") ?? ''}</span>`;
                         }
                     },
                     {
@@ -770,11 +764,14 @@ var CustomerList = function () {
                     },
                     {
                         targets: 9,
-                        data: 'card_histories',
+                        data: null,
                         className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data.length > 0 ? 'Đã nhắc' : 'Chưa nhắc'}</span>`;
+                            const cardHistories = row.card_histories;
+                            const dateDue = row.date_due;
+                            const text = isRemaing(cardHistories, dateDue) ? 'Đã nhắc' : 'Chưa nhắc';
+                            return `<span>${text}</span>`;
                         }
                     },
                     {

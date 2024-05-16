@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Business;
 use App\Models\BusinessMoney;
-use App\Models\Card;
 use App\Models\Debt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -55,8 +54,6 @@ class BusinessService
     {
         try {
             $data['fee'] = (float)($data['total_money'] * $data['fee_percent'] / 100);
-            $card = Card::where('card_number', $data['card_number'])->first();
-            $data['bank_code'] = $card->bank->code;
             $business = Business::create($data);
 
             if (!$business) {

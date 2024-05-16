@@ -28,7 +28,7 @@ class EditCardRequest extends FormRequest
         return [
             'id' => 'required|numeric|exists:cards,id',
             'card_number' => 'required|numeric|digits:16',
-            'account_number' => 'required|numeric',
+            'account_number' => 'nullable|numeric',
             'date_due' => 'required|numeric|min:0|max:31',
             'date_return' => 'nullable|date_format:Y-m-d',
             'login_info' => 'nullable|string',

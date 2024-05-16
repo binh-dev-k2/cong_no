@@ -8,7 +8,7 @@ const FormAddCard = (function () {
         if (!item.id) {
             return item.text;
         }
-
+        console.log(item);
         const span = document.createElement("span");
         const imgUrl = item.element.getAttribute("data-kt-select2-country");
         let template = "";
@@ -54,16 +54,16 @@ const FormAddCard = (function () {
                                 },
                             },
                         },
-                        account_number: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Số tài khoản là bắt buộc",
-                                },
-                                numeric: {
-                                    message: "Số tài khoản phải là số",
-                                },
-                            },
-                        },
+                        // account_number: {
+                        //     validators: {
+                        //         notEmpty: {
+                        //             message: "Số tài khoản là bắt buộc",
+                        //         },
+                        //         numeric: {
+                        //             message: "Số tài khoản phải là số",
+                        //         },
+                        //     },
+                        // },
                         date_due: {
                             validators: {
                                 notEmpty: {
@@ -71,7 +71,7 @@ const FormAddCard = (function () {
                                 },
                                 between: {
                                     min: 1,
-                                    max:31,
+                                    max: 31,
                                     message: "Ngày đáo hạn phải từ 1 đến 31",
                                 }
                             },
@@ -290,18 +290,17 @@ const FormAddCard = (function () {
             //     locale: "vn",
             // });
             // add input datepicker
-            $(
-                form.querySelector('[name="date_return"]')
-            ).flatpickr({
+            $(form.querySelector('[name="date_return"]')).flatpickr({
                 enableTime: false,
                 dateFormat: "Y-m-d",
                 locale: "vn",
-            }),
-                $("#select_bank_list").select2({
-                    templateSelection: optionFormat,
-                    templateResult: optionFormat,
-                    minimumResultsForSearch: Infinity,
-                });
+            })
+
+            $("#select_bank_list").select2({
+                templateSelection: optionFormat,
+                templateResult: optionFormat,
+                minimumResultsForSearch: Infinity,
+            });
 
             btn_card_cancel.addEventListener("click", function (event) {
                 event.preventDefault();

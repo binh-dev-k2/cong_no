@@ -58,12 +58,7 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal"
-                                data-bs-target="#kt_customers_export_modal">
-                                <i class="ki-duotone ki-exit-up fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>Export</button>
+                            
                             <button type="button" class="btn btn-primary btn-add-customer me-2" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
                             <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
@@ -75,7 +70,7 @@
                                 <span class="me-2" data-kt-customer-table-select="selected_count"></span>Hàng được chọn
                             </div>
                             <button type="button" class="btn btn-danger"
-                                data-kt-customer-table-select="delete_selected">Xóa</button>
+                                data-kt-customer-table-select="delete_selected">Xóa khách hàng</button>
                         </div>
                     </div>
                 </div>
@@ -125,13 +120,15 @@
         var routes = {
             blankCards: "<?php echo e(route('api.card.blankCards')); ?>",
             storeCard: "<?php echo e(route('api.card.store')); ?>",
+            remindCard: "<?php echo e(route('api.card.remindCard')); ?>",
+            editCard: "<?php echo e(route('api.card.edit')); ?>",
+            deleteCard: "<?php echo e(route('api.card.delete')); ?>",
+
             storeCustomer: "<?php echo e(route('api.customer.store')); ?>",
             updateCustomer: "<?php echo e(route('api.customer.update')); ?>",
             getAllCustomers: "<?php echo e(route('api.customer_showAll')); ?>",
             deleteCustomers: "<?php echo e(route('api.customer_delete')); ?>",
             updateCardNote: "<?php echo e(route('api.card.updateNote')); ?>",
-            remindCard: "<?php echo e(route('api.card.remindCard')); ?>",
-            editCard: "<?php echo e(route('api.card.edit')); ?>",
         }
         var datatable;
     </script>

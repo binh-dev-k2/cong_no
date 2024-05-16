@@ -77,12 +77,12 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal"
+                            {{-- <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal"
                                 data-bs-target="#kt_customers_export_modal">
                                 <i class="ki-duotone ki-exit-up fs-2">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
-                                </i>Export</button>
+                                </i>Export</button> --}}
                             <button type="button" class="btn btn-primary btn-add-customer me-2" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
                             <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
@@ -94,7 +94,7 @@
                                 <span class="me-2" data-kt-customer-table-select="selected_count"></span>Hàng được chọn
                             </div>
                             <button type="button" class="btn btn-danger"
-                                data-kt-customer-table-select="delete_selected">Xóa</button>
+                                data-kt-customer-table-select="delete_selected">Xóa khách hàng</button>
                         </div>
                     </div>
                 </div>

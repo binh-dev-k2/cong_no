@@ -38,7 +38,7 @@ class BusinessService
 
         $recordsFiltered = $recordsTotal = $query->count();
         $businnesses = $query->skip($skip)
-            ->with(['card.bank'])
+            ->with(['bank'])
             ->take($pageLength)
             ->get();
 

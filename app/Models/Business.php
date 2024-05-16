@@ -18,8 +18,8 @@ class Business extends Model
         return $this->hasMany(BusinessMoney::class, 'business_id', 'id');
     }
 
-    public function card()
+    public function bank()
     {
-        return $this->belongsTo(Card::class, 'card_number', 'card_number');
+        return $this->belongsTo(Bank::class, 'bank_code', 'code');
     }
 }

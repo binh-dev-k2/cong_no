@@ -23,6 +23,7 @@ class CreateBusinessesTable extends Migration
             $table->enum('formality', ['R', 'D']);
             $table->bigInteger('fee');
             $table->bigInteger('pay_extra')->nullable();
+            $table->string('bank_code');
             $table->timestamps();
         });
     }

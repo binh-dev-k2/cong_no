@@ -225,7 +225,7 @@ var CustomerList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="${row.card.bank.logo}" class="h-30px" alt="${row.card.bank.bank_code}">
+                                        <img src="${row.bank.logo}" class="h-30px" alt="${row.bank.code}">
                                         ${row.card_number}
                                     </div>
                                     `;

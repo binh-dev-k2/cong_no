@@ -98,7 +98,6 @@ var CustomerList = function () {
                     let data = {
                         list_selected: list_selected
                     }
-                    console.log(data)
                     // const deletePromises = list_selected.map((customerID) => {
                     //     const url = delete_customer_route.replace('customer_id', customerID);
                     //     return axios.delete(url, {headers: headers});
@@ -390,14 +389,12 @@ var CustomerList = function () {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr')
                 const data = datatable.row(row).data();
-                console.log(data);
                 formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
                 formEdit.querySelector('input[name="fee_percent"]').value = data.customer.fee_percent ?? '';
                 listCard = data.customer.cards
                 $("#select_edit_card").empty()
-                console.log(listCard);
                 listCard.forEach(card => {
                     let opt = new Option(card.card_number, card.id, false, false);
                     opt.bank_logo = card.bank.logo
@@ -487,6 +484,48 @@ var CustomerList = function () {
         })
     }
 
+    const deleteCard = () => {
+        let btnDeleteCards = document.querySelectorAll('.btn-delete_card');
+        btnDeleteCards.forEach((btnDel)=>{
+            const row = btnDel.closest('tr')
+            const data = datatable.row(row).data();
+            let cardNumberToDelete = row.cells[3].innerText;
+            btnDel.addEventListener('click', function (e) {
+                Swal.fire({
+                    text: `Bạn có chắc chắn muốn xóa thẻ có số thẻ ${cardNumberToDelete} không?`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Có, xóa!",
+                    cancelButtonText: "Không, hủy bỏ",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-danger",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete(routes.deleteCard, { headers: headers, data: { id: data.id } })
+                            .then((response) => {
+                                Swal.fire({
+                                    text: "Xóa thẻ thành công",
+                                    icon: "success",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                }).then(function (result) {
+                                    if (result.isConfirmed) {
+                                        dt_phone = null;
+                                        datatable.row($(btnDel.closest("tbody tr"))).remove().draw();
+                                    }
+                                })
+                            })
+                    }
+                })
+            })
+        })
+    }
     const submitEditCardForm = () => {
         $('#edit_card_form').submit(function (e) {
             e.preventDefault();
@@ -634,7 +673,7 @@ var CustomerList = function () {
                 columnDefs: [
                     {
                         targets: 0,
-                        data: 'customer.id',
+                        data: 'customer_id',
                         orderable: false,
                         render: function (data, type, row) {
                             if (row.customer.phone !== dt_phone && type === 'display') {
@@ -764,8 +803,8 @@ var CustomerList = function () {
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
-                                            <a href="javascript:void(0);" class="menu-link px-3" data-kt-docs-table-filter="delete_row">
-                                                Xóa
+                                            <a href="javascript:void(0);" class="menu-link px-3 btn-delete_card"  data-kt-docs-table-filter="delete_row">
+                                                Xóa thẻ
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
@@ -788,6 +827,7 @@ var CustomerList = function () {
                 initRemindDrawer()
                 initEdit()
                 initEditCard()
+                deleteCard()
                 KTMenu.createInstances()
             })
             handleSearchDatatable()

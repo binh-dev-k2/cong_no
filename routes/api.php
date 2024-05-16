@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('card/update-note', [CardController::class, 'updateNote'])->name('api.card.updateNote');
     Route::post('card/remind', [CardController::class, 'remindCard'])->name('api.card.remindCard');
     Route::post('card/edit', [CardController::class, 'edit'])->name('api.card.edit');
+    Route::delete('card/delete', [CardController::class, 'destroy'])->name('api.card.delete');
 
     //customer
     Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store');

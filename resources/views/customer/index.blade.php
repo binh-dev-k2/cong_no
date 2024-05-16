@@ -144,13 +144,15 @@
         var routes = {
             blankCards: "{{ route('api.card.blankCards') }}",
             storeCard: "{{ route('api.card.store') }}",
+            remindCard: "{{ route('api.card.remindCard') }}",
+            editCard: "{{ route('api.card.edit') }}",
+            deleteCard: "{{ route('api.card.delete') }}",
+
             storeCustomer: "{{ route('api.customer.store') }}",
             updateCustomer: "{{ route('api.customer.update') }}",
             getAllCustomers: "{{ route('api.customer_showAll') }}",
             deleteCustomers: "{{ route('api.customer_delete') }}",
             updateCardNote: "{{ route('api.card.updateNote') }}",
-            remindCard: "{{ route('api.card.remindCard') }}",
-            editCard: "{{ route('api.card.edit') }}",
         }
         var datatable;
     </script>

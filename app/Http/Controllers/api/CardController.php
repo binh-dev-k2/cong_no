@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Card\AddCardRequest;
+use App\Http\Requests\Card\DeleteCardRequest;
 use App\Http\Requests\Card\EditCardRequest;
 use App\Http\Requests\Card\RemindCardRequest;
 use App\Http\Requests\Card\UpdateNoteRequest;
@@ -29,6 +30,13 @@ class CardController extends Controller
     {
         $data = $request->validated();
         $result = $this->cardService->update($data);
+        return jsonResponse($result ? 0 : 1);
+    }
+
+    function destroy(DeleteCardRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->cardService->delete($data);
         return jsonResponse($result ? 0 : 1);
     }
 

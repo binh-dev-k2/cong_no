@@ -140,6 +140,24 @@ class CardService
         }
     }
 
+    function delete($data)
+    {
+        try {
+            DB::beginTransaction();
+            $result = Card::where('id', $data['id'])->delete();
+            if ($result) {
+                DB::commit();
+                return true;
+            }
+            DB::rollBack();
+            return false;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
+        }
+    }
+
     function assignCustomer($cardIds, $customerId)
     {
         try {

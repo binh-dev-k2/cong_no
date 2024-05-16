@@ -589,15 +589,12 @@ var CustomerList = function () {
                             customClass: {
                                 confirmButton: "btn btn-primary",
                             }
-                        }).then(function (result) {
-                            if (result.isConfirmed) {
-                                editCardModal.hide();
-                                formEditCard.reset();
-                                $("#select_add_card").empty()
-                                dt_phone = null;
-                                datatable.draw()
-                            }
                         })
+
+                        formEditCard.reset();
+                        $("#select_add_card").empty()
+                        dt_phone = null;
+                        datatable.draw()
                     } else {
                         Swal.fire({
                             text: res.data.data.join(", "),
@@ -639,6 +636,20 @@ var CustomerList = function () {
         editModal.hide();
     })
 
+    $('[data-bs-toggle="tab"]').on('click', function () {
+        $(this).find('input[type="radio"]').prop('checked', true)
+        dt_phone = null
+        datatable.draw()
+    })
+
+    const formatDate = (time) => {
+        const dateTime = new Date(time);
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+        const day = String(dateTime.getDate()).padStart(2, "0");
+        return `${day}-${month}-${year}`;
+    }
+
     return {
         initDatatable: async function () {
             datatable = $("#kt_customers_table").DataTable({
@@ -667,6 +678,7 @@ var CustomerList = function () {
                     },
                     data: function (d) {
                         d.search = $('#customer_search').val();
+                        d.view_type = $('input[name="view_type"]:checked').val();
                     }
                 },
                 columnDefs: [
@@ -751,27 +763,6 @@ var CustomerList = function () {
                     },
                     {
                         targets: 8,
-                        data: 'date_return',
-                        orderable: false,
-                        className: 'text-center',
-                        render: function (data, type, row) {
-                            return `<span>${data?.split("-").reverse().join("-") ?? ''}</span>`;
-                        }
-                    },
-                    {
-                        targets: 9,
-                        data: 'note',
-                        orderable: false,
-                        className: 'text-center',
-                        render: function (data, type, row) {
-                            return `<div class="d-flex justify-content-between align-items-center">
-                                        <p class="text-truncate mb-0 me-2" style="max-width: 200px">${data ?? ''}</p>
-                                        <button class="btn btn-primary drawer-note-btn" data-id="${row.id}" data-note="${data ?? ''}">Xem</button>
-                                    </div>`;
-                        }
-                    },
-                    {
-                        targets: 10,
                         data: null,
                         className: 'text-center',
                         orderable: false,
@@ -801,6 +792,12 @@ var CustomerList = function () {
                                         </span>
                                     </button>
                                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4" data-kt-menu="true">
+                                        ${row.date_return ?
+                                    (`<div class="menu-item px-3">
+                                                <a href="javascript:void(0);" class="menu-link px-3">
+                                                    ${formatDate(row.date_return)}
+                                                </a>
+                                            </div>`) : ''}
                                         <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 btn-edit-customer" data-bs-toggle="modal"
                                             data-bs-target="#modal_edit_customer">
@@ -821,6 +818,11 @@ var CustomerList = function () {
                                         <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 drawer-remind-btn">
                                                 Nhắc nợ
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
+                                            <a href="javascript:void(0);" class="menu-link px-3 drawer-note-btn" data-id="${row.id}" data-note="${row.note ?? ''}">
+                                                Ghi chú
                                             </a>
                                         </div>
                                     </div>

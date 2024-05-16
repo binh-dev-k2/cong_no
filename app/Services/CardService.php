@@ -26,18 +26,17 @@ class CardService
             })->orWhere('account_number', 'like', "%{$search}%");
         }
 
-        // switch ($data['order'][0]['column']) {
-        //     case '0':
-        //         $orderBy = 'id';
-        //         break;
+        switch ($data['view_type']) {
+            case '1':
+                $startDate = Carbon::now()->format('d');
+                $endDate = Carbon::now()->addDays(7)->format('d');
+                $query->whereBetween('date_due', [$startDate, $endDate])->orderBy('customer_id', 'desc');
+                break;
 
-        //     default:
-        //         $orderBy = 'id';
-        //         break;
-        // }
-        $startDate = Carbon::now()->format('d');
-        $endDate = Carbon::now()->addDays(7)->format('d');
-        $query->whereBetween('date_due', [$startDate, $endDate])->orderBy('customer_id', 'desc');
+            default:
+                break;
+        }
+
         $recordsFiltered = $recordsTotal = $query->count();
         $customers = $query->skip($skip)
             ->with(['customer.cards.bank', 'bank', 'cardHistories.user'])

@@ -2,7 +2,6 @@
     Trang thống kê
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('header'); ?>
-
     <style>
         tr td {
             padding: 0.5rem !important;
@@ -37,7 +36,27 @@
                 </ul>
             </div>
             <div class="d-flex align-items-center overflow-auto">
-                
+                <div class="d-flex align-items-center flex-shrink-0">
+                    <span class="fs-7 fw-bold text-gray-700 flex-shrink-0 pe-4 d-none d-md-block">Lọc :</span>
+                    <div class="flex-shrink-0">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-sm btn-color-muted btn-active-color-primary btn-active-light active fw-semibold fs-7 px-4 me-1"
+                                    data-bs-toggle="tab" href="">
+                                    Toàn bộ
+                                    <input type="radio" name="view_type" class="d-none" value="0" checked>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-sm btn-color-muted btn-active-color-primary btn-active-light fw-semibold fs-7 px-4 me-1"
+                                    data-bs-toggle="tab" href="#">
+                                    7 ngày tới
+                                    <input type="radio" name="view_type" class="d-none" value="1">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="bullet bg-secondary h-35px w-1px mx-5"></div>
             </div>
         </div>
@@ -62,7 +81,7 @@
                             <button type="button" class="btn btn-primary btn-add-customer me-2" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
                             <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_add_card">Thêm thẻ</button>
+                                data-bs-target="#kt_modal_add_card">Thêm thẻ</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
@@ -92,8 +111,6 @@
                                 <th class="text-center min-w-125px">TT đăng nhập</th>
                                 <th class="text-center min-w-125px">Chủ tài khoản</th>
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
-                                <th class="text-center min-w-125px">Ngày trả thẻ</th>
-                                <th class="text-center min-w-70px">Ghi chú</th>
                                 <th class="text-center min-w-70px">Nhắc nợ</th>
                                 <th class="text-center min-w-100px">Hành động</th>
                             </tr>
@@ -112,7 +129,6 @@
     <?php echo $__env->make('customer.modal.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.editCard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('customer.modal.add_card', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
@@ -138,7 +154,6 @@
     <script src="<?php echo e(asset('assets/js/customer/list.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/customer/add_card.js')); ?>"></script>
-
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\CodeTools\laragon\www\WORK\quan_ly_cong_no\resources\views/customer/index.blade.php ENDPATH**/ ?>

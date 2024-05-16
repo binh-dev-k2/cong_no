@@ -46,7 +46,7 @@ Trang thống kê
                             <span class="path1"></span>
                             <span class="path2"></span>
                         </i>
-                        <input type="text" id="debit_search" class="form-control form-control-solid w-250px ps-12"
+                        <input type="text" id="debit_search" class="form-control form-control-solid w-250px ps-12 " data-kt-debit-table-filter="search"
                                placeholder="Tìm kiếm" />
                     </div>
                 </div>

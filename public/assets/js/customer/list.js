@@ -734,6 +734,14 @@ var CustomerList = function () {
                     },
                     {
                         targets: 6,
+                        data: 'account_name',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<p class="mb-0">${data ?? ''}</p>`;
+                        }
+                    },
+                    {
+                        targets: 7,
                         data: 'date_due',
                         orderable: false,
                         className: 'text-center',
@@ -742,7 +750,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 7,
+                        targets: 8,
                         data: 'date_return',
                         orderable: false,
                         className: 'text-center',
@@ -751,7 +759,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 8,
+                        targets: 9,
                         data: 'note',
                         orderable: false,
                         className: 'text-center',
@@ -763,7 +771,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 9,
+                        targets: 10,
                         data: null,
                         className: 'text-center',
                         orderable: false,

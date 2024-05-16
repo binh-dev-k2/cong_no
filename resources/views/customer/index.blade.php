@@ -114,6 +114,7 @@
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-125px">Số tài khoản</th>
                                 <th class="text-center min-w-125px">TT đăng nhập</th>
+                                <th class="text-center min-w-125px">Chủ tài khoản</th>
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
                                 <th class="text-center min-w-125px">Ngày trả thẻ</th>
                                 <th class="text-center min-w-70px">Ghi chú</th>

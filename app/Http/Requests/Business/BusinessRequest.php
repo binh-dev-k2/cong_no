@@ -44,10 +44,13 @@ class BusinessRequest extends FormRequest
                     'id' => 'required|exists:businesses,id'
                 ];
 
-            case 'updateMoneyNote':
+            case 'updateBusinessMoney':
                 return [
                     'id' => 'required|exists:business_money,id',
-                    'note' => 'required|string'
+                    'money' => 'nullable|numeric',
+                    'note' => 'nullable|string',
+                    'is_money_checked' => 'required|boolean',
+                    'is_note_checked' => 'required|boolean',
                 ];
 
             case 'updatePayExtra':

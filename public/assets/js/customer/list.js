@@ -766,18 +766,18 @@ var CustomerList = function () {
                             return `<span>${data ?? ''}</span>`;
                         }
                     },
-                    {
-                        targets: 7,
-                        data: null,
-                        className: 'text-center',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            const cardHistories = row.card_histories;
-                            const dateDue = row.date_due;
-                            const text = isRemaing(cardHistories, dateDue) ? 'Đã nhắc' : 'Chưa nhắc';
-                            return `<span>${text}</span>`;
-                        }
-                    },
+                    // {
+                    //     targets: 7,
+                    //     data: null,
+                    //     className: 'text-center',
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         const cardHistories = row.card_histories;
+                    //         const dateDue = row.date_due;
+                    //         const text = isRemaing(cardHistories, dateDue) ? 'Đã nhắc' : 'Chưa nhắc';
+                    //         return `<span>${text}</span>`;
+                    //     }
+                    // },
                     {
                         targets: -1,
                         data: null,

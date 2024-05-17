@@ -17,7 +17,9 @@ class CreateBusinessMoneyTable extends Migration
             $table->id();
             $table->unsignedBigInteger('business_id');
             $table->bigInteger('money');
+            $table->boolean('is_money_checked')->default(0);
             $table->text('note')->nullable();
+            $table->boolean('is_note_checked')->default(0);
             $table->timestamps();
         });
     }

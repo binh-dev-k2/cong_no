@@ -6,6 +6,7 @@ use App\Models\Business;
 use App\Models\BusinessMoney;
 use App\Models\Card;
 use App\Models\Debt;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,7 @@ class BusinessService
 
         $recordsFiltered = $recordsTotal = $query->count();
         $businnesses = $query->skip($skip)
-            ->with(['bank'])
+            ->with(['bank', 'money'])
             ->take($pageLength)
             ->get();
 
@@ -120,14 +121,21 @@ class BusinessService
         return Business::where('id', $data['id'])->update(['pay_extra' => $data['pay_extra']]);
     }
 
-    public function getBusinessMoney(int $id)
-    {
-        return BusinessMoney::where('business_id', $id)->get();
-    }
+    // public function getBusinessMoney(int $id)
+    // {
+    //     return BusinessMoney::where('business_id', $id)->get();
+    // }
 
-    public function updateNoteBusinessMoney($data)
+    public function updateBusinessMoney($data)
     {
-        return BusinessMoney::where('id', $data['id'])->update(['note' => $data['note']]);
+        return BusinessMoney::where('id', $data['id'])->update(
+            [
+                'money' => $data['money'] ?? 0,
+                'is_money_checked' => $data['is_money_checked'],
+                'note' => $data['note'] ?? '',
+                'is_note_checked' => $data['is_note_checked'],
+            ]
+        );
     }
 
     public function randomMoney()
@@ -139,8 +147,10 @@ class BusinessService
     {
         BusinessMoney::where('business_id', $businessId)->delete();
         $data = [];
+        $i = 0;
 
         while ($totalMoney > 0) {
+            $i++;
             $randomMoney = $this->randomMoney();
             if ($totalMoney >= $randomMoney) {
                 $data[] = $this->createMoneyData($businessId, $randomMoney);
@@ -150,6 +160,10 @@ class BusinessService
             }
         }
 
+        for ($i; $i < 10; $i++) {
+            $data[] = $this->createMoneyData($businessId, 0);
+        }
+
         return BusinessMoney::insert($data);
     }
 
@@ -157,7 +171,10 @@ class BusinessService
     {
         return [
             'business_id' => $businessId,
-            'money' => $money
+            'money' => $money,
+            'is_money_checked' => false,
+            'is_note_checked' => false,
+            'created_at' => now('Asia/Ho_Chi_Minh'),
         ];
     }
 

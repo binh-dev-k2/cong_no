@@ -116,7 +116,7 @@
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-125px">Số tài khoản</th>
                                 <th class="text-center min-w-125px">Ngày đến hạn</th>
-                                <th class="text-center min-w-70px">Nhắc nợ</th>
+                                {{-- <th class="text-center min-w-70px">Nhắc nợ</th> --}}
                                 <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>

@@ -53,17 +53,17 @@ class BusinessController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
-    public function viewMoney(BusinessRequest $request)
-    {
-        $data = $request->validated();
-        $money = $this->businessService->getBusinessMoney($data['id']);
-        return view('business.modal.money', compact('money'));
-    }
+    // public function viewMoney(BusinessRequest $request)
+    // {
+    //     $data = $request->validated();
+    //     $money = $this->businessService->getBusinessMoney($data['id']);
+    //     return view('business.modal.money', compact('money'));
+    // }
 
-    public function updateMoneyNote(BusinessRequest $request)
+    public function updateBusinessMoney(BusinessRequest $request)
     {
         $data = $request->validated();
-        $result = $this->businessService->updateNoteBusinessMoney($data);
+        $result = $this->businessService->updateBusinessMoney($data);
         return jsonResponse($result ? 0 : 1, $result ? 'Thành công' : 'Thất bại');
     }
 }

@@ -92,30 +92,87 @@ var CustomerList = function () {
         })
     }
 
-    const initViewMoney = () => {
-        const viewMoneyBtns = document.querySelectorAll('.btn-view-money');
-        viewMoneyBtns.forEach((btn) => {
-            btn.addEventListener('click', () => {
+    const initEditBusinessMoney = () => {
+        const editBusinessMoneyBtns = document.querySelectorAll('.btn-edit-business-money');
+        editBusinessMoneyBtns.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                const dataId = btn.getAttribute('data-id');
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
-                const id = data.id
+                const businessMoney = data.money[dataId]
 
-                axios.post(routes.businessViewMoney, { id: id }, { headers: headers })
-                    .then((res) => {
-                        if (res.status === 200) {
-                            $('#money-modal .modal-dialog').html(res.data);
-                            $('#money-modal').modal('show');
-                        } else {
-                            notify("Có lỗi xảy ra...", 'error')
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        notify(err.message, 'error')
-                    })
+                console.log(businessMoney);
+                const td = btn.closest('td');
+                td.querySelector('.container-business-money').classList.add('d-none');
+                td.innerHTML += `
+                                    <div class="d-flex align-items-center container-edit-business-money">
+                                        <input type="number" data-type="money" value="${businessMoney.money}" class="form-control me-2" style="min-width: 150px; max-width:200px" min="0" step="any"/>
+                                        <input type="checkbox" data-type="is_money_checked" class="form-check-input me-2" ${businessMoney.is_money_checked ? "checked" : ""}/>
+                                        <input type="text" data-type="note" value="${businessMoney.note ?? ''}" class="form-control me-2" style="min-width: 150px; max-width:200px"/>
+                                        <input type="checkbox" data-type="is_note_checked" class="form-check-input me-2" ${businessMoney.is_note_checked ? "checked" : ""}/>
+                                        <button class="btn btn-light btn-close-business-money px-3 py-2">Đóng</button>
+                                        <button class="btn btn-success btn-save-business-money px-3 py-2">Lưu</button>
+                                    </div>
+                                `
+
+                td.querySelector('.btn-close-business-money').addEventListener('click', (e) => {
+                    datatable.draw();
+                })
+
+                td.querySelector('.btn-save-business-money').addEventListener('click', (e) => {
+                    const money = td.querySelector('.container-edit-business-money input[data-type="money"]').value;
+                    const isMoneyChecked = td.querySelector('.container-edit-business-money input[data-type="is_money_checked"]').checked;
+                    const note = td.querySelector('.container-edit-business-money input[data-type="note"]').value;
+                    const isNoteChecked = td.querySelector('.container-edit-business-money input[data-type="is_note_checked"]').checked;
+
+                    const body = {
+                        id: businessMoney.id,
+                        money: money,
+                        is_money_checked: isMoneyChecked,
+                        note: note,
+                        is_note_checked: isNoteChecked
+                    }
+
+                    axios.post(routes.businessUpdateBusinessMoney, body, { headers: headers })
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                notify('Lưu thành công!', 'success').then(() => {
+                                    prevPhone = null;
+                                    datatable.draw();
+                                })
+                            } else {
+                                notify(res.data.data.join(", "), 'error')
+                            }
+                        })
+                })
             })
         })
     }
+
+    // const initViewMoney = () => {
+    //     const viewMoneyBtns = document.querySelectorAll('.btn-view-money');
+    //     viewMoneyBtns.forEach((btn) => {
+    //         btn.addEventListener('click', () => {
+    //             const row = btn.closest('tr');
+    //             const data = datatable.row(row).data();
+    //             const id = data.id
+
+    //             axios.post(routes.businessViewMoney, { id: id }, { headers: headers })
+    //                 .then((res) => {
+    //                     if (res.status === 200) {
+    //                         $('#money-modal .modal-dialog').html(res.data);
+    //                         $('#money-modal').modal('show');
+    //                     } else {
+    //                         notify("Có lỗi xảy ra...", 'error')
+    //                     }
+    //                 })
+    //                 .catch((err) => {
+    //                     console.log(err);
+    //                     notify(err.message, 'error')
+    //                 })
+    //         })
+    //     })
+    // }
 
     const initComplete = () => {
         const completeBtns = document.querySelectorAll('.btn-complete');
@@ -164,8 +221,8 @@ var CustomerList = function () {
         initDatatable: async function () {
             datatable = $("#business_table").DataTable({
                 fixedColumns: {
-                    leftColumns: 1,
-                    // rightColumns: 1
+                    leftColumns: 0,
+                    rightColumns: 1
                 },
                 processing: true,
                 serverSide: true,
@@ -188,27 +245,28 @@ var CustomerList = function () {
                     }
                 },
                 columnDefs: [
+                    // {
+                    //     targets: 0,
+                    //     data: 'id',
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return `
+                    //                 <div class="form-check form-check-sm form-check-custom form-check-solid">
+                    //                     <input class="form-check-input" type="checkbox" value="${data}" />
+                    //                 </div>`;
+                    //     }
+                    // },
                     {
                         targets: 0,
-                        data: 'id',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="${data}" />
-                                    </div>`;
-                        }
-                    },
-                    {
-                        targets: 1,
                         data: 'created_at',
                         orderable: false,
+                        className: 'text-center',
                         render: function (data, type, row) {
                             return `<span>${formatDate(data)}</span>`
                         }
                     },
                     {
-                        targets: 2,
+                        targets: 1,
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
@@ -220,7 +278,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 2,
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
@@ -232,7 +290,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 4,
+                        targets: 3,
                         data: 'fee_percent',
                         orderable: false,
                         className: 'text-center',
@@ -241,7 +299,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 4,
                         data: 'total_money',
                         orderable: false,
                         render: function (data, type, row) {
@@ -249,7 +307,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 6,
+                        targets: 5,
                         data: 'formality',
                         orderable: false,
                         className: 'text-center',
@@ -258,7 +316,7 @@ var CustomerList = function () {
                         }
                     },
                     {
-                        targets: 7,
+                        targets: 6,
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
@@ -266,13 +324,164 @@ var CustomerList = function () {
                         }
                     },
                     {
+                        targets: 7,
+                        data: 'money.0',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${0}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
                         targets: 8,
+                        data: 'money.1',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${1}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 9,
+                        data: 'money.2',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${2}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 10,
+                        data: 'money.3',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${3}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 11,
+                        data: 'money.4',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${4}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 12,
+                        data: 'money.5',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${5}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 13,
+                        data: 'money.6',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${6}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 14,
+                        data: 'money.7',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${7}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 15,
+                        data: 'money.8',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${8}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 16,
+                        data: 'money.9',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `
+                                    <div class="d-flex align-items-center justify-content-between container-business-money">
+                                        <span class="me-2 max-h-30px ${data.is_money_checked ? 'bg-info text-white p-2 rounded' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                        <span class="me-2"> - </span>
+                                        <span class="me-2 min-w-50px ${data.is_note_checked ? 'bg-info text-white p-2 rounded text-truncate' : ''}" style="min-height:34px; max-width: 125px">${data?.note ?? ''}</span>
+                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${9}">Sửa</button>
+                                    </div>
+                                    `;
+                        }
+                    },
+                    {
+                        targets: 17,
                         data: 'pay_extra',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex align-items-center justify-content-between container-pay-extra">
                                         <span class="me-2">${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                        <button class="btn btn-warning btn-edit-pay-extra">Sửa</button>
+                                        -
+                                        <button class="btn btn-warning btn-edit-pay-extra p-2">Sửa</button>
                                     </div>
                                     `;
                         }
@@ -284,7 +493,6 @@ var CustomerList = function () {
                         className: 'text-center min-w-150px',
                         render: function (data, type, row) {
                             return `
-                                    <button class="btn btn-light btn-light-primary btn-sm btn-view-money">Xem số tiền</button>
                                     <button class="btn btn-light btn-light-success btn-sm btn-complete">Hoàn thành</button>
                                     `;
                         },
@@ -295,12 +503,12 @@ var CustomerList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 initComplete()
-                initViewMoney()
+                // initViewMoney()
+                initEditBusinessMoney()
                 initEditPayExtra()
                 KTMenu.createInstances()
             })
             handleSearchDatatable()
-
         }
     };
 

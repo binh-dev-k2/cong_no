@@ -20,7 +20,7 @@ var DebitsList = function () {
         btnDones.forEach((btnDone) => {
             const row = btnDone.closest('tr');
             const data = datatable.row(row).data();
-            const dataId = {id : data.id}
+            const dataId = { id: data.id }
             btnDone.addEventListener('click', function () {
                 Swal.fire({
                     text: "Bạn có chắc chắn muốn hoàn thành không?",
@@ -35,20 +35,20 @@ var DebitsList = function () {
                     }
                 }).then(function (result) {
                     if (result.isConfirmed) {
-                       axios.post(routes.updateDebitStatus, dataId,{ headers: headers})
-                           .then((response) => {
-                               Swal.fire({
-                                   text: "Cập nhật trạng thái thành công",
-                                   icon: "success",
-                                   buttonsStyling: !1,
-                                   confirmButtonText: "Ok, got it!",
-                                   customClass: {
-                                       confirmButton: "btn btn-primary",
-                                   }
-                               }).then(function () {
-                                      datatable.draw();
-                                 });
-                               })
+                        axios.post(routes.updateDebitStatus, dataId, { headers: headers })
+                            .then((response) => {
+                                Swal.fire({
+                                    text: "Cập nhật trạng thái thành công",
+                                    icon: "success",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                }).then(function () {
+                                    datatable.draw();
+                                });
+                            })
 
                     }
                 });
@@ -91,23 +91,17 @@ var DebitsList = function () {
                 columnDefs: [
                     {
                         targets: 0,
-                        data: 'name',
+                        data: null,
                         orderable: false,
+                        className: 'text-center',
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data.name ?? ''} - ${data.phone ?? ''}</span>`;
                         }
                     },
                     {
                         targets: 1,
-                        data: 'phone',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
-                        }
-                    },
-                    {
-                        targets: 2,
                         data: 'card_number',
+                        className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
@@ -118,22 +112,28 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 2,
                         data: 'formality',
+                        className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data === 'D'){
-                                return `<span>Đáo</span>`;
-                            }
-                            return `<span>Rút</span>`;
+                            return `<span>${data}</span>`;
+                        }
+                    },
+                    {
+                        targets: 3,
+                        data: 'fee',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
                         }
                     },
                     {
                         targets: 4,
-                        data: 'fee',
+                        data: 'pay_extra',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
                         }
                     },
                     {
@@ -141,45 +141,27 @@ var DebitsList = function () {
                         data: 'total_amount',
                         orderable: false,
                         render: function (data, type, row) {
-                           return `<span>${data ?? ''}</span>`;
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
                         }
                     },
                     {
                         targets: 6,
-                        data: 'pay_extra',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
-                        }
-                    },
-                    {
-                        targets: 7,
-                        data: null,
-                        orderable: false,
-                        render: function (data, type, row) {
-                            const totalAmount = row.total_amount !== undefined ? row.total_amount : '';
-                            const payExtra = row.pay_extra !== undefined ? row.pay_extra : '';
-                            return `<span>${(totalAmount + payExtra) ?? ''}</span>`;
-                        }
-                    },
-
-                    {
-                        targets: 8,
                         data: 'status',
+                        className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data===0){
+                            if (data === 0) {
                                 return `<span>Chưa thu</span>`;
                             }
                             return `<span>Đã thu</span>`;
                         }
                     },
                     {
-                        targets: 9,
-                        data: 'status',
+                        targets: -1,
+                        data: null,
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data===0){
+                            if (row.status === 0) {
                                 return `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done" data-value="${row.id}">Hoàn thành</span>`;
                             }
                             return `<span></span>`;

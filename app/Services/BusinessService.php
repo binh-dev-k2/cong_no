@@ -37,7 +37,6 @@ class BusinessService
         // }
 
         $query->orderBy('id', 'desc');
-
         $recordsFiltered = $recordsTotal = $query->count();
         $businnesses = $query->skip($skip)
             ->with(['bank', 'money'])
@@ -95,10 +94,10 @@ class BusinessService
                 'phone' => $business->phone,
                 'card_number' => $business->card_number,
                 'formality' => $business->formality,
-                'fee' => $business->fee,
+                'fee' => $business->fee ?? 0,
                 'pay_extra' => $business->pay_extra ?? 0,
                 'status' => Debt::STATUS_UNPAID,
-                'total_amount' => $business->fee + $business->pay_extra ?? 0,
+                'total_amount' => $business->fee ?? 0 + $business->pay_extra ?? 0,
             ]);
 
             if (!$debt) {

@@ -57,12 +57,10 @@ Trang thống kê
                     id="kt_debit_table">
                     <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                        <th class="text-center min-w-125px">Họ và tên</th>
-                        <th class="text-center min-w-125px">Số điện thoại</th>
+                        <th class="text-center min-w-125px">Tên - SĐT</th>
                         <th class="text-center min-w-125px">Số thẻ</th>
                         <th class="text-center min-w-125px">Hình thức</th>
                         <th class="text-center min-w-50px">Phí</th>
-                        <th class="text-center min-w-125px">Số tiền</th>
                         <th class="text-center min-w-125px">Tiền trả thêm</th>
                         <th class="text-center min-w-125px">Tổng số tiền</th>
                         <th class="text-center min-w-125px">Trạng thái</th>

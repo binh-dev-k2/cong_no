@@ -320,7 +320,7 @@ var CustomerList = function () {
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${row.fee.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1)}</span>`;
+                            return `<span>${row?.fee.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
                         }
                     },
                     {

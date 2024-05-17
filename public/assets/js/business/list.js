@@ -101,7 +101,6 @@ var BusinessList = function () {
                 const data = datatable.row(row).data();
                 const businessMoney = data.money[dataId]
 
-                console.log(businessMoney);
                 const td = btn.closest('td');
                 td.querySelector('.container-business-money').classList.add('d-none');
                 td.innerHTML += `
@@ -116,6 +115,7 @@ var BusinessList = function () {
                                 `
 
                 td.querySelector('.btn-close-business-money').addEventListener('click', (e) => {
+                    prevPhone = null;
                     datatable.draw();
                 })
 

@@ -64,7 +64,7 @@ Trang thống kê
                         <th class="text-center min-w-125px">Tiền trả thêm</th>
                         <th class="text-center min-w-125px">Tổng số tiền</th>
                         <th class="text-center min-w-125px">Trạng thái</th>
-                        <th class="text-center min-w-70px">Đã thu</th>
+                        <th class="text-center min-w-70px">Hành động</th>
                     </tr>
                     </thead>
                     <tbody class="fw-semibold text-gray-600">

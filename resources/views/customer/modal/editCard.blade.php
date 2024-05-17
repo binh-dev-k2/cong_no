@@ -31,7 +31,7 @@
                                 name="account_name" id="account_name" />
                         </div>
                         <div class="d-flex flex-column mb-7 fv-row">
-                            <label class="required fs-6 fw-semibold mb-2" for="account_number">Số tài
+                            <label class="fs-6 fw-semibold mb-2" for="account_number">Số tài
                                 khoản</label>
                             <input type="number" class="form-control form-control-solid" placeholder=""
                                 name="account_number" id="account_number" />
@@ -52,7 +52,7 @@
                         </div>
                         <div class="row g-9 mb-7">
                             <div class="col-md-6 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2">Ngày đến hạn</label>
+                                <label class="fs-6 fw-semibold mb-2">Ngày đến hạn</label>
                                 <div class="position-relative d-flex align-items-center">
                                     <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
                                         <span class="path1"></span>

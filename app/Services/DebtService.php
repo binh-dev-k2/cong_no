@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Debt;
-
+use Illuminate\Support\Facades\Log;
 
 class DebtService
 {
@@ -21,7 +21,7 @@ class DebtService
         $query->orderBy('id', 'desc');
         $recordsFiltered = $recordsTotal = $query->count();
         $debts = $query->skip($skip)
-            ->with(['bank'])
+            ->with(['card.bank'])
             ->take($pageLength)
             ->get();
         return [
@@ -32,13 +32,14 @@ class DebtService
         ];
     }
 
-    
-    // function checkDebt($id){
-    //     $debt = Debt::find($id);
-    //     if($debt->status == 0){
-    //         return "Chưa thanh toán";
-    //     }else{
-    //         return "Đã thanh toán";
-    //     }
-    // }
+
+    function updateStatus($id)
+    {
+        try {
+            return Debt::where('id', $id)->update(['status' => Debt::STATUS_PAID]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-var CustomerList = function () {
+var BusinessList = function () {
     var timeoutSearch, prevPhone = null;
 
     const headers = {
@@ -186,7 +186,10 @@ var CustomerList = function () {
                         axios.post(routes.businessComplete, { id: data.id }, { headers: headers })
                             .then((res) => {
                                 if (res.data.code == 0) {
-                                    notify('Hoàn thành!', 'success').then(() => { datatable.draw(); })
+                                    notify('Hoàn thành!', 'success').then(() => {
+                                        prevPhone = null
+                                        datatable.draw();
+                                    })
                                 } else {
                                     notify(res.data.data.join(", "), 'error')
                                 }
@@ -515,5 +518,5 @@ var CustomerList = function () {
 }();
 
 KTUtil.onDOMContentLoaded((function () {
-    CustomerList.initDatatable();
+    BusinessList.initDatatable();
 }));

@@ -63,9 +63,6 @@ var DebitsList = function () {
                     leftColumns: 1,
                     rightColumns: 1
                 },
-
-                // scrollCollapse: true,
-                // scrollX: true,
                 searchDelay: 500,
                 processing: true,
                 serverSide: true,
@@ -95,18 +92,20 @@ var DebitsList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return `<span>${data.name ?? ''} - ${data.phone ?? ''}</span>`;
+                            if (type === 'display') {
+                                return `<span>${data.name ?? ''} - ${data.phone ?? ''}</span>`;
+                            }
+                            return '<span></span>'
                         }
                     },
                     {
                         targets: 1,
-                        data: 'card_number',
-                        className: 'text-center',
+                        data: null,
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="https://api.vietqr.io/img/${row.card.bank_code}.png" class="h-30px" alt="${row.card.bank_code}">
-                                        ${data ?? ''}
+                                        <img src="${row.card.bank.logo}" class="h-30px" alt="${row.card.bank.code}">
+                                        ${row.card_number}
                                     </div>
                                     `;
                         }
@@ -160,6 +159,7 @@ var DebitsList = function () {
                         targets: -1,
                         data: null,
                         orderable: false,
+                        className: 'text-center',
                         render: function (data, type, row) {
                             if (row.status === 0) {
                                 return `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done" data-value="${row.id}">Hoàn thành</span>`;

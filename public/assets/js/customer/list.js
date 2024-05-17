@@ -356,27 +356,27 @@ var CustomerList = function () {
         return $(span);
     }
 
-    const isRemaing = (cardHistories, dateDue) => {
-        const dateTime = new Date();
-        const year = dateTime.getFullYear();
-        const month = String(dateTime.getMonth()).padStart(2, "0");
-        const lastMonth = new Date(year, month - 1, dateDue + 1);
-        const nextMonth = new Date(year, month, dateDue);
+    // const isRemaing = (cardHistories, dateDue) => {
+    //     const dateTime = new Date();
+    //     const year = dateTime.getFullYear();
+    //     const month = String(dateTime.getMonth()).padStart(2, "0");
+    //     const lastMonth = new Date(year, month - 1, dateDue + 1);
+    //     const nextMonth = new Date(year, month, dateDue);
 
-        let check = false;
-        cardHistories.forEach((history) => {
-            const createdAt = new Date(history.created_at);
-            if (isDateInRange(createdAt, lastMonth, nextMonth)) {
-                check = true;
-            }
-        })
+    //     let check = false;
+    //     cardHistories.forEach((history) => {
+    //         const createdAt = new Date(history.created_at);
+    //         if (isDateInRange(createdAt, lastMonth, nextMonth)) {
+    //             check = true;
+    //         }
+    //     })
 
-        return check;
-    }
+    //     return check;
+    // }
 
-    const isDateInRange = (dateToCheck, startDate, endDate) => {
-        return dateToCheck >= startDate && dateToCheck <= endDate;
-    }
+    // const isDateInRange = (dateToCheck, startDate, endDate) => {
+    //     return dateToCheck >= startDate && dateToCheck <= endDate;
+    // }
 
     const initEditGetBlankCards = function () {
         $("#select_edit_card").select2({
@@ -449,7 +449,7 @@ var CustomerList = function () {
                 id: formEdit.querySelector("input[name='id']").value,
                 customer_name: formEdit.querySelector("input[name='name']").value,
                 customer_phone: formEdit.querySelector("input[name='phone']").value,
-                fee_percent: formEdit.querySelector("input[name='fee_percent']").value,
+                fee_percent: parseFloat(formEdit.querySelector("input[name='fee_percent']").value),
                 card_ids: $("#select_edit_card").select2("val"),
             };
 
@@ -465,13 +465,11 @@ var CustomerList = function () {
                                 confirmButton: "btn btn-primary",
                             }
                         }).then(function (result) {
-                            if (result.isConfirmed) {
-                                editModal.hide();
-                                formEdit.reset();
-                                $("#select_add_card").empty()
-                                dt_phone = null;
-                                datatable.draw()
-                            }
+                            editModal.hide();
+                            formEdit.reset();
+                            $("#select_add_card").empty()
+                            dt_phone = null;
+                            datatable.draw()
                         })
                     } else {
                         Swal.fire({
@@ -507,20 +505,20 @@ var CustomerList = function () {
             dateFormat: "Y-m-d",
             locale: "vn",
         }),
-        btnEdits.forEach((btn) => {
-            btn.addEventListener('click', function () {
-                const row = btn.closest('tr')
-                const data = datatable.row(row).data();
-                formEditCard.querySelector('input[name="id"]').value = data.id ?? '';
-                formEditCard.querySelector('input[name="account_name"]').value = data.account_name ?? '';
-                formEditCard.querySelector('input[name="card_number"]').value = data.card_number ?? '';
-                formEditCard.querySelector('input[name="account_number"]').value = data.account_number ?? '';
-                formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
-                formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
-                formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
-                formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
+            btnEdits.forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const row = btn.closest('tr')
+                    const data = datatable.row(row).data();
+                    formEditCard.querySelector('input[name="id"]').value = data.id ?? '';
+                    formEditCard.querySelector('input[name="account_name"]').value = data.account_name ?? '';
+                    formEditCard.querySelector('input[name="card_number"]').value = data.card_number ?? '';
+                    formEditCard.querySelector('input[name="account_number"]').value = data.account_number ?? '';
+                    formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
+                    formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
+                    formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
+                    formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
+                })
             })
-        })
     }
 
     const deleteCard = () => {
@@ -528,10 +526,10 @@ var CustomerList = function () {
         btnDeleteCards.forEach((btnDel) => {
             const row = btnDel.closest('tr')
             const data = datatable.row(row).data();
-            let cardNumberToDelete = row.cells[3].innerText;
+
             btnDel.addEventListener('click', function (e) {
                 Swal.fire({
-                    text: `Bạn có chắc chắn muốn xóa thẻ có số thẻ ${cardNumberToDelete} không?`,
+                    text: `Bạn có chắc chắn muốn xóa thẻ có số thẻ ${data.card_number} không?`,
                     icon: "warning",
                     showCancelButton: true,
                     buttonsStyling: false,
@@ -612,6 +610,7 @@ var CustomerList = function () {
                             }
                         })
 
+                        editCardModal.hide()
                         formEditCard.reset();
                         $("#select_add_card").empty()
                         dt_phone = null;
@@ -788,7 +787,7 @@ var CustomerList = function () {
                         targets: -1,
                         data: null,
                         orderable: false,
-                        className: 'text-end',
+                        className: 'text-center',
                         render: function (data, type, row) {
                             return `
                                     <button class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">

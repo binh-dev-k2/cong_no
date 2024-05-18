@@ -4,6 +4,7 @@ use App\Http\Controllers\api\CardController;
 use App\Http\Controllers\api\DebtController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    //dashboard
+    Route::get('dashboard/getDonutChartData', [DashboardController::class, 'getDonutChartData'])->name('api.dashboard.getDonutChartData');
+    Route::get('dashboard/getProcessData', [DashboardController::class, 'getProcessData'])->name('api.dashboard.getProcessData');
+    Route::get('dashboard/getTotalBusiness', [DashboardController::class, 'getTotalBusiness'])->name('api.dashboard.getTotalBusiness');
+
     //card
     Route::post('card/find', [CardController::class, 'find'])->name('api.card.find');
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store');

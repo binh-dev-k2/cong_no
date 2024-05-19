@@ -15,7 +15,7 @@ const FormAddCard = (function () {
         template +=
             '<img src="' +
             imgUrl +
-            '" class="rounded-circle h-20px me-2" alt="image"/>';
+            '" class="h-20px me-2" style="min-width: 52px" alt="image"/>';
         template += item.text;
 
         span.innerHTML = template;

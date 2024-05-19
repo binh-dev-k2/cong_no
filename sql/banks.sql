@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 09, 2024 at 06:08 PM
+-- Generation Time: May 19, 2024 at 08:40 AM
 -- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,12 +29,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `banks` (
   `id` int NOT NULL,
-  `code` varchar(50) NOT NULL,
-  `bin` int NOT NULL,
-  `shortName` varchar(255) NOT NULL,
-  `logo` varchar(255) NOT NULL,
-  `swift_code` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `bin` int DEFAULT NULL,
+  `shortName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `swift_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `banks`
@@ -103,7 +103,16 @@ INSERT INTO `banks` (`id`, `code`, `bin`, `shortName`, `logo`, `swift_code`) VAL
 (60, 'KEBHANAHCM', 970466, 'KEBHanaHCM', 'https://api.vietqr.io/img/KEBHANAHCM.png', NULL),
 (61, 'KEBHANAHN', 970467, 'KEBHanaHN', 'https://api.vietqr.io/img/KEBHANAHN.png', NULL),
 (62, 'MAFC', 977777, 'MAFC', 'https://api.vietqr.io/img/MAFC.png', NULL),
-(63, 'VBSP', 999888, 'VBSP', 'https://api.vietqr.io/img/VBSP.png', NULL);
+(63, 'VBSP', 999888, 'VBSP', 'https://api.vietqr.io/img/VBSP.png', NULL),
+(64, 'FECREDIT', NULL, 'FE Credit', 'https://brademar.com/wp-content/uploads/2022/09/FE-CREDIT-Logo-PNG-2.png', NULL),
+(65, 'HOMECREDIT', NULL, 'Home Credit', 'https://trustingsocial.com/uploads/vn-homecredit.png', NULL),
+(66, 'MCREDIT', NULL, 'Mcredit', 'https://trustingsocial.com/uploads/vn-mcredit.png', NULL),
+(67, 'VIETCREDIT', NULL, 'VietCredit', 'https://trustingsocial.com/uploads/vn-viet-credit.png', NULL),
+(68, 'SHINHANFINANCE', NULL, 'Shinhan Finance', 'https://static.ybox.vn/2023/6/3/1686103724869-logo-ngang-ch%E1%BB%AF-xanh-kh%C3%B4ng-n%E1%BB%81n-_website.png', NULL),
+(69, 'MIRAEASSET', NULL, 'Mirae Asset', 'https://cdn.tuoitrethudo.vn/stores/news_dataimages/2023/092023/15/11/croped/thumbnail/294873410-464540765674556-7494395062025773479-n20230915111446.png?230915021405', NULL),
+(70, 'LOTTEFINANCE', NULL, 'LOTTE Finance', 'https://i.pinimg.com/originals/6a/4d/0f/6a4d0fcecee7b9f0f50be9e17a9fd7b7.png', NULL),
+(71, 'SHBFINANCE', NULL, 'SHB Finance', 'https://assets-global.website-files.com/6107d6546b656b27d809cd54/6107d6546b656b31df09d091_shb.svg', NULL),
+(72, 'JACCS', NULL, 'JACCS', 'https://monfin.vn/images/source/Congty/logo%20jaccs.png', NULL);
 
 --
 -- Indexes for dumped tables
@@ -123,7 +132,7 @@ ALTER TABLE `banks`
 -- AUTO_INCREMENT for table `banks`
 --
 ALTER TABLE `banks`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

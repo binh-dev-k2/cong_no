@@ -159,7 +159,7 @@
                         res.data?.data.forEach(card => {
                             console.log(card);
                             const image =
-                                `<img src="${card.bank.logo}" class="rounded-circle h-20px mb-1" alt="image"/>`;
+                                `<img src="${card.bank.logo}" class="h-20px mb-1" style="min-width: 52px" alt="image"/>`;
                             const text =
                                 `${card.card_number} ${card.customer ? `- ${card.customer.name} - ${card.customer.phone}` : ''}`;
 

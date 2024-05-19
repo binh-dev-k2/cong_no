@@ -12,7 +12,6 @@ class DashBoardService
     public function getChartCustomer(): array
     {
         $query = Card::query()->whereHas('customer');
-        $totalCardsWithCustomer = $query->count();
         $startDate = Carbon::now()->format('d');
         $endDate = Carbon::now()->addDays(7)->format('d');
         $cards = $query->whereBetween('date_due', [$startDate, $endDate])->get();
@@ -28,7 +27,6 @@ class DashBoardService
         $totalNotReminding = $totalCanBeRemind - $totalHasBeenReminded;
 
         return [
-            'totalCardsWithCustomer' => $totalCardsWithCustomer,
             'totalCanBeRemind' => $totalCanBeRemind,
             'totalNotReminding' => $totalNotReminding,
             'totalHasBeenReminded' => $totalHasBeenReminded

@@ -89,6 +89,7 @@ class BusinessService
             }
 
             $debt = Debt::create([
+                'account_name' => $business->account_name,
                 'name' => $business->name,
                 'phone' => $business->phone,
                 'card_number' => $business->card_number,
@@ -187,5 +188,10 @@ class BusinessService
 
         $data[] = $this->createMoneyData($businessId, $remainingMoney);
         return 0;
+    }
+
+    public function delete($id)
+    {
+        return Business::where('id', $id)->delete() > 0;
     }
 }

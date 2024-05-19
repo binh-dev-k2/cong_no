@@ -126,6 +126,7 @@
             datatable: "{{ route('api.business.datatable') }}",
             businessComplete: "{{ route('api.business.complete') }}",
             businessUpdatePayExtra: "{{ route('api.business.updatePayExtra') }}",
+            businessDelete: "{{ route('api.business.delete') }}",
             // businessViewMoney: "{{ route('api.business.viewMoney') }}",
             businessUpdateBusinessMoney: "{{ route('api.business.updateBusinessMoney') }}",
         }

@@ -16,6 +16,7 @@ class CreateDebtsTable extends Migration
     {
         Schema::create('debts', function (Blueprint $table) {
             $table->id();
+            $table->string('account_name')->nullable();
             $table->string('name');
             $table->string('phone');
             $table->string('card_number');

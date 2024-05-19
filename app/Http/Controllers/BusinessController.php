@@ -66,4 +66,11 @@ class BusinessController extends Controller
         $result = $this->businessService->updateBusinessMoney($data);
         return jsonResponse($result ? 0 : 1, $result ? 'Thành công' : 'Thất bại');
     }
+
+    public function delete(BusinessRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->businessService->delete($data['id']);
+        return jsonResponse($result ? 0 : 1);
+    }
 }

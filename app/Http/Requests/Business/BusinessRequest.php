@@ -32,6 +32,7 @@ class BusinessRequest extends FormRequest
             case 'store':
                 return [
                     'card_number' => 'required|digits:16|exists:cards,card_number',
+                    'account_name' => 'nullable|string',
                     'name' => 'required|string',
                     'phone' => 'required|digits:10',
                     'fee_percent' => 'required|numeric',
@@ -62,6 +63,11 @@ class BusinessRequest extends FormRequest
             case 'viewMoney':
                 return [
                     'id' => 'required|exists:businesses,id',
+                ];
+
+            case 'delete':
+                return [
+                    'id' => 'required|exists:businesses,id'
                 ];
         }
     }

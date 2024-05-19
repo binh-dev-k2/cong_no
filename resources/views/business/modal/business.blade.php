@@ -59,7 +59,13 @@
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2" for="name">Tên</label>
+                                <label class="fs-6 fw-semibold mb-2" for="account_name">Chủ tài khoản</label>
+                                <input type="text" class="form-control form-control-solid"
+                                    placeholder="Ex: Tran Van A" name="account_name" id="account_name" />
+                            </div>
+
+                            <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="required fs-6 fw-semibold mb-2" for="name">Tên khách hàng</label>
                                 <input type="text" class="form-control form-control-solid"
                                     placeholder="Ex: Tran Van A" name="name" id="name" required />
                             </div>
@@ -157,7 +163,6 @@
                         $results.empty();
 
                         res.data?.data.forEach(card => {
-                            console.log(card);
                             const image =
                                 `<img src="${card.bank.logo}" class="h-20px mb-1" style="min-width: 52px" alt="image"/>`;
                             const text =
@@ -183,10 +188,10 @@
 
         $modalBusiness.on('click', '.search-results li', function() {
             bodyBusinessData = {};
-            console.log("Selected card:", $(this).data());
             const data = $(this).data();
 
             $modalBusiness.find('input[name="card_number"]').val(data.card_number);
+            $modalBusiness.find('input[name="account_name"]').val(data.account_name ?? '');
             $modalBusiness.find('input[name="name"]').val(data.customer?.name ?? '');
             $modalBusiness.find('input[name="phone"]').val(data.customer?.phone ?? '');
             $modalBusiness.find('input[name="fee_percent"]').val(data.customer?.fee_percent ?? '');
@@ -199,6 +204,7 @@
 
             const body = {
                 card_number: $modalBusiness.find('input[name="card_number"]').val(),
+                account_name: $modalBusiness.find('input[name="account_name"]').val(),
                 name: $modalBusiness.find('input[name="name"]').val(),
                 phone: $modalBusiness.find('input[name="phone"]').val(),
                 fee_percent: parseFloat($modalBusiness.find('input[name="fee_percent"]').val()),

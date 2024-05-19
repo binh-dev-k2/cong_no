@@ -15,6 +15,7 @@ class CreateBusinessesTable extends Migration
     {
         Schema::create('businesses', function (Blueprint $table) {
             $table->id();
+            $table->string('account_name')->nullable();
             $table->string('name');
             $table->string('phone');
             $table->float('fee_percent');

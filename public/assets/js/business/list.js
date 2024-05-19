@@ -205,6 +205,37 @@ var BusinessList = function () {
         })
     }
 
+    const initDelete = () => {
+        const deleteBtns = document.querySelectorAll('.btn-delete');
+        deleteBtns.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                const row = btn.closest('tr');
+                const data = datatable.row(row).data();
+                const id = data.id
+
+                notify('Bạn có chắc muốn xóa nghiệp vụ này?', 'warning', true).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.post(routes.businessDelete, { id: id }, { headers: headers })
+                            .then((res) => {
+                                if (res.data.code == 0) {
+                                    notify('Xóa thành công!', 'success').then(() => {
+                                        prevPhone = null
+                                        datatable.draw();
+                                    })
+                                } else {
+                                    notify('Có lỗi xảy ra, vui lòng thử lại sau!', 'error')
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                notify(err.message, 'error')
+                            })
+                    }
+                })
+            })
+        })
+    }
+
     const notify = (text, type = 'success', showCancelButton = false) => {
         return Swal.fire({
             text: text,
@@ -273,9 +304,15 @@ var BusinessList = function () {
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
-                            if (type === 'display' && row.phone != prevPhone) {
-                                prevPhone = row.phone
-                                return `<span>${row.name} - ${row.phone}</span>`
+                            if (type === 'display') {
+                                if (row.account_name) {
+                                    return `<span>${row.account_name}</span>`
+                                }
+
+                                if (row.phone != prevPhone) {
+                                    prevPhone = row.phone
+                                    return `<span>${row.name} - ${row.phone}</span>`
+                                }
                             }
                             return `<span></span>`
                         }
@@ -496,7 +533,10 @@ var BusinessList = function () {
                         className: 'text-center min-w-150px',
                         render: function (data, type, row) {
                             return `
-                                    <button class="btn btn-light btn-light-success btn-sm btn-complete">Hoàn thành</button>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button class="me-2 btn btn-danger btn-sm btn-delete">Xóa</button>
+                                    <button class="btn btn-success btn-sm btn-complete">Hoàn thành</button>
+                                </div>
                                     `;
                         },
                     },
@@ -506,6 +546,7 @@ var BusinessList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 initComplete()
+                initDelete()
                 // initViewMoney()
                 initEditBusinessMoney()
                 initEditPayExtra()

@@ -22,14 +22,14 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    function getDonutChartData()
+    function getChartCustomer()
     {
-        $data = $this->dashBoardService->getDounutChartData();
+        $data = $this->dashBoardService->getChartCustomer();
         return response()->json($data);
     }
 
-    function getProcessData(){
-        $data = $this->dashBoardService->getProcessData();
+    function getTotalDebit(){
+        $data = $this->dashBoardService->getTotalDebit();
         return response()->json($data);
     }
 

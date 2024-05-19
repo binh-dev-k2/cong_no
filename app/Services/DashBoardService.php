@@ -1,53 +1,56 @@
 <?php
+
 namespace App\Services;
+
 use App\Models\Business;
 use App\Models\Card;
-use App\Models\Customer;
 use App\Models\Debt;
 use Carbon\Carbon;
 
 class DashBoardService
 {
-    public function getDounutChartData()
+    public function getChartCustomer(): array
     {
         $query = Card::query()->whereHas('customer');
-        $totalData = $query->count();
+        $totalCardsWithCustomer = $query->count();
         $startDate = Carbon::now()->format('d');
         $endDate = Carbon::now()->addDays(7)->format('d');
-        $query->whereBetween('date_due', [$startDate, $endDate]);
-        $totalDataDue = $query->count();
-        $countRemind = $query->whereHas('cardHistories')->count();
-        $countnotRemind = $totalDataDue - $countRemind;
-        $data = [
-            'totalData' => $totalData,
-            'totalDataDue' => $totalDataDue,
-            'totalRemind' => $countRemind,
-            'totalNotRemind' => $countnotRemind
-        ];
-        return $data;
+        $cards = $query->whereBetween('date_due', [$startDate, $endDate])->get();
 
-    }
+        $totalHasBeenReminded = 0;
+        foreach ($cards as $card) {
+            if ($card->cardHistories->where('created_at', '>', Carbon::now()->subMonth()->format('Y-m-') . $card->date_due)->count()) {
+                $totalHasBeenReminded++;
+            }
+        }
 
-    function getProcessData(){
-        $query = Debt::query();
-        $totalData = $query->count();
-        $totalFee = $query->sum('fee');
-        $totalAmount = $query->sum('total_amount');
-        $totalMoney = $totalFee + $totalAmount;
-        $isDone = $query->where('status', 1)->count();
-        $isNotDone = $totalData - $isDone;
-        $percent = ($isDone / $totalData) * 100;
+        $totalCanBeRemind = $cards->count();
+        $totalNotReminding = $totalCanBeRemind - $totalHasBeenReminded;
+
         return [
-            'percent' => $percent,
-            'totalMoney' => $totalMoney,
-            'totalData' => $totalData,
-            'isDone' => $isDone,
-            'isNotDone' => $isNotDone
+            'totalCardsWithCustomer' => $totalCardsWithCustomer,
+            'totalCanBeRemind' => $totalCanBeRemind,
+            'totalNotReminding' => $totalNotReminding,
+            'totalHasBeenReminded' => $totalHasBeenReminded
         ];
-
     }
 
-    function getTotalBusiness(){
+    public function getTotalDebit(): array
+    {
+        $debtQuery = Debt::query();
+        $totalDebts = $debtQuery->count();
+        $totalAmount = $debtQuery->sum('total_amount');
+        $paidDebts = $debtQuery->where('status', Debt::STATUS_PAID)->count();
+        $percentCompleted = $totalDebts > 0 ? round(($paidDebts / $totalDebts) * 100, 2) : 0;
+        return [
+            'percentCompleted' => $percentCompleted,
+            'totalAmount' => $totalAmount,
+            'countPaidedDebit' => $paidDebts,
+        ];
+    }
+
+    function getTotalBusiness()
+    {
         $query = Business::query()->count();
         return [
             'totalBusiness' => $query

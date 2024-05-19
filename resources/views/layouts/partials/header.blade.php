@@ -77,14 +77,14 @@
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu item-->
-                    <div class="menu-item px-3 my-0">
+                    {{-- <div class="menu-item px-3 my-0">
                         <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
                             <span class="menu-icon" data-kt-element="icon">
                                 <i class="ki-outline ki-screen fs-2"></i>
                             </span>
                             <span class="menu-title">Theo hệ thống</span>
                         </a>
-                    </div>
+                    </div> --}}
                     <!--end::Menu item-->
                 </div>
                 <!--end::Menu-->
@@ -141,7 +141,7 @@
 
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        
+
                         @if (Auth::check())
                             <li>
                                 <a class="menu-link px-5" href="{{ route('logout') }}"

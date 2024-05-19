@@ -12,7 +12,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Hệ thống quản lý công nợ" />
     <meta property="og:site_name" content="Hệ thống quản lý công nợ" />
-    <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     {{-- <link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" /> --}}
@@ -77,11 +77,9 @@
         <i class="ki-outline ki-arrow-up"></i>
     </div>
 
-    <script>
-        var hostUrl = "assets/";
-        </script>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     @yield('script')
 
     @yield('modal')

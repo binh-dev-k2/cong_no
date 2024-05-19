@@ -155,7 +155,6 @@
         }
         var datatable;
     </script>
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
     <script src="{{ asset('assets/js/customer/list.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add.js') }}"></script>

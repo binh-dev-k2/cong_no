@@ -12,7 +12,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Hệ thống quản lý công nợ" />
     <meta property="og:site_name" content="Hệ thống quản lý công nợ" />
-    <link rel="shortcut icon" href="<?php echo e(asset('media/logos/favicon.ico')); ?>" />
+    <link rel="shortcut icon" href="<?php echo e(asset('assets/media/logos/favicon.ico')); ?>" />
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     
@@ -77,11 +77,9 @@
         <i class="ki-outline ki-arrow-up"></i>
     </div>
 
-    <script>
-        var hostUrl = "assets/";
-        </script>
     <script src="<?php echo e(asset('assets/plugins/global/plugins.bundle.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/scripts.bundle.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/plugins/custom/datatables/datatables.bundle.js')); ?>"></script>
     <?php echo $__env->yieldContent('script'); ?>
 
     <?php echo $__env->yieldContent('modal'); ?>

@@ -71,6 +71,11 @@ Trang thống kê
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-end">
+                    <h3>Tổng tiền: <?= number_format($totalMoney, 0, ',', ',') ?> VNĐ </h3>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -94,6 +99,6 @@ Trang thống kê
     var datatable;
 </script>
 
-<script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+
 <script src="{{ asset('assets/js/debit/list.js') }}"></script>
 @endsection

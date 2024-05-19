@@ -26,8 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     //dashboard
-    Route::get('dashboard/getDonutChartData', [DashboardController::class, 'getDonutChartData'])->name('api.dashboard.getDonutChartData');
-    Route::get('dashboard/getProcessData', [DashboardController::class, 'getProcessData'])->name('api.dashboard.getProcessData');
+    Route::get('dashboard/chart-customer', [DashboardController::class, 'getChartCustomer'])->name('api.dashboard.getChartCustomer');
+    Route::get('dashboard/total-debit', [DashboardController::class, 'getTotalDebit'])->name('api.dashboard.getTotalDebit');
     Route::get('dashboard/getTotalBusiness', [DashboardController::class, 'getTotalBusiness'])->name('api.dashboard.getTotalBusiness');
 
     //card
@@ -58,6 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('debit/updateStatus/', [DebitController::class, 'update'])->name('api.debit_updateStatus');
 });
 
-Route::get('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');
-Route::delete('customer/delete/', [CustomerController::class, 'destroy'])->name('api.customer_delete');
-Route::post('customer/debt/showAll/', [DebitController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');
+// Route::get('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');
+// Route::delete('customer/delete/', [CustomerController::class, 'destroy'])->name('api.customer_delete');
+// Route::post('customer/debt/showAll/', [DebitController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');

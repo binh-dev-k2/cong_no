@@ -42,4 +42,9 @@ class DebtService
             return false;
         }
     }
+
+    public function getTotalMoney()
+    {
+        return Debt::sum('total_amount');
+    }
 }

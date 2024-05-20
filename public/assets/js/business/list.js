@@ -261,7 +261,7 @@ var BusinessList = function () {
                 modalEdit.querySelector('input[name="name"]').value = data.name;
                 modalEdit.querySelector('input[name="phone"]').value = data.phone;
                 modalEdit.querySelector('input[name="fee_percent"]').value = data.fee_percent;
-                modalEdit.querySelector('input[name="formality"][value="' + data.formality + '"]').checked = true;
+                data.formality ? modalEdit.querySelector('input[name="formality"][value="' + data.formality + '"]').checked = true : '';
                 modalEdit.querySelector('input[name="total_money"]').value = data.total_money;
             })
         })

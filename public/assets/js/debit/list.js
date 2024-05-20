@@ -1,7 +1,7 @@
 "use strict";
 
 var DebitsList = function () {
-    let timeoutSearch;
+    let timeoutSearch, prevPhone = null;
     const headers = {
         Authorization: `Bearer ${token}`,
     };
@@ -10,6 +10,7 @@ var DebitsList = function () {
             .addEventListener("keyup", (function (e) {
                 clearTimeout(timeoutSearch)
                 timeoutSearch = setTimeout(function () {
+                    prevPhone = null;
                     datatable.draw();
                 }, 300)
             }));
@@ -41,11 +42,12 @@ var DebitsList = function () {
                                     text: "Cập nhật trạng thái thành công",
                                     icon: "success",
                                     buttonsStyling: !1,
-                                    confirmButtonText: "Ok, got it!",
+                                    confirmButtonText: "Xác nhận!",
                                     customClass: {
                                         confirmButton: "btn btn-primary",
                                     }
                                 }).then(function () {
+                                    prevPhone = null;
                                     datatable.draw();
                                 });
                             })
@@ -103,12 +105,9 @@ var DebitsList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            if (type === 'display') {
-                                if (row.account_name) {
-                                    return `<span>${row.account_name}</span>`
-                                }
-
-                                return `<span>${row.name} - ${row.phone}</span>`
+                            if (row.phone !== prevPhone && type === 'display') {
+                                prevPhone = row.phone
+                                return `<span>${row.name ?? ''} - ${row.phone ?? ''}</span>`
                             }
                             return `<span></span>`
                         }
@@ -127,6 +126,15 @@ var DebitsList = function () {
                     },
                     {
                         targets: 2,
+                        data: 'account_name',
+                        orderable: false,
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return `<span>${data ?? ''}</span>`
+                        }
+                    },
+                    {
+                        targets: 3,
                         data: 'formality',
                         className: 'text-center',
                         orderable: false,
@@ -135,7 +143,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 4,
                         data: 'fee',
                         orderable: false,
                         render: function (data, type, row) {
@@ -143,7 +151,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 4,
+                        targets: 5,
                         data: 'pay_extra',
                         orderable: false,
                         render: function (data, type, row) {
@@ -151,7 +159,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 6,
                         data: 'total_amount',
                         orderable: false,
                         render: function (data, type, row) {
@@ -159,7 +167,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 6,
+                        targets: 7,
                         data: 'status',
                         className: 'text-center',
                         orderable: false,

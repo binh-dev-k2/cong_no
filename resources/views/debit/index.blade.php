@@ -56,12 +56,13 @@
                         id="kt_debit_table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
+                                <th class="text-center min-w-125px">Tên - SĐT</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
+                                <th class="text-center min-w-125px">Chủ tài khoản</th>
                                 <th class="text-center min-w-125px">Hình thức</th>
-                                <th class="text-center min-w-50px">Phí</th>
-                                <th class="text-center min-w-125px">Tiền trả thêm</th>
-                                <th class="text-center min-w-125px">Tổng số tiền</th>
+                                <th class="text-center min-w-50px">Phí (VNĐ)</th>
+                                <th class="text-center min-w-125px">Tiền trả thêm (VNĐ)</th>
+                                <th class="text-center min-w-125px">Tổng số tiền (VNĐ)</th>
                                 <th class="text-center min-w-125px">Trạng thái</th>
                                 <th class="text-center min-w-70px">Hành động</th>
                             </tr>

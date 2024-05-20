@@ -76,7 +76,7 @@
                                     </div>
                                 </th> --}}
                                 <th class="text-center min-w-125px">Ngày tạo</th>
-                                <th class="text-center min-w-125px">Tên - SĐT</th>
+                                <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-50px">Phí (%)</th>
                                 <th class="text-center min-w-125px">Số tiền(vnđ)</th>

@@ -283,6 +283,17 @@ var BusinessList = function () {
         })
     }
 
+    function formatNumber(number) {
+        // Chuyển số sang chuỗi nếu nó chưa phải là chuỗi
+        const str = number.toString();
+
+        // Sử dụng biểu thức chính quy để chia thành từng nhóm 4 chữ số
+        const formattedStr = str.replace(/(.{4})/g, '$1 ');
+
+        // Cắt bỏ khoảng trắng cuối cùng nếu có
+        return formattedStr.trim();
+    }
+
     return {
         initDatatable: async function () {
             datatable = $("#business_table").DataTable({
@@ -335,6 +346,7 @@ var BusinessList = function () {
                         targets: 1,
                         data: null,
                         orderable: false,
+                        className: 'min-w-150px',
                         render: function (data, type, row) {
                             if (type === 'display') {
                                 if (row.account_name) {
@@ -353,10 +365,11 @@ var BusinessList = function () {
                         targets: 2,
                         data: null,
                         orderable: false,
+                        className: 'text-center min-w-150px',
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.bank.logo}" class="h-30px" alt="${row.bank.code}">
-                                        ${row.card_number}
+                                        ${formatNumber(row.card_number)}
                                     </div>
                                     `;
                         }

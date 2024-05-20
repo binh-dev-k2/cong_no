@@ -56,6 +56,17 @@ var DebitsList = function () {
         });
     }
 
+    function formatNumber(number) {
+        // Chuyển số sang chuỗi nếu nó chưa phải là chuỗi
+        const str = number.toString();
+
+        // Sử dụng biểu thức chính quy để chia thành từng nhóm 4 chữ số
+        const formattedStr = str.replace(/(.{4})/g, '$1 ');
+
+        // Cắt bỏ khoảng trắng cuối cùng nếu có
+        return formattedStr.trim();
+    }
+
     return {
         initDatatable: async function () {
             datatable = $("#kt_debit_table").DataTable({
@@ -93,9 +104,13 @@ var DebitsList = function () {
                         className: 'text-center',
                         render: function (data, type, row) {
                             if (type === 'display') {
-                                return `<span>${data.name ?? ''} - ${data.phone ?? ''}</span>`;
+                                if (row.account_name) {
+                                    return `<span>${row.account_name}</span>`
+                                }
+
+                                return `<span>${row.name} - ${row.phone}</span>`
                             }
-                            return '<span></span>'
+                            return `<span></span>`
                         }
                     },
                     {
@@ -105,7 +120,7 @@ var DebitsList = function () {
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.card.bank.logo}" class="h-30px" alt="${row.card.bank.code}">
-                                        ${row.card_number}
+                                        ${formatNumber(row.card_number)}
                                     </div>
                                     `;
                         }

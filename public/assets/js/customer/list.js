@@ -669,6 +669,17 @@ var CustomerList = function () {
         return `${day}-${month}-${year}`;
     }
 
+    function formatNumber(number) {
+        // Chuyển số sang chuỗi nếu nó chưa phải là chuỗi
+        const str = number.toString();
+
+        // Sử dụng biểu thức chính quy để chia thành từng nhóm 4 chữ số
+        const formattedStr = str.replace(/(.{4})/g, '$1 ');
+
+        // Cắt bỏ khoảng trắng cuối cùng nếu có
+        return formattedStr.trim();
+    }
+
     return {
         initDatatable: async function () {
             datatable = $("#kt_customers_table").DataTable({
@@ -750,7 +761,7 @@ var CustomerList = function () {
                         data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data ? formatNumber(data) : ''}</span>`;
                         }
                     },
                     {
@@ -758,7 +769,7 @@ var CustomerList = function () {
                         data: 'account_number',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data ? formatNumber(data) : ''}</span>`;
                         }
                     },
                     {

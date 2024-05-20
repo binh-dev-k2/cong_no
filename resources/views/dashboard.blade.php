@@ -20,7 +20,7 @@
             <div id="kt_app_content" class="app-content flex-column-fluid">
                 <div id="kt_app_content_container" class="app-container container-xxl">
                     <div class="row gy-5 g-10">
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <div class="card card-flush mb-10">
                                 <div class="card-header pt-5">
                                     <h3 class="card-title align-items-start flex-column">
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <div class="card card-flush overflow-hidden h-100">
                                 <div class="card-header py-5">
                                     <h3 class="card-title align-items-start flex-column">

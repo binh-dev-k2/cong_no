@@ -684,7 +684,7 @@ var CustomerList = function () {
         initDatatable: async function () {
             datatable = $("#kt_customers_table").DataTable({
                 fixedColumns: {
-                    leftColumns: 1,
+                    leftColumns: 2,
                 },
                 searchDelay: 500,
                 processing: true,

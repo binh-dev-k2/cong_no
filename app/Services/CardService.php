@@ -42,6 +42,7 @@ class CardService
             ->with(['customer.cards.bank', 'bank', 'cardHistories.user'])
             ->take($pageLength)
             ->orderBy('customer_id', 'desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return [

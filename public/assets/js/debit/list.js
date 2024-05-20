@@ -114,6 +114,15 @@ var DebitsList = function () {
                     },
                     {
                         targets: 1,
+                        data: 'account_name',
+                        orderable: false,
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return `<span>${data ?? ''}</span>`
+                        }
+                    },
+                    {
+                        targets: 2,
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
@@ -122,15 +131,6 @@ var DebitsList = function () {
                                         ${formatNumber(row.card_number)}
                                     </div>
                                     `;
-                        }
-                    },
-                    {
-                        targets: 2,
-                        data: 'account_name',
-                        orderable: false,
-                        className: 'text-center',
-                        render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`
                         }
                     },
                     {

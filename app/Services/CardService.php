@@ -30,7 +30,7 @@ class CardService
             case '1':
                 $startDate = Carbon::now()->format('d');
                 $endDate = Carbon::now()->addDays(7)->format('d');
-                $query->whereBetween('date_due', [$startDate, $endDate])->orderBy('customer_id', 'desc');
+                $query->whereBetween('date_due', [$startDate, $endDate]);
                 break;
 
             default:
@@ -41,6 +41,7 @@ class CardService
         $customers = $query->skip($skip)
             ->with(['customer.cards.bank', 'bank', 'cardHistories.user'])
             ->take($pageLength)
+            ->orderBy('customer_id', 'desc')
             ->get();
 
         return [

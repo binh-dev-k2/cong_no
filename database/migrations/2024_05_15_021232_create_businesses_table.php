@@ -21,7 +21,7 @@ class CreateBusinessesTable extends Migration
             $table->float('fee_percent');
             $table->string('card_number');
             $table->bigInteger('total_money');
-            $table->enum('formality', ['R', 'D']);
+            $table->enum('formality', ['R', 'Đ']);
             $table->bigInteger('fee');
             $table->bigInteger('pay_extra')->nullable();
             $table->string('bank_code');

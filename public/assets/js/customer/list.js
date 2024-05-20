@@ -181,7 +181,6 @@ var CustomerList = function () {
         const drawer = KTDrawer.getInstance(drawer_login_info);
         drawer_btns.forEach((btn) => {
             btn.addEventListener('click', function () {
-                console.log(drawer_login_info);
                 const row = btn.closest('tr')
                 const data = datatable.row(row).data();
                 drawer_login_info.querySelector('textarea[name="login_info"]').value = data.login_info ?? ''

@@ -8,7 +8,6 @@ const dashboard = function () {
     const initDonutChart = function () {
         axios.get(routes.getChartCustomer, { headers })
             .then((response) => {
-                console.log(response);
                 let ctx = document.getElementById('canvas-chart-customer');
                 document.getElementById('chart-customer').innerText = response.data.totalCanBeRemind;
                 const labels = ['Đã nhắc', 'Chưa nhắc'];

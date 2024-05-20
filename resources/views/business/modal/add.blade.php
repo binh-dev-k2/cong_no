@@ -1,13 +1,13 @@
 <style>
     /* Chrome, Safari, Edge, Opera */
-    #modal_business input::-webkit-outer-spin-button,
-    #modal_business input::-webkit-inner-spin-button {
+    #modal_add input::-webkit-outer-spin-button,
+    #modal_add input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
 
     /* Firefox */
-    #modal_business input[type=number] {
+    #modal_add input[type=number] {
         -moz-appearance: textfield;
     }
 
@@ -31,10 +31,10 @@
 </style>
 
 
-<div class="modal fade" id="modal_business" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modal-add" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
-            <form action="#" method="post" id="modal_form_add_business">
+            <form action="#" method="post">
                 <div class="modal-header">
                     <h4 class="modal-title">Thêm mới nghiệp vụ</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -86,7 +86,7 @@
                                 <label class="required fs-6 fw-semibold mb-2">Hình thức</label>
                                 <div class="d-flex">
                                     <div class="form-check me-5">
-                                        <input class="form-check-input" type="radio" value="D" checked
+                                        <input class="form-check-input" type="radio" value="Đ" checked
                                             name="formality">
                                         <label class="form-check-label" for="type_old">
                                             Đáo
@@ -133,8 +133,8 @@
         };
 
         let timeOutSearchCard = null;
-        const $modalBusiness = $('#modal_business');
-        const $results = $modalBusiness.find('.search-results');
+        const $modalAddBusiness = $('#modal-add');
+        const $results = $modalAddBusiness.find('.search-results');
 
         const notify = (text, type = 'success', showCancelButton = false) => {
             return Swal.fire({
@@ -151,7 +151,7 @@
             })
         }
 
-        $modalBusiness.find('input[name="card_number"]').on('keyup', function() {
+        $modalAddBusiness.find('input[name="card_number"]').on('keyup', function() {
             clearTimeout(timeOutSearchCard);
             timeOutSearchCard = setTimeout(() => {
                 axios.post("{{ route('api.card.find') }}", {
@@ -186,30 +186,30 @@
             }, 500);
         })
 
-        $modalBusiness.on('click', '.search-results li', function() {
+        $modalAddBusiness.on('click', '.search-results li', function() {
             bodyBusinessData = {};
             const data = $(this).data();
 
-            $modalBusiness.find('input[name="card_number"]').val(data.card_number);
-            $modalBusiness.find('input[name="account_name"]').val(data.account_name ?? '');
-            $modalBusiness.find('input[name="name"]').val(data.customer?.name ?? '');
-            $modalBusiness.find('input[name="phone"]').val(data.customer?.phone ?? '');
-            $modalBusiness.find('input[name="fee_percent"]').val(data.customer?.fee_percent ?? '');
-            $modalBusiness.find('.search-results').hide();
+            $modalAddBusiness.find('input[name="card_number"]').val(data.card_number);
+            $modalAddBusiness.find('input[name="account_name"]').val(data.account_name ?? '');
+            $modalAddBusiness.find('input[name="name"]').val(data.customer?.name ?? '');
+            $modalAddBusiness.find('input[name="phone"]').val(data.customer?.phone ?? '');
+            $modalAddBusiness.find('input[name="fee_percent"]').val(data.customer?.fee_percent ?? '');
+            $modalAddBusiness.find('.search-results').hide();
         });
 
-        $modalBusiness.on('submit', 'form', function(e) {
+        $modalAddBusiness.on('submit', 'form', function(e) {
             e.preventDefault();
             $(this).find('button[type="submit"]').attr('data-kt-indicator', "on");
 
             const body = {
-                card_number: $modalBusiness.find('input[name="card_number"]').val(),
-                account_name: $modalBusiness.find('input[name="account_name"]').val(),
-                name: $modalBusiness.find('input[name="name"]').val(),
-                phone: $modalBusiness.find('input[name="phone"]').val(),
-                fee_percent: parseFloat($modalBusiness.find('input[name="fee_percent"]').val()),
-                formality: $modalBusiness.find('input[name="formality"]').val(),
-                total_money: parseInt($modalBusiness.find('input[name="total_money"]').val()),
+                card_number: $modalAddBusiness.find('input[name="card_number"]').val(),
+                account_name: $modalAddBusiness.find('input[name="account_name"]').val(),
+                name: $modalAddBusiness.find('input[name="name"]').val(),
+                phone: $modalAddBusiness.find('input[name="phone"]').val(),
+                fee_percent: parseFloat($modalAddBusiness.find('input[name="fee_percent"]').val()),
+                formality: $modalAddBusiness.find('input[name="formality"]:checked').val(),
+                total_money: parseInt($modalAddBusiness.find('input[name="total_money"]').val()),
             }
 
             // console.log(body);
@@ -219,13 +219,16 @@
                 })
                 .then((res) => {
                     if (res.data.code == 0) {
-                        notify("Thêm mới nghiệp vụ thành công!", 'success');
+                        // notify("Thêm mới nghiệp vụ thành công!", 'success');
                         prevPhone = null
-                        $modalBusiness.modal('hide');
+                        $modalAddBusiness.modal('hide');
                         datatable.draw();
-                        $modalBusiness.find('form')[0].reset();
+                        $modalAddBusiness.find('form')[0].reset();
                     } else {
-                        notify(res.data.data.join(', '), 'error');
+                        notify(
+                            "Có lỗi gì đó xảy ra! Nếu xảy ra nhiều lần vui lòng liên hệ Dev để biết thêm chi tiết :D",
+                            'error'
+                        );
                     }
                 })
                 .catch((err) => {

@@ -39,6 +39,13 @@ class BusinessController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
+    public function update(BusinessRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->businessService->update($data);
+        return jsonResponse($result ? 0 : 1);
+    }
+
     public function complete(BusinessRequest $request)
     {
         $data = $request->validated();

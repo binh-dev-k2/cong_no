@@ -79,6 +79,12 @@ class BusinessService
         }
     }
 
+    public function update(array $data)
+    {
+        $business = Business::findOrFail($data['id']);
+        return $business->fill($data)->save();
+    }
+
     public function complete($id)
     {
         try {

@@ -52,7 +52,7 @@
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
-                                data-bs-target="#modal_business">Thêm nghiệp vụ</button>
+                                data-bs-target="#modal-add">Thêm nghiệp vụ</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">
@@ -65,8 +65,7 @@
                     </div>
                 </div>
                 <div class="card-body pt-0">
-                    <table
-                        class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
+                    <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
                         id="business_table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
@@ -116,7 +115,8 @@
 @endsection
 
 @section('modal')
-    @include('business.modal.business')
+    @include('business.modal.add')
+    @include('business.modal.edit')
 @endsection
 
 @section('script')

@@ -40,6 +40,18 @@ class BusinessRequest extends FormRequest
                     'total_money' => 'required|numeric',
                 ];
 
+            case 'update':
+                return [
+                    'id' => 'required|exists:businesses,id',
+                    'card_number' => 'required|digits:16|exists:cards,card_number',
+                    'account_name' => 'nullable|string',
+                    'name' => 'required|string',
+                    'phone' => 'required|digits:10',
+                    'fee_percent' => 'required|numeric',
+                    'formality' => 'required|string',
+                    'total_money' => 'required|numeric',
+                ];
+
             case 'complete':
                 return [
                     'id' => 'required|exists:businesses,id'

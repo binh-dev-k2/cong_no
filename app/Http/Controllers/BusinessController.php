@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Business\BusinessRequest;
 use App\Models\Business;
+use App\Models\Setting;
 use App\Services\BusinessService;
 use Illuminate\Http\Request;
 
@@ -78,6 +79,20 @@ class BusinessController extends Controller
     {
         $data = $request->validated();
         $result = $this->businessService->delete($data['id']);
+        return jsonResponse($result ? 0 : 1);
+    }
+
+    public function editSetting()
+    {
+        $min = Setting::where('key', 'business_min')->first()?->value;
+        $max = Setting::where('key', 'business_max')->first()?->value;
+        return view('business.modal.edit-setting', compact('min', 'max'));
+    }
+
+    public function updateSetting(Request $request)
+    {
+        $data = $request->all();
+        $result = $this->businessService->updateSetting($data);
         return jsonResponse($result ? 0 : 1);
     }
 }

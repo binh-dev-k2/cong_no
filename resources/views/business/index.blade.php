@@ -51,6 +51,7 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                            <button type="button" class="btn btn-warning me-2 btn-edit-setting">Sửa tiền chia</button>
                             <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
                                 data-bs-target="#modal-add">Thêm nghiệp vụ</button>
                         </div>
@@ -103,11 +104,8 @@
             </div>
         </div>
     </div>
-    {{--
-        @include('customer.components.note')
-        --}}
 
-    <div class="modal fade" id="money-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modal-edit-setting" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
 
         </div>
@@ -129,6 +127,8 @@
             businessDelete: "{{ route('api.business.delete') }}",
             // businessViewMoney: "{{ route('api.business.viewMoney') }}",
             businessUpdateBusinessMoney: "{{ route('api.business.updateBusinessMoney') }}",
+            businessEditSetting: "{{ route('api.business.editSetting') }}",
+            businessUpdateSetting: "{{ route('api.business.updateSetting') }}",
         }
         var datatable;
     </script>

@@ -6,6 +6,7 @@ use App\Models\Business;
 use App\Models\BusinessMoney;
 use App\Models\Card;
 use App\Models\Debt;
+use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -143,9 +144,9 @@ class BusinessService
         );
     }
 
-    public function randomMoney()
+    public function randomMoney($min, $max)
     {
-        return random_int(34000000, 35000000);
+        return random_int($min, $max);
     }
 
     public function calculateFee($businessId, $totalMoney)
@@ -153,15 +154,17 @@ class BusinessService
         BusinessMoney::where('business_id', $businessId)->delete();
         $data = [];
         $i = 0;
+        $min = (int)Setting::where('key', 'business_min')->first()->value;
+        $max = (int)Setting::where('key', 'business_max')->first()->value;
 
         while ($totalMoney > 0) {
             $i++;
-            $randomMoney = $this->randomMoney();
+            $randomMoney = $this->randomMoney($min, $max);
             if ($totalMoney >= $randomMoney) {
                 $data[] = $this->createMoneyData($businessId, $randomMoney);
                 $totalMoney -= $randomMoney;
             } else {
-                $totalMoney = $this->distributeRemainingMoney($data, $businessId, $totalMoney);
+                $totalMoney = $this->distributeRemainingMoney($data, $businessId, $totalMoney, $max);
             }
         }
 
@@ -183,10 +186,10 @@ class BusinessService
         ];
     }
 
-    private function distributeRemainingMoney(array &$data, int $businessId, int $remainingMoney): int
+    private function distributeRemainingMoney(array &$data, int $businessId, int $remainingMoney, $max): int
     {
         foreach ($data as &$entry) {
-            if ($entry['money'] + $remainingMoney <= 35000000) {
+            if ($entry['money'] + $remainingMoney <= $max) {
                 $entry['money'] += $remainingMoney;
                 return 0;
             }
@@ -199,5 +202,17 @@ class BusinessService
     public function delete($id)
     {
         return Business::where('id', $id)->delete() > 0;
+    }
+
+    public function updateSetting($data)
+    {
+        try {
+            Setting::where('key', 'business_min')->update(['value' => $data['business_min']]);
+            Setting::where('key', 'business_max')->update(['value' => $data['business_max']]);
+            return true;
+        } catch (\Throwable $th) {
+            //throw $th;
+            return false;
+        }
     }
 }

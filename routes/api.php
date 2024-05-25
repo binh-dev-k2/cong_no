@@ -54,6 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('business/store', [BusinessController::class, 'store'])->name('api.business.store');
     Route::post('business/update', [BusinessController::class, 'update'])->name('api.business.update');
     Route::post('business/delete', [BusinessController::class, 'delete'])->name('api.business.delete');
+    Route::get('business/edit-setting', [BusinessController::class, 'editSetting'])->name('api.business.editSetting');
+    Route::post('business/update-setting', [BusinessController::class, 'updateSetting'])->name('api.business.updateSetting');
 
     //debt
     Route::post('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');

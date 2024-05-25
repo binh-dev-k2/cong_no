@@ -267,6 +267,25 @@ var BusinessList = function () {
         })
     }
 
+    const initEditSetting = () => {
+        const editSettingBtn = document.querySelector('.btn-edit-setting');
+
+        editSettingBtn.addEventListener('click', () => {
+            axios.get(routes.businessEditSetting, { headers: headers })
+                .then((res) => {
+                    if (res.status === 200) {
+                        $('#modal-edit-setting .modal-dialog').html(res.data);
+                        $('#modal-edit-setting').modal('show');
+                    } else {
+                        notify("Có lỗi xảy ra...", 'error')
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    notify(err.message, 'error')
+                })
+        })
+    }
 
     const notify = (text, type = 'success', showCancelButton = false) => {
         return Swal.fire({
@@ -644,6 +663,7 @@ var BusinessList = function () {
                 initEditPayExtra()
                 KTMenu.createInstances()
             })
+            initEditSetting()
             handleSearchDatatable()
         }
     };

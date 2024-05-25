@@ -104,7 +104,7 @@ class BusinessService
                 'fee' => $business->fee ?? 0,
                 'pay_extra' => $business->pay_extra ?? 0,
                 'status' => Debt::STATUS_UNPAID,
-                'total_amount' => $business->fee ?? 0 + $business->pay_extra ?? 0,
+                'total_amount' => ($business->fee ?? 0) + ($business->pay_extra ?? 0),
             ]);
 
             if (!$debt) {

@@ -27,25 +27,43 @@
                 <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6" id="#kt_app_sidebar_menu"
                     data-kt-menu="true" data-kt-menu-expand="false">
                     <div class="menu-item">
-                        <a class="menu-link  @if(Route::currentRouteName() == 'dashboard') active @endif" href="{{ route('dashboard') }}">
+                        <a class="menu-link  @if (Route::currentRouteName() == 'dashboard') active @endif"
+                            href="{{ route('dashboard') }}">
                             <span class="menu-icon">
-                                <i class="ki-outline ki-abstract-13 fs-2"></i>
+                                <i class="ki-duotone ki-graph-2 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                </i>
                             </span>
                             <span class="menu-title">Thống kê</span>
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link @if(Route::currentRouteName() == 'customer') active @endif" href="{{ route('customer') }}">
+                        <a class="menu-link @if (Route::currentRouteName() == 'customer') active @endif"
+                            href="{{ route('customer') }}">
                             <span class="menu-icon">
-                                <i class="ki-outline ki-user fs-2"></i>
+                                <i class="ki-duotone ki-people fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                    <span class="path5"></span>
+                                </i>
                             </span>
                             <span class="menu-title">Khách hàng</span>
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link @if(Route::currentRouteName() == 'business') active @endif" href="{{ route('business') }}">
+                        <a class="menu-link @if (Route::currentRouteName() == 'business') active @endif"
+                            href="{{ route('business') }}">
                             <span class="menu-icon">
-                                <i class="ki-outline ki-user fs-2"></i>
+                                <i class="ki-duotone ki-tablet-text-down fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                </i>
                             </span>
                             <span class="menu-title">Nghiệp vụ</span>
                         </a>
@@ -54,7 +72,7 @@
                     <div class="menu-item">
                         <!--begin:Menu link-->
                         <a class="menu-link @if (Route::currentRouteName() == 'debit') active @endif"
-                           href="{{ route('debit') }}">
+                            href="{{ route('debit') }}">
                             <span class="menu-icon">
                                 <i class="ki-duotone ki-credit-cart fs-2">
                                     <span class="path1"></span>
@@ -62,6 +80,20 @@
                                 </i>
                             </span>
                             <span class="menu-title">Ghi Nợ</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link @if (Route::currentRouteName() == 'user') active @endif" href="{{ route('user') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-user fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Người dùng</span>
                         </a>
                         <!--end:Menu link-->
                     </div>

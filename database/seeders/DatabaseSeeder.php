@@ -27,30 +27,14 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        Customer::create([
-            'name' => 'test',
-            'phone' => '0123457890',
-        ]);
+        // Setting::create([
+        //     'key' => 'business_min',
+        //     'value' => '34000000',
+        // ]);
 
-        Card::create([
-            'card_number' => '1234123412341234',
-            'account_number' => '1234123412341234',
-            'customer_id' => '1',
-            'note' => '',
-            'date_due' => now(),
-            'date_return' => now() + 7,
-            'card_name' => 'test',
-            'login_info' =>  'test',
-        ]);
-
-        Setting::create([
-            'key' => 'business_min',
-            'value' => '34000000',
-        ]);
-
-        Setting::create([
-            'key' => 'business_max',
-            'value' => '35000000',
-        ]);
+        // Setting::create([
+        //     'key' => 'business_max',
+        //     'value' => '35000000',
+        // ]);
     }
 }

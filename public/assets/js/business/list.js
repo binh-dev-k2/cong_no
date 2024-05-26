@@ -322,14 +322,6 @@ var BusinessList = function () {
                 },
                 processing: true,
                 serverSide: true,
-                // order: [
-                //     [2, 'desc']
-                // ],
-                select: {
-                    style: 'multi',
-                    selector: 'td:first-child input[type="checkbox"]',
-                    className: 'row-selected'
-                },
                 ajax: {
                     url: routes.datatable,
                     type: "POST",

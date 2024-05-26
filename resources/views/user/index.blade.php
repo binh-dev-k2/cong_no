@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 @section('title')
-    Ghi nợ
+    Người dùng
 @endsection
 @section('header')
     <style>
@@ -8,8 +8,19 @@
             padding: 0.5rem !important;
             margin: 0 !important;
         }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
-    <link href="{{ asset('assets/css/debit.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -20,7 +31,7 @@
                 class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
 
                 <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Nghiệp vụ
+                    Người dùng
                 </h1>
 
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -30,7 +41,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-500 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Ghi nợ</li>
+                    <li class="breadcrumb-item text-muted">Người dùng</li>
                 </ul>
             </div>
         </div>
@@ -46,59 +57,57 @@
                                 <span class="path1"></span>
                                 <span class="path2"></span>
                             </i>
-                            <input type="text" id="debit_search" class="form-control form-control-solid w-250px ps-12 "
-                                data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
+                            <input type="text" id="user_search" class="form-control form-control-solid w-250px ps-12"
+                                placeholder="Tìm kiếm" />
+                        </div>
+                    </div>
+                    <div class="card-toolbar">
+                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
+                                data-bs-target="#modal-add">Thêm người dùng</button>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center d-none"
+                            data-kt-customer-table-toolbar="selected">
+                            <div class="fw-bold me-5">
+                                <span class="me-2" data-kt-customer-table-select="selected_count"></span>Hàng được chọn
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body pt-0">
                     <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
-                        id="kt_debit_table">
+                        id="user_table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-125px">Tên - SĐT</th>
-                                <th class="text-center min-w-125px">Chủ tài khoản</th>
-                                <th class="text-center min-w-125px">Số thẻ</th>
-                                <th class="text-center min-w-125px">Hình thức</th>
-                                <th class="text-center min-w-50px">Phí (VNĐ)</th>
-                                <th class="text-center min-w-125px">Tiền trả thêm (VNĐ)</th>
-                                <th class="text-center min-w-125px">Tổng số tiền (VNĐ)</th>
-                                <th class="text-center min-w-125px">Trạng thái</th>
-                                <th class="text-center min-w-70px">Hành động</th>
+                                <th class="text-center min-w-125px">STT</th>
+                                <th class="text-center min-w-125px">Tên</th>
+                                <th class="text-center min-w-125px">Email</th>
+                                <th class="text-center min-w-125px">Ngày tạo</th>
+                                <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-end">
-                        <h3>Tổng tiền: <?= number_format($totalMoney, 0, ',', ',') ?> VNĐ </h3>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
-
-    <div class="modal fade" id="money-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-650px">
-
-        </div>
-    </div>
+@section('modal')
+    @include('user.modal.add')
+@endsection
 @endsection
 
-
 @section('script')
-    <script>
-        let token = "{{ session('authToken') }}";
-        let routes = {
-            getAllDebitCards: "{{ route('api.debit_showAll') }}",
-            updateDebitStatus: "{{ route('api.debit_updateStatus') }}",
-        }
-        var datatable;
-    </script>
+<script>
+    var token = "{{ session('authToken') }}";
+    var routes = {
+        datatable: "{{ route('api.user.datatable') }}",
+        userDelete: "{{ route('api.user.delete') }}",
+    }
+    var datatable;
+</script>
 
-
-    <script src="{{ asset('assets/js/debit/list.js') }}"></script>
+<script src="{{ asset('assets/js/user/index.js') }}"></script>
 @endsection

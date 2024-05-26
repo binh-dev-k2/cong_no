@@ -6,6 +6,7 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebitController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::middleware('auth:sanctum')->group(function () {
     //dashboard
@@ -60,8 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //debt
     Route::post('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');
     Route::post('debit/updateStatus/', [DebitController::class, 'update'])->name('api.debit_updateStatus');
-});
 
-// Route::get('debit/showAll/', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');
-// Route::delete('customer/delete/', [CustomerController::class, 'destroy'])->name('api.customer_delete');
-// Route::post('customer/debt/showAll/', [DebitController::class, 'getAllDebtByCustomer'])->name('api.debt_showAll');
+    //user
+    Route::post('user/datatable', [UserController::class, 'datatable'])->name('api.user.datatable');
+    Route::post('user/delete', [UserController::class, 'delete'])->name('api.user.delete');
+    Route::post('user/register', [UserController::class, 'register'])->name('api.user.register');
+});

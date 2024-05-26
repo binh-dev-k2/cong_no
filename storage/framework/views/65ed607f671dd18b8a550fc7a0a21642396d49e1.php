@@ -126,7 +126,7 @@
                     <!--end::Menu separator-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        <a href="account/overview.html" class="menu-link px-5">My Profile</a>
+                        <a href="<?php echo e(route('profile.editPassword')); ?>" class="menu-link px-5">Đổi mật khẩu</a>
                     </div>
                     <!--end::Menu item-->
 
@@ -141,7 +141,7 @@
                             <li>
                                 <a class="menu-link px-5" href="<?php echo e(route('logout')); ?>"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class='mdi mdi-logout me-2'></i>
+                                    
                                     <span class="align-middle"><?php echo e(__('Đăng xuất')); ?></span>
                                 </a>
                             </li>

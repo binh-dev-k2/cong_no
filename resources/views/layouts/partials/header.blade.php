@@ -131,7 +131,7 @@
                     <!--end::Menu separator-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-5">
-                        <a href="account/overview.html" class="menu-link px-5">My Profile</a>
+                        <a href="{{ route('profile.editPassword') }}" class="menu-link px-5">Đổi mật khẩu</a>
                     </div>
                     <!--end::Menu item-->
 
@@ -146,7 +146,7 @@
                             <li>
                                 <a class="menu-link px-5" href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class='mdi mdi-logout me-2'></i>
+                                    {{-- <i class='mdi mdi-logout me-2'></i> --}}
                                     <span class="align-middle">{{ __('Đăng xuất') }}</span>
                                 </a>
                             </li>

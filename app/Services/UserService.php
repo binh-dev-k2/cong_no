@@ -40,7 +40,11 @@ class UserService
 
     public function create($data)
     {
-        return User::create($data);
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
     }
 
     public function delete($id)

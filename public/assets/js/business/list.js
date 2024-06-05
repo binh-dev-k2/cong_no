@@ -654,6 +654,9 @@ var BusinessList = function () {
                 initEditBusinessMoney()
                 initEditPayExtra()
                 KTMenu.createInstances()
+                $('.paginate_button a').on('click', function () {
+                    prevPhone = null;
+                });
             })
             initEditSetting()
             handleSearchDatatable()

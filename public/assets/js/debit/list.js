@@ -197,13 +197,14 @@ var DebitsList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 doneDebit();
+                $('.paginate_button a').on('click', function () {
+                    prevPhone = null;
+                });
             })
             handleSearchDatatable();
             handleMonthFilter();
 
-            datatable.on('page.dt', function () {
-                prevPhone = null;
-            });
+
         }
     };
 

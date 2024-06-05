@@ -4,7 +4,7 @@ var CustomerList = function () {
     const drawer_note = document.querySelector("#drawer_note");
     const drawer_remind = document.querySelector("#drawer_remind");
     const drawer_login_info = document.querySelector("#drawer_login_info");
-    let dt_phone = ''
+    let prevPhone = ''
     const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
     const editCardModal = new bootstrap.Modal(document.querySelector('#modal_edit_card'));
 
@@ -126,7 +126,7 @@ var CustomerList = function () {
                             }).then((function () {
                                 checkboxes.forEach((checkbox => {
                                     if (checkbox.checked) {
-                                        dt_phone = null;
+                                        prevPhone = null;
                                         datatable.row($(checkbox.closest("tbody tr"))).remove().draw();
                                     }
                                 }));
@@ -158,7 +158,7 @@ var CustomerList = function () {
         $('#customer_search').on("keyup", (function (e) {
             clearTimeout(timeoutSearch)
             timeoutSearch = setTimeout(function () {
-                dt_phone = null;
+                prevPhone = null;
                 datatable.draw();
             }, 500)
         }));
@@ -212,7 +212,7 @@ var CustomerList = function () {
                             }
                         }).then((function () {
                             // drawer.toggle();
-                            dt_phone = null;
+                            prevPhone = null;
                             datatable.draw();
                         }));
                     } else {
@@ -303,7 +303,7 @@ var CustomerList = function () {
                             }
                         }).then(function () {
                             KTDrawer.getInstance(drawer_remind).toggle()
-                            dt_phone = null;
+                            prevPhone = null;
                             datatable.draw()
                         })
                     } else {
@@ -467,7 +467,7 @@ var CustomerList = function () {
                             editModal.hide();
                             formEdit.reset();
                             $("#select_add_card").empty()
-                            dt_phone = null;
+                            prevPhone = null;
                             datatable.draw()
                         })
                     } else {
@@ -552,7 +552,7 @@ var CustomerList = function () {
                                     }
                                 }).then(function (result) {
                                     if (result.isConfirmed) {
-                                        dt_phone = null;
+                                        prevPhone = null;
                                         datatable.row($(btnDel.closest("tbody tr"))).remove().draw();
                                     }
                                 })
@@ -612,7 +612,7 @@ var CustomerList = function () {
                         editCardModal.hide()
                         formEditCard.reset();
                         $("#select_add_card").empty()
-                        dt_phone = null;
+                        prevPhone = null;
                         datatable.draw()
                     } else {
                         Swal.fire({
@@ -657,7 +657,7 @@ var CustomerList = function () {
 
     $('[data-bs-toggle="tab"]').on('click', function () {
         $(this).find('input[type="radio"]').prop('checked', true)
-        dt_phone = null
+        prevPhone = null
         datatable.draw()
     })
 
@@ -715,7 +715,7 @@ var CustomerList = function () {
                         data: 'customer_id',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (row.customer.phone !== dt_phone && type === 'display') {
+                            if (row.customer.phone !== prevPhone && type === 'display') {
                                 return `
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
                                         <input class="form-check-input" type="checkbox" name="customer-id" value="${data}"/>
@@ -729,8 +729,8 @@ var CustomerList = function () {
                         data: 'customer',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (row.customer.phone !== dt_phone && type === 'display') {
-                                dt_phone = row.customer.phone
+                            if (row.customer.phone !== prevPhone && type === 'display') {
+                                prevPhone = row.customer.phone
                                 return `<span>${row.customer.name} - ${row.customer.phone}</span>`
                             }
                             return `<span></span>`
@@ -872,6 +872,9 @@ var CustomerList = function () {
                 initEditCard()
                 deleteCard()
                 KTMenu.createInstances()
+                $('.paginate_button a').on('click', function () {
+                    prevPhone = null;
+                });
             })
             handleSearchDatatable()
             initEditGetBlankCards()

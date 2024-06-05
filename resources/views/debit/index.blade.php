@@ -40,7 +40,7 @@
         <div id="kt_app_content_container" class="app-container ">
             <div class="card">
                 <div class="card-header border-0 pt-6">
-                    <div class="card-title">
+                    <div class="card-title w-100 justify-content-between">
                         <div class="d-flex align-items-center position-relative my-1">
                             <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
                                 <span class="path1"></span>
@@ -48,6 +48,24 @@
                             </i>
                             <input type="text" id="debit_search" class="form-control form-control-solid w-250px ps-12 "
                                 data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
+                        </div>
+                        <div class="form-floating" style="min-width: 150px; cursor: pointer">
+                            <select class="form-select form-select-solid" id="debit_month" name="month" aria-label="Tháng">
+                                <option value="" selected>Toàn bộ</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <label for="debit_month">Tháng</label>
                         </div>
                     </div>
                 </div>
@@ -63,7 +81,7 @@
                                 <th class="text-center min-w-50px">Phí (VNĐ)</th>
                                 <th class="text-center min-w-125px">Tiền trả thêm (VNĐ)</th>
                                 <th class="text-center min-w-125px">Tổng số tiền (VNĐ)</th>
-                                <th class="text-center min-w-125px">Trạng thái</th>
+                                <th class="text-center min-w-125px">Tổng nợ</th>
                                 <th class="text-center min-w-70px">Hành động</th>
                             </tr>
                         </thead>

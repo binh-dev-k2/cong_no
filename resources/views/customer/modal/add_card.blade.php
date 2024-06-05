@@ -31,7 +31,7 @@
                             <input type="number" class="form-control form-control-solid" placeholder=""
                                 name="account_number" id="account_number" />
                         </div>
-                        <div class="d-flex flex-column mb-7 fv-row">
+                        <div class="d-flex flex-column mb-7 fv-row" id="select_bank">
                             <label class="required fs-6 fw-semibold mb-2" for="select_bank_list"> Ngân hàng </label>
                             <select class="form-select form-select-transparent" data-hide-search="false"
                                 placeholder="Chọn ngân hàng" id="select_bank_list" name="bank_code">

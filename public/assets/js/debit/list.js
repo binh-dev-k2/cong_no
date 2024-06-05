@@ -16,6 +16,14 @@ var DebitsList = function () {
             }));
     }
 
+    const handleMonthFilter = () => {
+        document.querySelector('#debit_month')
+            .addEventListener("change", (function (e) {
+                prevPhone = null;
+                datatable.draw();
+            }));
+    }
+
     const doneDebit = () => {
         let btnDones = document.querySelectorAll('.btn-done');
         btnDones.forEach((btnDone) => {
@@ -59,13 +67,8 @@ var DebitsList = function () {
     }
 
     function formatNumber(number) {
-        // Chuyển số sang chuỗi nếu nó chưa phải là chuỗi
         const str = number.toString();
-
-        // Sử dụng biểu thức chính quy để chia thành từng nhóm 4 chữ số
         const formattedStr = str.replace(/(.{4})/g, '$1 ');
-
-        // Cắt bỏ khoảng trắng cuối cùng nếu có
         return formattedStr.trim();
     }
 
@@ -83,11 +86,11 @@ var DebitsList = function () {
                     // [2, 'desc']
                 ],
                 stateSave: true,
-                select: {
-                    style: 'multi',
-                    selector: 'td:first-child input[type="checkbox"]',
-                    className: 'row-selected'
-                },
+                // select: {
+                //     style: 'multi',
+                //     selector: 'td:first-child input[type="checkbox"]',
+                //     className: 'row-selected'
+                // },
                 ajax: {
                     url: routes.getAllDebitCards,
                     type: "POST",
@@ -96,6 +99,7 @@ var DebitsList = function () {
                     },
                     data: function (d) {
                         d.search = $('input[data-kt-debit-table-filter]').val();
+                        d.month = $('#debit_month').val();
                     }
                 },
                 columnDefs: [
@@ -168,14 +172,11 @@ var DebitsList = function () {
                     },
                     {
                         targets: 7,
-                        data: 'status',
+                        data: 'sum_amount',
                         className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
-                            if (data === 0) {
-                                return `<span>Chưa thu</span>`;
-                            }
-                            return `<span>Đã thu</span>`;
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? ''}</span>`;
                         }
                     },
                     {
@@ -190,15 +191,19 @@ var DebitsList = function () {
                             return `<span></span>`;
                         }
                     }
-
                 ]
             });
 
             // Re-init functions
             datatable.on('draw', function () {
                 doneDebit();
-                handleSearchDatatable();
             })
+            handleSearchDatatable();
+            handleMonthFilter();
+
+            datatable.on('page.dt', function () {
+                prevPhone = null;
+            });
         }
     };
 

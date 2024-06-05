@@ -298,7 +298,8 @@ const FormAddCard = (function () {
             $("#select_bank_list").select2({
                 templateSelection: optionFormat,
                 templateResult: optionFormat,
-                minimumResultsForSearch: Infinity,
+                minimumResultsForSearch: 0,
+                dropdownParent: $("#select_bank")
             });
 
             btn_card_cancel.addEventListener("click", function (event) {

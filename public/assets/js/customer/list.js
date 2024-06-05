@@ -761,7 +761,11 @@ var CustomerList = function () {
                         data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data ? formatNumber(data) : ''}</span>`;
+                            return `
+                                <div class="px-2 py-3 text-center rounded" ${row.date_return ? 'style="color:white; background-color: #f582ff"' : ''}>
+                                    ${data ? formatNumber(data) : ''}
+                                </div>
+                            `;
                         }
                     },
                     {

@@ -14,7 +14,8 @@ class DebtService
         $pageLength = $data['length'] ?? 10;
         $skip = ($pageNumber - 1) * $pageLength;
 
-        $query = Debt::query();
+        $query = Debt::query()
+            ->with(['card.bank']);
 
         if (isset($data['search'])) {
             $search = $data['search'];
@@ -31,27 +32,16 @@ class DebtService
         }
 
         $recordsFiltered = $recordsTotal = $query->count();
-        // $debts = $query
-        //     ->orderBy('phone', 'asc')
-        //     ->orderBy('created_at', 'desc')
-        //     ->skip($skip)
-        //     ->take($pageLength)
-        //     ->get();
-
-        // Lấy tất cả dữ liệu và sắp xếp trong bộ nhớ
-        $debts = $query->with(['card.bank'])->get();
-
-        // Sắp xếp theo phone và sau đó theo created_at
-        $debts = $debts->sortBy(function ($debt) {
-            return $debt->created_at->timestamp . $debt->phone;
-        });
-
-        // Áp dụng phân trang sau khi sắp xếp
-        $paginatedDebts = $debts->slice($skip, $pageLength);
+        $debts = $query
+            ->orderBy('phone', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->skip($skip)
+            ->take($pageLength)
+            ->get();
 
         $currentPhone = null;
 
-        $paginatedDebts->each(function (&$debt) use (&$currentPhone, $data) {
+        $debts->each(function ($debt) use (&$currentPhone, $data) {
             if ($currentPhone === $debt->phone) {
                 $debt->sum_amount = null;
             } else {

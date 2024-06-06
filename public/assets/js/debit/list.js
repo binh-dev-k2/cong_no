@@ -172,11 +172,11 @@ var DebitsList = function () {
                     },
                     {
                         targets: 7,
-                        data: 'sum_amount',
+                        data: null,
                         className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? ''}</span>`;
+                            return `<span>${row.sum_amount ? row.sum_amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) : ''}</span>`;
                         }
                     },
                     {

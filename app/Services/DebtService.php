@@ -15,9 +15,7 @@ class DebtService
         $skip = ($pageNumber - 1) * $pageLength;
 
         $query = Debt::query()
-            ->with(['card.bank'])
-            ->orderBy('id', 'desc')
-            ->orderBy('phone');
+            ->with(['card.bank']);
 
         if (isset($data['search'])) {
             $search = $data['search'];
@@ -34,7 +32,10 @@ class DebtService
         }
 
         $recordsFiltered = $recordsTotal = $query->count();
-        $debts = $query->skip($skip)
+        $debts = $query
+            ->orderBy('created_at', 'desc')
+            ->orderBy('phone', 'asc')
+            ->skip($skip)
             ->take($pageLength)
             ->get();
 

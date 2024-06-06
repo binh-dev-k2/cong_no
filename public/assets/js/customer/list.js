@@ -738,12 +738,12 @@ var CustomerList = function () {
                     },
                     {
                         targets: 2,
-                        data: 'bank.shortName',
+                        data: 'bank',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="https://api.vietqr.io/img/${row.bank_code}.png" class="h-30px" alt="${row.bank_code}">
-                                        ${data ?? ''}
+                                        <img src="${data.logo}" class="h-30px" alt="${data.code}">
+                                        ${data.shortName ?? ''}
                                     </div>
                                     `;
                         }

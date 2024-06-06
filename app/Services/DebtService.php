@@ -33,8 +33,8 @@ class DebtService
 
         $recordsFiltered = $recordsTotal = $query->count();
         $debts = $query
-            ->orderBy('created_at', 'desc')
             ->orderBy('phone', 'asc')
+            ->orderBy('created_at', 'desc')
             ->skip($skip)
             ->take($pageLength)
             ->get();

@@ -33,38 +33,71 @@ class DebtService
 
         $recordsFiltered = $recordsTotal = $query->count();
         $debts = $query
-            ->orderBy('phone', 'desc')
             ->orderBy('created_at', 'desc')
-            ->skip($skip)
-            ->take($pageLength)
-            ->get();
+            // ->orderBy('phone', 'asc')
+            // ->skip($skip)
+            // ->take($pageLength)
+            ->get()
+            ->toArray();
 
-        $currentPhone = null;
+        $sortedDebts = $this->customSort($debts, $skip + $pageLength);
 
-        $debts->each(function ($debt) use (&$currentPhone, $data) {
-            if ($currentPhone === $debt->phone) {
-                $debt->sum_amount = null;
-            } else {
-                $currentPhone = $debt->phone;
-
-                $sumAmount = $debt->status === Debt::STATUS_PAID ?
-                    Debt::where('status', Debt::STATUS_PAID)
-                    ->whereMonth('created_at', $data['month'])
-                    ->whereYear('created_at', Carbon::now()->year)
-                    ->sum('total_amount') : Debt::where('status', Debt::STATUS_UNPAID)
-                    ->where('phone', $debt->phone)
-                    ->sum('total_amount');
-
-                $debt->sum_amount = (int)$sumAmount;
-            }
-        });
+        $paginatedDebts = array_slice($sortedDebts, $skip, $pageLength);
+        $this->calculateSumAmount($paginatedDebts, $data['month']);
 
         return [
             "draw" => $data['draw'] ?? 1,
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
-            'data' => $debts
+            'data' => $paginatedDebts
         ];
+    }
+
+    public function customSort(array $array, int $length)
+    {
+        $sortedArray = [];
+
+        while ($length > 0 && !empty($array)) {
+            $item = $array[0];
+            for ($i = 0; $i < count($array) && $length > 0; $i++) {
+                if ($item['phone'] === $array[$i]['phone']) {
+                    $sortedArray[] = $array[$i];
+                    unset($array[$i]);
+                    $array = array_values($array);
+                    $i--;
+                    $length--;
+                }
+            }
+        }
+
+        return $sortedArray;
+    }
+
+    public function calculateSumAmount(&$array, $month)
+    {
+        $phoneArray = [];
+
+        foreach ($array as &$item) {
+            if (in_array($item['phone'], $phoneArray)) {
+                $item['sum_amount'] = null;
+                continue;
+            }
+
+            $phoneArray[] = $item['phone'];
+            $sumAmount = $item['status'] === Debt::STATUS_PAID
+                ? Debt::where('status', Debt::STATUS_PAID)
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->where('phone', $item['phone'])
+                ->sum('total_amount')
+                : Debt::where('status', Debt::STATUS_UNPAID)
+                ->where('phone', $item['phone'])
+                ->sum('total_amount');
+
+            $item['sum_amount'] = (int)$sumAmount;
+        }
+
+        return $array;
     }
 
 

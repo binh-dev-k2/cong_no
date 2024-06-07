@@ -72,6 +72,14 @@ var DebitsList = function () {
         return formattedStr.trim();
     }
 
+    const formatDate = (time) => {
+        const dateTime = new Date(time);
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+        const day = String(dateTime.getDate()).padStart(2, "0");
+        return `${day}-${month}-${year}`;
+    }
+
     return {
         initDatatable: async function () {
             datatable = $("#kt_debit_table").DataTable({
@@ -118,6 +126,15 @@ var DebitsList = function () {
                     },
                     {
                         targets: 1,
+                        data: 'updated_at',
+                        orderable: false,
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return `<span>${formatDate(data)}</span>`
+                        }
+                    },
+                    {
+                        targets: 2,
                         data: 'account_name',
                         orderable: false,
                         className: 'text-center',
@@ -126,7 +143,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 2,
+                        targets: 3,
                         data: null,
                         orderable: false,
                         render: function (data, type, row) {
@@ -138,7 +155,7 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 3,
+                        targets: 4,
                         data: 'formality',
                         className: 'text-center',
                         orderable: false,
@@ -147,16 +164,8 @@ var DebitsList = function () {
                         }
                     },
                     {
-                        targets: 4,
-                        data: 'fee',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
-                        }
-                    },
-                    {
                         targets: 5,
-                        data: 'pay_extra',
+                        data: 'total_money',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
@@ -164,7 +173,7 @@ var DebitsList = function () {
                     },
                     {
                         targets: 6,
-                        data: 'total_amount',
+                        data: 'fee',
                         orderable: false,
                         render: function (data, type, row) {
                             return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
@@ -172,6 +181,22 @@ var DebitsList = function () {
                     },
                     {
                         targets: 7,
+                        data: 'pay_extra',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
+                        }
+                    },
+                    {
+                        targets: 8,
+                        data: 'total_amount',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>`;
+                        }
+                    },
+                    {
+                        targets: 9,
                         data: null,
                         className: 'text-center',
                         orderable: false,

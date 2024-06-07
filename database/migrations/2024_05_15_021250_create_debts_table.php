@@ -20,6 +20,7 @@ class CreateDebtsTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('card_number');
+            $table->bigInteger('total_money')->nullable();
             $table->enum('formality', ['R', 'D']);
             $table->bigInteger('fee');
             $table->bigInteger('pay_extra')->nullable();

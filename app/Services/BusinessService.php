@@ -100,6 +100,7 @@ class BusinessService
                 'name' => $business->name,
                 'phone' => $business->phone,
                 'card_number' => $business->card_number,
+                'total_money' => $business->total_money,
                 'formality' => $business->formality,
                 'fee' => $business->fee ?? 0,
                 'pay_extra' => $business->pay_extra ?? 0,

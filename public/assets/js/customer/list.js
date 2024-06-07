@@ -686,6 +686,8 @@ var CustomerList = function () {
                 fixedColumns: {
                     leftColumns: 2,
                 },
+                lengthMenu: [10, 20, 50, 100],
+                pageLength: 50,
                 searchDelay: 500,
                 processing: true,
                 serverSide: true,

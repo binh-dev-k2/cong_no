@@ -87,6 +87,8 @@ var DebitsList = function () {
                     leftColumns: 1,
                     rightColumns: 1
                 },
+                lengthMenu: [10, 20, 50, 100],
+                pageLength: 50,
                 searchDelay: 500,
                 processing: true,
                 serverSide: true,

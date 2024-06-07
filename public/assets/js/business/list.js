@@ -320,6 +320,8 @@ var BusinessList = function () {
                     leftColumns: 0,
                     rightColumns: 1
                 },
+                lengthMenu: [10, 20, 50, 100],
+                pageLength: 50,
                 processing: true,
                 serverSide: true,
                 ajax: {

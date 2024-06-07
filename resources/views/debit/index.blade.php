@@ -20,7 +20,7 @@
                 class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
 
                 <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Nghiệp vụ
+                    Ghi nợ
                 </h1>
 
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -77,8 +77,8 @@
                                 <th class="text-center min-w-125px">Tên - SĐT</th>
                                 <th class="text-center min-w-125px">Ngày cập nhật</th>
                                 <th class="text-center min-w-125px">Chủ tài khoản</th>
-                                <th class="text-center min-w-125px">Số thẻ</th>
-                                <th class="text-center min-w-125px">Hình thức</th>
+                                <th class="text-center min-w-150px">Số thẻ</th>
+                                <th class="text-center min-w-75px">Hình thức</th>
                                 <th class="text-center min-w-125px">Số tiền</th>
                                 <th class="text-center min-w-125px">Phí (VNĐ)</th>
                                 <th class="text-center min-w-125px">Tiền trả thêm (VNĐ)</th>

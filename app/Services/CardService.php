@@ -14,7 +14,7 @@ class CardService
     function filterDatatableCustomer(array $data)
     {
         $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
-        $pageLength = $data['length'] ?? 10;
+        $pageLength = $data['length'] ?? 50;
         $skip = ($pageNumber - 1) * $pageLength;
 
         $query = Card::query()->whereHas('customer');

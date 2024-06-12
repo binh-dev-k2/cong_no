@@ -1,5 +1,5 @@
 "use strict";
-const FormAddCard = (function () {
+const FormAddCard = () => {
     let form, btn_submit_add_new_card, formValidate;
     let addModal = new bootstrap.Modal(document.querySelector('#kt_modal_add_card'));
     let btn_card_cancel = document.querySelector("#btn_card_cancel");
@@ -345,7 +345,7 @@ const FormAddCard = (function () {
             });
         },
     };
-})();
+};
 KTUtil.onDOMContentLoaded(function () {
-    FormAddCard.init();
+    FormAddCard().init();
 });

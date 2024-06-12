@@ -5,13 +5,12 @@ var CustomerList = function () {
     const drawer_remind = document.querySelector("#drawer_remind");
     const drawer_login_info = document.querySelector("#drawer_login_info");
     let prevPhone = ''
-    const editModal = new bootstrap.Modal(document.querySelector('#modal_edit_customer'));
-    const editCardModal = new bootstrap.Modal(document.querySelector('#modal_edit_card'));
+    const editModal = document.querySelector('#modal_edit_customer');
+    const editCardModal = document.querySelector('#modal_edit_card');
 
     const headers = {
         Authorization: `Bearer ${token}`,
     };
-
     const updateToolbar = () => {
         const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
         const selectedToolbar = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
@@ -337,6 +336,7 @@ var CustomerList = function () {
     let listCard = []
 
     const optionFormat = function (item) {
+        console.log(item);
         if (!item.id) {
             return item.text;
         }
@@ -495,29 +495,36 @@ var CustomerList = function () {
         })
     }
 
+    const optionFormatCard = function (item) {
+        if (!item.id) {
+            return item.text;
+        }
+
+        let span = document.createElement('span');
+        let template = `<img src="${item.element.getAttribute('data-kt-select2-country')}" class="h-20px mb-1" />${item.text}`;
+
+        span.innerHTML = template;
+
+        return $(span);
+    }
     const initEditCard = () => {
         let btnEdits = document.querySelectorAll('.btn-edit-card');
-        $(
-            formEditCard.querySelector('[name="date_return"]')
-        ).flatpickr({
-            enableTime: false,
-            dateFormat: "Y-m-d",
-            locale: "vn",
-        }),
-            btnEdits.forEach((btn) => {
-                btn.addEventListener('click', function () {
-                    const row = btn.closest('tr')
-                    const data = datatable.row(row).data();
-                    formEditCard.querySelector('input[name="id"]').value = data.id ?? '';
-                    formEditCard.querySelector('input[name="account_name"]').value = data.account_name ?? '';
-                    formEditCard.querySelector('input[name="card_number"]').value = data.card_number ?? '';
-                    formEditCard.querySelector('input[name="account_number"]').value = data.account_number ?? '';
-                    formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
-                    formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
-                    formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
-                    formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
-                })
+        btnEdits.forEach((btn) => {
+            btn.addEventListener('click', function () {
+                const row = btn.closest('tr')
+                const data = datatable.row(row).data();
+                formEditCard.querySelector('input[name="id"]').value = data.id ?? '';
+                formEditCard.querySelector('input[name="account_name"]').value = data.account_name ?? '';
+                formEditCard.querySelector('input[name="card_number"]').value = data.card_number ?? '';
+                formEditCard.querySelector('input[name="account_number"]').value = data.account_number ?? '';
+                formEditCard.querySelector('input[name="login_info"]').value = data.login_info ?? '';
+                formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
+                formEditCard.querySelector('select[name="bank_code"]').value = data.bank_code ?? '';
+                formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
+                formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
+                $('#modal_edit_card').modal('show');
             })
+        })
     }
 
     const deleteCard = () => {
@@ -563,6 +570,21 @@ var CustomerList = function () {
         })
     }
     const submitEditCardForm = () => {
+        formEditCard.querySelector('[name="date_return"]').flatpickr({
+            enableTime: false,
+            dateFormat: "Y-m-d",
+            locale: "vn",
+        })
+
+        $('#modal_edit_card').on("show.bs.modal", function () {
+            $(this).find('#select_bank_list_edit').select2({
+                templateSelection: optionFormatCard,
+                templateResult: optionFormatCard,
+                minimumResultsForSearch: 0,
+                dropdownParent: $("#select_bank_edit")
+            })
+        })
+
         $('#edit_card_form').submit(function (e) {
             e.preventDefault();
             let data = {
@@ -831,8 +853,7 @@ var CustomerList = function () {
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
-                                            <a href="javascript:void(0);" class="menu-link px-3 btn-edit-card" data-bs-toggle="modal"
-                                            data-bs-target="#modal_edit_card">
+                                            <a href="javascript:void(0);" class="menu-link px-3 btn-edit-card" >
                                                 Sửa thẻ
                                             </a>
                                         </div>

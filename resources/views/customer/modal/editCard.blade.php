@@ -1,5 +1,4 @@
 <div class="modal fade" id="modal_edit_card" tabindex="-1" aria-hidden="true">
-
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
             <form class="form" action="#" id="edit_card_form">
@@ -36,7 +35,7 @@
                             <input type="number" class="form-control form-control-solid" placeholder=""
                                 name="account_number" id="account_number" />
                         </div>
-                        <div class="d-flex flex-column mb-7 fv-row">
+                        <div class="d-flex flex-column mb-7 fv-row" id="select_bank_edit">
                             <label class="required fs-6 fw-semibold mb-2" for="select_bank_list">
                                 Ngân hàng
                             </label>

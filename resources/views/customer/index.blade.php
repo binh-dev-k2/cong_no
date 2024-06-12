@@ -127,14 +127,7 @@
             </div>
         </div>
     </div>
-
-    @include('customer.components.note')
-    @include('customer.components.remind')
-    @include('customer.components.login_info')
-    @include('customer.modal.add')
-    @include('customer.modal.edit')
     @include('customer.modal.editCard')
-    @include('customer.modal.add_card')
 @endsection
 
 @section('script')
@@ -154,9 +147,18 @@
             updateCardNote: "{{ route('api.card.updateNote') }}",
         }
         var datatable;
-    </script>
+        </script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
     <script src="{{ asset('assets/js/customer/list.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add.js') }}"></script>
     <script src="{{ asset('assets/js/customer/add_card.js') }}"></script>
+@endsection
+
+@section('modal')
+    @include('customer.components.note')
+    @include('customer.components.remind')
+    @include('customer.components.login_info')
+    @include('customer.modal.add')
+    @include('customer.modal.edit')
+    @include('customer.modal.add_card')
 @endsection

@@ -84,7 +84,7 @@
                                 <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-50px">Phí (%)</th>
-                                <th class="text-center min-w-125px">Số tiền(vnđ)</th>
+                                <th class="text-center min-w-100px">Số tiền</th>
                                 <th class="text-center min-w-75px">Hình thức</th>
                                 <th class="text-center">Phí</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>

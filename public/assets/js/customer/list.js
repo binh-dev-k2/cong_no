@@ -630,7 +630,7 @@ var CustomerList = function () {
                             }
                         })
 
-                        editCardModal.hide()
+                        $("#modal_edit_card").modal('hide')
                         formEditCard.reset();
                         $("#select_add_card").empty()
                         prevPhone = null;
@@ -661,11 +661,11 @@ var CustomerList = function () {
     }
 
     $("#modal_edit_card_close").click(function () {
-        editCardModal.hide();
+        $("#modal_edit_card").modal('hide');
     })
 
     $("#modal_edit_card_cancel").click(function () {
-        editCardModal.hide();
+        $("#modal_edit_card").modal('hide');
     })
 
     $("#modal_edit_customer_close").click(function () {

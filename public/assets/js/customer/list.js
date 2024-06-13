@@ -420,7 +420,6 @@ var CustomerList = function () {
 
     const initEdit = () => {
         let btnEdits = document.querySelectorAll('.btn-edit-customer');
-
         btnEdits.forEach((btn) => {
             btn.addEventListener('click', function () {
                 const row = btn.closest('tr')
@@ -464,8 +463,8 @@ var CustomerList = function () {
                                 confirmButton: "btn btn-primary",
                             }
                         }).then(function (result) {
-                            editModal.hide();
-                            formEdit.reset();
+                            $("#modal_edit_customer").modal('hide');
+                            $('#edit_customer_form').triggle('reset');
                             $("#select_add_card").empty()
                             prevPhone = null;
                             datatable.draw()

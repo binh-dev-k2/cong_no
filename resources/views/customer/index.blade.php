@@ -128,6 +128,7 @@
         </div>
     </div>
     @include('customer.modal.editCard')
+    @include('customer.modal.edit')
 @endsection
 
 @section('script')
@@ -159,6 +160,5 @@
     @include('customer.components.remind')
     @include('customer.components.login_info')
     @include('customer.modal.add')
-    @include('customer.modal.edit')
     @include('customer.modal.add_card')
 @endsection

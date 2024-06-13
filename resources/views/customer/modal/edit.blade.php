@@ -23,14 +23,14 @@
                         <div class="fv-row mb-7">
                             <label class="required fs-6 fw-semibold mb-2">Họ và tên</label>
                             <input type="text" class="form-control form-control-solid" placeholder="Nhập họ và tên"
-                                   name="name" />
+                                name="name" />
                         </div>
 
                         <div class="fv-row mb-7">
                             <label class="fs-6 fw-semibold mb-2">
                                 <span class="required">Số điện thoại</span>
                                 <span class="ms-1" data-bs-toggle="tooltip"
-                                      title="Số điện thoại không được trùng với các khách hàng trước đó">
+                                    title="Số điện thoại không được trùng với các khách hàng trước đó">
                                     <i class="ki-duotone ki-information fs-7">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -38,13 +38,14 @@
                                     </i>
                                 </span>
                             </label>
-                            <input type="tel" class="form-control form-control-solid" placeholder="Nhập số điện thoại"
-                                   name="phone" />
+                            <input type="tel" class="form-control form-control-solid"
+                                placeholder="Nhập số điện thoại" name="phone" />
                         </div>
 
                         <div class="d-flex flex-column mb-3 fv-row">
                             <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
-                            <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" step="any"/>
+                            <input type="number" class="form-control form-control-solid"
+                                placeholder="Nhập phần trăm phí" name="fee_percent" step="any" />
                         </div>
 
                         <div class="fv-row mb-7">

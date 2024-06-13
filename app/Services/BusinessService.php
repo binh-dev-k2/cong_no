@@ -54,7 +54,12 @@ class BusinessService
     public function store(array $data)
     {
         try {
-            $data['fee'] = (float)($data['total_money'] * $data['fee_percent'] / 100);
+            if ($data['formality'] == 'R') {
+                $fee = (float)($data['total_money'] * $data['fee_percent'] / 100);
+                $data['fee'] = (float)($data['total_money'] - $fee);
+            } else {
+                $data['fee'] = (float)($data['total_money'] * $data['fee_percent'] / 100);
+            }
             $card = Card::where('card_number', $data['card_number'])->first();
             $data['bank_code'] = $card->bank->code;
             $business = Business::create($data);

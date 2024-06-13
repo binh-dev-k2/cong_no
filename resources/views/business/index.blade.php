@@ -80,24 +80,24 @@
                                             data-kt-check-target="#business_table .form-check-input" value="1" />
                                     </div>
                                 </th> --}}
-                                <th class="text-center min-w-125px">Ngày tạo</th>
+                                <th class="text-center min-w-75px">Ngày tạo</th>
                                 <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
                                 <th class="text-center min-w-50px">Phí (%)</th>
                                 <th class="text-center min-w-125px">Số tiền(vnđ)</th>
                                 <th class="text-center min-w-75px">Hình thức</th>
-                                <th class="text-center min-w-125px">Phí Đáo/Rút(vnđ)</th>
+                                <th class="text-center">Phí</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                {{-- <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Trả thêm(vnđ)</th>
+                                <th class="text-center min-w-125px">Tiền - Ghi chú</th> --}}
+                                <th class="text-center min-w-125px">Trả thêm</th>
                                 <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>

@@ -322,6 +322,7 @@ var BusinessList = function () {
                 },
                 lengthMenu: [10, 20, 50, 100],
                 pageLength: 50,
+                ordering: false,
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -523,76 +524,76 @@ var BusinessList = function () {
                                     `;
                         }
                     },
+                    // {
+                    //     targets: 13,
+                    //     data: 'money.6',
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return `
+                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
+                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
+                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                    //                         <span class="me-2"> - </span>
+                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                    //                     </div>
+                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${6}">Sửa</button>
+                    //                 </div>
+                    //                 `;
+                    //     }
+                    // },
+                    // {
+                    //     targets: 14,
+                    //     data: 'money.7',
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return `
+                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
+                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
+                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                    //                         <span class="me-2"> - </span>
+                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                    //                     </div>
+                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${7}">Sửa</button>
+                    //                 </div>
+                    //                 `;
+                    //     }
+                    // },
+                    // {
+                    //     targets: 15,
+                    //     data: 'money.8',
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return `
+                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
+                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
+                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                    //                         <span class="me-2"> - </span>
+                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                    //                     </div>
+                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${8}">Sửa</button>
+                    //                 </div>
+                    //                 `;
+                    //     }
+                    // },
+                    // {
+                    //     targets: 16,
+                    //     data: 'money.9',
+                    //     orderable: false,
+                    //     render: function (data, type, row) {
+                    //         return `
+                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
+                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
+                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                    //                         <span class="me-2"> - </span>
+                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                    //                     </div>
+                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${9}">Sửa</button>
+                    //                 </div>
+                    //                 `;
+                    //     }
+                    // },
                     {
                         targets: 13,
-                        data: 'money.6',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${6}">Sửa</button>
-                                    </div>
-                                    `;
-                        }
-                    },
-                    {
-                        targets: 14,
-                        data: 'money.7',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${7}">Sửa</button>
-                                    </div>
-                                    `;
-                        }
-                    },
-                    {
-                        targets: 15,
-                        data: 'money.8',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${8}">Sửa</button>
-                                    </div>
-                                    `;
-                        }
-                    },
-                    {
-                        targets: 16,
-                        data: 'money.9',
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${9}">Sửa</button>
-                                    </div>
-                                    `;
-                        }
-                    },
-                    {
-                        targets: 17,
                         data: 'pay_extra',
                         orderable: false,
                         render: function (data, type, row) {

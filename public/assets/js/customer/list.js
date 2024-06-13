@@ -711,9 +711,7 @@ var CustomerList = function () {
                 searchDelay: 500,
                 processing: true,
                 serverSide: true,
-                // order: [
-                //     [2, 'desc']
-                // ],
+                ordering: false,
                 stateSave: true,
                 select: {
                     style: 'multi',

@@ -16,7 +16,7 @@ var UserList = function () {
         }));
     }
 
-    
+
     const formatTime = (time) => {
         const dateTime = new Date(time);
         const year = dateTime.getFullYear();
@@ -95,6 +95,7 @@ var UserList = function () {
             datatable = $("#user_table").DataTable({
                 processing: true,
                 serverSide: true,
+                ordering: false,
                 ajax: {
                     url: routes.datatable,
                     type: "POST",

@@ -336,7 +336,6 @@ var CustomerList = function () {
     let listCard = []
 
     const optionFormat = function (item) {
-        console.log(item);
         if (!item.id) {
             return item.text;
         }
@@ -464,7 +463,7 @@ var CustomerList = function () {
                             }
                         }).then(function (result) {
                             $("#modal_edit_customer").modal('hide');
-                            $('#edit_customer_form').triggle('reset');
+                            $('#edit_customer_form').trigger('reset');
                             $("#select_add_card").empty()
                             prevPhone = null;
                             datatable.draw()
@@ -669,11 +668,11 @@ var CustomerList = function () {
     })
 
     $("#modal_edit_customer_close").click(function () {
-        editModal.hide();
+        $("#modal_edit_customer").modal('hide');
     })
 
     $("#modal_edit_customer_cancel").click(function () {
-        editModal.hide();
+        $("#modal_edit_customer").modal('hide');
     })
 
     $('[data-bs-toggle="tab"]').on('click', function () {

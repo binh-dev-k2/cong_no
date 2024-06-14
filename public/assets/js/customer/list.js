@@ -802,7 +802,7 @@ var CustomerList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return `<span>${data ?? ''}</span>`;
+                            return `<span>${data ?? 'R'}</span>`;
                         }
                     },
                     // {

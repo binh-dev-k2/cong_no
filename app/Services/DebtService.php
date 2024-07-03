@@ -25,15 +25,15 @@ class DebtService
 
         if (isset($data['month'])) {
             $query->where('status', Debt::STATUS_PAID)
-                ->whereMonth('created_at', $data['month'])
-                ->whereYear('created_at', Carbon::now()->year);
+                ->whereMonth('updated_at', $data['month'])
+                ->whereYear('updated_at', Carbon::now()->year);
         } else {
             $query->where('status', Debt::STATUS_UNPAID);
         }
 
         $recordsFiltered = $recordsTotal = $query->count();
         $debts = $query
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             // ->orderBy('phone', 'asc')
             // ->skip($skip)
             // ->take($pageLength)
@@ -113,21 +113,27 @@ class DebtService
 
     public function getTotalFee($month = null)
     {
-        $query = Debt::query()->where('status', Debt::STATUS_UNPAID);
+        $query = Debt::query();
         if ($month) {
-            $query->whereMonth('created_at', $month)
-                ->whereYear('created_at', Carbon::now()->year);
+            $query->where('status', Debt::STATUS_PAID)
+                ->whereMonth('updated_at', $month)
+                ->whereYear('updated_at', Carbon::now()->year);
+        } else {
+            $query->where('status', Debt::STATUS_UNPAID);
         }
         return $query->where('formality', '!=', 'R')->sum('total_amount');
     }
 
     public function getTotalMoney($month = null)
     {
-        $query = Debt::query()->where('status', Debt::STATUS_UNPAID);
+        $query = Debt::query();
         if ($month) {
-            $query->whereMonth('created_at', $month)
-                ->whereYear('created_at', Carbon::now()->year);
+            $query->where('status', Debt::STATUS_PAID)
+                ->whereMonth('updated_at', $month)
+                ->whereYear('updated_at', Carbon::now()->year);
+        } else {
+            $query->where('status', Debt::STATUS_UNPAID);
         }
-        return $query->sum('total_amount');
+        return $query->sum('total_money');
     }
 }

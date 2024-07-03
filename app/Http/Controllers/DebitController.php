@@ -15,10 +15,17 @@ class DebitController extends Controller
         $this->debtService = $debtService;
     }
 
-    function index()
+    public function index()
     {
-        $totalMoney = $this->debtService->getTotalMoney();
-        return view('debit.index', compact('totalMoney'));
+        return view('debit.index');
+    }
+
+    public function getTotalMoney(Request $request)
+    {
+        $month = $request->get('month');
+        $totalMoney = $this->debtService->getTotalMoney($month);
+        $totalFee = $this->debtService->getTotalFee($month);
+        return jsonResponse(0, ['totalMoney' => $totalMoney, 'totalFee' => $totalFee]);
     }
 
     public function showAllDebits(Request $request): JsonResponse

@@ -50,7 +50,8 @@
                                 data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
                         </div>
                         <div class="form-floating" style="min-width: 150px; cursor: pointer">
-                            <select class="form-select form-select-solid" id="debit_month" name="month" aria-label="Tháng">
+                            <select class="form-select form-select-solid" id="debit_month" name="month"
+                                aria-label="Tháng">
                                 <option value="" selected>Toàn bộ</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -80,9 +81,9 @@
                                 <th class="text-center min-w-150px">Số thẻ</th>
                                 <th class="text-center min-w-75px">Hình thức</th>
                                 <th class="text-center min-w-125px">Số tiền</th>
-                                <th class="text-center min-w-125px">Phí (VNĐ)</th>
-                                <th class="text-center min-w-125px">Tiền trả thêm (VNĐ)</th>
-                                <th class="text-center min-w-125px">Tổng số tiền (VNĐ)</th>
+                                <th class="text-center min-w-125px">Phí</th>
+                                <th class="text-center min-w-125px">Tiền trả thêm</th>
+                                <th class="text-center min-w-125px">Tổng số tiền</th>
                                 <th class="text-center min-w-125px">Tổng nợ</th>
                                 <th class="text-center min-w-70px">Hành động</th>
                             </tr>
@@ -93,7 +94,12 @@
                 </div>
                 <div class="card-footer">
                     <div class="d-flex justify-content-end">
-                        <h3>Tổng tiền: <?= number_format($totalMoney, 0, ',', ',') ?> VNĐ </h3>
+                        <div>
+                            <h3 class="c-total-fee">-Tổng phí:
+                                <span></span> VNĐ </h3>
+                            <h3 class="c-total-money">-Tổng tiền xử lý:
+                                <span></span>VNĐ </h3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,6 +121,7 @@
         let routes = {
             getAllDebitCards: "{{ route('api.debit_showAll') }}",
             updateDebitStatus: "{{ route('api.debit_updateStatus') }}",
+            debitTotalMoney: "{{ route('api.debit.getTotalMoney') }}",
         }
         var datatable;
     </script>

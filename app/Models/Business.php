@@ -22,4 +22,9 @@ class Business extends Model
     {
         return $this->belongsTo(Bank::class, 'bank_code', 'code');
     }
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class, 'card_number', 'card_number');
+    }
 }

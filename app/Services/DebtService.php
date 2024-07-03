@@ -111,8 +111,23 @@ class DebtService
         }
     }
 
-    public function getTotalMoney()
+    public function getTotalFee($month = null)
     {
-        return Debt::where('status', Debt::STATUS_UNPAID)->sum('total_amount');
+        $query = Debt::query()->where('status', Debt::STATUS_UNPAID);
+        if ($month) {
+            $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', Carbon::now()->year);
+        }
+        return $query->where('formality', '!=', 'R')->sum('total_amount');
+    }
+
+    public function getTotalMoney($month = null)
+    {
+        $query = Debt::query()->where('status', Debt::STATUS_UNPAID);
+        if ($month) {
+            $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', Carbon::now()->year);
+        }
+        return $query->sum('total_amount');
     }
 }

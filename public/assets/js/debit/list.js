@@ -24,6 +24,17 @@ var DebitsList = function () {
             }));
     }
 
+    const initTotalMoney = () => {
+        const totalFee = document.querySelector('.c-total-fee');
+        const totalMoney = document.querySelector('.c-total-money');
+
+        axios.post(routes.debitTotalMoney, { month: document.querySelector('#debit_month').value }, { headers: headers })
+            .then((response) => {
+                totalFee.querySelector('span').innerText = parseInt(response.data.data.totalFee).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1);
+                totalMoney.querySelector('span').innerText = parseInt(response.data.data.totalMoney).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1);
+            })
+    }
+
     const doneDebit = () => {
         let btnDones = document.querySelectorAll('.btn-done');
         btnDones.forEach((btnDone) => {
@@ -222,6 +233,7 @@ var DebitsList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 doneDebit();
+                initTotalMoney();
                 $('.paginate_button a').on('click', function () {
                     prevPhone = null;
                 });

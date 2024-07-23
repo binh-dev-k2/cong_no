@@ -144,13 +144,16 @@ class CardService
     {
         try {
             DB::beginTransaction();
-            $result = Card::where('id', $data['id'])->delete();
-            if ($result) {
-                DB::commit();
-                return true;
+            $card = Card::where('id', $data['id'])->firstOrFail();
+
+            if ($card->customer->cards()->count() == 1) {
+                $card->customer()->delete();
             }
-            DB::rollBack();
-            return false;
+
+            $card->delete();
+
+            DB::commit();
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");

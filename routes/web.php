@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,3 +24,10 @@ Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function (
 
 include "auth.php";
 
+// Route::get('setup', function() {
+//     Artisan::call('route:cache');
+//     Artisan::call('route:clear');
+//     Artisan::call('config:cache');
+//     Artisan::call('config:clear');
+//     Artisan::call('optimize');
+// });

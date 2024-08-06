@@ -629,7 +629,7 @@ var BusinessList = function () {
                                         ${row.card.account_number
                                     ? `<div class="menu-item px-3">
                                                 <a href="javascript:void(0);" class="menu-link px-3">
-                                                    ${row.card.account_number}
+                                                    ${formatNumber(row.card.account_number)}
                                                 </a>
                                             </div>`
                                     : ''

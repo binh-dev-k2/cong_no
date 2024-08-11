@@ -384,7 +384,8 @@ var BusinessList = function () {
                             console.log(row);
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.bank.logo}" class="h-30px" alt="${row.bank.code}">
-                                        ${formatNumber(row.card_number)}
+                                        <span>${formatNumber(row.card_number)}</span>
+                                        ${formatNumber(row.card.account_number ? 'STK: ' + row.card.account_number : '')}
                                         ${row.card.date_due ? `<span class="text-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}
                                     </div>
                                     `;
@@ -626,14 +627,7 @@ var BusinessList = function () {
                                         </span>
                                     </button>
                                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-                                        ${row.card.account_number
-                                    ? `<div class="menu-item px-3">
-                                                <a href="javascript:void(0);" class="menu-link px-3">
-                                                    ${formatNumber(row.card.account_number)}
-                                                </a>
-                                            </div>`
-                                    : ''
-                                }
+
                                         <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 btn-edit" data-bs-toggle="modal"
                                             data-bs-target="#modal-edit">

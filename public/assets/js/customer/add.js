@@ -2,7 +2,7 @@
 
 
 var KTModalCustomersAdd = (function () {
-    let btn_submit, btn_cancel, btn_close, formValidate, form, i, list_card, timeout_card_find, btn_add_customer, list_card_ids;
+    let btn_submit, btn_cancel, btn_close, formValidate, form, i, btn_add_customer;
 
     const headers = {
         Authorization: `Bearer ${token}`,
@@ -155,7 +155,7 @@ var KTModalCustomersAdd = (function () {
                         let data = {
                             customer_name: form.querySelector("input[name='name']").value,
                             customer_phone: form.querySelector("input[name='phone']").value,
-                            fee_percent: form.querySelector("input[name='fee_percent']").value,
+                            // fee_percent: form.querySelector("input[name='fee_percent']").value,
                             card_ids: $("#select_add_card").select2("val"),
                         };
                         // console.log(data);

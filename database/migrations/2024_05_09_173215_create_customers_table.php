@@ -17,7 +17,7 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone')->index();
-            $table->float('fee_percent');
+            $table->float('fee_percent')->nullable();
             $table->timestamps();
         });
     }

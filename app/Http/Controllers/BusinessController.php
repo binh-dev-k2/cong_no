@@ -24,7 +24,8 @@ class BusinessController extends Controller
 
     public function index()
     {
-        return view('business.index');
+        $businessNote = Setting::where('key', 'business_note')->first();
+        return view('business.index', compact('businessNote'));
     }
 
     public function datatable(Request $request)
@@ -93,6 +94,14 @@ class BusinessController extends Controller
     {
         $data = $request->all();
         $result = $this->businessService->updateSetting($data);
+        return jsonResponse($result ? 0 : 1);
+    }
+
+
+    public function updateNote(Request $request)
+    {
+        $data = $request->all();
+        $result = $this->businessService->updateNote($data);
         return jsonResponse($result ? 0 : 1);
     }
 }

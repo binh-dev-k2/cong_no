@@ -194,7 +194,7 @@
             $modalAddBusiness.find('input[name="account_name"]').val(data.account_name ?? '');
             $modalAddBusiness.find('input[name="name"]').val(data.customer?.name ?? '');
             $modalAddBusiness.find('input[name="phone"]').val(data.customer?.phone ?? '');
-            $modalAddBusiness.find('input[name="fee_percent"]').val(data.customer?.fee_percent ?? '');
+            $modalAddBusiness.find('input[name="fee_percent"]').val(data.fee_percent ?? '');
             $modalAddBusiness.find('.search-results').hide();
         });
 

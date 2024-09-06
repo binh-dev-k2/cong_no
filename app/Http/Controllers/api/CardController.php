@@ -20,10 +20,12 @@ class CardController extends Controller
         $this->cardService = $cardService;
     }
 
+
     function store(AddCardRequest $request)
     {
-        $data = $this->cardService->save($request);
-        return $this->successJsonResponse(200, $data);
+        $data = $request->validated();
+        $result = $this->cardService->save($data);
+        return $this->successJsonResponse(200, $result);
     }
 
     function edit(EditCardRequest $request)

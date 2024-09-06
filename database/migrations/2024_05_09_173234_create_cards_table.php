@@ -24,6 +24,7 @@ class CreateCardsTable extends Migration
             $table->smallInteger('date_due')->nullable();
             $table->date('date_return')->nullable();
             $table->string('account_name');
+            $table->float('fee_percent')->nullable();
             $table->string('note')->nullable();
             $table->tinyInteger('status')->default(Card::STATUS_SHOW);
             $table->timestamps();

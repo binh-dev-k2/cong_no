@@ -1,11 +1,27 @@
 "use strict";
 
 var BusinessList = function () {
-    var timeoutSearch, prevPhone = null;
+    var timeoutSearch, timeoutNote, prevPhone = null;
 
     const headers = {
         Authorization: `Bearer ${token}`,
     };
+
+    const handleUpdateNote = () => {
+        document.querySelector('[name="business_note"]').addEventListener('keyup', (e) => {
+            clearTimeout(timeoutNote)
+            timeoutNote = setTimeout(function () {
+                const value = document.querySelector('[name="business_note"]').value;
+                axios.post(routes.businessUpdateNote, { business_note: value }, { headers: headers })
+                    .then((res) => {
+                    })
+                    .catch((err) => {
+                        console.log(err);
+
+                    })
+            }, 500)
+        })
+    }
 
     // var updateToolbar = () => {
     //     const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
@@ -667,6 +683,7 @@ var BusinessList = function () {
             })
             initEditSetting()
             handleSearchDatatable()
+            handleUpdateNote()
         }
     };
 

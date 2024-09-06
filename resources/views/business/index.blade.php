@@ -24,6 +24,10 @@
 @endsection
 
 @section('content')
+    <div class="app-container ">
+        <label class="form-label" for="business_note">Thông báo</label>
+        <textarea class="form-control" name="business_note" id="business_note" cols="30" rows="2">{{ $businessNote->value }}</textarea>
+    </div>
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
             <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
@@ -132,7 +136,7 @@
             // businessViewMoney: "{{ route('api.business.viewMoney') }}",
             businessUpdateBusinessMoney: "{{ route('api.business.updateBusinessMoney') }}",
             businessEditSetting: "{{ route('api.business.editSetting') }}",
-            businessUpdateSetting: "{{ route('api.business.updateSetting') }}",
+            businessUpdateNote: "{{ route('api.business.updateNote') }}",
         }
         var datatable;
     </script>

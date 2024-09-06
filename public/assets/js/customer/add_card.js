@@ -53,21 +53,8 @@ const FormAddCard = () => {
                                 },
                             },
                         },
-                        // account_number: {
-                        //     validators: {
-                        //         notEmpty: {
-                        //             message: "Số tài khoản là bắt buộc",
-                        //         },
-                        //         numeric: {
-                        //             message: "Số tài khoản phải là số",
-                        //         },
-                        //     },
-                        // },
                         date_due: {
                             validators: {
-                                // notEmpty: {
-                                //     message: "Ngày đáo hạn là bắt buộc",
-                                // },
                                 between: {
                                     min: 1,
                                     max: 31,
@@ -77,9 +64,6 @@ const FormAddCard = () => {
                         },
                         date_return: {
                             validators: {
-                                // notEmpty: {
-                                //     message: "Ngày trả là bắt buộc",
-                                // },
                                 date: {
                                     format: "YYYY-MM-DD",
                                     message:
@@ -87,13 +71,6 @@ const FormAddCard = () => {
                                 },
                             },
                         },
-                        // login_info: {
-                        //     validators: {
-                        //         notEmpty: {
-                        //             message: "Thông tin đăng nhập là bắt buộc",
-                        //         },
-                        //     },
-                        // },
                         bank_code: {
                             validators: {
                                 notEmpty: {
@@ -108,27 +85,6 @@ const FormAddCard = () => {
                                 },
                             },
                         },
-                        // total_money: {
-                        //     validators: {
-                        //         notEmpty: {
-                        //             message: "Tổng số tiền là bắt buộc",
-                        //         },
-                        //     },
-                        // },
-                        // formality: {
-                        //     validators: {
-                        //         notEmpty: {
-                        //             message: "Hình thức là bắt buộc",
-                        //         },
-                        //     },
-                        // },
-                        // pay_extra: {
-                        //     validators: {
-                        //         numeric: {
-                        //             message: "Tiền trả thêm phải là số",
-                        //         },
-                        //     },
-                        // },
                     },
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
@@ -169,18 +125,9 @@ const FormAddCard = () => {
                                 bank_code: form.querySelector(
                                     'select[name="bank_code"]'
                                 ).value,
-                                // fee_percent: form.querySelector(
-                                //     'input[name="fee_percent"]'
-                                // ).value,
-                                // total_money: form.querySelector(
-                                //     'input[name="total_money"]'
-                                // ).value,
-                                // formality: form.querySelector(
-                                //     'select[name="select_formality"]'
-                                // ).value,
-                                // pay_extra: form.querySelector(
-                                //     'input[name="pay_extra"]'
-                                // ).value,
+                                fee_percent: form.querySelector(
+                                    'input[name="fee_percent"]'
+                                ).value,
                                 note: form.querySelector(
                                     'textarea[name="note"]'
                                 ).value,
@@ -211,7 +158,6 @@ const FormAddCard = () => {
                                             if (result.isConfirmed) {
                                                 form.reset();
                                                 addModal.hide();
-
                                             }
                                         });
                                     }

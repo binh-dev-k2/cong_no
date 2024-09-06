@@ -33,6 +33,7 @@ class AddCardRequest extends FormRequest
             'login_info' => 'nullable|string',
             'bank_code' => 'required|string|exists:banks,code',
             'account_name' => 'nullable|string',
+            'fee_percent' => 'required|numeric',
         ];
     }
     public function messages()
@@ -50,6 +51,8 @@ class AddCardRequest extends FormRequest
             'card_number.unique' => 'Số thẻ ngân hàng đã tồn tại trong hệ thống.',
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
+            'fee_percent.required' => 'Phần trăm phí là bắt buộc.',
+            'fee_percent.numeric' => 'Phần trăm phí phải là số.',
         ];
     }
 

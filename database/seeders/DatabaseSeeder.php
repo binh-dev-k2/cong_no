@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Card;
-use App\Models\Customer;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -19,6 +17,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $settings = [
+            [
+                'key' => 'business_min',
+                'value' => '34000000',
+            ],
+            [
+                'key' => 'business_max',
+                'value' => '35000000',
+            ],
+            [
+                'key' => 'business_note',
+                'value' => '',
+            ]
+        ];
+
+        foreach ($settings as $setting) {
+            Setting::create($setting);
+        }
+
         User::create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
@@ -26,15 +43,5 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ]);
-
-        // Setting::create([
-        //     'key' => 'business_min',
-        //     'value' => '34000000',
-        // ]);
-
-        // Setting::create([
-        //     'key' => 'business_max',
-        //     'value' => '35000000',
-        // ]);
     }
 }

@@ -5,8 +5,6 @@ var CustomerList = function () {
     const drawer_remind = document.querySelector("#drawer_remind");
     const drawer_login_info = document.querySelector("#drawer_login_info");
     let prevPhone = ''
-    const editModal = document.querySelector('#modal_edit_customer');
-    const editCardModal = document.querySelector('#modal_edit_card');
 
     const headers = {
         Authorization: `Bearer ${token}`,
@@ -286,7 +284,7 @@ var CustomerList = function () {
         const drawer_remind_alert = document.querySelector('.drawer-remind-alert');
         drawer_remind_alert.addEventListener('click', function (e) {
             e.preventDefault()
-            const id = drawer_remind.querySelector('input[name="card_id"]').value
+            const id = document.querySelector('#drawer_remind input[name="card_id"]').value
             const customer_id = drawer_remind.querySelector('input[name="customer_id"]').value
 
             axios.post(routes.remindCard, { id: id, customer_id: customer_id }, { headers: headers })
@@ -426,7 +424,6 @@ var CustomerList = function () {
                 formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
-                formEdit.querySelector('input[name="fee_percent"]').value = data.customer.fee_percent ?? '';
                 listCard = data.customer.cards
                 $("#select_edit_card").empty()
                 listCard.forEach(card => {
@@ -446,7 +443,6 @@ var CustomerList = function () {
                 id: formEdit.querySelector("input[name='id']").value,
                 customer_name: formEdit.querySelector("input[name='name']").value,
                 customer_phone: formEdit.querySelector("input[name='phone']").value,
-                fee_percent: parseFloat(formEdit.querySelector("input[name='fee_percent']").value),
                 card_ids: $("#select_edit_card").select2("val"),
             };
 
@@ -519,6 +515,7 @@ var CustomerList = function () {
                 formEditCard.querySelector('input[name="date_due"]').value = data.date_due ?? '';
                 formEditCard.querySelector('select[name="bank_code"]').value = data.bank_code ?? '';
                 formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
+                formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
                 formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
                 $('#modal_edit_card').modal('show');
             })
@@ -602,6 +599,9 @@ var CustomerList = function () {
                 ).value,
                 date_return: formEditCard.querySelector(
                     'input[name="date_return"]'
+                ).value,
+                fee_percent: formEditCard.querySelector(
+                    'input[name="fee_percent"]'
                 ).value,
                 login_info: formEditCard.querySelector(
                     'input[name="login_info"]'

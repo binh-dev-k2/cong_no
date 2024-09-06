@@ -8,9 +8,8 @@ use App\Models\Card;
 use App\Models\Debt;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-class BusinessService
+class BusinessService extends BaseService
 {
     public function filterDatatable(array $data)
     {
@@ -65,22 +64,18 @@ class BusinessService
             $business = Business::create($data);
 
             if (!$business) {
-                DB::rollBack();
                 return false;
             }
 
             $resultCalculaterFee = $this->calculateFee($business->id, $data['total_money']);
             if (!$resultCalculaterFee) {
-                DB::rollBack();
                 return false;
             }
 
             DB::commit();
             return true;
         } catch (\Throwable $th) {
-            //throw $th;
-            DB::rollBack();
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            $this->handleException($th);
             return false;
         }
     }
@@ -111,10 +106,10 @@ class BusinessService
                 'pay_extra' => $business->pay_extra ?? 0,
                 'status' => Debt::STATUS_UNPAID,
                 'total_amount' => ($business->fee ?? 0) + ($business->pay_extra ?? 0),
+                'business_id' => $business->id
             ]);
 
             if (!$debt) {
-                DB::rollBack();
                 return false;
             }
 
@@ -122,8 +117,7 @@ class BusinessService
             DB::commit();
             return true;
         } catch (\Throwable $th) {
-            DB::rollBack();
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            $this->handleException($th);
             return false;
         }
     }
@@ -213,12 +207,17 @@ class BusinessService
     public function updateSetting($data)
     {
         try {
-            Setting::where('key', 'business_min')->update(['value' => $data['business_min']]);
-            Setting::where('key', 'business_max')->update(['value' => $data['business_max']]);
+            Setting::updateOrCreate(['key' => 'business_min'], ['value' => $data['business_min']]);
+            Setting::updateOrCreate(['key' => 'business_max'], ['value' => $data['business_max']]);
             return true;
         } catch (\Throwable $th) {
-            //throw $th;
+            $this->handleException($th);
             return false;
         }
+    }
+
+    public function updateNote($data)
+    {
+        return Setting::updateOrCreate(['key' => 'business_note'], ['value' => $data['business_note']]);
     }
 }

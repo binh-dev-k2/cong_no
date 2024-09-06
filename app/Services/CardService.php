@@ -77,20 +77,19 @@ class CardService
         ]);
     }
 
-    function save(AddCardRequest $request)
+    function save($data)
     {
         try {
             DB::beginTransaction();
-            $card = Card::create($request->all());
+            $card = Card::create($data);
             if ($card) {
                 DB::commit();
                 return [
                     'success' => true,
-                    'data' => $card
+                    'data' => []
                 ];
             }
 
-            DB::rollBack();
             return [
                 'success' => false,
                 'code' => 1
@@ -110,29 +109,14 @@ class CardService
         try {
             DB::beginTransaction();
 
-            $card = Card::where('id', $data['id'])->first();
-            if (!$card) {
+            $card = Card::findOrFail($data['id']);
+            $result = $card->update($data);
+
+            if (!$result) {
                 return false;
             }
-
-            $result = $card->update([
-                'account_name' => $data['account_name'],
-                'account_number' => $data['account_number'],
-                'bank_code' => $data['bank_code'],
-                'card_number' => $data['card_number'],
-                'date_due' => $data['date_due'],
-                'date_return' => $data['date_return'],
-                'login_info' => $data['login_info'],
-                'note' => $data['note'],
-            ]);
-
-            if ($result) {
-                //                $this->calculateFee($card->id, $data['total_money']);
-                DB::commit();
-                return true;
-            }
-            DB::rollBack();
-            return false;
+            DB::commit();
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
@@ -171,8 +155,8 @@ class CardService
                 DB::commit();
                 return true;
             }
+            return false;
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;
@@ -189,10 +173,8 @@ class CardService
                 return true;
             }
 
-            DB::rollBack();
             return false;
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;

@@ -26,6 +26,7 @@ class CreateDebtsTable extends Migration
             $table->bigInteger('pay_extra')->nullable();
             $table->bigInteger('total_amount')->nullable();
             $table->tinyInteger('status')->default(Debt::STATUS_UNPAID);
+            $table->unsignedBigInteger('business_id')->nullable();
             $table->timestamps();
         });
     }

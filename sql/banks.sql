@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 19, 2024 at 08:40 AM
--- Server version: 8.0.30
--- PHP Version: 8.2.18
+-- Generation Time: Sep 03, 2024 at 09:13 PM
+-- Server version: 10.6.18-MariaDB-cll-lve-log
+-- PHP Version: 8.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cong_no`
+-- Database: `zarcrcgj_cong_no`
 --
 
 -- --------------------------------------------------------
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `banks` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `bin` int DEFAULT NULL,
+  `bin` int(11) DEFAULT NULL,
   `shortName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `swift_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
@@ -112,7 +112,8 @@ INSERT INTO `banks` (`id`, `code`, `bin`, `shortName`, `logo`, `swift_code`) VAL
 (69, 'MIRAEASSET', NULL, 'Mirae Asset', 'https://cdn.tuoitrethudo.vn/stores/news_dataimages/2023/092023/15/11/croped/thumbnail/294873410-464540765674556-7494395062025773479-n20230915111446.png?230915021405', NULL),
 (70, 'LOTTEFINANCE', NULL, 'LOTTE Finance', 'https://i.pinimg.com/originals/6a/4d/0f/6a4d0fcecee7b9f0f50be9e17a9fd7b7.png', NULL),
 (71, 'SHBFINANCE', NULL, 'SHB Finance', 'https://assets-global.website-files.com/6107d6546b656b27d809cd54/6107d6546b656b31df09d091_shb.svg', NULL),
-(72, 'JACCS', NULL, 'JACCS', 'https://monfin.vn/images/source/Congty/logo%20jaccs.png', NULL);
+(72, 'JACCS', NULL, 'JACCS', 'https://monfin.vn/images/source/Congty/logo%20jaccs.png', NULL),
+(73, 'VIETCAPITAL', NULL, 'Bản Việt', 'https://wikiland.vn/wp-content/uploads/logo-vietcapital.png', NULL);
 
 --
 -- Indexes for dumped tables
@@ -132,7 +133,7 @@ ALTER TABLE `banks`
 -- AUTO_INCREMENT for table `banks`
 --
 ALTER TABLE `banks`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

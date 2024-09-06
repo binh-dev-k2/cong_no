@@ -162,3 +162,4 @@
     @include('customer.modal.add')
     @include('customer.modal.add_card')
 @endsection
+

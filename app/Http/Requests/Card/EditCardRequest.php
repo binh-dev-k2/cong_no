@@ -35,7 +35,7 @@ class EditCardRequest extends FormRequest
             'bank_code' => 'required|string|exists:banks,code',
             'account_name' => 'nullable|string',
             'note' => 'nullable|string|max:255',
-
+            'fee_percent' => 'required|numeric',
         ];
     }
     function messages()
@@ -54,6 +54,8 @@ class EditCardRequest extends FormRequest
             'login_info.string' => 'Thông tin đăng nhập phải là chuỗi ký tự.',
             'bank_code.exists' => 'Ngân hàng không hợp lệ.',
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
+            'fee_percent.required' => 'Phần trăm phí là bắt buộc.',
+            'fee_percent.numeric' => 'Phần trăm phí phải là số.',
         ];
     }
 

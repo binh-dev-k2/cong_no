@@ -80,9 +80,10 @@
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    @yield('modal')
+
     @yield('script')
 
-    @yield('modal')
 </body>
 
 </html>

@@ -6,7 +6,6 @@ use App\Http\Requests\Customer\AddCustomerRequest;
 use App\Http\Requests\Customer\DeleteCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Bank;
-use App\Models\Customer;
 use App\Services\CardService;
 use App\Services\CustomerService;
 use Illuminate\Http\JsonResponse;
@@ -15,11 +14,6 @@ use Illuminate\View\View;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public $customerService;
     public $cardService;
 
@@ -29,12 +23,6 @@ class CustomerController extends Controller
         $this->cardService = $cardService;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function index(): View
     {
         $banks = Bank::get();
@@ -42,32 +30,12 @@ class CustomerController extends Controller
         return view('customer.index', compact('banks'));
     }
 
-    /**
-     * @SWG\Get(
-     *     path="/api/customer",
-     *     summary="Get all customer",
-     *     tags={"Customer"},
-     *     description="Get all customer",
-     *     @SWG\Response(response=200, description="successful operation")
-     *     @SWG\Response(response=404, description="Not Found")
-     * @return \Illuminate\Http\Response
-     */
-
     public function datatable(Request $request): JsonResponse
     {
         $result = $this->cardService->filterDatatableCustomer($request->all());
         return response()->json($result);
     }
 
-    /** @SWG\Post(
-
-     *     path="/api/customer/store",
-     *     summary="Add new customer",
-     *     tags={"Customer"},
-     *     description="Add new customer",
-     *     @SWG\Header(header="Authorization", type="string", description="Authorization)
-     *    @SWG\Parameter(
-     * ) */
     public function store(AddCustomerRequest $request)
     {
         $data = $request->validated();

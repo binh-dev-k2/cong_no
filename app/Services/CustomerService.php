@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\Customer\addCustomerRequest;
-use App\Models\Card;
 use App\Models\CardHistory;
 use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
@@ -25,18 +23,15 @@ class CustomerService
 
     public function create($data)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-
             $customer = Customer::create([
                 'name' => $data['customer_name'],
                 'phone' => $data['customer_phone'],
-                // 'fee_percent' => $data['fee_percent'],
+                'fee_percent' => null,
             ]);
 
             if (!$customer) {
-                Log::error("Failed to create customer with data: " . json_encode($data));
-                DB::rollBack();
                 return false;
             }
 
@@ -44,25 +39,24 @@ class CustomerService
             $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
 
             if (!$result) {
-                Log::error("Failed to assign cards to customer with ID: " . $customer->id);
-                DB::rollBack();
                 return false;
             }
+            Log::info($result);
 
             DB::commit();
             return true;
         } catch (\Throwable $th) {
-            DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            DB::rollBack();
             return false;
         }
     }
 
     public function update($data)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            $customer = Customer::where('id', $data['id'])->first();
+            $customer = Customer::find($data['id']);
             if (!$customer) {
                 return false;
             }
@@ -84,7 +78,6 @@ class CustomerService
 
             if (!$result) {
                 Log::error("Failed to assign cards to customer with ID: " . $data['id']);
-                DB::rollBack();
                 return false;
             }
 
@@ -99,13 +92,11 @@ class CustomerService
 
     public function delete(array $customer_ids)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-
             // Xóa khách hàng
             $customersDeleted = Customer::whereIn('id', $customer_ids)->delete();
             if (!$customersDeleted) {
-                DB::rollBack();
                 Log::error("Failed to delete customers with IDs: " . implode(', ', $customer_ids));
                 return false;
             }
@@ -113,7 +104,6 @@ class CustomerService
             // Hủy gán khách hàng theo card
             $unassignResult = $this->cardService->unassignCustomer($customer_ids);
             if (!$unassignResult) {
-                DB::rollBack();
                 Log::error("Failed to unassign customers from cardService with IDs: " . implode(', ', $customer_ids));
                 return false;
             }
@@ -121,7 +111,6 @@ class CustomerService
             // Xóa lịch sử thẻ của khách hàng
             $cardHistoryDeleted = CardHistory::whereIn('customer_id', $customer_ids)->delete();
             if (!$cardHistoryDeleted) {
-                DB::rollBack();
                 Log::error("Failed to delete card history for customers with IDs: " . implode(', ', $customer_ids));
                 return false;
             }

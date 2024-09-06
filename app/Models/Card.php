@@ -13,7 +13,7 @@ class Card extends Model
 
     protected $table = "cards";
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public const STATUS_HIDDEN = 0;
     public const STATUS_SHOW = 1;

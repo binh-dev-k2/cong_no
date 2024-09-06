@@ -12,7 +12,7 @@ class Customer extends Model
 
     protected $table = "customers";
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function cards(): HasMany
     {

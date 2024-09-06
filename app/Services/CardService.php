@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\Card\AddCardRequest;
 use App\Models\Card;
 use App\Models\CardHistory;
 use Carbon\Carbon;
@@ -147,10 +146,11 @@ class CardService
 
     function assignCustomer($cardIds, $customerId)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $this->unassignCustomer($customerId);
             $result = Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
+
             if ($result) {
                 DB::commit();
                 return true;
@@ -165,8 +165,8 @@ class CardService
 
     function unassignCustomer($id)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $result = Card::where('customer_id', $id)->update(['customer_id' => null]);
             if ($result) {
                 DB::commit();

@@ -24,7 +24,7 @@ class BusinessController extends Controller
 
     public function index()
     {
-        $businessNote = Setting::where('key', 'business_note')->first();
+        $businessNote = Setting::firstOrCreate(['key' => 'business_note'], ['key' => 'business_note', 'value' => '']);
         return view('business.index', compact('businessNote'));
     }
 

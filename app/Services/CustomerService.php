@@ -41,13 +41,12 @@ class CustomerService
             if (!$result) {
                 return false;
             }
-            Log::info($result);
 
             DB::commit();
             return true;
         } catch (\Throwable $th) {
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
             return false;
         }
     }

@@ -127,11 +127,6 @@ class BusinessService extends BaseService
         return Business::where('id', $data['id'])->update(['pay_extra' => $data['pay_extra']]);
     }
 
-    // public function getBusinessMoney(int $id)
-    // {
-    //     return BusinessMoney::where('business_id', $id)->get();
-    // }
-
     public function updateBusinessMoney($data)
     {
         return BusinessMoney::where('id', $data['id'])->update(

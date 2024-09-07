@@ -40,4 +40,11 @@ class DebitController extends Controller
         $result = $this->debtService->updateStatus($data);
         return jsonResponse($result ? 0 : 1);
     }
+
+        public function viewMoney(Request $request)
+    {
+        $businessId = $request->input('business_id');
+        $money = $this->debtService->getBusinessMoney($businessId);
+        return view('debit.modal.money', compact('money'));
+    }
 }

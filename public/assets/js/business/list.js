@@ -165,31 +165,6 @@ var BusinessList = function () {
         })
     }
 
-    // const initViewMoney = () => {
-    //     const viewMoneyBtns = document.querySelectorAll('.btn-view-money');
-    //     viewMoneyBtns.forEach((btn) => {
-    //         btn.addEventListener('click', () => {
-    //             const row = btn.closest('tr');
-    //             const data = datatable.row(row).data();
-    //             const id = data.id
-
-    //             axios.post(routes.businessViewMoney, { id: id }, { headers: headers })
-    //                 .then((res) => {
-    //                     if (res.status === 200) {
-    //                         $('#money-modal .modal-dialog').html(res.data);
-    //                         $('#money-modal').modal('show');
-    //                     } else {
-    //                         notify("Có lỗi xảy ra...", 'error')
-    //                     }
-    //                 })
-    //                 .catch((err) => {
-    //                     console.log(err);
-    //                     notify(err.message, 'error')
-    //                 })
-    //         })
-    //     })
-    // }
-
     const initComplete = () => {
         const completeBtns = document.querySelectorAll('.btn-complete');
         completeBtns.forEach((btn) => {

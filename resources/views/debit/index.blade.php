@@ -122,6 +122,7 @@
             getAllDebitCards: "{{ route('api.debit_showAll') }}",
             updateDebitStatus: "{{ route('api.debit_updateStatus') }}",
             debitTotalMoney: "{{ route('api.debit.getTotalMoney') }}",
+            debitViewMoney: "{{ route('api.debit.viewMoney') }}",
         }
         var datatable;
     </script>

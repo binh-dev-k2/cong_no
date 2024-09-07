@@ -77,6 +77,31 @@ var DebitsList = function () {
         });
     }
 
+    const initViewMoney = () => {
+        const viewMoneyBtns = document.querySelectorAll('.btn-view-money');
+        viewMoneyBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const row = btn.closest('tr');
+                const data = datatable.row(row).data();
+                const business_id = data.business_id
+
+                axios.post(routes.debitViewMoney, { business_id: business_id }, { headers: headers })
+                    .then((res) => {
+                        if (res.status === 200) {
+                            $('#money-modal .modal-dialog').html(res.data);
+                            $('#money-modal').modal('show');
+                        } else {
+                            notify("Có lỗi xảy ra...", 'error')
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        notify(err.message, 'error')
+                    })
+            })
+        })
+    }
+
     function formatNumber(number) {
         const str = number.toString();
         const formattedStr = str.replace(/(.{4})/g, '$1 ');
@@ -221,10 +246,11 @@ var DebitsList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
+                            let actionBtns = `<span class="btn btn-sm btn-primary btn-active-light-primary btn-view-money">Tiền chia</span>`;
                             if (row.status === 0) {
-                                return `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done" data-value="${row.id}">Hoàn thành</span>`;
+                                actionBtns += `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done ms-2" data-value="${row.id}">Hoàn thành</span>`;
                             }
-                            return `<span></span>`;
+                            return `<div class="d-flex justify-content-center">${actionBtns}</div>`;
                         }
                     }
                 ]
@@ -237,6 +263,7 @@ var DebitsList = function () {
                 $('.paginate_button a').on('click', function () {
                     prevPhone = null;
                 });
+                initViewMoney();
             })
             handleSearchDatatable();
             handleMonthFilter();

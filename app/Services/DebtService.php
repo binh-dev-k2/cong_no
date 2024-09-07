@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BusinessMoney;
 use App\Models\Debt;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -135,5 +136,10 @@ class DebtService
             $query->where('status', Debt::STATUS_UNPAID);
         }
         return $query->sum('total_money');
+    }
+
+    public function getBusinessMoney(int $businessId)
+    {
+        return BusinessMoney::where('business_id', $businessId)->get();
     }
 }

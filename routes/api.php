@@ -46,7 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('business/datatable', [BusinessController::class, 'datatable'])->name('api.business.datatable');
     Route::post('business/complete', [BusinessController::class, 'complete'])->name('api.business.complete');
     Route::post('business/update-pay-extra', [BusinessController::class, 'updatePayExtra'])->name('api.business.updatePayExtra');
-    Route::post('business/view-money', [BusinessController::class, 'viewMoney'])->name('api.business.viewMoney');
     Route::post('business/update-business-money', [BusinessController::class, 'updateBusinessMoney'])->name('api.business.updateBusinessMoney');
     Route::post('business/store', [BusinessController::class, 'store'])->name('api.business.store');
     Route::post('business/update', [BusinessController::class, 'update'])->name('api.business.update');
@@ -59,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('debit/showAll', [DebitController::class, 'showAllDebits'])->name('api.debit_showAll');
     Route::post('debit/updateStatus', [DebitController::class, 'update'])->name('api.debit_updateStatus');
     Route::post('debit/get-total-money', [DebitController::class, 'getTotalMoney'])->name('api.debit.getTotalMoney');
+    Route::post('debit/view-money', [DebitController::class, 'viewMoney'])->name('api.debit.viewMoney');
 
     //user
     Route::post('user/datatable', [UserController::class, 'datatable'])->name('api.user.datatable');

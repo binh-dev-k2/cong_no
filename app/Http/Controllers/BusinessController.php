@@ -62,13 +62,6 @@ class BusinessController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
-    // public function viewMoney(BusinessRequest $request)
-    // {
-    //     $data = $request->validated();
-    //     $money = $this->businessService->getBusinessMoney($data['id']);
-    //     return view('business.modal.money', compact('money'));
-    // }
-
     public function updateBusinessMoney(BusinessRequest $request)
     {
         $data = $request->validated();

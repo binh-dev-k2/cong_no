@@ -136,6 +136,10 @@
         const $modalAddBusiness = $('#modal-add');
         const $results = $modalAddBusiness.find('.search-results');
 
+        $modalAddBusiness.on('hide.bs.modal', function() {
+            $modalAddBusiness.find('form')[0].reset();
+        })
+
         const notify = (text, type = 'success', showCancelButton = false) => {
             return Swal.fire({
                 text: text,

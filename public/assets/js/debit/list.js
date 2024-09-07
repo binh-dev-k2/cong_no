@@ -246,7 +246,10 @@ var DebitsList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            let actionBtns = `<span class="btn btn-sm btn-primary btn-active-light-primary btn-view-money">Tiền chia</span>`;
+                            let actionBtns = '';
+                            if (row.business_id) {
+                                actionBtns +=`<span class="btn btn-sm btn-primary btn-active-light-primary btn-view-money">Tiền chia</span>`;
+                            }
                             if (row.status === 0) {
                                 actionBtns += `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done ms-2" data-value="${row.id}">Hoàn thành</span>`;
                             }

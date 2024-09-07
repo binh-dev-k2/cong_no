@@ -5,8 +5,10 @@
     </div>
     <div class="modal-body py-10 px-lg-17">
         <div class="scroll-y me-n7 pe-7" style="max-height: calc(100vh - 30rem)">
-
             @foreach ($money as $m)
+                @if ($m->money == 0 && $m->note == '')
+                    @continue
+                @else
                 <div class="fv-row mb-7">
                     <input type="hidden" class="money-id" value="{{ $m->id }}" />
                     <div class="input-group mb-5">
@@ -18,6 +20,7 @@
                             aria-label="Ghi chú" aria-describedby="money-{{ $m->id }}" readonly disabled />
                     </div>
                 </div>
+                @endif
             @endforeach
         </div>
     </div>

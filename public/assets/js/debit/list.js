@@ -184,7 +184,7 @@ var DebitsList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="${row.card.bank.logo}" class="h-30px" alt="${row.card.bank.code}">
+                                    ${row.card ? `<img src="${row?.card.bank.logo}" class="h-30px" alt="${row?.card.bank.code}">` : 'Không có thẻ'}
                                         ${formatNumber(row.card_number)}
                                     </div>
                                     `;
@@ -248,7 +248,7 @@ var DebitsList = function () {
                         render: function (data, type, row) {
                             let actionBtns = '';
                             if (row.business_id) {
-                                actionBtns +=`<span class="btn btn-sm btn-primary btn-active-light-primary btn-view-money">Tiền chia</span>`;
+                                actionBtns += `<span class="btn btn-sm btn-primary btn-active-light-primary btn-view-money">Tiền chia</span>`;
                             }
                             if (row.status === 0) {
                                 actionBtns += `<span class="btn btn-sm btn-primary btn-active-light-primary btn-done ms-2" data-value="${row.id}">Hoàn thành</span>`;

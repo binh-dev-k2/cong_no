@@ -7,6 +7,7 @@ use App\Models\Business;
 use App\Models\Setting;
 use App\Services\BusinessService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BusinessController extends Controller
 {
@@ -25,7 +26,11 @@ class BusinessController extends Controller
     public function index()
     {
         $businessNote = Setting::firstOrCreate(['key' => 'business_note'], ['key' => 'business_note', 'value' => '']);
-        return view('business.index', compact('businessNote'));
+        $businessMoneys = Setting::where('type', 'business_money')
+            ->select('key')
+            ->distinct()
+            ->get();
+        return view('business.index', compact('businessNote', 'businessMoneys'));
     }
 
     public function datatable(Request $request)
@@ -78,18 +83,8 @@ class BusinessController extends Controller
 
     public function editSetting()
     {
-        $min = Setting::where('key', 'business_min')->first()?->value;
-        $max = Setting::where('key', 'business_max')->first()?->value;
-        return view('business.modal.edit-setting', compact('min', 'max'));
+        return view('business.modal.edit-setting');
     }
-
-    public function updateSetting(Request $request)
-    {
-        $data = $request->all();
-        $result = $this->businessService->updateSetting($data);
-        return jsonResponse($result ? 0 : 1);
-    }
-
 
     public function updateNote(Request $request)
     {

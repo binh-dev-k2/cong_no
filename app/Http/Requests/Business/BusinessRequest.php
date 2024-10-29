@@ -38,6 +38,7 @@ class BusinessRequest extends FormRequest
                     'fee_percent' => 'required|numeric',
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
+                    'business_money_key' => 'required|string|exists:settings,key',
                 ];
 
             case 'update':
@@ -50,6 +51,7 @@ class BusinessRequest extends FormRequest
                     'fee_percent' => 'required|numeric',
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
+                    'business_money_key' => 'required|string|exists:settings,key',
                 ];
 
             case 'complete':

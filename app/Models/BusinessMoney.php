@@ -11,5 +11,5 @@ class BusinessMoney extends Model
 
     protected $table = "business_money";
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 }

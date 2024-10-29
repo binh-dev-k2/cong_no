@@ -19,17 +19,33 @@ class DatabaseSeeder extends Seeder
     {
         $settings = [
             [
-                'key' => 'business_min',
-                'value' => '34000000',
-            ],
-            [
-                'key' => 'business_max',
-                'value' => '35000000',
-            ],
-            [
                 'key' => 'business_note',
                 'value' => '',
-            ]
+            ],
+            [
+                'key' => '35',
+                'value' => 33000000,
+            ],
+            [
+                'key' => '35',
+                'value' => 34000000,
+            ],
+            [
+                'key' => '50',
+                'value' => 48000000,
+            ],
+            [
+                'key' => '50',
+                'value' => 49000000,
+            ],
+            [
+                'key' => '100',
+                'value' => 98000000,
+            ],
+            [
+                'key' => '100',
+                'value' => 99000000,
+            ],
         ];
 
         foreach ($settings as $setting) {

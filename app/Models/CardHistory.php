@@ -12,7 +12,7 @@ class CardHistory extends Model
 
     protected $table = "card_histories";
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function card(): BelongsTo
     {

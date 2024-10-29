@@ -11,7 +11,7 @@ class Business extends Model
 
     protected $table = "businesses";
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function money()
     {

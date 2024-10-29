@@ -106,6 +106,21 @@
                                 <input type="number" class="form-control form-control-solid" placeholder="Ex: 1000000"
                                     name="total_money" id="total_money" required />
                             </div>
+
+                            <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="required fs-6 fw-semibold mb-2">Khoảng chia</label>
+                                @foreach ($businessMoneys as $businessMoney)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" value="{{ $businessMoney->key }}"
+                                            name="business_money_key" id="business_money_{{ $businessMoney->key }}"
+                                            {{ $loop->first ? 'checked' : '' }}>
+                                        <label class="form-check-label"
+                                            for="business_money_{{ $businessMoney->key }}">
+                                            {{ $businessMoney->key }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
                     </div>
@@ -214,9 +229,9 @@
                 fee_percent: parseFloat($modalAddBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalAddBusiness.find('input[name="formality"]:checked').val(),
                 total_money: parseInt($modalAddBusiness.find('input[name="total_money"]').val()),
+                business_money_key: $modalAddBusiness.find(
+                    'input[name="business_money_key"]:checked').val(),
             }
-
-            // console.log(body);
 
             axios.post("{{ route('api.business.store') }}", body, {
                     headers: headers

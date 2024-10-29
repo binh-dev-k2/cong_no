@@ -53,22 +53,29 @@ class BusinessService extends BaseService
     public function store(array $data)
     {
         try {
+            DB::beginTransaction();
             if ($data['formality'] == 'R') {
-                $fee = (float)($data['total_money'] * $data['fee_percent'] / 100);
-                $data['fee'] = (float)($data['total_money'] - $fee);
+                $fee = (float) ($data['total_money'] * $data['fee_percent'] / 100);
+                $data['fee'] = (float) ($data['total_money'] - $fee);
             } else {
-                $data['fee'] = (float)($data['total_money'] * $data['fee_percent'] / 100);
+                $data['fee'] = (float) ($data['total_money'] * $data['fee_percent'] / 100);
             }
             $card = Card::where('card_number', $data['card_number'])->first();
             $data['bank_code'] = $card->bank->code;
             $business = Business::create($data);
 
             if (!$business) {
+                DB::rollBack();
                 return false;
             }
 
-            $resultCalculaterFee = $this->calculateFee($business->id, $data['total_money']);
+            $businessMoney = Setting::where('type', 'business_money')->where('key', $data['business_money_key'])->orderBy('value', 'asc')->limit(2)->get();
+            $minRangeMoney = (int) $businessMoney->first()->value;
+            $maxRangeMoney = (int) $businessMoney->last()->value;
+
+            $resultCalculaterFee = $this->calculateFee($business->id, $data['total_money'], $minRangeMoney, $maxRangeMoney);
             if (!$resultCalculaterFee) {
+                DB::rollBack();
                 return false;
             }
 
@@ -76,6 +83,7 @@ class BusinessService extends BaseService
             return true;
         } catch (\Throwable $th) {
             $this->handleException($th);
+            DB::rollBack();
             return false;
         }
     }
@@ -144,22 +152,20 @@ class BusinessService extends BaseService
         return random_int($min, $max);
     }
 
-    public function calculateFee($businessId, $totalMoney)
+    public function calculateFee($businessId, $totalMoney, $minRangeMoney, $maxRangeMoney)
     {
         BusinessMoney::where('business_id', $businessId)->delete();
         $data = [];
         $i = 0;
-        $min = (int)Setting::where('key', 'business_min')->first()->value;
-        $max = (int)Setting::where('key', 'business_max')->first()->value;
 
         while ($totalMoney > 0) {
             $i++;
-            $randomMoney = $this->randomMoney($min, $max);
+            $randomMoney = $this->randomMoney($minRangeMoney, $maxRangeMoney);
             if ($totalMoney >= $randomMoney) {
                 $data[] = $this->createMoneyData($businessId, $randomMoney);
                 $totalMoney -= $randomMoney;
             } else {
-                $totalMoney = $this->distributeRemainingMoney($data, $businessId, $totalMoney, $max);
+                $totalMoney = $this->distributeRemainingMoney($data, $businessId, $totalMoney, $maxRangeMoney);
             }
         }
 
@@ -197,18 +203,6 @@ class BusinessService extends BaseService
     public function delete($id)
     {
         return Business::where('id', $id)->delete() > 0;
-    }
-
-    public function updateSetting($data)
-    {
-        try {
-            Setting::updateOrCreate(['key' => 'business_min'], ['value' => $data['business_min']]);
-            Setting::updateOrCreate(['key' => 'business_max'], ['value' => $data['business_max']]);
-            return true;
-        } catch (\Throwable $th) {
-            $this->handleException($th);
-            return false;
-        }
     }
 
     public function updateNote($data)

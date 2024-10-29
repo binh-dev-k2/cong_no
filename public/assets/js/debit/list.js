@@ -184,7 +184,7 @@ var DebitsList = function () {
                         orderable: false,
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                    ${row.card ? `<img src="${row?.card.bank.logo}" class="h-30px" alt="${row?.card.bank.code}">` : '<div>Không có thẻ</div>'}
+                                    ${row.card ? `<img src="${row?.card.bank.logo}" class="h-30px" alt="${row?.card.bank.code}">` : '<div class="text-center text-danger">Không có thẻ</div>'}
                                         ${formatNumber(row.card_number)}
                                     </div>
                                     `;

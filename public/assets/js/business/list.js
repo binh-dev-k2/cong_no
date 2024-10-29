@@ -372,7 +372,6 @@ var BusinessList = function () {
                         orderable: false,
                         className: 'text-center min-w-175px',
                         render: function (data, type, row) {
-                            console.log(row);
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">
                                         <span>${formatNumber(row.card_number)}</span>

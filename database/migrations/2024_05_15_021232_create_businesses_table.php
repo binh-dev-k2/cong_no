@@ -19,12 +19,12 @@ class CreateBusinessesTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->float('fee_percent');
-            $table->string('card_number');
+            $table->string('card_number')->index();
             $table->bigInteger('total_money');
             $table->enum('formality', ['R', 'Đ']);
             $table->bigInteger('fee');
             $table->bigInteger('pay_extra')->nullable();
-            $table->string('bank_code');
+            $table->string('bank_code')->index();
             $table->timestamps();
         });
     }

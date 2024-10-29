@@ -15,7 +15,7 @@ class CreateBusinessMoneyTable extends Migration
     {
         Schema::create('business_money', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('business_id');
+            $table->unsignedBigInteger('business_id')->index();
             $table->bigInteger('money');
             $table->boolean('is_money_checked')->default(0);
             $table->text('note')->nullable();

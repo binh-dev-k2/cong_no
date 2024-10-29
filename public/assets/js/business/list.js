@@ -374,7 +374,7 @@ var BusinessList = function () {
                         render: function (data, type, row) {
                             console.log(row);
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="${row.bank.logo}" class="h-30px" alt="${row.bank.code}">
+                                        <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">
                                         <span>${formatNumber(row.card_number)}</span>
                                         ${formatNumber(row.card.account_number ? 'STK: ' + row.card.account_number : '')}
                                         ${row.card.date_due ? `<span class="text-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}

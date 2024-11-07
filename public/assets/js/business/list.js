@@ -360,8 +360,8 @@ var BusinessList = function () {
 
                                 if (row.phone != prevPhone) {
                                     prevPhone = row.phone
-                                    const phone = row.customer.phone.startsWith('@') ? row.customer.phone.substring(1) : row.customer.phone;
-                                    const url = row.customer.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
+                                    const phone = row.phone.startsWith('@') ? row.phone.substring(1) : row.phone;
+                                    const url = row.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
                                     return `
                                     <div>${row.name}</div>
                                     <a href="${url}" target="_blank">${phone}</a>

@@ -355,6 +355,14 @@ var BusinessList = function () {
                         render: function (data, type, row) {
                             if (type === 'display') {
                                 if (row.account_name) {
+                                    if (row.phone) {
+                                        const phone = row.phone.startsWith('@') ? row.phone.substring(1) : row.phone;
+                                        const url = row.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
+                                        return `
+                                                <div>${row.account_name}</div>
+                                                <a href="${url}" target="_blank">${phone}</a>
+                                            `
+                                    }
                                     return `<div>${row.account_name}</div>`
                                 }
 
@@ -362,9 +370,10 @@ var BusinessList = function () {
                                     prevPhone = row.phone
                                     const phone = row.phone.startsWith('@') ? row.phone.substring(1) : row.phone;
                                     const url = row.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
+
                                     return `
-                                    <div>${row.name}</div>
-                                    <a href="${url}" target="_blank">${phone}</a>
+                                        <div>${row.name}</div>
+                                        <a href="${url}" target="_blank">${phone}</a>
                                     `
                                 }
                             }
@@ -375,7 +384,7 @@ var BusinessList = function () {
                         targets: 2,
                         data: null,
                         orderable: false,
-                        className: 'text-center min-w-175px',
+                        className: 'text-center min-w-200px',
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">

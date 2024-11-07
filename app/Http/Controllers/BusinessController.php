@@ -83,6 +83,7 @@ class BusinessController extends Controller
     {
         $businessMoneys = Setting::where('type', 'business_money')
             ->get()
+            ->orderBy('key', 'asc')
             ->groupBy('key')
             ->map(function ($group) {
                 return $group->sortBy('value');

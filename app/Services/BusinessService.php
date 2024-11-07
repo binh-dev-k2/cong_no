@@ -8,6 +8,7 @@ use App\Models\Card;
 use App\Models\Debt;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BusinessService extends BaseService
 {
@@ -39,14 +40,22 @@ class BusinessService extends BaseService
         $recordsFiltered = $recordsTotal = $query->count();
         $businnesses = $query->skip($skip)
             ->with(['bank', 'money', 'card'])
+            ->withCount([
+                'money' => function ($query) {
+                    $query->where('money', '!=', 0);
+                }
+            ])
             ->take($pageLength)
             ->get();
+
+        $moneyRecordCount = $businnesses->max('money_count');
 
         return [
             "draw" => $data['draw'] ?? 1,
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
-            'data' => $businnesses
+            'data' => $businnesses,
+            'money_record_count' => $moneyRecordCount
         ];
     }
 
@@ -208,5 +217,26 @@ class BusinessService extends BaseService
     public function updateNote($data)
     {
         return Setting::updateOrCreate(['key' => 'business_note'], ['value' => $data['business_note']]);
+    }
+
+    public function updateSetting($data)
+    {
+        DB::beginTransaction();
+        try {
+            Setting::where('type', 'business_money')->delete();
+            foreach ($data as $key => $value) {
+                Setting::create([
+                    'type' => 'business_money',
+                    'key' => $value['key'],
+                    'value' => $value['value']
+                ]);
+            }
+
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return false;
+        }
     }
 }

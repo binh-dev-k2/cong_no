@@ -351,19 +351,24 @@ var BusinessList = function () {
                         targets: 1,
                         data: null,
                         orderable: false,
-                        className: 'min-w-150px',
+                        className: 'text-center min-w-150px',
                         render: function (data, type, row) {
                             if (type === 'display') {
                                 if (row.account_name) {
-                                    return `<span>${row.account_name}</span>`
+                                    return `<div>${row.account_name}</div>`
                                 }
 
                                 if (row.phone != prevPhone) {
                                     prevPhone = row.phone
-                                    return `<span>${row.name} - ${row.phone}</span>`
+                                    const phone = row.customer.phone.startsWith('@') ? row.customer.phone.substring(1) : row.customer.phone;
+                                    const url = row.customer.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
+                                    return `
+                                    <div>${row.name}</div>
+                                    <a href="${url}" target="_blank">${phone}</a>
+                                    `
                                 }
                             }
-                            return `<span></span>`
+                            return `<div></div>`
                         }
                     },
                     {

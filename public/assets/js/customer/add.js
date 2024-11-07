@@ -81,18 +81,18 @@ var KTModalCustomersAdd = (function () {
                             notEmpty: {
                                 message: "Số điện thoại không được để trống",
                             },
-                            phone: {
-                                country: "VN",
-                                message: "Số điện thoại không hợp lệ",
-                            },
-                            numberic: {
-                                message: "Số điện thoại không hợp lệ",
-                            },
-                            stringLength: {
-                                min: 10,
-                                max: 10,
-                                message: "Số điện thoại phải đủ 10 số",
-                            },
+                            // phone: {
+                            //     country: "VN",
+                            //     message: "Số điện thoại không hợp lệ",
+                            // },
+                            // numberic: {
+                            //     message: "Số điện thoại không hợp lệ",
+                            // },
+                            // stringLength: {
+                            //     min: 10,
+                            //     max: 10,
+                            //     message: "Số điện thoại phải đủ 10 số",
+                            // },
                         },
                     },
                 },

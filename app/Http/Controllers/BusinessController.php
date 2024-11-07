@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Business\BusinessRequest;
-use App\Models\Business;
 use App\Models\Setting;
 use App\Services\BusinessService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BusinessController extends Controller
 {
@@ -83,7 +81,20 @@ class BusinessController extends Controller
 
     public function editSetting()
     {
-        return view('business.modal.edit-setting');
+        $businessMoneys = Setting::where('type', 'business_money')
+            ->get()
+            ->groupBy('key')
+            ->map(function ($group) {
+                return $group->sortBy('value');
+            });
+        return view('business.modal.edit-setting', compact('businessMoneys'));
+    }
+
+    public function updateSetting(Request $request)
+    {
+        $data = $request->all();
+        $result = $this->businessService->updateSetting($data);
+        return jsonResponse($result ? 0 : 1);
     }
 
     public function updateNote(Request $request)

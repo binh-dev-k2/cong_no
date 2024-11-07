@@ -747,13 +747,17 @@ var CustomerList = function () {
                     {
                         targets: 1,
                         data: 'customer',
+                        className: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
                             if (row.customer.phone !== prevPhone && type === 'display') {
                                 prevPhone = row.customer.phone
-                                return `<span>${row.customer.name} - ${row.customer.phone}</span>`
+                                const phone = row.customer.phone.startsWith('@') ? row.customer.phone.substring(1) : row.customer.phone;
+                                const url = row.customer.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
+                                return `<div>${row.customer.name}</div>
+                                    <a href="${url}" target="_blank">${phone}</a>`;
                             }
-                            return `<span></span>`
+                            return `<div></div>`
                         }
                     },
                     {

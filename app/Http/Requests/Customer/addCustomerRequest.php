@@ -33,17 +33,17 @@ class AddCustomerRequest extends FormRequest
             'customer_name' => 'required|string',
             'customer_phone' => [
                 'required',
-                'numeric',
-                'digits:10',
+                // 'numeric',
+                // 'digits:10',
                 'unique:customers,phone',
-                function ($attribute, $value, $fail) {
-                    if (strlen($value) != 10) {
-                        $fail('Số điện thoại khách hàng phải gồm 10 chữ số.');
-                    }
-                    if (substr($value, 0, 1) != '0') {
-                        $fail('Số điện thoại khách hàng phải bắt đầu bằng số 0.');
-                    }
-                },
+                // function ($attribute, $value, $fail) {
+                //     if (strlen($value) != 10) {
+                //         $fail('Số điện thoại khách hàng phải gồm 10 chữ số.');
+                //     }
+                //     if (substr($value, 0, 1) != '0') {
+                //         $fail('Số điện thoại khách hàng phải bắt đầu bằng số 0.');
+                //     }
+                // },
             ],
             // 'fee_percent' => 'required|numeric',
             'card_ids' => 'required|array|exists:cards,id'

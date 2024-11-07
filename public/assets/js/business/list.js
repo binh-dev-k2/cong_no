@@ -384,7 +384,7 @@ var BusinessList = function () {
                         targets: 2,
                         data: null,
                         orderable: false,
-                        className: 'text-center min-w-200px',
+                        className: 'text-center min-w-175px',
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">

@@ -155,7 +155,12 @@ var DebitsList = function () {
                         render: function (data, type, row) {
                             if (row.phone !== prevPhone && type === 'display') {
                                 prevPhone = row.phone
-                                return `<span>${row.name ?? ''} - ${row.phone ?? ''}</span>`
+                                const phone = row.phone.startsWith('@') ? row.phone.substring(1) : row.phone;
+                                const url = row.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
+                                return `
+                                        <div>${row.name ?? ''}</div>
+                                        <a href="${url}" target="_blank">${phone}</a>
+                                    `
                             }
                             return `<span></span>`
                         }

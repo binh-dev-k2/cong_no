@@ -1,11 +1,20 @@
 #!/bin/bash
 
-# Chuyển đến thư mục dự án
-cd "$(dirname "$0")"
+# Đường dẫn đến repo GitHub
+REPO_URL="https://github.com/CodetifyTech/quan_ly_cong_no.git"
+BRANCH="live" # Nhánh cần pull (sửa nếu cần)
 
-# Pull code mới nhất từ GitHub
-echo "Pulling the latest code from GitHub..."
-git pull origin live
+# Thư mục chứa code
+TARGET_DIR="$(dirname "$0")"
+
+# Chuyển đến thư mục dự án
+cd "$TARGET_DIR" || exit 1
+
+# Pull code mới nhất
+echo "Pulling the latest code from $REPO_URL..."
+git fetch origin
+git reset --hard origin/$BRANCH
+
 
 # Cài đặt các dependencies (composer)
 echo "Installing PHP dependencies..."

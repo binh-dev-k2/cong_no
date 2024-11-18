@@ -121,7 +121,7 @@ var BusinessList = function () {
                 td.querySelector('.container-business-money').classList.add('d-none');
                 td.innerHTML += `
                                     <div class="d-flex align-items-center container-edit-business-money">
-                                        <input type="number" data-type="money" value="${businessMoney.money}" class="form-control me-2" style="min-width: 150px; max-width:200px" min="0" step="any"/>
+                                        <input type="text" data-type="money" value="${businessMoney.money}" class="form-control me-2" style="min-width: 150px; max-width:200px" min="0" step="any"/>
                                         <input type="checkbox" data-type="is_money_checked" class="form-check-input me-2" ${businessMoney.is_money_checked ? "checked" : ""}/>
                                         <input type="text" data-type="note" value="${businessMoney.note ?? ''}" class="form-control me-2" style="min-width: 150px; max-width:200px"/>
                                         <input type="checkbox" data-type="is_note_checked" class="form-check-input me-2" ${businessMoney.is_note_checked ? "checked" : ""}/>
@@ -136,14 +136,14 @@ var BusinessList = function () {
                 })
 
                 td.querySelector('.btn-save-business-money').addEventListener('click', (e) => {
-                    const money = td.querySelector('.container-edit-business-money input[data-type="money"]').value;
+                    const money = td.querySelector('.container-edit-business-money input[data-type="money"]').value.replace(/,/g, '');
                     const isMoneyChecked = td.querySelector('.container-edit-business-money input[data-type="is_money_checked"]').checked;
                     const note = td.querySelector('.container-edit-business-money input[data-type="note"]').value;
                     const isNoteChecked = td.querySelector('.container-edit-business-money input[data-type="is_note_checked"]').checked;
 
                     const body = {
                         id: businessMoney.id,
-                        money: money,
+                        money: parseInt(money),
                         is_money_checked: isMoneyChecked,
                         note: note,
                         is_note_checked: isNoteChecked
@@ -164,6 +164,22 @@ var BusinessList = function () {
             })
         })
     }
+
+    $(document).on('input', '[data-type="money"]', (e) => {
+        // Lấy giá trị hiện tại, bỏ hết dấu phân cách hàng nghìn cũ
+        let value = e.target.value.replace(/,/g, '');
+
+        // Đảm bảo chỉ nhận số
+        if (!/^\d*\.?\d*$/.test(value)) {
+            value = value.slice(0, -1); // Bỏ ký tự không hợp lệ
+        }
+
+        // Định dạng lại với dấu phân cách hàng nghìn
+        const formattedValue = new Intl.NumberFormat('en-US').format(value);
+
+        // Gán lại giá trị đã format
+        e.target.value = formattedValue;
+    })
 
     const initComplete = () => {
         const completeBtns = document.querySelectorAll('.btn-complete');

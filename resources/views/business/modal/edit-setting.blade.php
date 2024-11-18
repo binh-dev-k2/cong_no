@@ -8,12 +8,19 @@
             <div class="scroll-y me-n7 pe-7" style="max-height: calc(100vh - 30rem)">
                 <div class="content">
                     @foreach ($businessMoneys as $key => $businessMoney)
-                        <div class="card mb-3">
+                        <div class="card mb-3 business-setting-container">
+                            <div class="card-header d-flex justify-content-end" style="min-height: 40px!important">
+                                <button type="button" class="btn btn-danger btn-sm delete-business-setting"
+                                    style="margin-right: -30px">
+                                    <i class="bi bi-x-circle p-0"></i>
+                                </button>
+                            </div>
                             <div class="card-body">
                                 <div class="d-flex flex-column mb-3 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Mốc (Triệu)</label>
                                     <input type="number" class="form-control form-control-solid"
-                                        value="{{ $key }}" name="key[]" placeholder="Khoảng giá (triệu)">
+                                        value="{{ $key }}" name="key[]" placeholder="Khoảng giá (triệu)"
+                                        required>
                                 </div>
 
                                 <div class="d-flex flex-column mb-3 fv-row">
@@ -32,6 +39,13 @@
                             </div>
                         </div>
                     @endforeach
+                    <div class="w-100">
+                        <button type="button"
+                            class="btn btn-primary btn-sm my-3 add-business-setting w-100 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-plus-circle p-0 me-2"></i>
+                            Thêm
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -49,6 +63,35 @@
         </div>
     </form>
 </div>
+
+<template id="business-setting-template">
+    <div class="card mb-3 business-setting-container">
+        <div class="card-header d-flex justify-content-end" style="min-height: 40px!important">
+            <button type="button" class="btn btn-danger btn-sm delete-business-setting" style="margin-right: -30px">
+                <i class="bi bi-x-circle p-0"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="d-flex flex-column mb-3 fv-row">
+                <label class="required fs-6 fw-semibold mb-2">Mốc (Triệu)</label>
+                <input type="number" class="form-control form-control-solid" value="" name="key[]"
+                    placeholder="Khoảng giá (triệu)" required>
+            </div>
+
+            <div class="d-flex flex-column mb-3 fv-row">
+                <label class="required fs-6 fw-semibold mb-2">Khoảng nhỏ</label>
+                <input type="number" class="form-control form-control-solid" min="0" value=""
+                    placeholder="Ex: 34000000" name="min[]" required />
+            </div>
+
+            <div class="d-flex flex-column mb-3 fv-row">
+                <label class="required fs-6 fw-semibold mb-2">Khoảng lớn</label>
+                <input type="number" class="form-control form-control-solid" min="0" value=""
+                    placeholder="Ex: 35000000" name="max[]" required />
+            </div>
+        </div>
+    </div>
+</template>
 
 <script>
     $(document).ready(function() {
@@ -78,9 +121,6 @@
         $(document).on('submit', '#form-edit-setting', function(e) {
             e.preventDefault();
 
-            const $submitButton = $(this).find('button[type="submit"]');
-            $submitButton.attr('data-kt-indicator', "on").prop('disabled', true);
-
             const businessMoneys = [];
             $modalEditSetting.find('input[name="key[]"]').each(function() {
                 const key = parseInt($(this).val());
@@ -99,6 +139,13 @@
                 });
             });
 
+            if (businessMoneys.length == 0) {
+                notify("Vui lòng nhập thống tin", 'error');
+                return;
+            }
+
+            const $submitButton = $(this).find('button[type="submit"]');
+            $submitButton.attr('data-kt-indicator', "on").prop('disabled', true);
             const body = businessMoneys
 
             axios.post("{{ route('api.business.updateSetting') }}", body, {
@@ -106,7 +153,6 @@
                 })
                 .then((res) => {
                     if (res.data.code == 0) {
-                        // notify("Sửa nghiệp vụ thành công!", 'success');
                         $modalEditSetting.modal('hide');
                         $modalEditSetting.find('form')[0].reset();
                     } else {
@@ -120,6 +166,18 @@
                 .finally(() => {
                     $submitButton.attr('data-kt-indicator', "off").prop('disabled', false);
                 })
+        })
+
+        $(document).on('click', '.delete-business-setting', function(e) {
+            e.preventDefault();
+            $(this).closest('.card').remove();
+        })
+
+        $('.add-business-setting').on('click', function(e) {
+            e.preventDefault();
+
+            const businessSettingElement = $('#business-setting-template').clone().html();
+            $('#form-edit-setting').find('.add-business-setting').before(businessSettingElement);
         })
     })
 </script>

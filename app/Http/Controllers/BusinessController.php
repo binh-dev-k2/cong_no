@@ -82,12 +82,10 @@ class BusinessController extends Controller
     public function editSetting()
     {
         $businessMoneys = Setting::where('type', 'business_money')
-            ->get()
             ->orderBy('key', 'asc')
-            ->groupBy('key')
-            ->map(function ($group) {
-                return $group->sortBy('value');
-            });
+            ->orderBy('value', 'asc')
+            ->get()
+            ->groupBy('key');
         return view('business.modal.edit-setting', compact('businessMoneys'));
     }
 

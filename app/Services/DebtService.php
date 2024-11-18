@@ -123,6 +123,7 @@ class DebtService
             $query->where('status', Debt::STATUS_UNPAID);
         }
         return $query->where('formality', '!=', 'R')->sum('total_amount');
+        // return $query->where('formality', '!=', 'R')->sum('total_amount');
     }
 
     public function getTotalMoney($month = null)

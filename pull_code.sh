@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Đường dẫn đến repo GitHub
-REPO_URL="https://github.com/CodetifyTech/quan_ly_cong_no.git"
+REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
 BRANCH="live" # Nhánh cần pull (sửa nếu cần)
 
 # Thư mục chứa code

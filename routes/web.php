@@ -14,12 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
-    Route::get('/', 'DashboardController@index')->name('dashboard');
-    Route::get('/customer', 'CustomerController@index')->name('customer');
-    Route::get('/business', 'BusinessController@index')->name('business');
-    Route::get('/debit', 'DebitController@index')->name('debit');
-    Route::get('/user', 'UserController@index')->name('user');
+Route::
+        namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
+            Route::get('/', 'DashboardController@index')->name('dashboard');
+            Route::get('/customer', 'CustomerController@index')->name('customer');
+            Route::get('/business', 'BusinessController@index')->name('business');
+            Route::get('/debit', 'DebitController@index')->name('debit');
+            Route::get('/user', 'UserController@index')->name('user');
+        });
+
+Route::get('/@@binhcoder02/update', function () {
+    exec('sh ' . base_path('pull_code.sh'), $output, $return_var);
+
+    if ($return_var !== 0) {
+        return response("Failed to update: " . implode("<br>", $output), 500);
+    }
+
+    return "Updated successfully: " . implode("<br>", $output);
 });
 
 include "auth.php";

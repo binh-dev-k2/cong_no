@@ -25,16 +25,16 @@
 
                                 <div class="d-flex flex-column mb-3 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Khoảng nhỏ</label>
-                                    <input type="number" class="form-control form-control-solid" min="0"
+                                    <input type="text" class="form-control form-control-solid" min="0"
                                         value="{{ $businessMoney[0]['value'] }}" placeholder="Ex: 34000000"
-                                        name="min[]" required />
+                                        name="min[]" required data-type="money" />
                                 </div>
 
                                 <div class="d-flex flex-column mb-3 fv-row">
                                     <label class="required fs-6 fw-semibold mb-2">Khoảng lớn</label>
-                                    <input type="number" class="form-control form-control-solid" min="0"
+                                    <input type="text" class="form-control form-control-solid" min="0"
                                         value="{{ $businessMoney[1]['value'] }}" placeholder="Ex: 35000000"
-                                        name="max[]" required />
+                                        name="max[]" required data-type="money"/>
                                 </div>
                             </div>
                         </div>
@@ -80,14 +80,14 @@
 
             <div class="d-flex flex-column mb-3 fv-row">
                 <label class="required fs-6 fw-semibold mb-2">Khoảng nhỏ</label>
-                <input type="number" class="form-control form-control-solid" min="0" value=""
-                    placeholder="Ex: 34000000" name="min[]" required />
+                <input type="text" class="form-control form-control-solid" min="0" value=""
+                    placeholder="Ex: 34000000" name="min[]" required data-type="money"/>
             </div>
 
             <div class="d-flex flex-column mb-3 fv-row">
                 <label class="required fs-6 fw-semibold mb-2">Khoảng lớn</label>
-                <input type="number" class="form-control form-control-solid" min="0" value=""
-                    placeholder="Ex: 35000000" name="max[]" required />
+                <input type="text" class="form-control form-control-solid" min="0" value=""
+                    placeholder="Ex: 35000000" name="max[]" required data-type="money"/>
             </div>
         </div>
     </div>

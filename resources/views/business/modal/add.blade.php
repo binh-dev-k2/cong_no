@@ -103,8 +103,8 @@
 
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2" for="total_money">Số tiền</label>
-                                <input type="number" class="form-control form-control-solid" placeholder="Ex: 1000000"
-                                    name="total_money" id="total_money" required />
+                                <input type="text" class="form-control form-control-solid" placeholder="Ex: 1000000"
+                                    name="total_money" id="total_money" required data-type="money"/>
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">

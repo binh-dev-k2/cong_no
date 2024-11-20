@@ -30,7 +30,7 @@ Route::get('/@@binhcoder02/update', function () {
         return response("Failed to update: " . implode("<br>", $output), 500);
     }
 
-    return "Updated successfully: " . implode("<br>", $output);
+    return redirect()->route('dashboard')->with('status', 'Quay lai trang chu');
 });
 
 include "auth.php";

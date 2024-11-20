@@ -107,12 +107,9 @@ class BusinessService extends BaseService
     {
         try {
             DB::beginTransaction();
-            $business = Business::where('id', $id)->first();
-            if (!$business) {
-                return false;
-            }
+            $business = Business::where('id', $id)->with('card')->first();
 
-            $debt = Debt::create([
+            $debtData = [
                 'account_name' => $business->account_name,
                 'name' => $business->name,
                 'phone' => $business->phone,
@@ -124,17 +121,21 @@ class BusinessService extends BaseService
                 'status' => Debt::STATUS_UNPAID,
                 'total_amount' => ($business->fee ?? 0) + ($business->pay_extra ?? 0),
                 'business_id' => $business->id
-            ]);
+            ];
 
-            if (!$debt) {
-                return false;
+            if ($business->formality == 'R') {
+                $debtData['fee'] = (float) ($business->total_money * ($business->card->fee_percent ?? $business->fee_percent) / 100);
+                $debtData['total_amount'] = $debtData['fee'] + ($business->pay_extra ?? 0);
             }
+
+            Debt::create($debtData);
 
             $business->delete();
             DB::commit();
             return true;
         } catch (\Throwable $th) {
             $this->handleException($th);
+            DB::rollBack();
             return false;
         }
     }

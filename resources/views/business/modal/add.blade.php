@@ -245,7 +245,7 @@
                         $modalAddBusiness.find('form')[0].reset();
                     } else {
                         notify(
-                            "Có lỗi gì đó xảy ra! Nếu xảy ra nhiều lần vui lòng liên hệ Dev để biết thêm chi tiết :D",
+                            res.data?.data[0] ?? "Có lỗi gì đó xảy ra! Nếu xảy ra nhiều lần vui.lên liên hệ Dev để biết thêm chi tiết :D",
                             'error'
                         );
                     }

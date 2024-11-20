@@ -4,16 +4,11 @@
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
 BRANCH="live" # Nhánh cần pull (sửa nếu cần)
 
-# Thư mục chứa code
-TARGET_DIR="$(dirname "$0")"
-
-# Chuyển đến thư mục dự án
-cd "$TARGET_DIR" || exit 1
+cd "$(dirname "$0")"
 
 # Pull code mới nhất
 echo "Pulling the latest code from $REPO_URL..."
-git fetch origin
-git reset --hard origin/$BRANCH
+git pull origin $BRANCH
 
 
 # Cài đặt các dependencies (composer)

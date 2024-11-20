@@ -4,7 +4,10 @@
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
 BRANCH="live" # Nhánh cần pull (sửa nếu cần)
 
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Chuyển vào thư mục của script
+cd "$SCRIPT_DIR" || exit
 
 # Pull code mới nhất
 echo "Pulling the latest code from $REPO_URL..."

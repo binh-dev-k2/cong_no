@@ -15,8 +15,4 @@ php artisan migrate --force
 # Dọn dẹp cache (nếu cần)
 echo "Clearing and optimizing cache..."
 php artisan o:c
-php artisan config:clear
-php artisan config:cache
-php artisan route:clear
-php artisan route:cache
 echo ">>>>>>>Done!"

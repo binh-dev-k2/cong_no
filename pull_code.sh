@@ -5,7 +5,11 @@ cd "$(dirname "$0")"
 sed -i -e 's/\r$//' pull_code.sh
 # Pull code mới nhất
 echo "Pulling the latest code from $REPO_URL..."
-git pull origin $BRANCH
+git clone --branch $BRANCH --single-branch $REPO_URL temp_folder
+rsync -a temp_folder/ . --remove-source-files
+rm -rf temp_folder
+chmod +x ./pull_code.sh
+
 # Cài đặt các dependencies (composer)
 echo "Installing PHP dependencies..."
 composer install --no-dev --optimize-autoloader

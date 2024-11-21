@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Card;
 use App\Models\CardHistory;
+use App\Models\Debt;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +30,12 @@ class CardService
             case '1':
                 $startDate = Carbon::now()->format('d');
                 $endDate = Carbon::now()->addDays(7)->format('d');
-                $query->whereBetween('date_due', [$startDate, $endDate]);
+                $query->whereBetween('date_due', [$startDate, $endDate])
+                    ->whereHas('businesses', function ($query) {
+                        $query->whereNotNull('date_return');
+                    })->whereHas('debts', function ($query) {
+                        $query->where('formality', '!=', 'R');
+                    });
                 break;
 
             default:

@@ -32,4 +32,14 @@ class Card extends Model
     {
         return $this->hasMany(CardHistory::class, 'card_id', 'id');
     }
+
+    public function businesses()
+    {
+        return $this->hasMany(Business::class, 'card_number', 'card_number');
+    }
+
+    public function debts()
+    {
+        return $this->hasMany(Debt::class, 'card_number', 'card_number');
+    }
 }

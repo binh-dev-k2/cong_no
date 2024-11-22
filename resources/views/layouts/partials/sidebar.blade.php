@@ -103,16 +103,14 @@
         </div>
     </div>
     <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
-        <a href="{{ route('update-code') }}"
+        <button
             class="btn btn-flex flex-center btn-custom btn-warning overflow-hidden text-nowrap px-0 h-40px w-100 btn-update-code"
             data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
             title="Cập nhật phiên bản mới">
+            <span class="spinner-border spinner-border-sm align-middle me-2 d-none" id="update-code-spinner"></span>
             <span class="btn-label">Cập nhật</span>
-            <span class="indicator-progress d-none">
-                Loading... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-            </span>
             <i class="ki-outline ki-refresh btn-icon fs-2 m-0"></i>
-        </a>
+        </button>
     </div>
 </div>
 
@@ -121,8 +119,10 @@
         const updateCodeBtn = document.querySelector('.btn-update-code');
         updateCodeBtn.addEventListener('click', function(e) {
             updateCodeBtn.disabled = true;
-            const loadingIndicator = updateCodeBtn.querySelector('.indicator-progress');
+            const loadingIndicator = updateCodeBtn.querySelector('#update-code-spinner');
+            updateCodeBtn.querySelector('.btn-label').textContent = 'Đang cập nhật...';
             loadingIndicator.classList.remove('d-none');
+            window.location.href = "{{ route('update-code') }}";
         });
     })
 </script>

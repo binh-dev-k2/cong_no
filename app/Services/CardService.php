@@ -31,7 +31,7 @@ class CardService
                 $endDate = Carbon::now()->addDays(7)->format('d');
                 $query->whereBetween('date_due', [$startDate, $endDate])
                     ->whereHas('businesses', function ($query) {
-                        $query->whereNotNull('date_return');
+                        $query->whereNull('date_return');
                     })->whereHas('debts', function ($query) {
                         $query->whereMonth('created_at', Carbon::now()->month)->where('formality', 'R');
                     });

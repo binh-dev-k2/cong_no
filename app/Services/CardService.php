@@ -33,7 +33,7 @@ class CardService
                     ->whereHas('businesses', function ($query) {
                         $query->whereNotNull('date_return');
                     })->whereHas('debts', function ($query) {
-                        $query->whereMonth('created_at', Carbon::now()->month)->where('formality', '!=', 'R');
+                        $query->whereMonth('created_at', Carbon::now()->month)->where('formality', 'R');
                     });
                 break;
 

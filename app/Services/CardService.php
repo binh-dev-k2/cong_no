@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Card;
 use App\Models\CardHistory;
-use App\Models\Debt;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

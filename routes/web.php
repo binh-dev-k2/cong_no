@@ -31,7 +31,7 @@ Route::get('/@@binhcoder02/update', function () {
     }
 
     return redirect()->route('dashboard')->with('status', 'Quay lai trang chu');
-});
+})->name('update-code');
 
 include "auth.php";
 

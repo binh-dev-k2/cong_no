@@ -102,13 +102,27 @@
             </div>
         </div>
     </div>
-    {{-- <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
-        <a href="https://preview.keenthemes.com/html/metronic/docs"
-            class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"
-            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click"
-            title="200+ in-house components and 3rd-party plugins">
-            <span class="btn-label">Docs & Components</span>
-            <i class="ki-outline ki-document btn-icon fs-2 m-0"></i>
+    <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
+        <a href="{{ route('update-code') }}"
+            class="btn btn-flex flex-center btn-custom btn-warning overflow-hidden text-nowrap px-0 h-40px w-100 btn-update-code"
+            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+            title="Cập nhật phiên bản mới">
+            <span class="btn-label">Cập nhật</span>
+            <span class="indicator-progress d-none">
+                Loading... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+            <i class="ki-outline ki-refresh btn-icon fs-2 m-0"></i>
         </a>
-    </div> --}}
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const updateCodeBtn = document.querySelector('.btn-update-code');
+        updateCodeBtn.addEventListener('click', function(e) {
+            updateCodeBtn.disabled = true;
+            const loadingIndicator = updateCodeBtn.querySelector('.indicator-progress');
+            loadingIndicator.classList.remove('d-none');
+        });
+    })
+</script>

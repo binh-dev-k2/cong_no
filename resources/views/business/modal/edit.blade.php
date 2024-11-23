@@ -211,7 +211,8 @@
                 phone: $modalEditBusiness.find('input[name="phone"]').val(),
                 fee_percent: parseFloat($modalEditBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalEditBusiness.find('input[name="formality"]:checked').val(),
-                total_money: parseInt($modalEditBusiness.find('input[name="total_money"]').val()),
+                total_money: parseInt($modalEditBusiness.find('input[name="total_money"]').val()
+                    .replace(/[.,]/g, ''), 10),
             }
 
             // console.log(body);

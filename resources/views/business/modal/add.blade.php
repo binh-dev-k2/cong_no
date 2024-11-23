@@ -104,15 +104,16 @@
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2" for="total_money">Số tiền</label>
                                 <input type="text" class="form-control form-control-solid" placeholder="Ex: 1000000"
-                                    name="total_money" id="total_money" required data-type="money"/>
+                                    name="total_money" id="total_money" required data-type="money" />
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2">Khoảng chia</label>
                                 @foreach ($businessMoneys as $businessMoney)
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" value="{{ $businessMoney->key }}"
-                                            name="business_money_key" id="business_money_{{ $businessMoney->key }}"
+                                        <input class="form-check-input" type="radio"
+                                            value="{{ $businessMoney->key }}" name="business_money_key"
+                                            id="business_money_{{ $businessMoney->key }}"
                                             {{ $loop->first ? 'checked' : '' }}>
                                         <label class="form-check-label"
                                             for="business_money_{{ $businessMoney->key }}">
@@ -228,7 +229,8 @@
                 phone: $modalAddBusiness.find('input[name="phone"]').val(),
                 fee_percent: parseFloat($modalAddBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalAddBusiness.find('input[name="formality"]:checked').val(),
-                total_money: parseInt($modalAddBusiness.find('input[name="total_money"]').val()),
+                total_money: parseInt($modalAddBusiness.find('input[name="total_money"]').val()
+                    .replace(/[.,]/g, ''), 10),
                 business_money_key: $modalAddBusiness.find(
                     'input[name="business_money_key"]:checked').val(),
             }
@@ -245,7 +247,8 @@
                         $modalAddBusiness.find('form')[0].reset();
                     } else {
                         notify(
-                            res.data?.data[0] ?? "Có lỗi gì đó xảy ra! Nếu xảy ra nhiều lần vui.lên liên hệ Dev để biết thêm chi tiết :D",
+                            res.data?.data[0] ??
+                            "Có lỗi gì đó xảy ra! Nếu xảy ra nhiều lần vui.lên liên hệ Dev để biết thêm chi tiết :D",
                             'error'
                         );
                     }

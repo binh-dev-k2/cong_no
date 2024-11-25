@@ -25,15 +25,25 @@ class CardService
             })->orWhere('account_number', 'like', "%{$search}%");
         }
 
-        switch ((int)$data['view_type']) {
+        switch ((int) $data['view_type']) {
             case 1:
-                $startDate = Carbon::now()->format('d');
-                $endDate = Carbon::now()->addDays(7)->format('d');
-                if ($endDate > Carbon::now()->daysInMonth) {
-                    $endDate = Carbon::now()->daysInMonth;
+                $startDate = Carbon::now(); // Ngày hiện tại
+                $endDate = Carbon::now()->addDays(7); // 7 ngày sau'd');
+                if ($endDate->month > Carbon::now()->month) {
+                    $endDate = Carbon::now()->endOfMonth();
                 }
-                $query->whereBetween('date_due', [$startDate, $endDate])
-                    ->whereNull('date_return');
+
+                $month = Carbon::now()->month;
+                $year = Carbon::now()->year;
+                $formality = 'Đ';
+
+                $query->whereBetween('date_due', [$startDate->day, $endDate->day])
+                    ->whereNull('date_return')
+                    ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
+                        $query->whereMonth('created_at', $month)
+                            ->whereYear('created_at', $year)
+                            ->where('formality', $formality);
+                    });
                 break;
 
             default:

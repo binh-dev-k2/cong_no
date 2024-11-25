@@ -34,7 +34,7 @@ class CardService
                     ->whereHas('debts', function ($query) {
                         $query->whereMonth('created_at', Carbon::now()->month)
                             ->whereYear('created_at', Carbon::now()->year)
-                            ->where('formality', 'R');
+                            ->where('formality', '!=', 'Đ');
                     });
                 break;
 

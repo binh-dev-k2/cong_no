@@ -27,15 +27,15 @@ class CardService
 
         switch ($data['view_type']) {
             case '1':
-                $startDate = Carbon::now()->format('d');
-                $endDate = Carbon::now()->addDays(7)->format('d');
-                $query->whereBetween('date_due', [$startDate, $endDate])
-                    ->whereNull('date_return')
-                    ->whereDoesntHave('debts', function ($query) {
-                        $query->whereMonth('created_at', Carbon::now()->month)
-                            ->whereYear('created_at', Carbon::now()->year)
-                            ->where('formality', 'Đ');
-                    });
+                // $startDate = Carbon::now()->format('d');
+                // $endDate = Carbon::now()->addDays(7)->format('d');
+                // $query->whereBetween('date_due', [$startDate, $endDate])
+                //     ->whereNull('date_return')
+                //     ->whereDoesntHave('debts', function ($query) {
+                //         $query->whereMonth('created_at', Carbon::now()->month)
+                //             ->whereYear('created_at', Carbon::now()->year)
+                //             ->where('formality', 'Đ');
+                //     });
                 break;
 
             default:

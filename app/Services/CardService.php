@@ -32,13 +32,13 @@ class CardService
                 if ($endDate > Carbon::now()->daysInMonth) {
                     $endDate = Carbon::now()->daysInMonth;
                 }
-                $query->whereBetween('date_due', [$startDate, $endDate])
-                    ->whereNull('date_return')
-                    ->whereDoesntHave('debts', function ($query) {
-                        $query->whereMonth('created_at', Carbon::now()->month)
-                            ->whereYear('created_at', Carbon::now()->year)
-                            ->where('formality', 'Đ');
-                    });
+                // $query->whereBetween('date_due', [$startDate, $endDate])
+                //     ->whereNull('date_return')
+                //     ->whereDoesntHave('debts', function ($query) {
+                //         $query->whereMonth('created_at', Carbon::now()->month)
+                //             ->whereYear('created_at', Carbon::now()->year)
+                //             ->where('formality', 'Đ');
+                //     });
                 break;
 
             default:

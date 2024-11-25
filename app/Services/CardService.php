@@ -25,8 +25,8 @@ class CardService
             })->orWhere('account_number', 'like', "%{$search}%");
         }
 
-        switch ($data['view_type']) {
-            case '1':
+        switch ((int)$data['view_type']) {
+            case 1:
                 $startDate = Carbon::now()->format('d');
                 $endDate = Carbon::now()->addDays(7)->format('d');
                 if ($endDate > Carbon::now()->daysInMonth) {

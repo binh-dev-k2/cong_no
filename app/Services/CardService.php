@@ -27,17 +27,26 @@ class CardService
 
         switch ((int) $data['view_type']) {
             case 1:
-                $startDate = Carbon::now(); // Ngày hiện tại
-                $endDate = Carbon::now()->addDays(7); // 7 ngày sau'd');
-                if ($endDate->month > Carbon::now()->month) {
-                    $endDate = Carbon::now()->endOfMonth();
-                }
+                $now = Carbon::now()->startOfDay();
+                $endDate = Carbon::now()->addDays(7)->endOfDay();
 
-                $month = Carbon::now()->month;
-                $year = Carbon::now()->year;
+                $month = $now->month;
+                $year = $now->year;
                 $formality = 'Đ';
 
-                $query->whereBetween('date_due', [$startDate->day, $endDate->day])
+                $query->whereBetween(DB::raw("
+                STR_TO_DATE(
+                    CONCAT(
+                        $year, '-',
+                        CASE
+                            WHEN date_due < {$now->day} THEN $month + 1
+                            ELSE $month
+                        END, '-',
+                        date_due
+                    ),
+                    '%Y-%m-%d'
+                )
+            "), [$now, $endDate])
                     ->whereNull('date_return')
                     ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
                         $query->whereMonth('created_at', $month)

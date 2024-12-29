@@ -22,7 +22,8 @@ class CardService
             $search = $data['search'];
             $query->whereHas('customer', function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%");
-            })->orWhere('account_number', 'like', "%{$search}%");
+            })->orWhere('account_number', 'like', "%{$search}%")
+            ->orWhere('card_number', 'like', "%{$search}%");
         }
 
         switch ((int) $data['view_type']) {
@@ -35,18 +36,22 @@ class CardService
                 $formality = 'Đ';
 
                 $query->whereBetween(DB::raw("
-                STR_TO_DATE(
-                    CONCAT(
-                        $year, '-',
-                        CASE
-                            WHEN date_due < {$now->day} THEN $month + 1
-                            ELSE $month
-                        END, '-',
-                        date_due
-                    ),
-                    '%Y-%m-%d'
-                )
-            "), [$now, $endDate])
+                    STR_TO_DATE(
+                        CONCAT(
+                            CASE
+                                WHEN $month = 12 AND date_due < {$now->day} THEN $year + 1
+                                ELSE $year
+                            END, '-',
+                            CASE
+                                WHEN date_due < {$now->day} THEN
+                                    CASE WHEN $month = 12 THEN 1 ELSE $month + 1 END
+                                ELSE $month
+                            END, '-',
+                            date_due
+                        ),
+                        '%Y-%m-%d'
+                    )
+                "), [$now, $endDate])
                     ->whereNull('date_return')
                     ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
                         $query->whereMonth('created_at', $month)

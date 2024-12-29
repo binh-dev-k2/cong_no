@@ -25,7 +25,8 @@ Route::middleware('auth:sanctum')->group(function () {
     //dashboard
     Route::get('dashboard/chart-customer', [DashboardController::class, 'getChartCustomer'])->name('api.dashboard.getChartCustomer');
     Route::get('dashboard/total-debit', [DashboardController::class, 'getTotalDebit'])->name('api.dashboard.getTotalDebit');
-    Route::get('dashboard/getTotalBusiness', [DashboardController::class, 'getTotalBusiness'])->name('api.dashboard.getTotalBusiness');
+    Route::get('dashboard/total-business', [DashboardController::class, 'getTotalBusiness'])->name('api.dashboard.getTotalBusiness');
+    Route::post('dashboard/card-expired', [DashboardController::class, 'getCardExpired'])->name('api.dashboard.getCardExpired');
 
     //card
     Route::post('card/find', [CardController::class, 'find'])->name('api.card.find');

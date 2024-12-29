@@ -54,4 +54,27 @@ class DashBoardService
             'totalBusiness' => $query
         ];
     }
+
+    public function getCardExpired($data)
+    {
+        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
+        $pageLength = $data['length'] ?? 50;
+        $skip = ($pageNumber - 1) * $pageLength;
+
+        $query = Card::query()
+            ->whereRaw("CONCAT(year_expired, '-', month_expired) <= CURDATE()");
+
+        $recordsFiltered = $recordsTotal = $query->count();
+        $result = $query->skip($skip)
+            ->with(['customer', 'bank'])
+            ->take($pageLength)
+            ->get();
+
+        return [
+            "draw" => $data['draw'] ?? 1,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            'data' => $result
+        ];
+    }
 }

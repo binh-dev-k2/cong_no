@@ -90,6 +90,31 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-12">
+                            <div class="card card-flush">
+                                <div class="card-header pt-5">
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bold text-gray-900">Thẻ hết hạn</span>
+                                        <span class="text-gray-500 pt-2 fw-semibold fs-6">Danh sách thẻ đã hết hạn</span>
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5" id="table-card-expired">
+                                            <thead>
+                                                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                                    <th class="text-center min-w-125px">STT</th>
+                                                    <th class="text-center min-w-125px">Khách hàng</th>
+                                                    <th class="text-center min-w-125px">Số thẻ</th>
+                                                    <th class="text-center min-w-125px">Hết hạn</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,9 +127,9 @@
         let routes = {
             getChartCustomer: "{{ route('api.dashboard.getChartCustomer') }}",
             getTotalDebit: "{{ route('api.dashboard.getTotalDebit') }}",
-            getTotalBusiness: "{{ route('api.dashboard.getTotalBusiness') }}"
+            getTotalBusiness: "{{ route('api.dashboard.getTotalBusiness') }}",
+            getCardExpired: "{{ route('api.dashboard.getCardExpired') }}",
         }
-        var datatable;
     </script>
     <script src="{{ asset('assets/js/dashboard/dashBoardChart.js') }}"></script>
 @endsection

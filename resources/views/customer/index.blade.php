@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 @section('title')
-    Trang thống kê
+    Khách hàng
 @endsection
 @section('header')
     <style>

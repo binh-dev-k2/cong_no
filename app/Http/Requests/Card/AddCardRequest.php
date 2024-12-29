@@ -34,6 +34,8 @@ class AddCardRequest extends FormRequest
             'bank_code' => 'required|string|exists:banks,code',
             'account_name' => 'nullable|string',
             'fee_percent' => 'required|numeric',
+            'month_expired' => 'nullable|numeric|min:1|max:12',
+            'year_expired' => 'nullable|numeric|min:2000|max:3000',
         ];
     }
     public function messages()

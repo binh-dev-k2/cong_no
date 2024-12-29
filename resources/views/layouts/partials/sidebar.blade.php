@@ -124,5 +124,11 @@
             loadingIndicator.classList.remove('d-none');
             window.location.href = "{{ route('update-code') }}";
         });
+
+        setTimeout(() => {
+            if (!$('#kt_app_sidebar').hasClass('drawer') && !$('#kt_app_sidebar').hasClass('drawer-start')) {
+                $('#kt_app_sidebar').addClass('drawer drawer-start');
+            }
+        }, 1000);
     })
 </script>

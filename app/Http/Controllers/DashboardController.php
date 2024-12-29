@@ -37,4 +37,9 @@ class DashboardController extends Controller
         $data = $this->dashBoardService->getTotalBusiness();
         return response()->json($data);
     }
+
+    public function getCardExpired(Request $request){
+        $data = $this->dashBoardService->getCardExpired($request->input());
+        return response()->json($data);
+    }
 }

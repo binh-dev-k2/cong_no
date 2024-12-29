@@ -16,22 +16,22 @@
                         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_modal_add_card_header"
                         data-kt-scroll-wrappers="#kt_modal_add_card_scroll" data-kt-scroll-offset="200px">
-                        <div class="d-flex flex-column mb-7 fv-row">
+                        <div class="d-flex flex-column mb-3 fv-row">
                             <label class="required fs-6 fw-semibold mb-2" for="card_number">Số thẻ</label>
                             <input type="number" class="form-control form-control-solid" placeholder=""
                                 name="card_number" id="card_number" />
                         </div>
-                        <div class="d-flex flex-column mb-7 fv-row">
+                        <div class="d-flex flex-column mb-3 fv-row">
                             <label class="required fs-6 fw-semibold mb-2" for="account_name">Chủ tài khoản</label>
                             <input type="text" class="form-control form-control-solid" placeholder=""
                                 name="account_name" id="account_name" />
                         </div>
-                        <div class="d-flex flex-column mb-7 fv-row">
+                        <div class="d-flex flex-column mb-3 fv-row">
                             <label class="fs-6 fw-semibold mb-2" for="account_number">Số tài khoản</label>
                             <input type="number" class="form-control form-control-solid" placeholder=""
                                 name="account_number" id="account_number" />
                         </div>
-                        <div class="d-flex flex-column mb-7 fv-row" id="select_bank">
+                        <div class="d-flex flex-column mb-3 fv-row" id="select_bank">
                             <label class="required fs-6 fw-semibold mb-2" for="select_bank_list"> Ngân hàng </label>
                             <select class="form-select form-select-transparent" data-hide-search="false"
                                 placeholder="Chọn ngân hàng" id="select_bank_list" name="bank_code">
@@ -44,7 +44,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="row g-9 mb-7">
+                        <div class="row g-9 mb-3">
                             <div class="col-md-6 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2">Ngày đến hạn</label>
                                 <div class="position-relative d-flex align-items-center">
@@ -85,7 +85,14 @@
                             <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
                             <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" step="any"/>
                         </div>
-
+                        <div class="d-flex flex-column mb-3 fv-row">
+                            <label class="fs-6 fw-semibold mb-2" for="expired">Tháng/Năm hết hạn</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control form-control-solid" placeholder="Ex: 1" name="month_expired" min="1" max="12" style="width: 50px"/>
+                                <span class="input-group-text">/</span>
+                                <input type="number" class="form-control form-control-solid" placeholder="Ex: 2024" name="year_expired" min="2000" style="width: 70px"/>
+                            </div>
+                        </div>
                         <!--        <div class="d-flex flex-column mb-3 fv-row">-->
                         <!--            <label class="required fs-6 fw-semibold mb-2" for="total_money">Tổng số tiền</label>-->
                         <!--            <input type="number" class="form-control form-control-solid"-->

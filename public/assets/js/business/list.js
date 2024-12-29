@@ -65,7 +65,9 @@ var BusinessList = function () {
         const year = dateTime.getFullYear();
         const month = String(dateTime.getMonth() + 1).padStart(2, "0");
         const day = String(dateTime.getDate()).padStart(2, "0");
-        return `${day}-${month}-${year}`;
+        const hour = String(dateTime.getHours()).padStart(2, "0");
+        const minute = String(dateTime.getMinutes()).padStart(2, "0");
+        return `${day}-${month}-${year} ${hour}:${minute}`;
     }
 
     const initEditPayExtra = () => {
@@ -323,10 +325,10 @@ var BusinessList = function () {
     return {
         initDatatable: async function () {
             datatable = $("#business_table").DataTable({
-                fixedColumns: {
-                    leftColumns: 0,
-                    rightColumns: 1
-                },
+                // fixedColumns: {
+                //     leftColumns: 0,
+                //     rightColumns: 1
+                // },
                 lengthMenu: [10, 20, 50, 100],
                 pageLength: 50,
                 ordering: false,

@@ -612,6 +612,12 @@ var CustomerList = function () {
                 note: formEditCard.querySelector(
                     'textarea[name="note"]'
                 ).value,
+                month_expired: form.querySelector(
+                    'input[name="month_expired"]'
+                ).value,
+                year_expired: form.querySelector(
+                    'input[name="year_expired"]'
+                ).value,
             };
 
             axios.post(
@@ -703,9 +709,9 @@ var CustomerList = function () {
     return {
         initDatatable: async function () {
             datatable = $("#kt_customers_table").DataTable({
-                fixedColumns: {
-                    leftColumns: 2,
-                },
+                // fixedColumns: {
+                //     leftColumns: 2,
+                // },
                 lengthMenu: [10, 20, 50, 100],
                 pageLength: 50,
                 searchDelay: 500,

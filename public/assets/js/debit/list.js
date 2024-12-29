@@ -119,10 +119,10 @@ var DebitsList = function () {
     return {
         initDatatable: async function () {
             datatable = $("#kt_debit_table").DataTable({
-                fixedColumns: {
-                    leftColumns: 1,
-                    rightColumns: 1
-                },
+                // fixedColumns: {
+                //     leftColumns: 1,
+                //     rightColumns: 1
+                // },
                 lengthMenu: [10, 20, 50, 100],
                 pageLength: 50,
                 searchDelay: 500,

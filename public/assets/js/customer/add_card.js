@@ -85,6 +85,26 @@ const FormAddCard = () => {
                                 },
                             },
                         },
+                        month_expired: {
+                            required: $('[name="year_expired"]').val(),
+                            validators: {
+                                between: {
+                                    min: 1,
+                                    max: 12,
+                                    message: "Tháng hết hạn thẻ phải nằm trong khoảng 1 tới 12",
+                                }
+                            },
+                        },
+                        year_expired: {
+                            required: $('[name="month_expired"]').val(),
+                            validators: {
+                                between: {
+                                    min: 2000,
+                                    max: 3000,
+                                    message: "Năm hết hạn thẻ phải bắt đầu từ 2000",
+                                }
+                            },
+                        },
                     },
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
@@ -130,6 +150,12 @@ const FormAddCard = () => {
                                 ).value,
                                 note: form.querySelector(
                                     'textarea[name="note"]'
+                                ).value,
+                                month_expired: form.querySelector(
+                                    'input[name="month_expired"]'
+                                ).value,
+                                year_expired: form.querySelector(
+                                    'input[name="year_expired"]'
                                 ).value,
                             };
                             const headers = {

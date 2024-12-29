@@ -55,6 +55,13 @@ class AddCardRequest extends FormRequest
             'bank_code.required' => 'Ngân hàng  là bắt buộc.',
             'fee_percent.required' => 'Phần trăm phí là bắt buộc.',
             'fee_percent.numeric' => 'Phần trăm phí phải là số.',
+
+            'month_expired.numeric' => 'Tháng hết hạn phải là số và nằm trong khoảng từ 1 đến 12.',
+            'month_expired.min' => 'Tháng hết hạn phải lớn hơn 0.',
+            'month_expired.max' => 'Tháng hết hạn phải nhỏ hơn 13.',
+            'year_expired.numeric' => 'Năm hết hạn phải là số và nằm trong khoảng từ 2000 đến 3000.',
+            'year_expired.min' => 'Năm hết hạn phải lớn hơn 1999.',
+            'year_expired.max' => 'Năm hết hạn phải nhỏ hơn 3001.',
         ];
     }
 

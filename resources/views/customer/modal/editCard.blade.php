@@ -92,6 +92,14 @@
                             <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>
                             <input type="number" class="form-control form-control-solid" placeholder="Nhập phần trăm phí" name="fee_percent" step="any"/>
                         </div>
+                        <div class="d-flex flex-column mb-3 fv-row">
+                            <label class="fs-6 fw-semibold mb-2" for="expired">Tháng/Năm hết hạn</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control form-control-solid" placeholder="Ex: 1" name="month_expired" min="1" max="12" style="width: 50px"/>
+                                <span class="input-group-text">/</span>
+                                <input type="number" class="form-control form-control-solid" placeholder="Ex: 2024" name="year_expired" min="2000" style="width: 70px"/>
+                            </div>
+                        </div>
 <!--                        <div class="d-flex flex-column mb-3 fv-row">-->
 <!--                            <label class="required fs-6 fw-semibold mb-2" for="fee_percent">Phần trăm phí</label>-->
 <!--                            <input type="number" class="form-control form-control-solid"-->

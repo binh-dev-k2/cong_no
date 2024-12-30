@@ -424,8 +424,6 @@ var CustomerList = function () {
                 formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
-                formEdit.querySelector('input[name="month_expired"]').value = data.month_expired ?? '';
-                formEdit.querySelector('input[name="year_expired"]').value = data.year_expired ?? '';
                 listCard = data.customer.cards
                 $("#select_edit_card").empty()
                 listCard.forEach(card => {
@@ -519,6 +517,8 @@ var CustomerList = function () {
                 formEditCard.querySelector('input[name="date_return"]').value = data.date_return ?? '';
                 formEditCard.querySelector('input[name="fee_percent"]').value = data.fee_percent ?? '';
                 formEditCard.querySelector('textarea[name="note"]').value = data.note ?? '';
+                formEditCard.querySelector('input[name="month_expired"]').value = data.month_expired ?? '';
+                formEditCard.querySelector('input[name="year_expired"]').value = data.year_expired ?? '';
                 $('#modal_edit_card').modal('show');
             })
         })

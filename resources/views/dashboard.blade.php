@@ -131,5 +131,5 @@
             getCardExpired: "{{ route('api.dashboard.getCardExpired') }}",
         }
     </script>
-    <script src="{{ asset('assets/js/dashboard/dashBoardChart.js') }}"></script>
+    <script src="{{ asset('assets/js/dashboard/dashboardChart.js') }}"></script>
 @endsection

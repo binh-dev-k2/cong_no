@@ -612,10 +612,10 @@ var CustomerList = function () {
                 note: formEditCard.querySelector(
                     'textarea[name="note"]'
                 ).value,
-                month_expired: form.querySelector(
+                month_expired: formEditCard.querySelector(
                     'input[name="month_expired"]'
                 ).value,
-                year_expired: form.querySelector(
+                year_expired: formEditCard.querySelector(
                     'input[name="year_expired"]'
                 ).value,
             };
@@ -791,10 +791,12 @@ var CustomerList = function () {
                         data: 'card_number',
                         orderable: false,
                         render: function (data, type, row) {
+                            const timeExpired = row.month_expired ? `${row.month_expired}-${row.year_expired}` : '';
                             return `
                                 <div class="px-2 py-3 text-center rounded" ${row.date_return ? 'style="color:white; background-color: #f582ff"' : ''}>
                                     ${data ? formatNumber(data) : ''}
                                 </div>
+                                ${timeExpired ? `<div class="text-center">Hết hạn: ${timeExpired}</div>` : ''}
                             `;
                         }
                     },

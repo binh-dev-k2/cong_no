@@ -424,6 +424,8 @@ var CustomerList = function () {
                 formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
+                formEdit.querySelector('input[name="month_expired"]').value = data.month_expired ?? '';
+                formEdit.querySelector('input[name="year_expired"]').value = data.year_expired ?? '';
                 listCard = data.customer.cards
                 $("#select_edit_card").empty()
                 listCard.forEach(card => {

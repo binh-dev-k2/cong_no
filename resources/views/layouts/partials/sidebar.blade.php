@@ -125,10 +125,14 @@
             window.location.href = "{{ route('update-code') }}";
         });
 
-        setTimeout(() => {
-            if (!$('#kt_app_sidebar').hasClass('drawer') && !$('#kt_app_sidebar').hasClass('drawer-start')) {
-                $('#kt_app_sidebar').addClass('drawer drawer-start');
+        window.addEventListener('resize', function() {
+            if (window.innerWidth < 992) {
+                if (!$('#kt_app_sidebar').hasClass('drawer') && !$('#kt_app_sidebar').hasClass('drawer-start')) {
+                    $('#kt_app_sidebar').addClass('drawer drawer-start');
+                }
+            } else {
+                $('#kt_app_sidebar').removeClass('drawer drawer-start');
             }
-        }, 1000);
+        });
     })
 </script>

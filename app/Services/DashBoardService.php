@@ -62,6 +62,8 @@ class DashBoardService
         $skip = ($pageNumber - 1) * $pageLength;
 
         $query = Card::query()
+            ->whereNotNull('year_expired')
+            ->whereNotNull('month_expired')
             ->whereRaw("CONCAT(year_expired, '-', LPAD(month_expired, 2, 0)) <= CURDATE()");
 
         $recordsFiltered = $recordsTotal = $query->count();

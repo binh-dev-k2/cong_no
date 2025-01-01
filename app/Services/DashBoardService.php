@@ -62,7 +62,7 @@ class DashBoardService
         $skip = ($pageNumber - 1) * $pageLength;
 
         $query = Card::query()
-            ->whereRaw("CONCAT(year_expired, '-', month_expired) <= CURDATE()");
+            ->whereRaw("CONCAT(year_expired, '-', LPAD(month_expired, 2, 0)) <= CURDATE()");
 
         $recordsFiltered = $recordsTotal = $query->count();
         $result = $query->skip($skip)

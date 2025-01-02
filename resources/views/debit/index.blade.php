@@ -49,24 +49,36 @@
                             <input type="text" id="debit_search" class="form-control form-control-solid w-250px ps-12 "
                                 data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
                         </div>
-                        <div class="form-floating" style="min-width: 150px; cursor: pointer">
-                            <select class="form-select form-select-solid" id="debit_month" name="month"
-                                aria-label="Tháng">
-                                <option value="" selected>Toàn bộ</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                            <label for="debit_month">Tháng</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-floating" style="min-width: 150px; cursor: pointer">
+                                <select class="form-select form-select-solid" id="debit_month" name="month"
+                                    aria-label="Tháng">
+                                    <option value="" selected>Toàn bộ</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <label for="debit_month">Tháng</label>
+                            </div>
+
+                            <div class="form-floating" style="min-width: 150px; cursor: pointer">
+                                <select class="form-select form-select-solid" id="debit_year" name="year"
+                                    aria-label="Năm">
+                                    @foreach (range(2022, date('Y')) as $year)
+                                        <option value="{{ $year }}" @if ($year == date('Y')) selected @endif>{{ $year }}</option>
+                                    @endforeach
+                                </select>
+                                <label for="debit_year">Năm</label>
+                            </div>
                         </div>
                     </div>
                 </div>

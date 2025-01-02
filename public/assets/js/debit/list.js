@@ -22,13 +22,26 @@ var DebitsList = function () {
                 prevPhone = null;
                 datatable.draw();
             }));
+
+        document.querySelector('#debit_year')
+            .addEventListener("change", (function (e) {
+                prevPhone = null;
+                datatable.draw();
+            }));
     }
 
     const initTotalMoney = () => {
         const totalFee = document.querySelector('.c-total-fee');
         const totalMoney = document.querySelector('.c-total-money');
 
-        axios.post(routes.debitTotalMoney, { month: document.querySelector('#debit_month').value }, { headers: headers })
+        axios.post(routes.debitTotalMoney,
+            {
+                month: document.querySelector('#debit_month').value,
+                year: document.querySelector('#debit_year').value
+            },
+            {
+                headers: headers
+            })
             .then((response) => {
                 totalFee.querySelector('span').innerText = parseInt(response.data.data.totalFee).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1);
                 totalMoney.querySelector('span').innerText = parseInt(response.data.data.totalMoney).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1);
@@ -144,6 +157,7 @@ var DebitsList = function () {
                     data: function (d) {
                         d.search = $('input[data-kt-debit-table-filter]').val();
                         d.month = $('#debit_month').val();
+                        d.year = $('#debit_year').val();
                     }
                 },
                 columnDefs: [

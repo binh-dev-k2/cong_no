@@ -6,15 +6,43 @@ use App\Models\Business;
 use App\Models\Card;
 use App\Models\Debt;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashBoardService
 {
     public function getChartCustomer(): array
     {
         $query = Card::query()->whereHas('customer');
-        $startDate = Carbon::now()->format('d');
-        $endDate = Carbon::now()->addDays(7)->format('d');
-        $cards = $query->whereBetween('date_due', [$startDate, $endDate])->get();
+        $now = Carbon::now()->startOfDay();
+        $endDate = Carbon::now()->addDays(7)->endOfDay();
+
+        $month = $now->month;
+        $year = $now->year;
+        $formality = 'Đ';
+
+        $cards = $query->whereBetween(DB::raw("
+            STR_TO_DATE(
+                CONCAT(
+                    CASE
+                        WHEN $month = 12 AND date_due < {$now->day} THEN $year + 1
+                        ELSE $year
+                    END, '-',
+                    CASE
+                        WHEN date_due < {$now->day} THEN
+                            CASE WHEN $month = 12 THEN 1 ELSE $month + 1 END
+                        ELSE $month
+                    END, '-',
+                    date_due
+                ),
+                '%Y-%m-%d'
+            )
+        "), [$now, $endDate])
+            ->whereNull('date_return')
+            ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
+                $query->whereMonth('created_at', $month)
+                    ->whereYear('created_at', $year)
+                    ->where('formality', $formality);
+            });
 
         $totalHasBeenReminded = 0;
         foreach ($cards as $card) {

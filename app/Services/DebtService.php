@@ -24,10 +24,11 @@ class DebtService
                 ->orWhere('card_number', 'like', "%{$search}%");
         }
 
+        $query->whereYear('updated_at', $data['year'] ?? Carbon::now()->year);
+
         if (isset($data['month'])) {
             $query->where('status', Debt::STATUS_PAID)
-                ->whereMonth('updated_at', $data['month'])
-                ->whereYear('updated_at', Carbon::now()->year);
+            ->whereMonth('updated_at', $data['month']);
         } else {
             $query->where('status', Debt::STATUS_UNPAID);
         }

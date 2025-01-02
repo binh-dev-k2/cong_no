@@ -116,7 +116,7 @@ class DebtService
 
     public function getTotalFee($month = null, $year = null)
     {
-        $query = Debt::query()->whereYear('created_at', $year ?? Carbon::now()->year);
+        $query = Debt::query()->whereYear('updated_at', $year ?? Carbon::now()->year);
 
         if ($month) {
             $query->where('status', Debt::STATUS_PAID)
@@ -130,7 +130,7 @@ class DebtService
 
     public function getTotalMoney($month = null, $year = null)
     {
-        $query = Debt::query()->whereYear('created_at', $year ?? Carbon::now()->year);
+        $query = Debt::query()->whereYear('updated_at', $year ?? Carbon::now()->year);
         if ($month) {
             $query->where('status', Debt::STATUS_PAID)
                 ->whereMonth('updated_at', $month)

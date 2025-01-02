@@ -28,7 +28,7 @@ class DebtService
 
         if (isset($data['month'])) {
             $query->where('status', Debt::STATUS_PAID)
-            ->whereMonth('updated_at', $data['month']);
+                ->whereMonth('updated_at', $data['month']);
         } else {
             $query->where('status', Debt::STATUS_UNPAID);
         }
@@ -45,7 +45,7 @@ class DebtService
         $sortedDebts = $this->customSort($debts, $skip + $pageLength);
 
         $paginatedDebts = array_slice($sortedDebts, $skip, $pageLength);
-        $this->calculateSumAmount($paginatedDebts, $data['month']);
+        $this->calculateSumAmount($paginatedDebts, $data['month'], $data['year']);
 
         return [
             "draw" => $data['draw'] ?? 1,
@@ -75,7 +75,7 @@ class DebtService
         return $sortedArray;
     }
 
-    public function calculateSumAmount(&$array, $month)
+    public function calculateSumAmount(&$array, $month, $year)
     {
         $phoneArray = [];
 
@@ -89,10 +89,11 @@ class DebtService
             $sumAmount = $item['status'] === Debt::STATUS_PAID
                 ? Debt::where('status', Debt::STATUS_PAID)
                     ->whereMonth('created_at', $month)
-                    ->whereYear('created_at', Carbon::now()->year)
+                    ->whereYear('created_at', $year ?? Carbon::now()->year)
                     ->where('phone', $item['phone'])
                     ->sum('total_amount')
                 : Debt::where('status', Debt::STATUS_UNPAID)
+                    ->whereYear('created_at', $year ?? Carbon::now()->year)
                     ->where('phone', $item['phone'])
                     ->sum('total_amount');
 

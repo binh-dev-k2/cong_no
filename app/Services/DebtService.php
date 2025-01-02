@@ -114,13 +114,13 @@ class DebtService
         }
     }
 
-    public function getTotalFee($month = null)
+    public function getTotalFee($month = null, $year = null)
     {
-        $query = Debt::query();
+        $query = Debt::query()->whereYear('created_at', $year ?? Carbon::now()->year);
+
         if ($month) {
             $query->where('status', Debt::STATUS_PAID)
-                ->whereMonth('updated_at', $month)
-                ->whereYear('updated_at', Carbon::now()->year);
+                ->whereMonth('updated_at', $month);
         } else {
             $query->where('status', Debt::STATUS_UNPAID);
         }
@@ -128,9 +128,9 @@ class DebtService
         // return $query->where('formality', '!=', 'R')->sum('total_amount');
     }
 
-    public function getTotalMoney($month = null)
+    public function getTotalMoney($month = null, $year = null)
     {
-        $query = Debt::query();
+        $query = Debt::query()->whereYear('created_at', $year ?? Carbon::now()->year);
         if ($month) {
             $query->where('status', Debt::STATUS_PAID)
                 ->whereMonth('updated_at', $month)

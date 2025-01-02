@@ -23,8 +23,9 @@ class DebitController extends Controller
     public function getTotalMoney(Request $request)
     {
         $month = $request->get('month');
-        $totalMoney = $this->debtService->getTotalMoney($month);
-        $totalFee = $this->debtService->getTotalFee($month);
+        $year = $request->get('year');
+        $totalMoney = $this->debtService->getTotalMoney($month, $year);
+        $totalFee = $this->debtService->getTotalFee($month, $year);
         return jsonResponse(0, ['totalMoney' => $totalMoney, 'totalFee' => $totalFee]);
     }
 

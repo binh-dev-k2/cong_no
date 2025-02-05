@@ -206,7 +206,7 @@
                 ],
             });
 
-            $('machine-modal').on('hidden.bs.modal', function(e) {
+            $('#machine-modal').on('hidden.bs.modal', function(e) {
                 $(this).find('input[name="id"]').val('');
                 $(this).find('form')[0].reset();
             })

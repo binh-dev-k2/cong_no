@@ -130,7 +130,7 @@
                     } else {
                         notify(
                             res.data.data.join(", ") ??
-                            "Có lỗi gì đó xảy ra! Nếu xảy ra nhiều lần vui lòng liên hệ Dev để biết thêm chi tiết :D",
+                            "Có lỗi gì đó xảy ra! Vui lòng liên hệ để biết thêm chi tiết",
                             'error'
                         );
                     }

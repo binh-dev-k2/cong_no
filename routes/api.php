@@ -6,6 +6,7 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebitController;
+use App\Http\Controllers\MachineController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,4 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user/datatable', [UserController::class, 'datatable'])->name('api.user.datatable');
     Route::post('user/delete', [UserController::class, 'delete'])->name('api.user.delete');
     Route::post('user/register', [UserController::class, 'register'])->name('api.user.register');
+
+    //machine
+    Route::post('machine/datatable', [MachineController::class, 'datatable'])->name('api.machine.list');
+    Route::post('machine/store', [MachineController::class, 'store'])->name('api.machine.store');
+    Route::post('machine/update', [MachineController::class, 'update'])->name('api.machine.update');
+    Route::post('machine/delete', [MachineController::class, 'delete'])->name('api.machine.delete');
 });

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class CardService
 {
-    function filterDatatableCustomer(array $data)
+    public function filterDatatableCustomer(array $data)
     {
         $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
         $pageLength = $data['length'] ?? 50;
@@ -20,10 +20,12 @@ class CardService
 
         if (isset($data['search'])) {
             $search = $data['search'];
+
             $query->whereHas('customer', function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%");
             })->orWhere('account_number', 'like', "%{$search}%")
-            ->orWhere('card_number', 'like', "%{$search}%");
+                ->orWhere('card_number', 'like', "%{$search}%")
+                ->orWhere('account_name', 'like', "%{$search}%");
         }
 
         switch ((int) $data['view_type']) {

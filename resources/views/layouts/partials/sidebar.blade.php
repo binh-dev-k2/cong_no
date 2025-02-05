@@ -98,6 +98,20 @@
                         <!--end:Menu link-->
                     </div>
 
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link @if (Route::currentRouteName() == 'machine') active @endif" href="{{ route('machine') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-screen fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Máy</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -7,38 +7,93 @@
         <div class="modal-body py-10 px-lg-17">
             <div class="scroll-y me-n7 pe-7" style="max-height: calc(100vh - 30rem)">
                 <div class="content">
-                    @foreach ($businessMoneys as $key => $businessMoney)
-                        <div class="card mb-3 business-setting-container">
-                            <div class="card-header d-flex justify-content-end" style="min-height: 40px!important">
-                                <button type="button" class="btn btn-danger btn-sm delete-business-setting"
-                                    style="margin-right: -30px">
-                                    <i class="bi bi-x-circle p-0"></i>
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex flex-column mb-3 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Mốc (Triệu)</label>
-                                    <input type="number" class="form-control form-control-solid"
-                                        value="{{ $key }}" name="key[]" placeholder="Khoảng giá (triệu)"
-                                        required>
+                    <?php
+                    $businessSettingMoney = \App\Models\BusinessSetting::where('type', 'MONEY')->orderBy('value')->get()->groupBy('key') ?? [];
+                    $businessSettingPercent = \App\Models\BusinessSetting::where('type', 'PERCENT')->orderBy('value')->get()->groupBy('key') ?? [];
+                    ?>
+                    @isset($businessSettingMoney)
+                        @foreach ($businessSettingMoney as $key => $businessSetting)
+                            <div class="card mb-3 business-setting-container">
+                                <div class="card-header d-flex justify-content-end" style="min-height: 40px!important">
+                                    <button type="button" class="btn btn-danger btn-sm delete-business-setting"
+                                        style="margin-right: -30px">
+                                        <i class="bi bi-x-circle p-0"></i>
+                                    </button>
                                 </div>
+                                <div class="card-body">
+                                    <div class="d-flex flex-column mb-3 fv-row">
+                                        <label class="required fs-6 fw-semibold mb-2">Loại</label>
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="radio" value="MONEY" name="type" checked="{{ $busi }}"
+                                                    required />
+                                                <label class="form-check-label">
+                                                    Khoảng giá
+                                                </label>
+                                            </div>
+                                            <div class="form-check form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="radio" value="PERCENT"
+                                                    name="type" checked="{{ $busi }}" required />
+                                                <label class="form-check-label">
+                                                    % phí
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <div class="d-flex flex-column mb-3 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Khoảng nhỏ</label>
-                                    <input type="text" class="form-control form-control-solid" min="0"
-                                        value="{{ $businessMoney[0]['value'] }}" placeholder="Ex: 34000000"
-                                        name="min[]" required data-type="money" />
-                                </div>
+                                    <div class="d-flex flex-column mb-3 fv-row">
+                                        <label class="required fs-6 fw-semibold mb-2">Mốc (Triệu)</label>
+                                        <input type="number" class="form-control form-control-solid"
+                                            value="{{ $key }}" name="key" placeholder="Khoảng giá (triệu)"
+                                            required>
+                                    </div>
 
-                                <div class="d-flex flex-column mb-3 fv-row">
-                                    <label class="required fs-6 fw-semibold mb-2">Khoảng lớn</label>
-                                    <input type="text" class="form-control form-control-solid" min="0"
-                                        value="{{ $businessMoney[1]['value'] }}" placeholder="Ex: 35000000"
-                                        name="max[]" required data-type="money"/>
+                                    <div class="d-flex flex-column mb-3 fv-row">
+                                        <label class="required fs-6 fw-semibold mb-2">Khoảng nhỏ</label>
+                                        <input type="text" class="form-control form-control-solid" min="0"
+                                            value="{{ $businessSetting[0]['value'] }}" placeholder="Ex: 34000000"
+                                            name="min" required data-type="money" />
+                                    </div>
+                                    <div class="d-flex flex-column mb-3 fv-row">
+                                        <label class="required fs-6 fw-semibold mb-2">Khoảng lớn</label>
+                                        <input type="text" class="form-control form-control-solid" min="0"
+                                            value="{{ $businessSetting[1]['value'] }}" placeholder="Ex: 35000000"
+                                            name="max" required data-type="money" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @endisset
+
+                    @isset($businessSettingPercent)
+                        @foreach ($businessSettingPercent as $key => $businessSetting)
+                            <div class="card mb-3 business-setting-container">
+                                <div class="card-header d-flex justify-content-end" style="min-height: 40px!important">
+                                    <button type="button" class="btn btn-danger btn-sm delete-business-setting"
+                                        style="margin-right: -30px">
+                                        <i class="bi bi-x-circle p-0"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex flex-column mb-3 fv-row">
+                                        <label class="required fs-6 fw-semibold mb-2">Mốc (Triệu)</label>
+                                        <input type="number" class="form-control form-control-solid"
+                                            value="{{ $key }}" name="key" placeholder="Khoảng giá (triệu)"
+                                            required>
+                                    </div>
+
+                                    @foreach ($businessSetting as $bs)
+                                        <div class="d-flex flex-column mb-3 fv-row">
+                                            <label class="required fs-6 fw-semibold mb-2">% phí</label>
+                                            <input type="text" class="form-control form-control-solid" min="0"
+                                                value="{{ $bs['value'] }}" placeholder="Ex: 10%" name="fee_percent"
+                                                required data-type="money" />
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    @endisset
                     <div class="w-100">
                         <button type="button"
                             class="btn btn-primary btn-sm my-3 add-business-setting w-100 d-flex align-items-center justify-content-center">
@@ -73,6 +128,22 @@
         </div>
         <div class="card-body">
             <div class="d-flex flex-column mb-3 fv-row">
+                <label class="required fs-6 fw-semibold mb-2">Loại</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="1" name="type" required>
+                    <label class="form-check-label">
+                        1
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="5" name="type" required>
+                    <label class="form-check-label">
+                        5
+                    </label>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column mb-3 fv-row">
                 <label class="required fs-6 fw-semibold mb-2">Mốc (Triệu)</label>
                 <input type="number" class="form-control form-control-solid" value="" name="key[]"
                     placeholder="Khoảng giá (triệu)" required>
@@ -81,13 +152,13 @@
             <div class="d-flex flex-column mb-3 fv-row">
                 <label class="required fs-6 fw-semibold mb-2">Khoảng nhỏ</label>
                 <input type="text" class="form-control form-control-solid" min="0" value=""
-                    placeholder="Ex: 34000000" name="min[]" required data-type="money"/>
+                    placeholder="Ex: 34000000" name="min" required data-type="money" />
             </div>
 
             <div class="d-flex flex-column mb-3 fv-row">
                 <label class="required fs-6 fw-semibold mb-2">Khoảng lớn</label>
                 <input type="text" class="form-control form-control-solid" min="0" value=""
-                    placeholder="Ex: 35000000" name="max[]" required data-type="money"/>
+                    placeholder="Ex: 35000000" name="max" required data-type="money" />
             </div>
         </div>
     </div>
@@ -121,7 +192,7 @@
         $(document).on('submit', '#form-edit-setting', function(e) {
             e.preventDefault();
 
-            const businessMoneys = [];
+            const businessSettings = [];
             $modalEditSetting.find('input[name="key[]"]').each(function() {
                 const key = parseInt($(this).val());
                 const min = parseInt($(this).closest('.card').find('input[name="min[]"]')
@@ -129,24 +200,24 @@
                 const max = parseInt($(this).closest('.card').find('input[name="max[]"]')
                     .val());
 
-                businessMoneys.push({
+                businessSettings.push({
                     key,
                     value: min
                 })
-                businessMoneys.push({
+                businessSettings.push({
                     key,
                     value: max
                 });
             });
 
-            if (businessMoneys.length == 0) {
+            if (businessSettings.length == 0) {
                 notify("Vui lòng nhập thống tin", 'error');
                 return;
             }
 
             const $submitButton = $(this).find('button[type="submit"]');
             $submitButton.attr('data-kt-indicator', "on").prop('disabled', true);
-            const body = businessMoneys
+            const body = businessSettings
 
             axios.post("{{ route('api.business.updateSetting') }}", body, {
                     headers: headers

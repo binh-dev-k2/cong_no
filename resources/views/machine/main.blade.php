@@ -272,7 +272,7 @@
                                     `Bearer ${token}`);
                             },
                             success: function(res) {
-                                if (res.status == 'success') {
+                                if (res.code == 0) {
                                     notify('Xóa thành công', 'success');
                                     datatable.draw();
                                 } else {

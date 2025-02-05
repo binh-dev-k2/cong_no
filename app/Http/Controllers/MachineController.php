@@ -33,7 +33,7 @@ class MachineController extends Controller
         return jsonResponse($result ? 0 : 1);
     }
 
-    public function update(MachineRequest $request, $id)
+    public function update(MachineRequest $request)
     {
         $data = $request->validated();
         $result = $this->machineService->update($data, $id);

@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebitController;
 use App\Http\Controllers\MachineController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth')->group(function () {
     //dashboard
     Route::get('dashboard/chart-customer', [DashboardController::class, 'getChartCustomer'])->name('api.dashboard.getChartCustomer');
     Route::get('dashboard/total-debit', [DashboardController::class, 'getTotalDebit'])->name('api.dashboard.getTotalDebit');
@@ -72,4 +73,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('machine/store', [MachineController::class, 'store'])->name('api.machine.store');
     Route::post('machine/update', [MachineController::class, 'update'])->name('api.machine.update');
     Route::post('machine/delete', [MachineController::class, 'delete'])->name('api.machine.delete');
+
+    //role
+    Route::post('role/datatable', [RoleController::class, 'datatable'])->name('api.role.list');
+    Route::post('role/store', [RoleController::class, 'store'])->name('api.role.store');
+    Route::post('role/update', [RoleController::class, 'update'])->name('api.role.update');
+    Route::post('role/delete', [RoleController::class, 'delete'])->name('api.role.delete');
 });

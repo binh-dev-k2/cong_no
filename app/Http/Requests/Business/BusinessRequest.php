@@ -38,7 +38,9 @@ class BusinessRequest extends FormRequest
                     'fee_percent' => 'required|numeric',
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
-                    'business_money_key' => 'required|string|exists:settings,key',
+                    'machine_id' => 'nullable|exists:machines,id',
+                    'business_setting_key' => 'required|string|exists:business_settings,key',
+                    'business_setting_type' => 'required|string|in:MONEY,PERCENT',
                 ];
 
             case 'update':
@@ -51,7 +53,7 @@ class BusinessRequest extends FormRequest
                     'fee_percent' => 'required|numeric',
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
-                    'business_money_key' => 'required|string|exists:settings,key',
+                    'machine_id' => 'nullable|exists:machines,id',
                 ];
 
             case 'complete':
@@ -82,6 +84,13 @@ class BusinessRequest extends FormRequest
             case 'delete':
                 return [
                     'id' => 'required|exists:businesses,id'
+                ];
+
+            case 'updateSetting':
+                return [
+                    '*.type' => 'required|string|in:MONEY,PERCENT',
+                    '*.key' => 'required|numeric',
+                    '*.value' => 'required|numeric',
                 ];
         }
     }

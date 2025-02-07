@@ -167,21 +167,11 @@ var BusinessList = function () {
         })
     }
 
-    $(document).on('input', '[data-type="money"]', (e) => {
-        // Lấy giá trị hiện tại, bỏ hết dấu phân cách hàng nghìn cũ
-        let value = e.target.value.replace(/,/g, '');
-
-        // Đảm bảo chỉ nhận số
-        if (!/^\d*\.?\d*$/.test(value)) {
-            value = value.slice(0, -1); // Bỏ ký tự không hợp lệ
-        }
-
-        // Định dạng lại với dấu phân cách hàng nghìn
-        const formattedValue = new Intl.NumberFormat('en-US').format(value);
-
-        // Gán lại giá trị đã format
-        e.target.value = formattedValue;
-    })
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'decimal',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    });
 
     const initComplete = () => {
         const completeBtns = document.querySelectorAll('.btn-complete');
@@ -272,6 +262,7 @@ var BusinessList = function () {
                 modalEdit.querySelector('input[name="fee_percent"]').value = data.fee_percent;
                 data.formality ? modalEdit.querySelector('input[name="formality"][value="' + data.formality + '"]').checked = true : '';
                 modalEdit.querySelector('input[name="total_money"]').value = data.total_money;
+                modalEdit.querySelector('select[name="machine_id"]').value = data.machine_id;
             })
         })
     }
@@ -321,6 +312,15 @@ var BusinessList = function () {
         // Cắt bỏ khoảng trắng cuối cùng nếu có
         return formattedStr.trim();
     }
+
+    $(document).on('input', 'input[data-type="money"]', function () {
+        const value = $(this).val().replace(/[^0-9.]/g, '');
+        if (value === '') {
+            $(this).val('');
+        } else {
+            $(this).val(formatter.format(parseInt(value)));
+        }
+    })
 
     return {
         initDatatable: async function () {
@@ -455,9 +455,9 @@ var BusinessList = function () {
                             return `
                                     <div class="d-flex align-items-center justify-content-between container-business-money">
                                         <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                             <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
                                         </div>
                                         <button class="btn btn-warning btn-edit-business-money p-2" data-id="${0}">Sửa</button>
                                     </div>
@@ -472,9 +472,9 @@ var BusinessList = function () {
                             return `
                                     <div class="d-flex align-items-center justify-content-between container-business-money">
                                         <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                             <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
                                         </div>
                                         <button class="btn btn-warning btn-edit-business-money p-2" data-id="${1}">Sửa</button>
                                     </div>
@@ -489,9 +489,9 @@ var BusinessList = function () {
                             return `
                                     <div class="d-flex align-items-center justify-content-between container-business-money">
                                         <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                             <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
                                         </div>
                                         <button class="btn btn-warning btn-edit-business-money p-2" data-id="${2}">Sửa</button>
                                     </div>
@@ -506,9 +506,9 @@ var BusinessList = function () {
                             return `
                                     <div class="d-flex align-items-center justify-content-between container-business-money">
                                         <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                             <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
                                         </div>
                                         <button class="btn btn-warning btn-edit-business-money p-2" data-id="${3}">Sửa</button>
                                     </div>
@@ -523,9 +523,9 @@ var BusinessList = function () {
                             return `
                                     <div class="d-flex align-items-center justify-content-between container-business-money">
                                         <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                             <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
                                         </div>
                                         <button class="btn btn-warning btn-edit-business-money p-2" data-id="${4}">Sửa</button>
                                     </div>
@@ -540,9 +540,9 @@ var BusinessList = function () {
                             return `
                                     <div class="d-flex align-items-center justify-content-between container-business-money">
                                         <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
                                             <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
+                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
                                         </div>
                                         <button class="btn btn-warning btn-edit-business-money p-2" data-id="${5}">Sửa</button>
                                     </div>

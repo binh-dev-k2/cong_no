@@ -1,12 +1,24 @@
 @extends('layouts.layout')
 @section('title')
-    Máy
+    Vai trò
 @endsection
 @section('header')
     <style>
         tr td {
             padding: 0.5rem !important;
             margin: 0 !important;
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection
@@ -19,7 +31,7 @@
                 class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
 
                 <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Máy
+                    Vai trò
                 </h1>
 
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -29,7 +41,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-500 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Máy</li>
+                    <li class="breadcrumb-item text-muted">Vai trò</li>
                 </ul>
             </div>
         </div>
@@ -45,28 +57,27 @@
                                 <span class="path1"></span>
                                 <span class="path2"></span>
                             </i>
-                            <input type="text" id="machine-search" class="form-control form-control-solid w-250px ps-12 "
-                                data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
+                            <input type="text" id="user_search" class="form-control form-control-solid w-250px ps-12"
+                                placeholder="Tìm kiếm" />
                         </div>
                     </div>
-
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#machine-modal">Thêm máy</button>
+                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
+                                data-bs-target="#modal-add">Thêm vai trò</button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body pt-0">
                     <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
-                        id="machine-table">
+                        id="role-table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-50px">STT</th>
-                                <th class="text-center min-w-125px">Tên máy</th>
-                                <th class="text-center min-w-125px">Mã máy</th>
-                                <th class="text-center min-w-125px">% phí</th>
-                                <th class="text-center min-w-70px">Hành động</th>
+                                <th class="text-center min-w-125px">STT</th>
+                                <th class="text-center min-w-125px">Tên</th>
+                                <th class="text-center min-w-125px">Quyền hạn</th>
+                                <th class="text-center min-w-125px">Ngày tạo</th>
+                                <th class="text-center min-w-100px">Hành động</th>
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
@@ -77,49 +88,8 @@
         </div>
     </div>
 
-
-    <div class="modal fade" id="machine-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-650px">
-            <div class="modal-content">
-                <form action="" id="form-machine">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Thông tin máy</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body py-10 px-lg-17">
-                        <div class="scroll-y me-n7 pe-7" style="max-height: calc(100vh - 30rem)">
-                            <input type="hidden" name="id" />
-                            <div class="fv-row mb-7">
-                                <label class="required fs-6 fw-semibold mb-2">
-                                    Tên máy:
-                                </label>
-                                <input type="text" class="form-control" name="name" />
-                            </div>
-                            <div class="fv-row mb-7">
-                                <label class="required fs-6 fw-semibold mb-2">
-                                    Mã máy:
-                                </label>
-                                <input type="text" class="form-control" name="code" />
-                            </div>
-                            <div class="fv-row mb-7">
-                                <label class="required fs-6 fw-semibold mb-2">
-                                    % phí:
-                                </label>
-                                <input type="text" class="form-control" name="fee_percent" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer flex-center">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
+    @include('role.modal')
 @endsection
-
 
 @section('script')
     <script>
@@ -141,18 +111,18 @@
                 })
             }
 
-            const datatable = $("#machine-table").DataTable({
+            const datatable = $("#role-table").DataTable({
                 processing: true,
                 serverSide: true,
                 ordering: false,
                 ajax: {
-                    url: "{{ route('api.machine.list') }}",
+                    url: "{{ route('api.role.list') }}",
                     type: "POST",
                     beforeSend: function(request) {
                         request.setRequestHeader("Authorization", `Bearer ${token}`);
                     },
                     data: function(d) {
-                        d.search = $('#machine-search').val();
+                        d.search = $('#role-search').val();
                     }
                 },
                 columnDefs: [{
@@ -175,20 +145,22 @@
                     },
                     {
                         targets: 2,
-                        data: 'code',
+                        data: 'permissions',
                         orderable: false,
                         className: 'min-w-150px',
                         render: function(data, type, row) {
-                            return `<span>${data ?? ''}</span>`
+                            return data.map(permission => {
+                                return `<span class="badge badge-light-info fs-base me-1">${permission.name}</span>`;
+                            }).join('');
                         }
                     },
                     {
                         targets: 3,
-                        data: 'fee_percent',
+                        data: 'created_at',
                         orderable: false,
                         className: 'text-center min-w-150px',
                         render: function(data, type, row) {
-                            return `<span>${new Intl.NumberFormat('vi-VN').format(data)}</span>`;
+                            return `<span>${new Intl.DateTimeFormat('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}).format(new Date(data))}</span>`;
                         }
                     },
                     {
@@ -198,36 +170,36 @@
                         className: 'text-center min-w-150px',
                         render: function(data, type, row) {
                             return `
-                                    <button class="btn btn-warning btn-active-light-warning btn-sm btn-edit">Sửa</button>
-                                    <button class="btn btn-danger btn-active-light-danger btn-sm btn-delete">Xóa</button>
-                                `;
+                                <button class="btn btn-warning btn-active-light-warning btn-sm btn-edit">Sửa</button>
+                                <button class="btn btn-danger btn-active-light-danger btn-sm btn-delete">Xóa</button>
+                            `;
                         },
                     },
                 ],
             });
 
-            $('#machine-modal').on('hidden.bs.modal', function(e) {
+            $('#role-modal').on('hidden.bs.modal', function(e) {
                 $(this).find('input[name="id"]').val('');
                 $(this).find('form')[0].reset();
             })
 
-            $('#form-machine').on('submit', function(e) {
+            $('#form-role').on('submit', function(e) {
                 e.preventDefault();
                 const form = $(this);
                 const id = form.find('input[name="id"]').val();
                 const name = form.find('input[name="name"]').val();
-                const code = form.find('input[name="code"]').val();
-                const fee_percent = form.find('input[name="fee_percent"]').val().replace(/[,]/g, '.');
+                const permissions = [];
+                $.each(form.find('input[name="permissions[]"]:checked'), function() {
+                    permissions.push($(this).val());
+                });
 
                 $.ajax({
-                    url: id ? "{{ route('api.machine.update') }}" :
-                        "{{ route('api.machine.store') }}",
+                    url: id ? "{{ route('api.role.update') }}" : "{{ route('api.role.store') }}",
                     type: "POST",
                     data: {
                         id: id,
                         name: name,
-                        code: code,
-                        fee_percent: parseFloat(fee_percent),
+                        permissions: permissions,
                     },
                     beforeSend: function(request) {
                         request.setRequestHeader("Authorization", `Bearer ${token}`);
@@ -235,7 +207,7 @@
                     success: function(res) {
                         if (res.code == 0) {
                             notify('Lưu thành công', 'success');
-                            $('#machine-modal').modal('hide');
+                            $('#role-modal').modal('hide');
                             datatable.draw();
                         } else {
                             notify(res.data[0], 'error');
@@ -250,19 +222,21 @@
 
             $(document).on('click', '.btn-edit', function() {
                 const data = datatable.row($(this).closest('tr')).data();
-                $('#form-machine').find('input[name="id"]').val(data.id);
-                $('#form-machine').find('input[name="name"]').val(data.name);
-                $('#form-machine').find('input[name="code"]').val(data.code);
-                $('#form-machine').find('input[name="fee_percent"]').val(data.fee_percent);
-                $('#machine-modal').modal('show');
+                $('#form-role').find('input[name="id"]').val(data.id);
+                $('#form-role').find('input[name="name"]').val(data.name);
+                $.each(data.permissions, function(index, value) {
+                    $('#form-role').find(`input[name="permissions[]"][value="${value}"]`).prop(
+                        'checked', true);
+                });
+                $('#role-modal').modal('show');
             })
 
             $(document).on('click', '.btn-delete', function() {
                 const id = datatable.row($(this).closest('tr')).data().id;
-                notify('Bạn chắc chắn muốn xóa máy này?', 'warning', true).then((result) => {
+                notify('Bạn chắc chắn muốn xóa vai trò này?', 'warning', true).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('api.machine.delete') }}",
+                            url: "{{ route('api.role.delete') }}",
                             type: "POST",
                             data: {
                                 id: id,

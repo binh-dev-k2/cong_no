@@ -22,6 +22,7 @@ Route::
             Route::get('/debit', 'DebitController@index')->name('debit');
             Route::get('/user', 'UserController@index')->name('user');
             Route::get('/machine', 'MachineController@index')->name('machine');
+            Route::get('/role', 'RoleController@index')->name('role');
         });
 
 Route::get('/@@binhcoder02/update', function () {

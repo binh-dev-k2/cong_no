@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Business;
 use App\Models\BusinessMoney;
+use App\Models\BusinessSetting;
 use App\Models\Card;
 use App\Models\Debt;
 use App\Models\Setting;
@@ -61,31 +62,53 @@ class BusinessService extends BaseService
 
     public function store(array $data)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            if ($data['formality'] == 'R') {
-                $fee = (float) ($data['total_money'] * $data['fee_percent'] / 100);
-                $data['fee'] = (float) ($data['total_money'] - $fee);
-            } else {
-                $data['fee'] = (float) ($data['total_money'] * $data['fee_percent'] / 100);
+            switch ($data['formality']) {
+                case 'R':
+                    $fee = (float) ($data['total_money'] * $data['fee_percent'] / 100);
+                    $data['fee'] = (float) ($data['total_money'] - $fee);
+                    break;
+
+                default:
+                    $data['fee'] = (float) ($data['total_money'] * $data['fee_percent'] / 100);
+                    break;
             }
+
             $card = Card::where('card_number', $data['card_number'])->first();
             $data['bank_code'] = $card->bank->code;
             $business = Business::create($data);
 
-            if (!$business) {
-                DB::rollBack();
-                return false;
-            }
+            $businessMoneySetting = BusinessSetting::where('type', $data['business_setting_type'])
+                ->where('key', $data['business_setting_key'])
+                ->pluck('value')
+                ->toArray();
 
-            $businessMoney = Setting::where('type', 'business_money')->where('key', $data['business_money_key'])->orderBy('value', 'asc')->limit(2)->get();
-            $minRangeMoney = (int) $businessMoney->first()->value;
-            $maxRangeMoney = (int) $businessMoney->last()->value;
+            switch ($data['business_setting_type']) {
+                case 'MONEY':
+                    $minRangeMoney = (int) min($businessMoneySetting);
+                    $maxRangeMoney = (int) max($businessMoneySetting);
 
-            $resultCalculaterFee = $this->calculateFee($business->id, $data['total_money'], $minRangeMoney, $maxRangeMoney);
-            if (!$resultCalculaterFee) {
-                DB::rollBack();
-                return false;
+                    $this->calculateFee($business->id, $data['total_money'], $minRangeMoney, $maxRangeMoney);
+                    break;
+
+                case 'PERCENT':
+                    BusinessMoney::where('business_id', $business->id)->delete();
+                    $i = 0;
+                    $moneyData = [];
+
+                    foreach ($businessMoneySetting as $bsm) {
+                        $fee = $data['total_money'] * $bsm / 100;
+                        $moneyData[] = $this->createMoneyData($business->id, $fee);
+                        $i++;
+                    }
+
+                    for ($i; $i < 10; $i++) {
+                        $moneyData[] = $this->createMoneyData($business->id, 0);
+                    }
+
+                    BusinessMoney::insert($moneyData);
+                    break;
             }
 
             DB::commit();
@@ -167,9 +190,9 @@ class BusinessService extends BaseService
         BusinessMoney::where('business_id', $businessId)->delete();
         $data = [];
         $i = 0;
-
         while ($totalMoney > 0) {
             $i++;
+            logger($totalMoney);
             $randomMoney = $this->randomMoney($minRangeMoney, $maxRangeMoney);
             if ($totalMoney >= $randomMoney) {
                 $data[] = $this->createMoneyData($businessId, $randomMoney);
@@ -222,12 +245,12 @@ class BusinessService extends BaseService
 
     public function updateSetting($data)
     {
+        BusinessSetting::truncate();
         DB::beginTransaction();
         try {
-            Setting::where('type', 'business_money')->delete();
-            foreach ($data as $key => $value) {
-                Setting::create([
-                    'type' => 'business_money',
+            foreach ($data as $value) {
+                BusinessSetting::create([
+                    'type' => $value['type'],
                     'key' => $value['key'],
                     'value' => $value['value']
                 ]);

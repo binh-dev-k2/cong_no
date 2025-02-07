@@ -103,12 +103,50 @@
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="required fs-6 fw-semibold mb-2" for="machine_id">Mã máy</label>
+                                <select class="form-select form-select-solid" name="machine_id" id="machine_id">
+                                    @foreach ($machines as $key => $machine)
+                                        <option value="{{ $machine['id'] }}">{{ $machine['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2" for="total_money">Số tiền</label>
-                                <input type="number" class="form-control form-control-solid" placeholder="Ex: 1000000"
-                                    name="total_money" id="total_money" required readonly />
+                                <input type="number" class="form-control form-control-solid"
+                                    placeholder="Ex: 1000000" name="total_money" id="total_money" required
+                                    readonly />
+                            </div>
+
+                            <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="required fs-6 fw-semibold mb-2">Khoảng chia</label>
+                                @isset($businessMoneys['MONEY'])
+                                    <span class="text-muted fw-bold mb-2">Theo khoảng</span>
+                                    @foreach ($businessMoneys['MONEY'] as $key => $businessMoney)
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" value="{{ $key }}"
+                                                data-type="MONEY" name="business_setting_key">
+                                            <label class="form-check-label">
+                                                {{ $key }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                @endisset
+
+                                @isset($businessMoneys['PERCENT'])
+                                    <span class="text-muted fw-bold mb-2">Theo %</span>
+                                    @foreach ($businessMoneys['PERCENT'] as $key => $businessMoney)
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" value="{{ $key }}"
+                                                data-type="PERCENT" name="business_setting_key">
+                                            <label class="form-check-label">
+                                                {{ $key }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                @endisset
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer flex-center">
@@ -211,8 +249,13 @@
                 phone: $modalEditBusiness.find('input[name="phone"]').val(),
                 fee_percent: parseFloat($modalEditBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalEditBusiness.find('input[name="formality"]:checked').val(),
+                machine_id: $modalEditBusiness.find('select[name="machine_id"]').val(),
                 total_money: parseInt($modalEditBusiness.find('input[name="total_money"]').val()
                     .replace(/[.,]/g, ''), 10),
+                business_setting_key: $modalEditBusiness.find(
+                    'input[name="business_setting_key"]:checked').val(),
+                business_setting_type: $modalEditBusiness.find(
+                    'input[name="business_setting_key"]:checked').data('type')
             }
 
             // console.log(body);

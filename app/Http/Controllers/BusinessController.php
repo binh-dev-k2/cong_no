@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Business\BusinessRequest;
+use App\Models\BusinessSetting;
+use App\Models\Machine;
 use App\Models\Setting;
 use App\Services\BusinessService;
 use Illuminate\Http\Request;
@@ -24,11 +26,9 @@ class BusinessController extends Controller
     public function index()
     {
         $businessNote = Setting::firstOrCreate(['key' => 'business_note'], ['key' => 'business_note', 'value' => '']);
-        $businessMoneys = Setting::where('type', 'business_money')
-            ->select('key')
-            ->distinct()
-            ->get();
-        return view('business.index', compact('businessNote', 'businessMoneys'));
+        $businessMoneys = BusinessSetting::get()->groupBy(['type', 'key']);
+        $machines = Machine::all();
+        return view('business.index', compact('businessNote', 'businessMoneys', 'machines'));
     }
 
     public function datatable(Request $request)
@@ -89,9 +89,9 @@ class BusinessController extends Controller
         return view('business.modal.edit-setting', compact('businessMoneys'));
     }
 
-    public function updateSetting(Request $request)
+    public function updateSetting(BusinessRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $result = $this->businessService->updateSetting($data);
         return jsonResponse($result ? 0 : 1);
     }

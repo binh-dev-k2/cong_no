@@ -129,7 +129,7 @@
 
 @section('script')
     <script>
-        let token = "{{ session('authToken') }}";
+        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         let routes = {
             getAllDebitCards: "{{ route('api.debit_showAll') }}",
             updateDebitStatus: "{{ route('api.debit_updateStatus') }}",

@@ -133,7 +133,7 @@
 
 @section('script')
     <script>
-        var token = "{{ session('authToken') }}";
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         var routes = {
             blankCards: "{{ route('api.card.blankCards') }}",
             storeCard: "{{ route('api.card.store') }}",

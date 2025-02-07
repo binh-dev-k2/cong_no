@@ -108,19 +108,42 @@
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="fs-6 fw-semibold mb-2" for="machine_id">Mã máy</label>
+                                <select class="form-select form-select-solid" name="machine_id" id="machine_id">
+                                    <option value="">Chọn mã máy</option>
+                                    @foreach ($machines as $key => $machine)
+                                        <option value="{{ $machine['id'] }}">{{ $machine['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2">Khoảng chia</label>
-                                @foreach ($businessMoneys as $businessMoney)
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio"
-                                            value="{{ $businessMoney->key }}" name="business_money_key"
-                                            id="business_money_{{ $businessMoney->key }}"
-                                            {{ $loop->first ? 'checked' : '' }}>
-                                        <label class="form-check-label"
-                                            for="business_money_{{ $businessMoney->key }}">
-                                            {{ $businessMoney->key }}
-                                        </label>
-                                    </div>
-                                @endforeach
+                                @isset($businessMoneys['MONEY'])
+                                    <span class="text-muted fw-bold mb-2">Theo khoảng</span>
+                                    @foreach ($businessMoneys['MONEY'] as $key => $businessMoney)
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" value="{{ $key }}"
+                                                data-type="MONEY" name="business_setting_key">
+                                            <label class="form-check-label">
+                                                {{ $key }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                @endisset
+
+                                @isset($businessMoneys['PERCENT'])
+                                    <span class="text-muted fw-bold mb-2">Theo %</span>
+                                    @foreach ($businessMoneys['PERCENT'] as $key => $businessMoney)
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" value="{{ $key }}"
+                                                data-type="PERCENT" name="business_setting_key">
+                                            <label class="form-check-label">
+                                                {{ $key }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                @endisset
                             </div>
                         </div>
 
@@ -231,8 +254,10 @@
                 formality: $modalAddBusiness.find('input[name="formality"]:checked').val(),
                 total_money: parseInt($modalAddBusiness.find('input[name="total_money"]').val()
                     .replace(/[.,]/g, ''), 10),
-                business_money_key: $modalAddBusiness.find(
-                    'input[name="business_money_key"]:checked').val(),
+                business_setting_key: $modalAddBusiness.find(
+                    'input[name="business_setting_key"]:checked').val(),
+                business_setting_type: $modalAddBusiness.find(
+                    'input[name="business_setting_key"]:checked').data('type')
             }
 
             axios.post("{{ route('api.business.store') }}", body, {

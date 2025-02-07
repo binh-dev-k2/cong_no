@@ -123,7 +123,7 @@
 @endsection
 @section('script')
     <script>
-        let token = "{{ session('authToken') }}";
+        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         let routes = {
             getChartCustomer: "{{ route('api.dashboard.getChartCustomer') }}",
             getTotalDebit: "{{ route('api.dashboard.getTotalDebit') }}",

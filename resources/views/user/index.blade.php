@@ -101,7 +101,7 @@
 
 @section('script')
 <script>
-    var token = "{{ session('authToken') }}";
+    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var routes = {
         datatable: "{{ route('api.user.datatable') }}",
         userDelete: "{{ route('api.user.delete') }}",

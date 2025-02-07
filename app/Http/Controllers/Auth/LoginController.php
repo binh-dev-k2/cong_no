@@ -53,9 +53,6 @@ class LoginController extends Controller
             return $response;
         }
         $user = User::where('email', $request->email)->first();
-        $tokenResult = $user->createToken('authToken')->plainTextToken;
-
-        Session::put('authToken', $tokenResult);
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect()->intended($this->redirectPath());

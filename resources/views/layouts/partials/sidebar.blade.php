@@ -86,6 +86,20 @@
 
                     <div class="menu-item">
                         <!--begin:Menu link-->
+                        <a class="menu-link @if (Route::currentRouteName() == 'machine') active @endif" href="{{ route('machine') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-screen fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Máy</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
                         <a class="menu-link @if (Route::currentRouteName() == 'user') active @endif" href="{{ route('user') }}">
                             <span class="menu-icon">
                                 <i class="ki-duotone ki-user fs-2">
@@ -100,14 +114,14 @@
 
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link @if (Route::currentRouteName() == 'machine') active @endif" href="{{ route('machine') }}">
+                        <a class="menu-link @if (Route::currentRouteName() == 'role') active @endif" href="{{ route('role') }}">
                             <span class="menu-icon">
-                                <i class="ki-duotone ki-screen fs-2">
+                                <i class="ki-duotone ki-shield fs-2">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </i>
                             </span>
-                            <span class="menu-title">Máy</span>
+                            <span class="menu-title">Vai trò</span>
                         </a>
                         <!--end:Menu link-->
                     </div>

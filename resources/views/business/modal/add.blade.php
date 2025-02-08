@@ -252,6 +252,7 @@
                 phone: $modalAddBusiness.find('input[name="phone"]').val(),
                 fee_percent: parseFloat($modalAddBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalAddBusiness.find('input[name="formality"]:checked').val(),
+                machine_id: $modalAddBusiness.find('select[name="machine_id"]').val(),
                 total_money: parseInt($modalAddBusiness.find('input[name="total_money"]').val()
                     .replace(/[.,]/g, ''), 10),
                 business_setting_key: $modalAddBusiness.find(

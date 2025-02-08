@@ -117,35 +117,6 @@
                                     placeholder="Ex: 1000000" name="total_money" id="total_money" required
                                     readonly />
                             </div>
-
-                            <div class="d-flex flex-column mb-3 fv-row">
-                                <label class="required fs-6 fw-semibold mb-2">Khoảng chia</label>
-                                @isset($businessMoneys['MONEY'])
-                                    <span class="text-muted fw-bold mb-2">Theo khoảng</span>
-                                    @foreach ($businessMoneys['MONEY'] as $key => $businessMoney)
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" value="{{ $key }}"
-                                                data-type="MONEY" name="business_setting_key">
-                                            <label class="form-check-label">
-                                                {{ $key }}
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                @endisset
-
-                                @isset($businessMoneys['PERCENT'])
-                                    <span class="text-muted fw-bold mb-2">Theo %</span>
-                                    @foreach ($businessMoneys['PERCENT'] as $key => $businessMoney)
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" value="{{ $key }}"
-                                                data-type="PERCENT" name="business_setting_key">
-                                            <label class="form-check-label">
-                                                {{ $key }}
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                @endisset
-                            </div>
                         </div>
                     </div>
                 </div>

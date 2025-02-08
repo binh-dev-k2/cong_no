@@ -40,7 +40,7 @@ class BusinessService extends BaseService
         $query->orderBy('id', 'desc');
         $recordsFiltered = $recordsTotal = $query->count();
         $businnesses = $query->skip($skip)
-            ->with(['bank', 'money', 'card'])
+            ->with(['bank', 'money', 'card', 'machine'])
             ->withCount([
                 'money' => function ($query) {
                     $query->where('money', '!=', 0);

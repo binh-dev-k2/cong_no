@@ -39,16 +39,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('card/delete', [CardController::class, 'destroy'])->name('api.card.delete')->middleware('can:customer-delete');
 
     //customer
-    Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store')->middleware('can:customer-store');
+    Route::post('customer/store', [CustomerController::class, 'store'])->name('api.customer.store')->middleware('can:customer-create');
     Route::post('customer/update', [CustomerController::class, 'update'])->name('api.customer.update')->middleware('can:customer-update');
     Route::post('customer/datatable', [CustomerController::class, 'datatable'])->name('api.customer_showAll')->middleware('can:customer-view');
     Route::delete('customer/delete/', [CustomerController::class, 'destroy'])->name('api.customer_delete')->middleware('can:customer-delete');
 
     //business
     Route::post('business/datatable', [BusinessController::class, 'datatable'])->name('api.business.datatable')->middleware('can:business-view');
-    Route::post('business/store', [BusinessController::class, 'store'])->name('api.business.store')->middleware('can:business-store');
-    Route::post('business/update', [BusinessController::class, 'update'])->name('api.business.update')->middleware('can:business-store');
-    Route::post('business/delete', [BusinessController::class, 'delete'])->name('api.business.delete')->middleware('can:business-store');
+    Route::post('business/store', [BusinessController::class, 'store'])->name('api.business.store')->middleware('can:business-create');
+    Route::post('business/update', [BusinessController::class, 'update'])->name('api.business.update')->middleware('can:business-create');
+    Route::post('business/delete', [BusinessController::class, 'delete'])->name('api.business.delete')->middleware('can:business-create');
     Route::post('business/complete', [BusinessController::class, 'complete'])->name('api.business.complete')->middleware('can:business-update');
     Route::post('business/update-pay-extra', [BusinessController::class, 'updatePayExtra'])->name('api.business.updatePayExtra')->middleware('can:business-update');
     Route::post('business/update-business-money', [BusinessController::class, 'updateBusinessMoney'])->name('api.business.updateBusinessMoney')->middleware('can:business-update');

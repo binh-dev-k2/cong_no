@@ -27,4 +27,6 @@ class Business extends Model
     {
         return $this->belongsTo(Card::class, 'card_number', 'card_number');
     }
+
+    public function 
 }

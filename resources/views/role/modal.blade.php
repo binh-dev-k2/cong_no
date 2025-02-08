@@ -31,17 +31,18 @@
 </style>
 
 
-<div class="modal fade" id="modal-add" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="role-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
             <form action="#" method="post" id="form-role">
                 <div class="modal-header">
-                    <h4 class="modal-title">Thêm mới người dùng</h4>
+                    <h4 class="modal-title">Thông tin vai trò</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-10 px-lg-17">
                     <div class="scroll-y me-n7 pe-7" style="max-height: calc(100vh - 30rem)">
                         <div class="content">
+                            <input type="hidden" name="id">
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="fs-6 fw-semibold mb-2" for="name">Tên vai trò</label>
                                 <input id="name" type="text" class="form-control form-control-solid"

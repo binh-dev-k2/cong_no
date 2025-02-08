@@ -64,7 +64,7 @@
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
-                                data-bs-target="#modal-add">Thêm vai trò</button>
+                                data-bs-target="#role-modal">Thêm vai trò</button>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,8 @@
                     url: "{{ route('api.role.list') }}",
                     type: "POST",
                     beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector(
+                            'meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function(d) {
                         d.search = $('#role-search').val();
@@ -202,7 +203,8 @@
                         permissions: permissions,
                     },
                     beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector(
+                            'meta[name="csrf-token"]').getAttribute('content'));
                     },
                     success: function(res) {
                         if (res.code == 0) {
@@ -225,7 +227,7 @@
                 $('#form-role').find('input[name="id"]').val(data.id);
                 $('#form-role').find('input[name="name"]').val(data.name);
                 $.each(data.permissions, function(index, value) {
-                    $('#form-role').find(`input[name="permissions[]"][value="${value}"]`).prop(
+                    $('#form-role').find(`input[name="permissions[]"][value="${value.name}"]`).prop(
                         'checked', true);
                 });
                 $('#role-modal').modal('show');
@@ -242,8 +244,9 @@
                                 id: id,
                             },
                             beforeSend: function(request) {
-                                request.setRequestHeader("Authorization",
-                                    `Bearer ${token}`);
+                                request.setRequestHeader("X-CSRF-TOKEN", document
+                                    .querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content'));
                             },
                             success: function(res) {
                                 if (res.code == 0) {

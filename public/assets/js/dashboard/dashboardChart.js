@@ -2,7 +2,7 @@
 
 const dashboard = function () {
     const headers = {
-        Authorization: 'Bearer ' + token,
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
 
     function formatNumber(number) {
@@ -88,7 +88,7 @@ const dashboard = function () {
                 url: routes.getCardExpired,
                 type: "POST",
                 beforeSend: function (request) {
-                    request.setRequestHeader("Authorization", `Bearer ${token}`);
+                    request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                 },
                 data: function (d) {
 

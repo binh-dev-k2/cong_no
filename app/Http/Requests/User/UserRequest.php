@@ -5,7 +5,6 @@ namespace App\Http\Requests\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rules\Password;
 
 class UserRequest extends FormRequest
 {
@@ -34,6 +33,13 @@ class UserRequest extends FormRequest
                     'name' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:users',
                     'password' => 'required|string|min:6',
+                    'role_name' => 'required|exists:roles,name',
+                ];
+
+            case 'updateRole':
+                return [
+                    'id' => 'required|numeric|exists:users,id',
+                    'role_name' => 'required|exists:roles,name',
                 ];
 
             case 'delete':
@@ -57,7 +63,9 @@ class UserRequest extends FormRequest
             'id.required' => 'ID không được để trống',
             'id.numeric' => 'ID phải là số',
             'id.exists' => 'ID không tồn tại',
-            'id.not_in' => 'Không được xóa tài khoản bạn đang sử dụng'
+            'id.not_in' => 'Không được xóa tài khoản bạn đang sử dụng',
+            'role_name.required' => 'Vui lòng chọn vai trò',
+            'role_name.exists' => 'Vai trò không tồn tại',
         ];
     }
 

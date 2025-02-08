@@ -16,6 +16,7 @@ composer install --no-dev --optimize-autoloader
 # Chạy migration (nếu cần)
 echo "Running database migrations..."
 php artisan migrate --force
+php artisan db:seed
 # Dọn dẹp cache (nếu cần)
 echo "Clearing and optimizing cache..."
 php artisan o:c

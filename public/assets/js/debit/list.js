@@ -3,7 +3,7 @@
 var DebitsList = function () {
     let timeoutSearch, prevPhone = null;
     const headers = {
-        Authorization: `Bearer ${token}`,
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
     const handleSearchDatatable = () => {
         document.querySelector('#debit_search')
@@ -152,7 +152,7 @@ var DebitsList = function () {
                     url: routes.getAllDebitCards,
                     type: "POST",
                     beforeSend: function (request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function (d) {
                         d.search = $('input[data-kt-debit-table-filter]').val();

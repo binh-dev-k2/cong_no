@@ -5,7 +5,7 @@ var KTModalCustomersAdd = (function () {
     let btn_submit, btn_cancel, btn_close, formValidate, form, i, btn_add_customer;
 
     const headers = {
-        Authorization: `Bearer ${token}`,
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
 
     const optionFormat = function (item) {

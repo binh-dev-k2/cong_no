@@ -7,7 +7,7 @@ var CustomerList = function () {
     let prevPhone = ''
 
     const headers = {
-        Authorization: `Bearer ${token}`,
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
     const updateToolbar = () => {
         const baseToolbar = document.querySelector('[data-kt-customer-table-toolbar="base"]');
@@ -81,7 +81,7 @@ var CustomerList = function () {
         deleteSelectedBtn.addEventListener("click", (function () {
             messageStatus().then((function (result) {
                 const headers = {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: token,
                 };
                 if (result.value) {
                     var list_selected = [];
@@ -193,7 +193,7 @@ var CustomerList = function () {
             const id = drawer_note.querySelector('input[name="drawer-id"]').value
             const note = drawer_note.querySelector('textarea.drawer-note').value
             const headers = {
-                Authorization: `Bearer ${token}`,
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             };
 
             axios.post(routes.updateCardNote, { id: parseInt(id), note: note }, { headers: headers })
@@ -730,7 +730,7 @@ var CustomerList = function () {
                     url: routes.getAllCustomers,
                     type: "POST",
                     beforeSend: function (request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function (d) {
                         d.search = $('#customer_search').val();

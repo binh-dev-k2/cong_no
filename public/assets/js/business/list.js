@@ -4,7 +4,7 @@ var BusinessList = function () {
     var timeoutSearch, timeoutNote, prevPhone = null;
 
     const headers = {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
     };
 
     const handleUpdateNote = () => {
@@ -338,7 +338,7 @@ var BusinessList = function () {
                     url: routes.datatable,
                     type: "POST",
                     beforeSend: function (request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function (d) {
                         d.search = $('#business_search').val();

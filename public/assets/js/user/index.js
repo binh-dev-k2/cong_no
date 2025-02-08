@@ -4,7 +4,7 @@ var UserList = function () {
     var timeoutSearch;
 
     const headers = {
-        Authorization: `Bearer ${token}`,
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
 
     const handleSearchDatatable = () => {
@@ -75,6 +75,20 @@ var UserList = function () {
     //     })
     // }
 
+    const initEditRole = () => {
+        $('.btn-edit-role').each(function () {
+            $(this).click(function () {
+                const row = $(this).closest('tr');
+                const data = datatable.row(row).data();
+                const modalEdit = $('#modal-role');
+
+                modalEdit.find('input[name="id"]').val(data.id);
+                modalEdit.find('select[name="role_name"]').val(data.roles ? data.roles[0].name : '').trigger('change');
+                modalEdit.modal('show');
+            })
+        })
+    }
+
     const notify = (text, type = 'success', showCancelButton = false) => {
         return Swal.fire({
             text: text,
@@ -100,7 +114,7 @@ var UserList = function () {
                     url: routes.datatable,
                     type: "POST",
                     beforeSend: function (request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function (d) {
                         d.search = $('#user_search').val();
@@ -150,6 +164,7 @@ var UserList = function () {
                         className: 'text-center min-w-150px',
                         render: function (data, type, row) {
                             return `
+                                    <button class="btn btn-warning btn-active-light-warning btn-sm btn-edit-role">Sửa vai trò</button>
                                     <button class="btn btn-danger btn-active-light-danger btn-sm btn-delete">Xóa</button>
                                 `;
                         },
@@ -160,7 +175,7 @@ var UserList = function () {
             // Re-init functions
             datatable.on('draw', function () {
                 initDelete()
-                // initEdit()
+                initEditRole()
             })
             handleSearchDatatable()
         }

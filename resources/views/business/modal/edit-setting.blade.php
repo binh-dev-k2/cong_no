@@ -213,7 +213,7 @@
 <script>
     $(document).ready(function() {
         const headers = {
-            Authorization: `Bearer ${token}`,
+            Authorization: token,
         };
 
         let count = {{ $count }};

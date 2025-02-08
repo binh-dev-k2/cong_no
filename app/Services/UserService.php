@@ -26,7 +26,9 @@ class UserService
 
         $query->orderBy('id', 'desc');
         $recordsFiltered = $recordsTotal = $query->count();
-        $businnesses = $query->skip($skip)
+        $businnesses = $query
+            ->with('roles')
+            ->skip($skip)
             ->take($pageLength)
             ->get();
 
@@ -40,11 +42,22 @@ class UserService
 
     public function create($data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $user->assignRole($data['role_name']);
+
+        return $user;
+    }
+
+    public function updateRole($data)
+    {
+        $user = User::find($data['id']);
+        $user->syncRoles($data['role_name']);
+        return $user;
     }
 
     public function delete($id)

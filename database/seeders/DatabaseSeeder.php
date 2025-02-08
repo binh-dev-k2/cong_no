@@ -48,12 +48,12 @@ class DatabaseSeeder extends Seeder
             'business-view',
             'business-create',
             'business-update',
-            'business-delete',
+            // 'business-delete',
 
             'debit-view',
-            'debit-create',
             'debit-update',
-            'debit-delete',
+            // 'debit-create',
+            // 'debit-delete',
 
             'user-view',
             'user-create',
@@ -72,9 +72,12 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create([
+            Permission::firstOrCreate([
                 'name' => $permission,
-                'guard_name' => $permission === 'dashboard' || strpos($permission, 'view') !== false ? 'web' : 'sanctum',
+            ],
+            [
+                'name' => $permission,
+                'guard_name' => 'web',
             ]);
         }
     }

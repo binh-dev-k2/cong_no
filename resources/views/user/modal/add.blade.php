@@ -31,7 +31,7 @@
 </style>
 
 
-<div class="modal fade" id="modal-add" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modal-user" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
             <form action="#" method="post">
@@ -63,6 +63,15 @@
                                     name="password" required>
                             </div>
 
+                            <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="fs-6 fw-semibold mb-2" for="role_name">Vai trò</label>
+                                <select class="form-select form-select-solid" name="role_name" id="role_name">
+                                    @foreach ($roles as $key => $role)
+                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -85,11 +94,11 @@
 <script>
     $(document).ready(function() {
         const headers = {
-            Authorization: `Bearer ${token}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         };
 
-        const $modalAddUser = $('#modal-add');
-        const $results = $modalAddUser.find('.search-results');
+        const $modalUser = $('#modal-user');
+        const $results = $modalUser.find('.search-results');
 
         const notify = (text, type = 'success', showCancelButton = false) => {
             return Swal.fire({
@@ -106,14 +115,15 @@
             })
         }
 
-        $modalAddUser.on('submit', 'form', function(e) {
+        $modalUser.on('submit', 'form', function(e) {
             e.preventDefault();
             $(this).find('button[type="submit"]').attr('data-kt-indicator', "on");
 
             const body = {
-                name: $modalAddUser.find('input[name="name"]').val(),
-                email: $modalAddUser.find('input[name="email"]').val(),
-                password: $modalAddUser.find('input[name="password"]').val(),
+                name: $modalUser.find('input[name="name"]').val(),
+                email: $modalUser.find('input[name="email"]').val(),
+                password: $modalUser.find('input[name="password"]').val(),
+                role_name: $modalUser.find('select[name="role_name"]').val(),
             }
 
             // console.log(body);
@@ -124,9 +134,9 @@
                 .then((res) => {
                     if (res.data.code == 0) {
                         // notify("Thêm mới nghiệp vụ thành công!", 'success');
-                        $modalAddUser.modal('hide');
+                        $modalUser.modal('hide');
                         datatable.draw();
-                        $modalAddUser.find('form')[0].reset();
+                        $modalUser.find('form')[0].reset();
                     } else {
                         notify(
                             res.data.data.join(", ") ??

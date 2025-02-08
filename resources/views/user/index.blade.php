@@ -96,6 +96,7 @@
 
 @section('modal')
     @include('user.modal.add')
+    @include('user.modal.role')
 @endsection
 @endsection
 

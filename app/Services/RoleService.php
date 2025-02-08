@@ -53,12 +53,18 @@ class RoleService extends BaseService
 
     public function delete($id)
     {
-        $result = Role::find($id);
-        $result->delete();
+        $role = Role::find($id);
+        $role->users()->detach();
+        $role->delete();
 
         // xoa cache
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-        return $result;
+        return $role;
+    }
+
+    public function getAll()
+    {
+        return Role::all();
     }
 
     public function getPermissions()

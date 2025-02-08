@@ -157,9 +157,9 @@ const FormAddCard = () => {
                                 year_expired: form.querySelector(
                                     'input[name="year_expired"]'
                                 ).value,
-                            };
+                            }
                             const headers = {
-                                Authorization: `Bearer ${token}`,
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                             };
                             axios
                                 .post(routes.storeCard, data, {

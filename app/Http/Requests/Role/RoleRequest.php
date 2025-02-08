@@ -35,7 +35,7 @@ class RoleRequest extends FormRequest
             case 'update':
                 return [
                     'id' => 'required|exists:roles,id',
-                    'name' => 'required|string|unique:roles,name,' . $this->route('role')->id,
+                    'name' => 'required|string|unique:roles,name,' . $this->input('id'),
                     'permissions' => 'required|array',
                     'permissions.*' => 'exists:permissions,name',
                 ];

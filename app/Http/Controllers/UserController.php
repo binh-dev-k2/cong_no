@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
+use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,9 +12,17 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    private $roleService;
+
+    public function __construct(RoleService $roleService)
+    {
+        $this->roleService = $roleService;
+    }
+
     public function index()
     {
-        return view('user.index');
+        $roles = $this->roleService->getAll();
+        return view('user.index', compact('roles'));
     }
 
     public function showRegistrationForm()
@@ -43,6 +52,14 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $result = $this->userService()->delete($data['id']);
+
+        return jsonResponse($result ? 0 : 1);
+    }
+
+    public function updateRole(UserRequest $request)
+    {
+        $data = $request->validated();
+        $result = $this->userService()->updateRole($data);
 
         return jsonResponse($result ? 0 : 1);
     }

@@ -3,7 +3,7 @@
 return [
     'dashboard' => 'Thống kê',
     'customer' => 'Khách hàng',
-    'business' => 'Doanh nghiệp',
+    'business' => 'Nghiệp vụ',
     'debit' => 'Ghi nợ',
     'user' => 'Người dùng',
     'role' => 'Vai trò',

@@ -149,7 +149,7 @@
                     url: "{{ route('api.machine.list') }}",
                     type: "POST",
                     beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function(d) {
                         d.search = $('#machine-search').val();
@@ -230,7 +230,7 @@
                         fee_percent: parseFloat(fee_percent),
                     },
                     beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", `Bearer ${token}`);
+                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     success: function(res) {
                         if (res.code == 0) {
@@ -268,8 +268,7 @@
                                 id: id,
                             },
                             beforeSend: function(request) {
-                                request.setRequestHeader("Authorization",
-                                    `Bearer ${token}`);
+                              request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                             },
                             success: function(res) {
                                 if (res.code == 0) {

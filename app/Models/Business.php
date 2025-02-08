@@ -28,5 +28,8 @@ class Business extends Model
         return $this->belongsTo(Card::class, 'card_number', 'card_number');
     }
 
-    public function 
+    public function machine()
+    {
+        return $this->belongsTo(Machine::class, 'machine_id', 'id');
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\api\CardController;
-use App\Http\Controllers\api\DebtController;
+use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;

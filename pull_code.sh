@@ -8,7 +8,7 @@ git clone --branch $BRANCH --single-branch $REPO_URL temp_folder
 rsync -a temp_folder/ . --remove-source-files
 rm -rf temp_folder
 chmod +x ./pull_code.sh
-rm -rf ./config/l5-swagger.php
+rm -f ./config/l5-swagger.php
 
 php artisan o:c
 

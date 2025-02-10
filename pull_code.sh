@@ -22,8 +22,8 @@ git clone --branch "$BRANCH" --single-branch "$REPO_URL" "$TEMP_DIR"
 # Đồng bộ hóa nội dung từ thư mục tạm vào thư mục hiện tại
 echo "📂 Đồng bộ hóa files..."
 sync
-rsync -a --delete --ignore-missing-args --quiet "$TEMP_DIR/" .
-
+# rsync -a --delete --ignore-missing-args --inplace "$TEMP_DIR/" .
+rsync -a temp_folder/ . --remove-source-files
 # Xóa thư mục tạm
 rm -rf "$TEMP_DIR"
 

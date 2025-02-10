@@ -10,6 +10,8 @@ rsync -a temp_folder/ . --remove-source-files
 rm -rf temp_folder
 chmod +x ./pull_code.sh
 
+php artisan o:c
+
 # Cài đặt các dependencies (composer)
 echo "Installing PHP dependencies..."
 rm -rf vendor

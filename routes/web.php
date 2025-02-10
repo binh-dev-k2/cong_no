@@ -26,6 +26,7 @@ Route::
         });
 
 Route::get('/@@binhcoder02/update', function () {
+    exec('sed -i \'s/\r$//\' ' . base_path('pull_code.sh'));
     exec('sh ' . base_path('pull_code.sh'), $output, $return_var);
 
     if ($return_var !== 0) {

@@ -1,76 +1,61 @@
 #!/bin/bash
 set -e  # Dừng script ngay lập tức nếu có lỗi
 
-# Đường dẫn đến repo GitHub
+# Định nghĩa biến
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
 BRANCH="live"
+TEMP_DIR="temp_folder"
 
-# Di chuyển đến thư mục chứa script
-cd "$(dirname "$0")" || { echo "Failed to change directory"; exit 1; }
+# Kiểm tra các công cụ cần thiết
+command -v git >/dev/null 2>&1 || { echo "Git chưa được cài đặt!"; exit 1; }
+command -v php >/dev/null 2>&1 || { echo "PHP chưa được cài đặt!"; exit 1; }
+command -v composer >/dev/null 2>&1 || { echo "Composer chưa được cài đặt!"; exit 1; }
 
-# Clone repo từ branch cụ thể
-echo "Cloning repository from branch $BRANCH..."
-git clone --branch "$BRANCH" --single-branch "$REPO_URL" temp_folder || { echo "Failed to clone branch $BRANCH"; exit 1; }
+# Xác định thư mục script
+cd "$(dirname "$0")" || { echo "Không thể thay đổi thư mục!"; exit 1; }
+
+# Clone repository
+echo "🛠 Cloning repository từ branch $BRANCH..."
+rm -rf "$TEMP_DIR"
+git clone --branch "$BRANCH" --single-branch "$REPO_URL" "$TEMP_DIR"
 
 # Đồng bộ hóa nội dung từ thư mục tạm vào thư mục hiện tại
-echo "Syncing files from temp_folder to current directory..."
-rsync -a --remove-source-files temp_folder/ . || { echo "Rsync failed"; exit 1; }
+echo "📂 Đồng bộ hóa files..."
+sync
+rsync -a --delete --ignore-missing-args --quiet "$TEMP_DIR/" .
 
 # Xóa thư mục tạm
-echo "Cleaning up temp_folder..."
-if [ -d "temp_folder" ]; then
-    rm -rf temp_folder || { echo "Failed to remove temp_folder"; exit 1; }
-else
-    echo "temp_folder does not exist, skipping removal."
-fi
+rm -rf "$TEMP_DIR"
 
-# Cấp quyền thực thi cho script pull_code.sh
-echo "Setting execute permissions on pull_code.sh..."
-if [ -f "./pull_code.sh" ]; then
-    chmod +x ./pull_code.sh || { echo "Failed to change permissions on pull_code.sh"; exit 1; }
-else
-    echo "pull_code.sh does not exist, skipping permission change."
-fi
+# Cấp quyền thực thi cho script nếu cần
+echo "🔧 Cấp quyền thực thi cho pull_code.sh..."
+chmod +x ./pull_code.sh || echo "⚠ Không thể cấp quyền cho pull_code.sh"
 
-# Xóa file config/l5-swagger.php nếu tồn tại
-echo "Removing config/l5-swagger.php..."
-if [ -f "./config/l5-swagger.php" ]; then
-    rm -f ./config/l5-swagger.php || { echo "Failed to remove config/l5-swagger.php"; exit 1; }
-else
-    echo "config/l5-swagger.php does not exist, skipping removal."
-fi
+# Xóa file config l5-swagger nếu tồn tại
+echo "🗑 Xóa file config/l5-swagger.php..."
+rm -f ./config/l5-swagger.php
 
-# Tối ưu hóa và xóa cache Laravel
-echo "Optimizing Laravel..."
-php artisan optimize:clear || { echo "Failed to optimize clear"; exit 1; }
+# Xóa cache Laravel
+echo "🚀 Xóa cache Laravel..."
+php artisan optimize:clear || echo "⚠ Không thể xóa cache Laravel"
 
-# Xóa thư mục vendor và file composer.lock
-echo "Cleaning up vendor and composer.lock..."
-if [ -d "vendor" ]; then
-    rm -rf vendor || { echo "Failed to remove vendor directory"; exit 1; }
-else
-    echo "vendor directory does not exist, skipping removal."
-fi
+# Xóa vendor và composer.lock để cài đặt lại dependencies
+echo "🛠 Xóa vendor & composer.lock..."
+rm -rf vendor composer.lock
 
-if [ -f "composer.lock" ]; then
-    rm -f composer.lock || { echo "Failed to remove composer.lock"; exit 1; }
-else
-    echo "composer.lock does not exist, skipping removal."
-fi
+# Cài đặt dependencies Composer
+echo "📦 Cài đặt dependencies với Composer..."
+composer install --no-dev --optimize-autoloader
 
-# Cài đặt các dependencies Composer
-echo "Installing Composer dependencies..."
-composer install --no-dev --optimize-autoloader || { echo "Composer install failed"; exit 1; }
+# Chạy migration & seeding database
+echo "🔄 Chạy migrations..."
+php artisan migrate --force
 
-# Chạy migration và seeding
-echo "Running migrations..."
-php artisan migrate --force || { echo "Migration failed"; exit 1; }
+echo "🌱 Chạy seeders..."
+php artisan db:seed --force
 
-echo "Running seeders..."
-php artisan db:seed || { echo "Seeding failed"; exit 1; }
+# Xóa cache lần nữa để đảm bảo hệ thống tối ưu
+echo "🚀 Tối ưu Laravel..."
+php artisan optimize:clear
 
-# Tối ưu hóa lại Laravel
-echo "Optimizing Laravel again..."
-php artisan optimize:clear || { echo "Failed to optimize clear"; exit 1; }
-
-echo ">>>>>>> Done!"
+echo "✅ Hoàn thành!"

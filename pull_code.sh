@@ -1,8 +1,8 @@
 # Đường dẫn đến repo GitHub
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
-BRANCH="live" 
+BRANCH="live"
 cd "$(dirname "$0")"
-sed -i -e 's/\r$//' pull_code.sh
+sed -i 's/'$'\\r''$//' pull_code.sh
 
 git clone --branch $BRANCH --single-branch $REPO_URL temp_folder
 rsync -a temp_folder/ . --remove-source-files

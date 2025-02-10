@@ -14,7 +14,7 @@ chmod +x ./pull_code.sh
 echo "Installing PHP dependencies..."
 rm -rf vendor
 rm -f composer.lock
-composer install
+composer install --no-dev --optimize-autoloader
 # Chạy migration (nếu cần)
 echo "Running database migrations..."
 php artisan migrate --force

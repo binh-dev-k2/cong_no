@@ -3,7 +3,7 @@ set -e  # Dừng script ngay lập tức nếu có lỗi
 
 # Định nghĩa biến
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
-BRANCH="live"
+BRANCH="live1"
 TEMP_DIR="temp_folder"
 
 # Kiểm tra các công cụ cần thiết
@@ -23,7 +23,7 @@ git clone --branch "$BRANCH" --single-branch "$REPO_URL" "$TEMP_DIR"
 echo "📂 Đồng bộ hóa files..."
 sync
 # rsync -a --delete --ignore-missing-args --inplace "$TEMP_DIR/" .
-rsync -a temp_folder/ . --remove-source-files
+rsync -a --delete --ignore-missing-args --inplace "$TEMP_DIR/" . --remove-source-files
 # Xóa thư mục tạm
 rm -rf "$TEMP_DIR"
 

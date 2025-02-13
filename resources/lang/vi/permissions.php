@@ -12,4 +12,6 @@ return [
     'create' => 'Thêm',
     'update' => 'Sửa',
     'delete' => 'Xóa',
+    'activity' => 'Lịch sử',
+    'log' => 'Xem',
 ];

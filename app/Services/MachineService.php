@@ -6,7 +6,6 @@ use App\Models\Business;
 use App\Models\Machine;
 
 class MachineService
-
 {
     public function datatable(array $data)
     {
@@ -23,7 +22,7 @@ class MachineService
         }
 
         $recordsFiltered = $recordsTotal = $query->count();
-        $result  = $query
+        $result = $query
             ->skip($skip)
             ->take($pageLength)
             ->get();
@@ -44,13 +43,14 @@ class MachineService
 
     public function update(array $data, $id)
     {
-        $result = Machine::where('id', $id)->update($data);
-        return $result;
+        $model = Machine::findOrFail($id);
+        $model->update($data);
+        return $model;
     }
 
     public function delete($id)
     {
-        $result = Machine::where('id', $id)->delete();
+        $result = Machine::findOrFail($id)->delete();
         Business::where('machine_id', $id)->update(['machine_id' => null]);
         return $result;
     }

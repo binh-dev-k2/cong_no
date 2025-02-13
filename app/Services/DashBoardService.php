@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Business;
 use App\Models\Card;
 use App\Models\Debt;
+use App\Models\Machine;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -106,6 +107,23 @@ class DashBoardService
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
             'data' => $result
+        ];
+    }
+
+    public function getMachineFee()
+    {
+        $total = 0;
+        Machine::query()->with('businesses')
+            ->get()
+            ->map(function ($machine) use (&$total) {
+                $machineFeePercent = $machine->fee_percent;
+                $machine->businesses->each(function ($business) use ($machineFeePercent, &$total) {
+                    $total += $business->fee - ($machineFeePercent * $business->fee / 100);
+                });
+            });
+
+        return [
+            'total' => $total
         ];
     }
 }

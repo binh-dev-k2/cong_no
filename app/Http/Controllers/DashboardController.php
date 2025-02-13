@@ -42,4 +42,9 @@ class DashboardController extends Controller
         $data = $this->dashBoardService->getCardExpired($request->input());
         return response()->json($data);
     }
+
+    public function getMachineFee(){
+        $data = $this->dashBoardService->getMachineFee();
+        return response()->json($data);
+    }
 }

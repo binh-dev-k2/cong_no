@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -55,14 +53,15 @@ class UserService
 
     public function updateRole($data)
     {
-        $user = User::find($data['id']);
+        $user = User::findOrFail($data['id']);
         $user->syncRoles($data['role_name']);
         return $user;
     }
 
     public function delete($id)
     {
-        return User::destroy($id);
+        $user = User::findOrFail($id);
+        return $user->delete();
     }
 
     public function updatePasswrod($data)

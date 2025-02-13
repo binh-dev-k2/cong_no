@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard/total-debit', [DashboardController::class, 'getTotalDebit'])->name('api.dashboard.getTotalDebit')->middleware('can:dashboard');
     Route::get('dashboard/total-business', [DashboardController::class, 'getTotalBusiness'])->name('api.dashboard.getTotalBusiness')->middleware('can:dashboard');
     Route::post('dashboard/card-expired', [DashboardController::class, 'getCardExpired'])->name('api.dashboard.getCardExpired')->middleware('can:dashboard');
+    Route::get('dashboard/machine-fee', [DashboardController::class, 'getMachineFee'])->name('api.dashboard.getMachineFee')->middleware('can:dashboard');
 
     //card
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store')->middleware('can:customer-create');
@@ -78,4 +80,6 @@ Route::middleware('auth')->group(function () {
     Route::post('role/store', [RoleController::class, 'store'])->name('api.role.store');
     Route::post('role/update', [RoleController::class, 'update'])->name('api.role.update');
     Route::post('role/delete', [RoleController::class, 'delete'])->name('api.role.delete');
+
+    Route::post('activity-log/datatable', [ActivityLogController::class, 'datatable'])->name('api.activity-log.list');
 });

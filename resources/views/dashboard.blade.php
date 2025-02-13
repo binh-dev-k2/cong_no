@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body d-flex flex-column">
+                                <div class="card-footer d-flex flex-column py-2">
                                     <div class="d-flex justify-content-end align-items-center mb-1">
                                         <a href="{{ route('debit') }}" class="btn btn-primary">Xem chi tiết</a>
                                     </div>
@@ -61,9 +61,25 @@
                                         <h3 class="align-content-center" id="total-business"></h3>
                                     </div>
                                 </div>
-                                <div class="card-body d-flex flex-column">
+                                <div class="card-body d-flex flex-column py-2">
                                     <div class="d-flex justify-content-end align-items-center mb-1">
                                         <a href="{{ route('business') }}" class="btn btn-primary">Xem chi tiết</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-flush">
+                                <div class="card-header pt-5">
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bold text-gray-900">Máy</span>
+                                        <span class="text-gray-500 pt-2 fw-semibold fs-6">Phí máy</span>
+                                    </h3>
+                                    <div class="card-toolbar">
+                                        <h3 class="align-content-center" id="total-machine-fee"></h3>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex flex-column py-2">
+                                    <div class="d-flex justify-content-end align-items-center mb-1">
+                                        <a href="{{ route('machine') }}" class="btn btn-primary">Xem chi tiết</a>
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +145,7 @@
             getTotalDebit: "{{ route('api.dashboard.getTotalDebit') }}",
             getTotalBusiness: "{{ route('api.dashboard.getTotalBusiness') }}",
             getCardExpired: "{{ route('api.dashboard.getCardExpired') }}",
+            getMachineFee: "{{ route('api.dashboard.getMachineFee') }}",
         }
     </script>
     <script src="{{ asset('assets/js/dashboard/dashboardChart.js') }}"></script>

@@ -123,7 +123,7 @@ class BusinessService extends BaseService
     public function update(array $data)
     {
         $business = Business::findOrFail($data['id']);
-        return $business->fill($data)->save();
+        return $business->update($data);
     }
 
     public function complete($id)
@@ -165,12 +165,12 @@ class BusinessService extends BaseService
 
     public function updatePayExtra($data)
     {
-        return Business::where('id', $data['id'])->update(['pay_extra' => $data['pay_extra']]);
+        return Business::findOrFail($data['id'])->update(['pay_extra' => $data['pay_extra']]);
     }
 
     public function updateBusinessMoney($data)
     {
-        return BusinessMoney::where('id', $data['id'])->update(
+        return BusinessMoney::findOrFail($data['id'])->update(
             [
                 'money' => $data['money'] ?? 0,
                 'is_money_checked' => $data['is_money_checked'],
@@ -235,7 +235,7 @@ class BusinessService extends BaseService
 
     public function delete($id)
     {
-        return Business::where('id', $id)->delete() > 0;
+        return Business::findOrFail($id)->delete() > 0;
     }
 
     public function updateNote($data)

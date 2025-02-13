@@ -14,4 +14,9 @@ class Machine extends Model
     protected $table = 'machines';
 
     protected $guarded = ['id'];
+
+    public function businesses()
+    {
+        return $this->hasMany(Business::class);
+    }
 }

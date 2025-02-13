@@ -94,10 +94,10 @@ class CustomerService
         DB::beginTransaction();
         try {
             // Xóa khách hàng
-            $customersDeleted = Customer::whereIn('id', $customer_ids)->delete();
-            if (!$customersDeleted) {
-                Log::error("Failed to delete customers with IDs: " . implode(', ', $customer_ids));
-                return false;
+            $customers = Customer::whereIn('id', $customer_ids)->get();
+
+            foreach ($customers as $customer) {
+                $customer->delete();
             }
 
             // Hủy gán khách hàng theo card
@@ -108,10 +108,9 @@ class CustomerService
             }
 
             // Xóa lịch sử thẻ của khách hàng
-            $cardHistoryDeleted = CardHistory::whereIn('customer_id', $customer_ids)->delete();
-            if (!$cardHistoryDeleted) {
-                Log::error("Failed to delete card history for customers with IDs: " . implode(', ', $customer_ids));
-                return false;
+            $cardHistories = CardHistory::whereIn('customer_id', $customer_ids)->get();
+            foreach ($cardHistories as $cardHistory) {
+                $cardHistory->delete();
             }
 
             DB::commit();

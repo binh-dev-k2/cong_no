@@ -107,7 +107,13 @@ class DebtService
     function updateStatus($id)
     {
         try {
-            return Debt::where('id', $id)->update(['status' => Debt::STATUS_PAID]);
+            $debt = Debt::where('id', $id)->first();
+            if ($debt) {
+                $debt->status = Debt::STATUS_PAID;
+                $debt->save();
+                return true;
+            }
+            return false;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return false;

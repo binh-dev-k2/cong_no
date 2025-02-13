@@ -39,7 +39,7 @@ class MachineRequest extends FormRequest
                 return [
                     'id' => 'required|exists:machines,id',
                     'name' => 'required|string|max:255',
-                    'code' => 'required|string|max:255|unique:machines,code',
+                    'code' => 'required|string|max:255|unique:machines,code,' . $this->input('id'),
                     'fee_percent' => 'required|numeric',
                 ];
 

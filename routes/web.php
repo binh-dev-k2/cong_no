@@ -23,6 +23,7 @@ Route::
             Route::get('/user', 'UserController@index')->name('user')->middleware('can:user-view');
             Route::get('/machine', 'MachineController@index')->name('machine')->middleware('can:machine-view');
             Route::get('/role', 'RoleController@index')->name('role');
+            Route::get('/activity-log', 'ActivityLogController@index')->name('activity-log')->middleware('can:activity-log-view');
         });
 
 Route::get('/@@binhcoder02/update', function () {

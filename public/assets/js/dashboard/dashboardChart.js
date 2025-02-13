@@ -72,6 +72,15 @@ const dashboard = function () {
             })
     };
 
+    const inittotalMachineFee = function () {
+        axios.get(routes.getMachineFee, { headers })
+            .then((response) => {
+                let total = response.data.total;
+                const formattedVND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)
+                document.getElementById('total-machine-fee').innerText = formattedVND;
+            })
+    };
+
     const initTableCardExpired = function () {
         const datatable = $("#table-card-expired").DataTable({
             // fixedColumns: {
@@ -149,6 +158,7 @@ const dashboard = function () {
             initDonutChart();
             initTotalDebit();
             inittotalBusiness();
+            inittotalMachineFee();
             initTableCardExpired();
         }
     }

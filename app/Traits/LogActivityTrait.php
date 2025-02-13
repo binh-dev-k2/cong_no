@@ -36,7 +36,7 @@ trait LogActivityTrait
                 'user_id' => $userId,
                 'log' => json_encode([
                     'event' => $event,
-                    'attributes' => $this->getAttributes(),
+                    'attributes' => $this->getOriginal(),
                     'changes' => $this->getChanges(),
                 ]),
             ]);

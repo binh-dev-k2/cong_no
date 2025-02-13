@@ -145,6 +145,22 @@
                         </div>
                     @endcan
 
+                    @can('activity-log-view')
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif"
+                            href="{{ route('activity-log') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-shield fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Lịch sử</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                @endcan
                 </div>
             </div>
         </div>

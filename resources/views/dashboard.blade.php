@@ -72,6 +72,24 @@
                                     <h3 class="card-title align-items-start flex-column">
                                         <span class="card-label fw-bold text-gray-900">Máy</span>
                                         <span class="text-gray-500 pt-2 fw-semibold fs-6">Phí máy</span>
+                                        <div class="d-flex flex-column mt-3">
+                                            <div class="d-flex">
+                                                <select class="form-select form-select-solid me-2" name="month"
+                                                    id="machine-month-select">
+                                                    <option value="">Tháng</option>
+                                                    @for ($i = 1; $i <= 12; $i++)
+                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                                <select class="form-select form-select-solid min-w-100px" name="year"
+                                                    id="machine-year-select">
+                                                    <option value="">Năm</option>
+                                                    @for ($i = now()->year; $i >= 2025; $i--)
+                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
                                     </h3>
                                     <div class="card-toolbar">
                                         <h3 class="align-content-center" id="total-machine-fee"></h3>
@@ -98,7 +116,8 @@
                                 </div>
                                 <div class="card-body py-0">
                                     <div class="d-flex flex-center">
-                                        <canvas id="canvas-chart-customer" class="mh-300px" width="300" height="300"></canvas>
+                                        <canvas id="canvas-chart-customer" class="mh-300px" width="300"
+                                            height="300"></canvas>
                                     </div>
                                     <div class="d-flex justify-content-end align-items-center mb-1">
                                         <a href="{{ route('customer') }}" class="btn btn-primary">Xem chi tiết</a>
@@ -117,7 +136,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5" id="table-card-expired">
+                                        <table
+                                            class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
+                                            id="table-card-expired">
                                             <thead>
                                                 <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                                     <th class="text-center min-w-125px">STT</th>

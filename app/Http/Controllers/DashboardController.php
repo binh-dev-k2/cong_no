@@ -43,8 +43,8 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    public function getMachineFee(){
-        $data = $this->dashBoardService->getMachineFee();
+    public function getMachineFee(Request $request){
+        $data = $this->dashBoardService->getMachineFee($request->input());
         return response()->json($data);
     }
 }

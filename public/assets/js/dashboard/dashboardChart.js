@@ -64,7 +64,7 @@ const dashboard = function () {
             })
     };
 
-    const inittotalBusiness = function () {
+    const initTotalBusiness = function () {
         axios.get(routes.getTotalBusiness, { headers })
             .then((response) => {
                 let totalBusiness = response.data.totalBusiness;
@@ -72,11 +72,11 @@ const dashboard = function () {
             })
     };
 
-    const inittotalMachineFee = function () {
-        axios.get(routes.getMachineFee, { headers })
+    const initTotalMachineFee = function (month = null, year = null) {
+        axios.post(routes.getMachineFee, { month, year }, { headers })
             .then((response) => {
                 let total = response.data.total;
-                const formattedVND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)
+                const formattedVND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total ?? 0)
                 document.getElementById('total-machine-fee').innerText = formattedVND;
             })
     };
@@ -152,14 +152,19 @@ const dashboard = function () {
         });
     }
 
-
     return {
         init: function () {
             initDonutChart();
             initTotalDebit();
-            inittotalBusiness();
-            inittotalMachineFee();
+            initTotalBusiness();
+            initTotalMachineFee();
             initTableCardExpired();
+
+            $('#machine-month-select, #machine-year-select').on('change', function () {
+                const month = $('#machine-month-select').val();
+                const year = $('#machine-year-select').val();
+                initTotalMachineFee(month, year);
+            })
         }
     }
 }();

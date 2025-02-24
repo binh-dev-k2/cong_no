@@ -16,6 +16,7 @@ class ActivityLogService extends BaseService
 
         $recordsFiltered = $recordsTotal = $query->count();
         $result = $query
+            ->latest()
             ->with('user')
             ->skip($skip)
             ->take($pageLength)

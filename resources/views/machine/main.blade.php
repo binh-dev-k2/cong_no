@@ -40,13 +40,36 @@
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-title">
-                        <div class="d-flex align-items-center position-relative my-1">
-                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                            <input type="text" id="machine-search" class="form-control form-control-solid w-250px ps-12 "
-                                data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
+                        <div class="d-flex flex-wrap">
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                                <input type="text" id="machine-search"
+                                    class="form-control form-control-solid w-250px ps-12 "
+                                    data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
+                            </div>
+
+                            <div class="d-flex gap-2 ms-2">
+                                <div class="d-flex">
+                                    <select class="form-select form-select-sm form-select-solid me-2" name="month"
+                                        id="machine-month-select">
+                                        <option value="">Tháng</option>
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                    <select class="form-select form-select-sm form-select-solid min-w-100px" name="year"
+                                        id="machine-year-select">
+                                        <option value="">Năm</option>
+                                        @for ($i = now()->year; $i >= 2025; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" id="machine-filter">Lọc</button>
+                            </div>
                         </div>
                     </div>
 
@@ -65,7 +88,8 @@
                                 <th class="text-center min-w-50px">STT</th>
                                 <th class="text-center min-w-125px">Tên máy</th>
                                 <th class="text-center min-w-125px">Mã máy</th>
-                                <th class="text-center min-w-125px">% phí</th>
+                                <th class="text-center min-w-125px">% lợi nhuận</th>
+                                <th class="text-center min-w-125px">Phí</th>
                                 <th class="text-center min-w-70px">Hành động</th>
                             </tr>
                         </thead>
@@ -154,6 +178,8 @@
                     },
                     data: function(d) {
                         d.search = $('#machine-search').val();
+                        d.month = $('#machine-month-select').val();
+                        d.year = $('#machine-year-select').val();
                     }
                 },
                 columnDefs: [{
@@ -178,7 +204,7 @@
                         targets: 2,
                         data: 'code',
                         orderable: false,
-                        className: 'min-w-150px',
+                        className: 'text-center',
                         render: function(data, type, row) {
                             return `<span>${data ?? ''}</span>`
                         }
@@ -190,6 +216,15 @@
                         className: 'text-center min-w-150px',
                         render: function(data, type, row) {
                             return `<span>${new Intl.NumberFormat('vi-VN').format(data)}</span>`;
+                        }
+                    },
+                    {
+                        targets: 4,
+                        data: 'business_fees_sum_fee',
+                        orderable: false,
+                        className: 'text-center min-w-150px',
+                        render: function(data, type, row) {
+                            return data ? new Intl.NumberFormat('vi-VN').format(data) : 0;
                         }
                     },
                     {
@@ -206,6 +241,15 @@
                     },
                 ],
             });
+
+            $('#machine-filter').on('click', function(e) {
+                e.preventDefault();
+                if ($('#machine-month-select').val() && !$('#machine-year-select').val()) {
+                    notify('Vui lòng chọn năm.', 'error');
+                    return;
+                }
+                datatable.ajax.reload();
+            })
 
             $('#machine-modal').on('hidden.bs.modal', function(e) {
                 $(this).find('input[name="id"]').val('');

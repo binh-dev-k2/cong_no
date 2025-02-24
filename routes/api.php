@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard/total-debit', [DashboardController::class, 'getTotalDebit'])->name('api.dashboard.getTotalDebit')->middleware('can:dashboard');
     Route::get('dashboard/total-business', [DashboardController::class, 'getTotalBusiness'])->name('api.dashboard.getTotalBusiness')->middleware('can:dashboard');
     Route::post('dashboard/card-expired', [DashboardController::class, 'getCardExpired'])->name('api.dashboard.getCardExpired')->middleware('can:dashboard');
-    Route::get('dashboard/machine-fee', [DashboardController::class, 'getMachineFee'])->name('api.dashboard.getMachineFee')->middleware('can:dashboard');
+    Route::post('dashboard/machine-fee', [DashboardController::class, 'getMachineFee'])->name('api.dashboard.getMachineFee')->middleware('can:dashboard');
 
     //card
     Route::post('card/store', [CardController::class, 'store'])->name('api.card.store')->middleware('can:customer-create');

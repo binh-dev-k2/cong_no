@@ -21,6 +21,17 @@ class MachineService
                 ->orWhere('code', 'like', "%{$search}%");
         }
 
+        if (isset($data['year'])) {
+            $query->withSum(['businessFees' => function ($subQuery) use ($data) {
+                $subQuery->where('year', $data['year']);
+                if (isset($data['month'])) {
+                    $subQuery->where('month', $data['month']);
+                }
+            }], 'fee');
+        } else {
+            $query->withSum('businessFees', 'fee');
+        }
+
         $recordsFiltered = $recordsTotal = $query->count();
         $result = $query
             ->skip($skip)

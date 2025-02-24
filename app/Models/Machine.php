@@ -19,4 +19,9 @@ class Machine extends Model
     {
         return $this->hasMany(Business::class);
     }
+
+    public function businessFees()
+    {
+        return $this->hasMany(MachineBusinessFee::class);
+    }
 }

@@ -106,7 +106,7 @@
                                 <label class="required fs-6 fw-semibold mb-2" for="machine_id">Mã máy</label>
                                 <select class="form-select form-select-solid" name="machine_id" id="machine_id">
                                     @foreach ($machines as $key => $machine)
-                                        <option value="{{ $machine['id'] }}">{{ $machine['name'] }}</option>
+                                        <option value="{{ $machine['id'] }}">{{ $machine['code'] }}</option>
                                     @endforeach
                                 </select>
                             </div>

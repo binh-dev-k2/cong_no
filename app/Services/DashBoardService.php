@@ -7,6 +7,7 @@ use App\Models\Card;
 use App\Models\Debt;
 use App\Models\Machine;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashBoardService
@@ -110,17 +111,20 @@ class DashBoardService
         ];
     }
 
-    public function getMachineFee()
+    public function getMachineFee($data)
     {
-        $total = 0;
-        Machine::query()->with('businesses')
-            ->get()
-            ->map(function ($machine) use (&$total) {
-                $machineFeePercent = $machine->fee_percent;
-                $machine->businesses->each(function ($business) use ($machineFeePercent, &$total) {
-                    $total += $business->fee - ($machineFeePercent * $business->fee / 100);
-                });
+        $query = Machine::query();
+
+        if ($data['month'] && $data['year']) {
+            $query->whereHas('businessFees', function ($query) use ($data) {
+                $query->where('month', $data['month'])
+                    ->where('year', $data['year']);
             });
+        }
+
+        $total = $query->with('businessFees')->get()->map(function ($item) {
+            return $item->businessFees->sum('fee');
+        })->sum();
 
         return [
             'total' => $total

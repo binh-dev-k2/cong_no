@@ -7,6 +7,7 @@ use App\Models\BusinessMoney;
 use App\Models\BusinessSetting;
 use App\Models\Card;
 use App\Models\Debt;
+use App\Models\MachineBusinessFee;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -130,7 +131,7 @@ class BusinessService extends BaseService
     {
         try {
             DB::beginTransaction();
-            $business = Business::where('id', $id)->with('card')->first();
+            $business = Business::where('id', $id)->with(['card', 'machine'])->first();
 
             $debtData = [
                 'account_name' => $business->account_name,
@@ -152,6 +153,15 @@ class BusinessService extends BaseService
             }
 
             Debt::create($debtData);
+
+            if ($business->machine) {
+                MachineBusinessFee::create([
+                    'machine_id' => $business->machine_id,
+                    'fee' => $business->fee - (float) ($business->total_money * $business->machine->fee_percent / 100),
+                    'month' => now()->month,
+                    'year' => now()->year
+                ]);
+            }
 
             $business->delete();
             DB::commit();

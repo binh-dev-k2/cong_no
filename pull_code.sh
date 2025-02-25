@@ -4,6 +4,7 @@ set -e  # Dừng script ngay khi gặp lỗi
 
 # Đường dẫn đến repo GitHub
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
+REMOTE_NAME="binh.dev.02"  # Đúng remote name
 BRANCH="live1"
 
 # Di chuyển đến thư mục chứa project
@@ -15,12 +16,16 @@ if [ ! -d ".git" ]; then
     git clone --branch "$BRANCH" "$REPO_URL" .
 else
     echo "🔄 Fetching latest changes..."
-    git fetch --all
+    git fetch "$REMOTE_NAME"
+
+    echo "🔄 Checking out branch $BRANCH..."
     git checkout "$BRANCH"
 
     echo "🔄 Resetting local branch to match remote..."
-    git reset --hard binh.dev.02/$BRANCH  # Reset lại để đồng bộ với remote
-    git pull origin "$BRANCH"  # Lấy code mới nhất
+    git reset --hard "$REMOTE_NAME/$BRANCH"  # Reset về đúng remote
+
+    echo "🔄 Pulling the latest changes..."
+    git pull "$REMOTE_NAME" "$BRANCH" --ff-only  # Fast-forward nếu có thể
 fi
 
 # Chạy migration nếu có thay đổi

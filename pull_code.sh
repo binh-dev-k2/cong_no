@@ -15,8 +15,9 @@ fi
 
 # Pull code mới nhất
 echo "🔄 Pulling the latest code from $REPO_URL..."
-git reset --hard origin/$BRANCH
-git pull origin $BRANCH --rebase
+git pull
+git checkout $BRANCH
+git pull
 
 # Kiểm tra lỗi khi pull code
 if [ $? -ne 0 ]; then

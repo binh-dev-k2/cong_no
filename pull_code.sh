@@ -28,6 +28,10 @@ else
     git pull "$REMOTE_NAME" "$BRANCH" --ff-only  # Fast-forward nếu có thể
 fi
 
+# Cài đặt dependency của PHP (không chạy script post-install)
+echo "📦 Installing composer dependencies..."
+composer install --no-interaction --prefer-dist --optimize-autoloader
+
 # Chạy migration nếu có thay đổi
 echo "⚙️ Running database migrations..."
 php artisan migrate --force || { echo "❌ Migration failed! Exiting."; exit 1; }

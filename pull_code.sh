@@ -17,7 +17,10 @@ else
     echo "🔄 Fetching latest changes..."
     git fetch --all
     git checkout "$BRANCH"
-    git pull origin "$BRANCH"
+
+    echo "🔄 Resetting local branch to match remote..."
+    git reset --hard origin/$BRANCH  # Reset lại để đồng bộ với remote
+    git pull origin "$BRANCH"  # Lấy code mới nhất
 fi
 
 # Chạy migration nếu có thay đổi

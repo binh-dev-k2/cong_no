@@ -19,7 +19,7 @@ else
     git checkout "$BRANCH"
 
     echo "🔄 Resetting local branch to match remote..."
-    git reset --hard origin/$BRANCH  # Reset lại để đồng bộ với remote
+    git reset --hard binh.dev.02/$BRANCH  # Reset lại để đồng bộ với remote
     git pull origin "$BRANCH"  # Lấy code mới nhất
 fi
 

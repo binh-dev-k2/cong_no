@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -72,13 +73,34 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
+            Permission::firstOrCreate(
+                [
+                    'name' => $permission,
+                ],
+                [
+                    'name' => $permission,
+                    'guard_name' => 'web',
+                ]
+            );
+        }
+
+        $role = Role::firstOrCreate([
+            'name' => 'admin',
+            'guard_name' => 'web',
+        ]);
+
+        $role->givePermissionTo($permissions);
+
+        $user = User::firstOrCreate(
+            [
+                'email' => 'admin@admin.com',
             ],
             [
-                'name' => $permission,
-                'guard_name' => 'web',
-            ]);
-        }
+                'name' => 'admin',
+                'password' => Hash::make('Gavosong800@'),
+            ]
+        );
+
+        $user->assignRole('admin');
     }
 }

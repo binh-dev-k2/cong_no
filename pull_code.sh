@@ -30,6 +30,7 @@ fi
 
 # Cài đặt dependency của PHP (không chạy script post-install)
 echo "📦 Installing composer dependencies..."
+composer clear-cache
 composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Chạy migration nếu có thay đổi

@@ -34,7 +34,7 @@ php artisan migrate --force || { echo "❌ Migration failed! Exiting."; exit 1; 
 
 # Chạy seeder (nếu cần)
 echo "🌱 Seeding database..."
-php artisan db:seed || { echo "❌ Seeding failed! Exiting."; exit 1; }
+php artisan db:seed --force || { echo "❌ Seeding failed! Exiting."; exit 1; }
 
 # Dọn dẹp và tối ưu cache
 echo "🗑️ Clearing and optimizing cache..."

@@ -1,41 +1,32 @@
 #!/bin/bash
 
+set -e  # Dừng script ngay khi gặp lỗi
+
 # Đường dẫn đến repo GitHub
 REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
 BRANCH="live1"
 
 # Di chuyển đến thư mục chứa project
-cd "$(dirname "$0")" || exit
+cd "$(dirname "$0")" || exit 1
 
 # Kiểm tra nếu chưa có Git repo, thì clone mới
 if [ ! -d ".git" ]; then
     echo "🚀 Cloning repository for the first time..."
-    git clone --branch $BRANCH $REPO_URL .
-fi
-
-# Pull code mới nhất
-echo "🔄 Pulling the latest code from $REPO_URL..."
-git pull
-git checkout $BRANCH
-git pull
-
-# Kiểm tra lỗi khi pull code
-if [ $? -ne 0 ]; then
-    echo "❌ Lỗi khi pull code! Kiểm tra lại."
-    exit 1
+    git clone --branch "$BRANCH" "$REPO_URL" .
+else
+    echo "🔄 Fetching latest changes..."
+    git fetch --all
+    git checkout "$BRANCH"
+    git pull origin "$BRANCH"
 fi
 
 # Chạy migration nếu có thay đổi
 echo "⚙️ Running database migrations..."
-php artisan migrate --force
+php artisan migrate --force || { echo "❌ Migration failed! Exiting."; exit 1; }
 
-php artisan db:seed
-
-# Kiểm tra lỗi migration
-if [ $? -ne 0 ]; then
-    echo "❌ Lỗi khi chạy migration! Dừng cập nhật."
-    exit 1
-fi
+# Chạy seeder (nếu cần)
+echo "🌱 Seeding database..."
+php artisan db:seed || { echo "❌ Seeding failed! Exiting."; exit 1; }
 
 # Dọn dẹp và tối ưu cache
 echo "🗑️ Clearing and optimizing cache..."

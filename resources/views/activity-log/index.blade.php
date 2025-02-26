@@ -132,7 +132,9 @@
                                 'year_expired': 'Năm hết hạn',
                                 'total_amount': 'Tổng số tiền',
                                 'business_id': 'ID nghiệp vụ',
-                                'machine_id': 'ID máy'
+                                'machine_id': 'ID máy',
+                                'is_money_checked': 'Đánh dấu số tiền',
+                                'is_note_checked': 'Đánh dấu ghi chú'
                             }[key] || key;
 
                             return [newKey, value];

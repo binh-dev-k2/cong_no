@@ -130,6 +130,9 @@
                                 'status': 'Trạng thái',
                                 'month_expired': 'Tháng hết hạn',
                                 'year_expired': 'Năm hết hạn',
+                                'total_amount': 'Tổng số tiền',
+                                'business_id': 'ID nghiệp vụ',
+                                'machine_id': 'ID máy'
                             }[key] || key;
 
                             return [newKey, value];
@@ -191,7 +194,7 @@
                                                 return `
                                                             <li>
                                                                 <span>${key}:</span>
-                                                                <span>${value}</span>
+                                                                <span>${value ?? ''}</span>
                                                             </li>
                                                             `
                                             }).join('')}

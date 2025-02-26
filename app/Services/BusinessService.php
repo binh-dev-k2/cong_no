@@ -157,7 +157,7 @@ class BusinessService extends BaseService
             if ($business->machine) {
                 MachineBusinessFee::create([
                     'machine_id' => $business->machine_id,
-                    'fee' => (float) ($business->total_money * $business->fee_percent / 100) - (float) ($business->total_money * $business->machine->fee_percent / 100),
+                    'fee' => (float) ($business->total_money * ($business->fee_percent - $business->machine->fee_percent) / 100),
                     'month' => now()->month,
                     'year' => now()->year
                 ]);

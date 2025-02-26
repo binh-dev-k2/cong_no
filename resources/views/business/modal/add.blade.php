@@ -112,7 +112,7 @@
                                 <select class="form-select form-select-solid" name="machine_id" id="machine_id">
                                     <option value="">Chọn mã máy</option>
                                     @foreach ($machines as $key => $machine)
-                                        <option value="{{ $machine['id'] }}">{{ $machine['code'] }}</option>
+                                        <option value="{{ $machine['id'] }}">{{ $machine['code'] . ' - ' . $machine['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>

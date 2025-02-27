@@ -409,7 +409,7 @@ var BusinessList = function () {
                                         <span>${formatNumber(row.card_number)}</span>
                                         ${formatNumber(row.card.account_number ? 'STK: ' + row.card.account_number : '')}
                                         ${row.card.date_due ? `<span class="text-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}
-                                        ${row.machine ? `<span class="text-secondary">Máy: ${row.machine.name}</span>` : ''}
+                                        ${row.machine ? `<span class="text-warning">Máy: ${row.machine.name}</span>` : ''}
                                     </div>
                                     `;
                         }

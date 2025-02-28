@@ -18,16 +18,6 @@ class CardService
 
         $query = Card::query()->whereHas('customer');
 
-        if (isset($data['search'])) {
-            $search = $data['search'];
-
-            $query->whereHas('customer', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })->orWhere('account_number', 'like', "%{$search}%")
-                ->orWhere('card_number', 'like', "%{$search}%")
-                ->orWhere('account_name', 'like', "%{$search}%");
-        }
-
         switch ((int) $data['view_type']) {
             case 1:
                 $now = Carbon::now()->startOfDay();
@@ -64,6 +54,16 @@ class CardService
 
             default:
                 break;
+        }
+
+        if (isset($data['search'])) {
+            $search = $data['search'];
+
+            $query->whereHas('customer', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })->orWhere('account_number', 'like', "%{$search}%")
+                ->orWhere('card_number', 'like', "%{$search}%")
+                ->orWhere('account_name', 'like', "%{$search}%");
         }
 
         $recordsFiltered = $recordsTotal = $query->count();

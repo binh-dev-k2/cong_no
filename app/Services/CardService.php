@@ -12,9 +12,7 @@ class CardService
 {
     public function filterDatatableCustomer(array $data)
     {
-        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
-        $pageLength = $data['length'] ?? 50;
-        $skip = ($pageNumber - 1) * $pageLength;
+        [$pageNumber, $pageLength, $skip] = $this->getPaginationInfo($data);
 
         $query = Card::query()->whereHas('customer');
 
@@ -22,7 +20,6 @@ class CardService
             case 1:
                 $now = Carbon::now()->startOfDay();
                 $endDate = Carbon::now()->addDays(7)->endOfDay();
-
                 $month = $now->month;
                 $year = $now->year;
                 $formality = 'Đ';
@@ -59,11 +56,13 @@ class CardService
         if (isset($data['search'])) {
             $search = $data['search'];
 
-            $query->whereHas('customer', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })->orWhere('account_number', 'like', "%{$search}%")
-                ->orWhere('card_number', 'like', "%{$search}%")
-                ->orWhere('account_name', 'like', "%{$search}%");
+            $query->where(function ($query) use ($search) {
+                $query->whereHas('customer', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })->orWhere('account_number', 'like', "%{$search}%")
+                    ->orWhere('card_number', 'like', "%{$search}%")
+                    ->orWhere('account_name', 'like', "%{$search}%");
+            });
         }
 
         $recordsFiltered = $recordsTotal = $query->count();
@@ -80,6 +79,34 @@ class CardService
             "recordsFiltered" => $recordsFiltered,
             'data' => $customers
         ];
+    }
+
+    private function getPaginationInfo(array $data): array
+    {
+        $pageLength = $data['length'] ?? 50;
+        $pageNumber = ($data['start'] ?? 0) / $pageLength + 1;
+        $skip = ($pageNumber - 1) * $pageLength;
+
+        return [$pageNumber, $pageLength, $skip];
+    }
+
+    private function applyViewTypeFilter($query, int $viewType)
+    {
+        if ($viewType === 1) {
+            $now = Carbon::now()->startOfDay();
+            $endDate = Carbon::now()->addDays(7)->endOfDay();
+            $month = $now->month;
+            $year = $now->year;
+            $formality = 'Đ';
+
+            $query->whereBetween('date_due', [$now, $endDate])
+                ->whereNull('date_return')
+                ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
+                    $query->whereMonth('created_at', $month)
+                        ->whereYear('created_at', $year)
+                        ->where('formality', $formality);
+                });
+        }
     }
 
     public function find($search)

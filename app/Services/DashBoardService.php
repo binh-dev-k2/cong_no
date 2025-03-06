@@ -5,9 +5,8 @@ namespace App\Services;
 use App\Models\Business;
 use App\Models\Card;
 use App\Models\Debt;
-use App\Models\Machine;
+use App\Models\MachineBusinessFee;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashBoardService
@@ -113,21 +112,18 @@ class DashBoardService
 
     public function getMachineFee($data)
     {
-        $query = Machine::query();
+        $query = MachineBusinessFee::query();
 
-        if ($data['month'] && $data['year']) {
-            $query->whereHas('businessFees', function ($query) use ($data) {
-                $query->where('month', $data['month'])
-                    ->where('year', $data['year']);
-            });
+        if (!empty($data['month']) && !empty($data['year'])) {
+            $query->where('month', $data['month'])
+                ->where('year', $data['year']);
         }
 
-        $total = $query->with('businessFees')->get()->map(function ($item) {
-            return $item->businessFees->sum('fee');
-        })->sum();
+        $total = $query->sum('fee');
 
         return [
             'total' => $total
         ];
     }
+
 }

@@ -64,7 +64,7 @@
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
-                                data-bs-target="#modal-add">Thêm người dùng</button>
+                                data-bs-target="#modal-user">Thêm người dùng</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">

@@ -12,7 +12,7 @@
                             <input type="hidden" name="id">
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="fs-6 fw-semibold mb-2" for="role_name">Vai trò</label>
-                                <select class="form-select form-select-solid" name="role_name" id="role_name">
+                                <select class="form-select form-select-solid" name="role_name">
                                     @foreach ($roles as $key => $role)
                                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                                     @endforeach

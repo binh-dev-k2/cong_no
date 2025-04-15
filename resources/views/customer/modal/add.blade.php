@@ -39,7 +39,7 @@
                                 name="phone" />
                         </div>
 
-                        <div class="fv-row mb-7">
+                        {{-- <div class="fv-row mb-7">
                             <label for="select_add_card" class="required fs-6 fw-semibold mb-2">
                                 Nhập số tài khoản hoặc số thẻ
                             </label>
@@ -53,7 +53,7 @@
                                     </option>
                                 @endforeach --}}
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer flex-center">

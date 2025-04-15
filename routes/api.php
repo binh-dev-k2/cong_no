@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Api\CardController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -82,4 +83,6 @@ Route::middleware('auth')->group(function () {
     Route::post('role/delete', [RoleController::class, 'delete'])->name('api.role.delete');
 
     Route::post('activity-log/datatable', [ActivityLogController::class, 'datatable'])->name('api.activity-log.list');
+
+    Route::post('bank/store', [BankController::class, 'store'])->name('api.bank.store');
 });

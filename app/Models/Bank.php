@@ -14,8 +14,10 @@ class Bank extends Model
     use LogActivityTrait;
 
     protected $table = "banks";
+    
+    public $timestamps = false;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function cards(): HasMany
     {

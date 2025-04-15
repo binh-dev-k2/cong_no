@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Card;
 use App\Models\CardHistory;
+use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +13,7 @@ class CardService
 {
     public function filterDatatableCustomer(array $data)
     {
-        [$pageNumber, $pageLength, $skip] = $this->getPaginationInfo($data);
+        [$pageLength, $skip] = $this->getPaginationInfo($data);
 
         $query = Card::query()->whereHas('customer');
 
@@ -25,28 +26,28 @@ class CardService
                 $formality = 'Đ';
 
                 $query->whereBetween(DB::raw("
-                    STR_TO_DATE(
-                        CONCAT(
-                            CASE
-                                WHEN $month = 12 AND date_due < {$now->day} THEN $year + 1
-                                ELSE $year
-                            END, '-',
-                            CASE
-                                WHEN date_due < {$now->day} THEN
-                                    CASE WHEN $month = 12 THEN 1 ELSE $month + 1 END
-                                ELSE $month
-                            END, '-',
-                            date_due
-                        ),
-                        '%Y-%m-%d'
-                    )
-                "), [$now, $endDate])
+                        STR_TO_DATE(
+                            CONCAT(
+                                CASE
+                                    WHEN $month = 12 AND date_due < {$now->day} THEN $year + 1
+                                    ELSE $year
+                                END, '-',
+                                CASE
+                                    WHEN date_due < {$now->day} THEN
+                                        CASE WHEN $month = 12 THEN 1 ELSE $month + 1 END
+                                    ELSE $month
+                                END, '-',
+                                date_due
+                            ),
+                            '%Y-%m-%d'
+                        )
+                    "), [$now, $endDate])
                     ->whereNull('date_return')
                     ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
                         $query->whereMonth('created_at', $month)
                             ->whereYear('created_at', $year)
                             ->where('formality', $formality);
-                    });
+                });
                 break;
 
             default:
@@ -60,8 +61,8 @@ class CardService
                 $query->whereHas('customer', function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%");
                 })->orWhere('account_number', 'like', "%{$search}%")
-                    ->orWhere('card_number', 'like', "%{$search}%")
-                    ->orWhere('account_name', 'like', "%{$search}%");
+                            ->orWhere('card_number', 'like', "%{$search}%")
+                            ->orWhere('account_name', 'like', "%{$search}%");
             });
         }
 
@@ -87,26 +88,7 @@ class CardService
         $pageNumber = ($data['start'] ?? 0) / $pageLength + 1;
         $skip = ($pageNumber - 1) * $pageLength;
 
-        return [$pageNumber, $pageLength, $skip];
-    }
-
-    private function applyViewTypeFilter($query, int $viewType)
-    {
-        if ($viewType === 1) {
-            $now = Carbon::now()->startOfDay();
-            $endDate = Carbon::now()->addDays(7)->endOfDay();
-            $month = $now->month;
-            $year = $now->year;
-            $formality = 'Đ';
-
-            $query->whereBetween('date_due', [$now, $endDate])
-                ->whereNull('date_return')
-                ->whereDoesntHave('debts', function ($query) use ($month, $year, $formality) {
-                    $query->whereMonth('created_at', $month)
-                        ->whereYear('created_at', $year)
-                        ->where('formality', $formality);
-                });
-        }
+        return [$pageLength, $skip];
     }
 
     public function find($search)
@@ -203,32 +185,11 @@ class CardService
 
     function assignCustomer($cardIds, $customerId)
     {
-        try {
-            $this->unassignCustomer($customerId);
-            $result = Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
-
-            if ($result) {
-                return true;
-            }
-            return false;
-        } catch (\Throwable $th) {
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return false;
-        }
+        return Card::where('customer_id', $customerId)->whereNotIn('id', $cardIds)->delete();
     }
 
-    function unassignCustomer($id)
+    public function unassignCustomer($customerIds)
     {
-        try {
-            $result = Card::where('customer_id', $id)->update(['customer_id' => null]);
-            if ($result) {
-                return true;
-            }
-
-            return false;
-        } catch (\Throwable $th) {
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return false;
-        }
+        return Card::whereIn('customer_id', $customerIds)->delete();
     }
 }

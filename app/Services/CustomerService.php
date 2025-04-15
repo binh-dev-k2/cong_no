@@ -23,32 +23,11 @@ class CustomerService
 
     public function create($data)
     {
-        DB::beginTransaction();
-        try {
-            $customer = Customer::create([
-                'name' => $data['customer_name'],
-                'phone' => $data['customer_phone'],
-                'fee_percent' => null,
-            ]);
-
-            if (!$customer) {
-                return false;
-            }
-
-            // Gán thẻ cho khách hàng
-            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
-
-            if (!$result) {
-                return false;
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return false;
-        }
+        return Customer::create([
+            'name' => $data['customer_name'],
+            'phone' => $data['customer_phone'],
+            'fee_percent' => null,
+        ]);
     }
 
     public function update($data)
@@ -60,25 +39,12 @@ class CustomerService
                 return false;
             }
 
-            // Cập nhật thông tin khách hàng
-            $customerUpdated = $customer->update([
+            $customer->update([
                 'name' => $data['customer_name'],
                 'phone' => $data['customer_phone'],
             ]);
 
-            if (!$customerUpdated) {
-                Log::error("Failed to update customer with ID: " . $data['id']);
-                DB::rollBack();
-                return false;
-            }
-
-            // Gán khách hàng với các thẻ
-            $result = $this->cardService->assignCustomer($data['card_ids'], $customer->id);
-
-            if (!$result) {
-                Log::error("Failed to assign cards to customer with ID: " . $data['id']);
-                return false;
-            }
+            $this->cardService->assignCustomer($data['card_ids'], $customer->id);
 
             DB::commit();
             return true;
@@ -93,25 +59,11 @@ class CustomerService
     {
         DB::beginTransaction();
         try {
-            // Xóa khách hàng
-            $customers = Customer::whereIn('id', $customer_ids)->get();
+            Customer::whereIn('id', $customer_ids)->delete();
 
-            foreach ($customers as $customer) {
-                $customer->delete();
-            }
+            $this->cardService->unassignCustomer($customer_ids);
 
-            // Hủy gán khách hàng theo card
-            $unassignResult = $this->cardService->unassignCustomer($customer_ids);
-            if (!$unassignResult) {
-                Log::error("Failed to unassign customers from cardService with IDs: " . implode(', ', $customer_ids));
-                return false;
-            }
-
-            // Xóa lịch sử thẻ của khách hàng
-            $cardHistories = CardHistory::whereIn('customer_id', $customer_ids)->get();
-            foreach ($cardHistories as $cardHistory) {
-                $cardHistory->delete();
-            }
+            CardHistory::whereIn('customer_id', $customer_ids)->delete();
 
             DB::commit();
             return true;

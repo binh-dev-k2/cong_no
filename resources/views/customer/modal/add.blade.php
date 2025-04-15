@@ -46,12 +46,6 @@
 
                             <select class="form-select form-select-solid" id="select_add_card" multiple>
                                 <option value="" disabled></option>
-                                {{-- @foreach ($blankCards as $card)
-                                    <option value="{{ $card->id }}"
-                                        data-src="https://api.vietqr.io/img/{{ $card->bank_code }}.png">
-                                        {{ $card->card_number }}
-                                    </option>
-                                @endforeach --}}
                             </select>
                         </div> --}}
                     </div>

@@ -2,70 +2,19 @@
 
 
 var KTModalCustomersAdd = (function () {
-    let btn_submit, btn_cancel, btn_close, formValidate, form, i, btn_add_customer;
+    let btn_submit, btn_cancel, btn_close, formValidate, form, i;
 
     const headers = {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
 
-    const optionFormat = function (item) {
-        if (!item.id) {
-            return item.text;
-        }
-
-        let span = document.createElement('span');
-        let template = `<img src="${item.bank_logo}" class="h-20px mb-1" />${item.text}`;
-
-        span.innerHTML = template;
-
-        return $(span);
-    }
-
-    const initGetBlankCards = function () {
-        $("#select_add_card").select2({
-            templateSelection: optionFormat,
-            templateResult: optionFormat,
-            placeholder: {
-                id: '',
-                text: 'None Selected'
-            },
-            closeOnSelect: false,
-            multiple: true,
-            ajax: {
-                url: routes.blankCards,
-                dataType: 'json',
-                delay: 250,
-                type: "GET",
-                cache: true,
-                headers: headers,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data.data, function (item) {
-                            return {
-                                text: item.card_number,
-                                id: item.id,
-                                bank_logo: item.bank.logo
-                            }
-                        })
-                    };
-                }
-            }
-        });
-    }
-
     return {
         init: function () {
             i = new bootstrap.Modal(document.querySelector("#kt_modal_add_customer"))
-            btn_add_customer = document.querySelector(".btn-add-customer")
             form = document.querySelector("#kt_modal_add_customer_form")
             btn_submit = form.querySelector("#kt_modal_add_customer_submit")
             btn_cancel = form.querySelector("#kt_modal_add_customer_cancel")
             btn_close = form.querySelector("#kt_modal_add_customer_close")
-
-            btn_add_customer.addEventListener('click', function () {
-                $("#select_add_card").empty()
-                initGetBlankCards()
-            })
 
             formValidate = FormValidation.formValidation(form, {
                 fields: {
@@ -108,44 +57,16 @@ var KTModalCustomersAdd = (function () {
 
             btn_cancel.addEventListener("click", function (event) {
                 event.preventDefault();
-                Swal.fire({
-                    text: "Bạn chắc chắn rằng muốn thoát khỏi form này?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Xác nhận!",
-                    cancelButtonText: "Quay lại",
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                        cancelButton: "btn btn-active-light",
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        i.hide();
-                        form.reset();
-                    }
-                });
+                form.reset();
+                formValidate.reset();
+                i.hide();
             });
 
             btn_close.addEventListener("click", function (event) {
                 event.preventDefault();
-                Swal.fire({
-                    text: "Bạn chắc chắn rằng muốn thoát khỏi form này?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Xác nhận!",
-                    cancelButtonText: "Quay lại",
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                        cancelButton: "btn btn-active-light",
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        i.hide();
-                        form.reset();
-                    }
-                });
+                form.reset();
+                formValidate.reset();
+                i.hide();
             });
 
             btn_submit.addEventListener("click", function (e) {
@@ -156,7 +77,7 @@ var KTModalCustomersAdd = (function () {
                             customer_name: form.querySelector("input[name='name']").value,
                             customer_phone: form.querySelector("input[name='phone']").value,
                             // fee_percent: form.querySelector("input[name='fee_percent']").value,
-                            card_ids: $("#select_add_card").select2("val"),
+                            // card_ids: $("#select_add_card").select2("val"),
                         };
                         // console.log(data);
 
@@ -175,7 +96,7 @@ var KTModalCustomersAdd = (function () {
                                         if (result.isConfirmed) {
                                             i.hide();
                                             form.reset();
-                                            $("#select_add_card").empty()
+                                            formValidate.reset();
                                             datatable.draw()
                                         }
                                     })

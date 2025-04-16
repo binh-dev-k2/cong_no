@@ -118,9 +118,10 @@
                             <a class="menu-link @if (Route::currentRouteName() == 'collaborator') active @endif"
                                 href="{{ route('collaborator') }}">
                                 <span class="menu-icon">
-                                    <i class="ki-duotone ki-user fs-2">
+                                    <i class="ki-duotone ki-profile-user fs-2">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
+                                        <span class="path3"></span>
                                     </i>
                                 </span>
                                 <span class="menu-title">Cộng tác viên</span>

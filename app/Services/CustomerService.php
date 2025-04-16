@@ -34,11 +34,11 @@ class CustomerService
             $this->cardService->assignCustomer($data['card_ids'], $customer->id);
 
             DB::commit();
-            return $customer;
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return null;
+            return false;
         }
     }
 

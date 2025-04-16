@@ -2,19 +2,74 @@
 
 
 var KTModalCustomersAdd = (function () {
-    let btn_submit, btn_cancel, btn_close, formValidate, form, i;
+    let btn_submit, btn_cancel, btn_close, formValidate, form, i, btn_add_customer;
 
     const headers = {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
 
+    const optionFormat = function (item) {
+        if (!item.id) {
+            return item.text;
+        }
+
+        let span = document.createElement('span');
+        let template = `<img src="${item.bank_logo}" class="h-20px mb-1" />${item.text}`;
+
+        span.innerHTML = template;
+
+        return $(span);
+    }
+
+    const initGetBlankCards = function () {
+        $("#select_add_card").select2({
+            templateSelection: optionFormat,
+            templateResult: optionFormat,
+            placeholder: {
+                id: '',
+                text: 'None Selected'
+            },
+            closeOnSelect: false,
+            multiple: true,
+            ajax: {
+                url: routes.blankCards,
+                dataType: 'json',
+                delay: 250,
+                type: "GET",
+                cache: true,
+                headers: headers,
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (item) {
+                            return {
+                                text: item.card_number,
+                                id: item.id,
+                                bank_logo: item.bank.logo
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    }
+
     return {
         init: function () {
             i = new bootstrap.Modal(document.querySelector("#kt_modal_add_customer"))
+            btn_add_customer = document.querySelector(".btn-add-customer")
             form = document.querySelector("#kt_modal_add_customer_form")
             btn_submit = form.querySelector("#kt_modal_add_customer_submit")
             btn_cancel = form.querySelector("#kt_modal_add_customer_cancel")
             btn_close = form.querySelector("#kt_modal_add_customer_close")
+            document.querySelector("#kt_modal_add_customer").addEventListener('hidden.bs.modal', function () {
+                form.reset();
+                $("#select_add_card").empty()
+            })
+
+            btn_add_customer.addEventListener('click', function () {
+                $("#select_add_card").empty()
+                initGetBlankCards()
+            })
 
             formValidate = FormValidation.formValidation(form, {
                 fields: {
@@ -55,20 +110,6 @@ var KTModalCustomersAdd = (function () {
                 },
             })
 
-            btn_cancel.addEventListener("click", function (event) {
-                event.preventDefault();
-                form.reset();
-                formValidate.reset();
-                i.hide();
-            });
-
-            btn_close.addEventListener("click", function (event) {
-                event.preventDefault();
-                form.reset();
-                formValidate.reset();
-                i.hide();
-            });
-
             btn_submit.addEventListener("click", function (e) {
                 e.preventDefault();
                 formValidate && formValidate.validate().then((status) => {
@@ -77,7 +118,7 @@ var KTModalCustomersAdd = (function () {
                             customer_name: form.querySelector("input[name='name']").value,
                             customer_phone: form.querySelector("input[name='phone']").value,
                             // fee_percent: form.querySelector("input[name='fee_percent']").value,
-                            // card_ids: $("#select_add_card").select2("val"),
+                            card_ids: $("#select_add_card").select2("val"),
                         };
                         // console.log(data);
 
@@ -96,7 +137,7 @@ var KTModalCustomersAdd = (function () {
                                         if (result.isConfirmed) {
                                             i.hide();
                                             form.reset();
-                                            formValidate.reset();
+                                            $("#select_add_card").empty()
                                             datatable.draw()
                                         }
                                     })

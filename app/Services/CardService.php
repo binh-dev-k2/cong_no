@@ -187,7 +187,7 @@ class CardService
     {
         DB::beginTransaction();
         try {
-            $this->unassignCustomer($customerId);
+            $this->unassignCustomer([$customerId]);
             Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
             DB::commit();
             return true;
@@ -198,7 +198,7 @@ class CardService
         }
     }
 
-    public function unassignCustomer($customerIds)
+    public function unassignCustomer(array $customerIds)
     {
         return Card::whereIn('customer_id', $customerIds)->update(['customer_id' => null]);
     }

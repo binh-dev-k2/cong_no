@@ -250,7 +250,7 @@
                     </div>
                 </div>
                 <div class="modal-footer flex-center">
-                    <button type="reset" id="modal_add_bank_cancel" class="btn btn-light me-3">Đóng</button>
+                    <button type="button" id="modal_add_bank_cancel" class="btn btn-light me-3">Đóng</button>
                     <button type="submit" id="modal_add_bank_submit" class="btn btn-primary">
                         <span class="indicator-label">Xác nhận</span>
                     </button>
@@ -291,6 +291,21 @@
         });
 
         const modalAddBank = document.querySelector('#modal_add_bank');
+
+        const modalAddBankCancel = document.querySelector('#modal_add_bank_cancel');
+        modalAddBankCancel.addEventListener('click', function(e) {
+            e.preventDefault();
+            $('#modal_add_bank').modal('hide');
+            modalAddBankForm.reset();
+        });
+
+        const modalAddBankClose = document.querySelector('#modal_add_bank_close');
+        modalAddBankClose.addEventListener('click', function(e) {
+            e.preventDefault();
+            $('#modal_add_bank').modal('hide');
+            modalAddBankForm.reset();
+        });
+
         modalAddBank.addEventListener('hidden.bs.modal', function(e) {
             addBankBtn.disabled = false;
             addBankBtn.querySelector('.btn-label').textContent = 'Thêm ngân hàng';

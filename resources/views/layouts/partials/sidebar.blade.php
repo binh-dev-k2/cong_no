@@ -169,7 +169,7 @@
                         <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif"
                             href="{{ route('activity-log') }}">
                             <span class="menu-icon">
-                                <i class="ki-duotone ki-shield fs-2">
+                                <i class="ki-duotone ki-scroll fs-2">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </i>

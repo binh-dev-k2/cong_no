@@ -16,6 +16,7 @@
                         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_modal_add_card_header"
                         data-kt-scroll-wrappers="#kt_modal_add_card_scroll" data-kt-scroll-offset="200px">
+                        <input type="hidden" name="customer_id" id="customer_id" />
                         <div class="d-flex flex-column mb-3 fv-row">
                             <label class="required fs-6 fw-semibold mb-2" for="card_number">Số thẻ</label>
                             <input type="number" class="form-control form-control-solid" placeholder=""

@@ -22,6 +22,7 @@ Route::
             Route::get('/debit', 'DebitController@index')->name('debit')->middleware('can:debit-view');
             Route::get('/user', 'UserController@index')->name('user')->middleware('can:user-view');
             Route::get('/machine', 'MachineController@index')->name('machine')->middleware('can:machine-view');
+            Route::get('/collaborator', 'CollaboratorController@index')->name('collaborator')->middleware('can:collaborator-view');
             Route::get('/role', 'RoleController@index')->name('role');
             Route::get('/activity-log', 'ActivityLogController@index')->name('activity-log')->middleware('can:activity-log-view');
         });

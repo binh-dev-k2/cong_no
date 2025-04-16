@@ -39,6 +39,7 @@ class BusinessRequest extends FormRequest
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
                     'machine_id' => 'nullable|exists:machines,id',
+                    'collaborator_id' => 'nullable|exists:collaborators,id',
                     'business_setting_key' => 'required|string|exists:business_settings,key',
                     'business_setting_type' => 'required|string|in:MONEY,PERCENT',
                 ];
@@ -54,6 +55,7 @@ class BusinessRequest extends FormRequest
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
                     'machine_id' => 'nullable|exists:machines,id',
+                    'collaborator_id' => 'nullable|exists:collaborators,id',
                 ];
 
             case 'complete':
@@ -117,6 +119,8 @@ class BusinessRequest extends FormRequest
             'note.string' => 'Ghi chú phải là chuỗi ký tự.',
             'pay_extra.required' => 'Bạn vui lòng nhập số tiền trả thêm.',
             'pay_extra.numeric' => 'Số tiền trả thêm phải là số.',
+            'collaborator_id.exists' => 'Cộng tác viên này không tồn tại trong hệ thống của chúng tôi.',
+            'machine_id.exists' => 'Máy này không tồn tại trong hệ thống của chúng tôi.',
         ];
     }
 

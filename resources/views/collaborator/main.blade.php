@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 @section('title')
-    Máy
+    Cộng tác viên
 @endsection
 @section('header')
     <style>
@@ -19,7 +19,7 @@
                 class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
 
                 <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Máy
+                    Cộng tác viên
                 </h1>
 
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -29,7 +29,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-500 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Máy</li>
+                    <li class="breadcrumb-item text-muted">Cộng tác viên</li>
                 </ul>
             </div>
         </div>
@@ -46,7 +46,7 @@
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </i>
-                                <input type="text" id="machine-search"
+                                <input type="text" id="collaborator-search"
                                     class="form-control form-control-solid w-250px ps-12 "
                                     data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
                             </div>
@@ -54,21 +54,21 @@
                             <div class="d-flex gap-2 ms-2">
                                 <div class="d-flex">
                                     <select class="form-select form-select-sm form-select-solid me-2" name="month"
-                                        id="machine-month-select">
+                                        id="collaborator-month-select">
                                         <option value="">Tháng</option>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>
                                     <select class="form-select form-select-sm form-select-solid min-w-100px" name="year"
-                                        id="machine-year-select">
+                                        id="collaborator-year-select">
                                         <option value="">Năm</option>
                                         @for ($i = now()->year; $i >= 2025; $i--)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>
                                 </div>
-                                <button class="btn btn-primary" id="machine-filter">Lọc</button>
+                                <button class="btn btn-primary" id="collaborator-filter">Lọc</button>
                             </div>
                         </div>
                     </div>
@@ -76,13 +76,13 @@
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#machine-modal">Thêm máy</button>
+                                data-bs-target="#collaborator-modal">Thêm cộng tác viên</button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body pt-0">
                     <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
-                        id="machine-table">
+                        id="collaborator-table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                 <th class="text-center min-w-50px">STT</th>
@@ -103,12 +103,12 @@
     </div>
 
 
-    <div class="modal fade" id="machine-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="collaborator-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
             <div class="modal-content">
-                <form action="" id="form-machine">
+                <form action="" id="form-collaborator">
                     <div class="modal-header">
-                        <h4 class="modal-title">Thông tin máy</h4>
+                        <h4 class="modal-title">Thông tin cộng tác viên</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body py-10 px-lg-17">
@@ -116,13 +116,13 @@
                             <input type="hidden" name="id" />
                             <div class="fv-row mb-7">
                                 <label class="required fs-6 fw-semibold mb-2">
-                                    Tên máy:
+                                    Tên cộng tác viên:
                                 </label>
                                 <input type="text" class="form-control" name="name" />
                             </div>
                             <div class="fv-row mb-7">
                                 <label class="required fs-6 fw-semibold mb-2">
-                                    Mã máy:
+                                    Mã cộng tác viên:
                                 </label>
                                 <input type="text" class="form-control" name="code" />
                             </div>
@@ -166,21 +166,21 @@
                 })
             }
 
-            const datatable = $("#machine-table").DataTable({
+            const datatable = $("#collaborator-table").DataTable({
                 processing: true,
                 serverSide: true,
                 ordering: false,
                 ajax: {
-                    url: "{{ route('api.machine.list') }}",
+                    url: "{{ route('api.collaborator.list') }}",
                     type: "POST",
                     beforeSend: function(request) {
                         request.setRequestHeader("X-CSRF-TOKEN", document.querySelector(
                             'meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function(d) {
-                        d.search = $('#machine-search').val();
-                        d.month = $('#machine-month-select').val();
-                        d.year = $('#machine-year-select').val();
+                        d.search = $('#collaborator-search').val();
+                        d.month = $('#collaborator-month-select').val();
+                        d.year = $('#collaborator-year-select').val();
                     }
                 },
                 columnDefs: [{
@@ -252,21 +252,21 @@
                 ],
             });
 
-            $('#machine-filter').on('click', function(e) {
+            $('#collaborator-filter').on('click', function(e) {
                 e.preventDefault();
-                if ($('#machine-month-select').val() && !$('#machine-year-select').val()) {
+                if ($('#collaborator-month-select').val() && !$('#collaborator-year-select').val()) {
                     notify('Vui lòng chọn năm.', 'error');
                     return;
                 }
                 datatable.ajax.reload();
             })
 
-            $('#machine-modal').on('hidden.bs.modal', function(e) {
+            $('#collaborator-modal').on('hidden.bs.modal', function(e) {
                 $(this).find('input[name="id"]').val('');
                 $(this).find('form')[0].reset();
             })
 
-            $('#form-machine').on('submit', function(e) {
+            $('#form-collaborator').on('submit', function(e) {
                 e.preventDefault();
                 const form = $(this);
                 const id = form.find('input[name="id"]').val();
@@ -275,8 +275,8 @@
                 const fee_percent = form.find('input[name="fee_percent"]').val().replace(/[,]/g, '.');
 
                 $.ajax({
-                    url: id ? "{{ route('api.machine.update') }}" :
-                        "{{ route('api.machine.store') }}",
+                    url: id ? "{{ route('api.collaborator.update') }}" :
+                        "{{ route('api.collaborator.store') }}",
                     type: "POST",
                     data: {
                         id: id,
@@ -291,7 +291,7 @@
                     success: function(res) {
                         if (res.code == 0) {
                             notify('Lưu thành công', 'success');
-                            $('#machine-modal').modal('hide');
+                            $('#collaborator-modal').modal('hide');
                             datatable.draw();
                         } else {
                             notify(res.data[0], 'error');
@@ -306,19 +306,19 @@
 
             $(document).on('click', '.btn-edit', function() {
                 const data = datatable.row($(this).closest('tr')).data();
-                $('#form-machine').find('input[name="id"]').val(data.id);
-                $('#form-machine').find('input[name="name"]').val(data.name);
-                $('#form-machine').find('input[name="code"]').val(data.code);
-                $('#form-machine').find('input[name="fee_percent"]').val(data.fee_percent);
-                $('#machine-modal').modal('show');
+                $('#form-collaborator').find('input[name="id"]').val(data.id);
+                $('#form-collaborator').find('input[name="name"]').val(data.name);
+                $('#form-collaborator').find('input[name="code"]').val(data.code);
+                $('#form-collaborator').find('input[name="fee_percent"]').val(data.fee_percent);
+                $('#collaborator-modal').modal('show');
             })
 
             $(document).on('click', '.btn-delete', function() {
                 const id = datatable.row($(this).closest('tr')).data().id;
-                notify('Bạn chắc chắn muốn xóa máy này?', 'warning', true).then((result) => {
+                notify('Bạn chắc chắn muốn xóa cộng tác viên này?', 'warning', true).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('api.machine.delete') }}",
+                            url: "{{ route('api.collaborator.delete') }}",
                             type: "POST",
                             data: {
                                 id: id,

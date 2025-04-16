@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Business\BusinessRequest;
 use App\Models\BusinessSetting;
 use App\Models\Machine;
+use App\Models\Collaborator;
 use App\Models\Setting;
 use App\Services\BusinessService;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class BusinessController extends Controller
         $businessNote = Setting::firstOrCreate(['key' => 'business_note'], ['key' => 'business_note', 'value' => '']);
         $businessMoneys = BusinessSetting::get()->groupBy(['type', 'key']);
         $machines = Machine::all();
-        return view('business.index', compact('businessNote', 'businessMoneys', 'machines'));
+        $collaborators = Collaborator::all();
+        return view('business.index', compact('businessNote', 'businessMoneys', 'machines', 'collaborators'));
     }
 
     public function datatable(Request $request)

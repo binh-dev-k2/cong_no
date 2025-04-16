@@ -112,6 +112,23 @@
                         </div>
                     @endcan
 
+                    @can('collaborator-view')
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link @if (Route::currentRouteName() == 'collaborator') active @endif"
+                                href="{{ route('collaborator') }}">
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-user fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title">Cộng tác viên</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    @endcan
+
                     @can('user-view')
                         <div class="menu-item">
                             <!--begin:Menu link-->

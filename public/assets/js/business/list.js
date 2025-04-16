@@ -263,6 +263,7 @@ var BusinessList = function () {
                 data.formality ? modalEdit.querySelector('input[name="formality"][value="' + data.formality + '"]').checked = true : '';
                 modalEdit.querySelector('input[name="total_money"]').value = data.total_money;
                 modalEdit.querySelector('select[name="machine_id"]').value = data.machine_id;
+                modalEdit.querySelector('select[name="collaborator_id"]').value = data.collaborator_id;
             })
         })
     }
@@ -407,9 +408,10 @@ var BusinessList = function () {
                             return `<div class="d-flex flex-column align-items-center">
                                         <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">
                                         <span>${formatNumber(row.card_number)}</span>
-                                        ${formatNumber(row.card.account_number ? 'STK: ' + row.card.account_number : '')}
-                                        ${row.card.date_due ? `<span class="text-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}
-                                        ${row.machine ? `<span class="text-success">Máy: ${row.machine.name}</span>` : ''}
+                                        ${formatNumber(row?.card?.account_number ? 'STK: ' + row.card.account_number : '')}
+                                        ${row?.card?.date_due ? `<span class="text-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}
+                                        ${row?.machine ? `<span class="text-success">Máy: ${row.machine.name}</span>` : ''}
+                                        ${row?.collaborator ? `<span class="text-info">CTV: ${row.collaborator.name}</span>` : ''}
                                     </div>
                                     `;
                         }

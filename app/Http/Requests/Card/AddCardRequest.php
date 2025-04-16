@@ -36,6 +36,7 @@ class AddCardRequest extends FormRequest
             'fee_percent' => 'required|numeric',
             'month_expired' => 'nullable|numeric|min:1|max:12',
             'year_expired' => 'nullable|numeric|min:2000|max:3000',
+            'customer_id' => 'nullable|exists:customers,id',
         ];
     }
     public function messages()
@@ -62,6 +63,7 @@ class AddCardRequest extends FormRequest
             'year_expired.numeric' => 'Năm hết hạn phải là số và nằm trong khoảng từ 2000 đến 3000.',
             'year_expired.min' => 'Năm hết hạn phải lớn hơn 1999.',
             'year_expired.max' => 'Năm hết hạn phải nhỏ hơn 3001.',
+            'customer_id.exists' => 'Khách hàng không hợp lệ.',
         ];
     }
 

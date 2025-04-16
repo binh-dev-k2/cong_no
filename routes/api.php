@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebitController;
 use App\Http\Controllers\MachineController;
+use App\Http\Controllers\CollaboratorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,12 @@ Route::middleware('auth')->group(function () {
     Route::post('machine/store', [MachineController::class, 'store'])->name('api.machine.store')->middleware('can:machine-create');
     Route::post('machine/update', [MachineController::class, 'update'])->name('api.machine.update')->middleware('can:machine-update');
     Route::post('machine/delete', [MachineController::class, 'delete'])->name('api.machine.delete')->middleware('can:machine-delete');
+
+    //collaborator
+    Route::post('collaborator/datatable', [CollaboratorController::class, 'datatable'])->name('api.collaborator.list')->middleware('can:collaborator-view');
+    Route::post('collaborator/store', [CollaboratorController::class, 'store'])->name('api.collaborator.store')->middleware('can:collaborator-create');
+    Route::post('collaborator/update', [CollaboratorController::class, 'update'])->name('api.collaborator.update')->middleware('can:collaborator-update');
+    Route::post('collaborator/delete', [CollaboratorController::class, 'delete'])->name('api.collaborator.delete')->middleware('can:collaborator-delete');
 
     //role
     Route::post('role/datatable', [RoleController::class, 'datatable'])->name('api.role.list');

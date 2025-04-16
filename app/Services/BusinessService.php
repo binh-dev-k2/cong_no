@@ -8,6 +8,7 @@ use App\Models\BusinessSetting;
 use App\Models\Card;
 use App\Models\Debt;
 use App\Models\MachineBusinessFee;
+use App\Models\CollaboratorBusinessFee;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,7 +42,7 @@ class BusinessService extends BaseService
         $query->orderBy('id', 'desc');
         $recordsFiltered = $recordsTotal = $query->count();
         $businnesses = $query->skip($skip)
-            ->with(['bank', 'money', 'card', 'machine'])
+            ->with(['bank', 'money', 'card', 'machine', 'collaborator'])
             ->withCount([
                 'money' => function ($query) {
                     $query->where('money', '!=', 0);
@@ -157,7 +158,18 @@ class BusinessService extends BaseService
             if ($business->machine) {
                 MachineBusinessFee::create([
                     'machine_id' => $business->machine_id,
+                    'total_money' => $business->total_money,
                     'fee' => (float) ($business->total_money * ($business->fee_percent - $business->machine->fee_percent) / 100),
+                    'month' => now()->month,
+                    'year' => now()->year
+                ]);
+            }
+
+            if ($business->collaborator) {
+                CollaboratorBusinessFee::create([
+                    'collaborator_id' => $business->collaborator_id,
+                    'total_money' => $business->total_money,
+                    'fee' => (float) ($business->total_money * ($business->fee_percent - $business->collaborator->fee_percent) / 100),
                     'month' => now()->month,
                     'year' => now()->year
                 ]);

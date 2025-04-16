@@ -23,11 +23,23 @@ class CustomerService
 
     public function create($data)
     {
-        return Customer::create([
-            'name' => $data['customer_name'],
-            'phone' => $data['customer_phone'],
-            'fee_percent' => null,
-        ]);
+        DB::beginTransaction();
+        try {
+            $customer = Customer::create([
+                'name' => $data['customer_name'],
+                'phone' => $data['customer_phone'],
+                'fee_percent' => null,
+            ]);
+
+            $this->cardService->assignCustomer($data['card_ids'], $customer->id);
+
+            DB::commit();
+            return $customer;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return null;
+        }
     }
 
     public function update($data)
@@ -36,7 +48,7 @@ class CustomerService
         try {
             $customer = Customer::find($data['id']);
             if (!$customer) {
-                return false;
+                return null;
             }
 
             $customer->update([
@@ -47,11 +59,11 @@ class CustomerService
             $this->cardService->assignCustomer($data['card_ids'], $customer->id);
 
             DB::commit();
-            return true;
+            return $customer;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return false;
+            return null;
         }
     }
 

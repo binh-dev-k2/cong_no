@@ -112,6 +112,16 @@
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
+                                <label class="fs-6 fw-semibold mb-2" for="collaborator_id">Cộng tác viên</label>
+                                <select class="form-select form-select-solid" name="collaborator_id" id="collaborator_id">
+                                    <option value="">Chọn cộng tác viên</option>
+                                    @foreach ($collaborators as $key => $collaborator)
+                                        <option value="{{ $collaborator['id'] }}">{{ $collaborator['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2" for="total_money">Số tiền</label>
                                 <input type="number" class="form-control form-control-solid"
                                     placeholder="Ex: 1000000" name="total_money" id="total_money" required
@@ -221,6 +231,7 @@
                 fee_percent: parseFloat($modalEditBusiness.find('input[name="fee_percent"]').val()),
                 formality: $modalEditBusiness.find('input[name="formality"]:checked').val(),
                 machine_id: $modalEditBusiness.find('select[name="machine_id"]').val(),
+                collaborator_id: $modalEditBusiness.find('select[name="collaborator_id"]').val(),
                 total_money: parseInt($modalEditBusiness.find('input[name="total_money"]').val()
                     .replace(/[.,]/g, ''), 10),
                 business_setting_key: $modalEditBusiness.find(

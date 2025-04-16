@@ -70,6 +70,11 @@ class DatabaseSeeder extends Seeder
             'machine-create',
             'machine-update',
             'machine-delete',
+
+            'collaborator-view',
+            'collaborator-create',
+            'collaborator-update',
+            'collaborator-delete',
         ];
 
         foreach ($permissions as $permission) {

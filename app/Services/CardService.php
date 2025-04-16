@@ -182,14 +182,24 @@ class CardService
             return false;
         }
     }
-
+    
     function assignCustomer($cardIds, $customerId)
     {
-        return Card::where('customer_id', $customerId)->whereNotIn('id', $cardIds)->delete();
+        DB::beginTransaction();
+        try {
+            $this->unassignCustomer($customerId);
+            Card::whereIn('id', $cardIds)->update(['customer_id' => $customerId]);
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
+            return false;
+        }
     }
 
     public function unassignCustomer($customerIds)
     {
-        return Card::whereIn('customer_id', $customerIds)->delete();
+        return Card::whereIn('customer_id', $customerIds)->update(['customer_id' => null]);
     }
 }

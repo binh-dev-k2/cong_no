@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Models\Business;
-use App\Models\Machine;
+use App\Models\Collaborator;
 
-class MachineService
+class CollaboratorService
 {
     public function datatable(array $data)
     {
@@ -13,7 +13,7 @@ class MachineService
         $pageLength = $data['length'] ?? 50;
         $skip = ($pageNumber - 1) * $pageLength;
 
-        $query = Machine::query();
+        $query = Collaborator::query();
 
         if (isset($data['search'])) {
             $search = $data['search'];
@@ -55,21 +55,21 @@ class MachineService
 
     public function store(array $data)
     {
-        $result = Machine::create($data);
+        $result = Collaborator::create($data);
         return $result;
     }
 
     public function update(array $data, $id)
     {
-        $model = Machine::findOrFail($id);
+        $model = Collaborator::findOrFail($id);
         $model->update($data);
         return $model;
     }
 
     public function delete($id)
     {
-        $result = Machine::findOrFail($id)->delete();
-        Business::where('machine_id', $id)->update(['machine_id' => null]);
+        $result = Collaborator::findOrFail($id)->delete();
+        Business::where('collaborator_id', $id)->update(['collaborator_id' => null]);
         return $result;
     }
 }

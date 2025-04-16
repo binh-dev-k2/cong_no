@@ -124,6 +124,9 @@ const FormAddCard = () => {
                     formValidate.validate().then((status) => {
                         if (status === "Valid") {
                             let data = {
+                                customer_id: form.querySelector(
+                                    'input[name="customer_id"]'
+                                ).value,
                                 account_name: form.querySelector(
                                     'input[name="account_name"]'
                                 ).value,
@@ -183,6 +186,10 @@ const FormAddCard = () => {
                                         }).then(function (result) {
                                             if (result.isConfirmed) {
                                                 form.reset();
+                                                form.querySelector(
+                                                    'input[name="customer_id"]'
+                                                ).value = '';
+                                                formValidate.reset();
                                                 addModal.hide();
                                             }
                                         });

@@ -524,6 +524,19 @@ var CustomerList = function () {
         })
     }
 
+    const addCard = () => {
+        let btnAddCards = document.querySelectorAll('.btn-add-card');
+        btnAddCards.forEach((btnAdd) => {
+            btnAdd.addEventListener('click', function (e) {
+                const row = btnAdd.closest('tr')
+                const data = datatable.row(row).data();
+                $('#kt_modal_add_card').modal('show');
+                $('#customer_id').val(data.id);
+            })
+        })
+    }
+    
+
     const deleteCard = () => {
         let btnDeleteCards = document.querySelectorAll('.btn-delete_card');
         btnDeleteCards.forEach((btnDel) => {
@@ -863,6 +876,11 @@ var CustomerList = function () {
                                             </a>
                                         </div>
                                         <div class="menu-item px-3">
+                                            <a href="javascript:void(0);" class="menu-link px-3 btn-add-card" >
+                                                Thêm thẻ
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 btn-edit-card" >
                                                 Sửa thẻ
                                             </a>
@@ -903,6 +921,7 @@ var CustomerList = function () {
                 initLoginInfoDrawer()
                 initEdit()
                 initEditCard()
+                addCard()
                 deleteCard()
                 KTMenu.createInstances()
                 $('.paginate_button a').on('click', function () {

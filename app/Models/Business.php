@@ -33,4 +33,9 @@ class Business extends Model
     {
         return $this->belongsTo(Machine::class, 'machine_id', 'id');
     }
+
+    public function collaborator()
+    {
+        return $this->belongsTo(Collaborator::class, 'collaborator_id', 'id');
+    }
 }

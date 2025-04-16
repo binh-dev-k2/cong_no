@@ -46,7 +46,7 @@ class AddCustomerRequest extends FormRequest
                 // },
             ],
             // 'fee_percent' => 'required|numeric',
-            // 'card_ids' => 'required|array|exists:cards,id'
+            'card_ids' => 'required|array|exists:cards,id'
         ];
     }
 

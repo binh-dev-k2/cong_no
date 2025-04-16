@@ -80,8 +80,8 @@
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <button type="button" class="btn btn-primary btn-add-customer me-2" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
-                            {{-- <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_add_card">Thêm thẻ</button> --}}
+                            <button type="button" class="btn btn-primary btn-add-card" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_add_card">Thêm thẻ</button>
                         </div>
                         <div class="d-flex justify-content-end align-items-center d-none"
                             data-kt-customer-table-toolbar="selected">

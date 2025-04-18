@@ -628,6 +628,12 @@ const CustomerList = function () {
         $("#modal_edit_customer").modal('hide');
     })
 
+    $('[data-bs-toggle="tab"]').on('click', function () {
+        $(this).find('input[type="radio"]').prop('checked', true)
+        prevPhone = null
+        datatable.draw()
+    })
+
     // Hàm xóa thẻ
     const deleteCard = () => {
         let btnDeleteCards = document.querySelectorAll('.btn-delete_card');

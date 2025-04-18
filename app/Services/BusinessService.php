@@ -149,7 +149,7 @@ class BusinessService extends BaseService
             ];
 
             if ($business->formality == 'R') {
-                $debtData['fee'] = (float) ($business->total_money * ($business->card->fee_percent ?? $business->fee_percent) / 100);
+                $debtData['fee'] = (float) ($business->total_money * ($business->fee_percent ?? $business->card->fee_percent) / 100);
                 $debtData['total_amount'] = $debtData['fee'] + ($business->pay_extra ?? 0);
             }
 
@@ -214,7 +214,7 @@ class BusinessService extends BaseService
         $i = 0;
         while ($totalMoney > 0) {
             $i++;
-            logger($totalMoney);
+            // logger($totalMoney);
             $randomMoney = $this->randomMoney($minRangeMoney, $maxRangeMoney);
             if ($totalMoney >= $randomMoney) {
                 $data[] = $this->createMoneyData($businessId, $randomMoney);

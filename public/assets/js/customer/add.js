@@ -66,6 +66,18 @@ var KTModalCustomersAdd = (function () {
                 $("#select_add_card").empty()
             })
 
+            btn_cancel.addEventListener('click', function () {
+                form.reset();
+                $("#select_add_card").empty()
+                i.hide()
+            })
+
+            btn_close.addEventListener('click', function () {
+                form.reset();
+                $("#select_add_card").empty()
+                i.hide()
+            })
+
             btn_add_customer.addEventListener('click', function () {
                 $("#select_add_card").empty()
                 initGetBlankCards()

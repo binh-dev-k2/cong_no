@@ -45,7 +45,14 @@ const FormAddCard = () => {
                 year_expired: { validators: { between: { min: 2000, max: 3000, message: "Năm hết hạn thẻ phải bắt đầu từ 2000" } } },
             },
             plugins: {
-                trigger: new FormValidation.plugins.Trigger(),
+                trigger: new FormValidation.plugins.Trigger({
+                    event: {
+                        input: false,
+                        blur: true,
+                        change: false,
+                        submit: true,
+                    },
+                }),
                 bootstrap5: new FormValidation.plugins.Bootstrap5({ rowSelector: ".fv-row" }),
             },
         });
@@ -88,6 +95,8 @@ const FormAddCard = () => {
                                 if (result.isConfirmed) {
                                     form.reset();
                                     form.querySelector('input[name="customer_id"]').value = '';
+                                    // Xóa trạng thái validate (is-valid/is-invalid)
+                                    $(form).find('input, select, textarea').removeClass('is-valid is-invalid');
                                     addModal.hide();
                                     datatable.draw();
                                 }
@@ -150,10 +159,8 @@ const FormAddCard = () => {
     const handleCancelOrClose = (event) => {
         event.preventDefault();
         addModal.hide();
-        form.reset();
-        $("#select_add_card").empty();
-        $('#customer_id').val('');
     };
+
     return {
         init: function () {
             modalElement.addEventListener('hidden.bs.modal', handleModalHidden);

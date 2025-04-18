@@ -101,9 +101,9 @@ class CardService
         return Card::where('id', $data['id'])->update(['note' => $data['note']]);
     }
 
-    public function getBlankCards()
+    public function getBlankCards($search)
     {
-        return Card::where('customer_id', null)->with('bank')->get();
+        return Card::where('customer_id', null)->with('bank')->where('card_number', 'like', '%' . $search . '%')->get();
     }
 
     public function remindCard($data)
@@ -182,7 +182,7 @@ class CardService
             return false;
         }
     }
-    
+
     function assignCustomer($cardIds, $customerId)
     {
         DB::beginTransaction();

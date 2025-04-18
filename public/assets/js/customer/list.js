@@ -492,7 +492,7 @@ const CustomerList = function () {
                                         </a>
                                     </div>
                                     <div class="menu-item px-3">
-                                        <a href="javascript:void(0);" class="menu-link px-3 btn-add-card" >
+                                        <a href="javascript:void(0);" class="menu-link px-3 btn-add-card-to-customer" >
                                             Thêm thẻ
                                         </a>
                                     </div>
@@ -600,7 +600,7 @@ const CustomerList = function () {
 
     // Hàm thêm thẻ
     const addCard = () => {
-        let btnAddCards = document.querySelectorAll('.btn-add-card');
+        let btnAddCards = document.querySelectorAll('.btn-add-card-to-customer');
         btnAddCards.forEach((btnAdd) => {
             btnAdd.addEventListener('click', function (e) {
                 const row = btnAdd.closest('tr')

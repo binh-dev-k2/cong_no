@@ -8,6 +8,7 @@ const CustomerList = function () {
     const formEditCard = document.querySelector('#edit_card_form');
     const formEdit = document.querySelector('#edit_customer_form');
     let prevPhone = '';
+    let listCard = [];
 
     const headers = {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -562,7 +563,7 @@ const CustomerList = function () {
                 formEdit.querySelector('input[name="id"]').value = data.customer_id ?? '';
                 formEdit.querySelector('input[name="name"]').value = data.customer.name ?? '';
                 formEdit.querySelector('input[name="phone"]').value = data.customer.phone ?? '';
-                const listCard = data.customer.cards
+                listCard = data.customer.cards
                 $("#select_edit_card").empty()
                 listCard.forEach(card => {
                     let opt = new Option(card.card_number, card.id, false, false);

@@ -383,13 +383,13 @@ const CustomerList = function () {
             columnDefs: [
                 {
                     targets: 0,
-                    data: 'customer_id',
-                    orderable: false,
+                    data: 'id',
+                    orderable: true,
                     render: function (data, type, row) {
                         if (row.customer.phone !== prevPhone && type === 'display') {
                             return `
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" name="customer-id" value="${data}"/>
+                                    <input class="form-check-input" type="checkbox" name="customer-id" value="${row.customer_id}"/>
                                 </div>`;
                         }
                         return `<div></div>`

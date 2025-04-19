@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Card;
 use App\Models\CardHistory;
-use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +12,10 @@ class CardService
 {
     public function filterDatatableCustomer(array $data)
     {
+        $orderColumn = $data['order'][0]['column'] ?? 0;
+        $column = $data['columns'][$orderColumn]['data'] ?? 'id';
+        $orderDir = $data['order'][0]['dir'] ?? 'desc';
+
         [$pageLength, $skip] = $this->getPaginationInfo($data);
 
         $query = Card::query()->whereHas('customer');
@@ -47,7 +50,7 @@ class CardService
                         $query->whereMonth('created_at', $month)
                             ->whereYear('created_at', $year)
                             ->where('formality', $formality);
-                });
+                    });
                 break;
 
             default:
@@ -61,17 +64,18 @@ class CardService
                 $query->whereHas('customer', function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%");
                 })->orWhere('account_number', 'like', "%{$search}%")
-                            ->orWhere('card_number', 'like', "%{$search}%")
-                            ->orWhere('account_name', 'like', "%{$search}%");
+                    ->orWhere('card_number', 'like', "%{$search}%")
+                    ->orWhere('account_name', 'like', "%{$search}%");
             });
         }
 
         $recordsFiltered = $recordsTotal = $query->count();
+
         $customers = $query->skip($skip)
             ->with(['customer.cards.bank', 'bank', 'cardHistories.user'])
             ->take($pageLength)
             ->orderBy('customer_id', 'desc')
-            ->orderBy('id', 'desc')
+            ->orderBy($column, $orderDir)
             ->get();
 
         return [

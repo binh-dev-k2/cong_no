@@ -361,7 +361,7 @@ const CustomerList = function () {
             searchDelay: 500,
             processing: true,
             serverSide: true,
-            ordering: false,
+            ordering: true, // bật ordering
             stateSave: true,
             select: {
                 style: 'multi',
@@ -377,6 +377,7 @@ const CustomerList = function () {
                 data: function (d) {
                     d.search = $('#customer_search').val();
                     d.view_type = $('input[name="view_type"]:checked').val();
+                    // truyền thêm thông tin ordering nếu cần
                 }
             },
             columnDefs: [
@@ -455,7 +456,7 @@ const CustomerList = function () {
                 {
                     targets: 6,
                     data: 'date_due',
-                    orderable: false,
+                    orderable: true,
                     className: 'text-center',
                     render: function (data, type, row) {
                         return `<span>${data ?? 'R'}</span>`;

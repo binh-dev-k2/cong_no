@@ -362,7 +362,7 @@ const CustomerList = function () {
             processing: true,
             serverSide: true,
             ordering: true, // bật ordering
-            stateSave: true,
+            // stateSave: true,
             select: {
                 style: 'multi',
                 selector: 'td:first-child input[type="checkbox"]',

@@ -142,7 +142,7 @@ var DebitsList = function () {
                 processing: true,
                 serverSide: true,
                 ordering: false,
-                stateSave: true,
+                // stateSave: true,
                 // select: {
                 //     style: 'multi',
                 //     selector: 'td:first-child input[type="checkbox"]',

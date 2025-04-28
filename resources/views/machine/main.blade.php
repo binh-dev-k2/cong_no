@@ -51,16 +51,16 @@
                                     data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
                             </div>
 
-                            <div class="d-flex gap-2 ms-2">
+                            <div class="d-flex flex-wrap gap-2 ms-2">
                                 <div class="d-flex">
-                                    <select class="form-select form-select-sm form-select-solid me-2" name="month"
+                                    <select class="form-select form-select-solid me-2 min-w-100px"
                                         id="machine-month-select">
                                         <option value="">Tháng</option>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>
-                                    <select class="form-select form-select-sm form-select-solid min-w-100px" name="year"
+                                    <select class="form-select form-select-solid min-w-100px"
                                         id="machine-year-select">
                                         <option value="">Năm</option>
                                         @for ($i = now()->year; $i >= 2025; $i--)
@@ -68,8 +68,18 @@
                                         @endfor
                                     </select>
                                 </div>
+
+                                <div class="ms-2">
+                                    <select class="form-select form-select-solid min-w-100px" name="status"
+                                        id="machine-status-select">
+                                        <option value="0">Máy đã ẩn</option>
+                                        <option value="1" selected>Mặc định</option>
+                                    </select>
+                                </div>
+
                                 <button class="btn btn-primary" id="machine-filter">Lọc</button>
                             </div>
+
                         </div>
                     </div>
 
@@ -132,6 +142,15 @@
                                 </label>
                                 <input type="text" class="form-control" name="fee_percent" />
                             </div>
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-semibold mb-2">
+                                    Trạng thái:
+                                </label>
+                                <select class="form-select form-select-solid" name="status">
+                                    <option value="0">Ẩn</option>
+                                    <option value="1" selected>Hiện</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer flex-center">
@@ -181,6 +200,7 @@
                         d.search = $('#machine-search').val();
                         d.month = $('#machine-month-select').val();
                         d.year = $('#machine-year-select').val();
+                        d.status = $('#machine-status-select').val();
                     }
                 },
                 columnDefs: [{
@@ -245,7 +265,6 @@
                         render: function(data, type, row) {
                             return `
                                     <button class="btn btn-warning btn-active-light-warning btn-sm btn-edit">Sửa</button>
-                                    <button class="btn btn-danger btn-active-light-danger btn-sm btn-delete">Xóa</button>
                                 `;
                         },
                     },
@@ -273,6 +292,7 @@
                 const name = form.find('input[name="name"]').val();
                 const code = form.find('input[name="code"]').val();
                 const fee_percent = form.find('input[name="fee_percent"]').val().replace(/[,]/g, '.');
+                const status = form.find('select[name="status"]').val();
 
                 $.ajax({
                     url: id ? "{{ route('api.machine.update') }}" :
@@ -283,6 +303,7 @@
                         name: name,
                         code: code,
                         fee_percent: parseFloat(fee_percent),
+                        status: status
                     },
                     beforeSend: function(request) {
                         request.setRequestHeader("X-CSRF-TOKEN", document.querySelector(
@@ -310,42 +331,9 @@
                 $('#form-machine').find('input[name="name"]').val(data.name);
                 $('#form-machine').find('input[name="code"]').val(data.code);
                 $('#form-machine').find('input[name="fee_percent"]').val(data.fee_percent);
+                $('#form-machine').find('select[name="status"]').val(data.status);
                 $('#machine-modal').modal('show');
             })
-
-            $(document).on('click', '.btn-delete', function() {
-                const id = datatable.row($(this).closest('tr')).data().id;
-                notify('Bạn chắc chắn muốn xóa máy này?', 'warning', true).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ route('api.machine.delete') }}",
-                            type: "POST",
-                            data: {
-                                id: id,
-                            },
-                            beforeSend: function(request) {
-                                request.setRequestHeader("X-CSRF-TOKEN", document
-                                    .querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content'));
-                            },
-                            success: function(res) {
-                                if (res.code == 0) {
-                                    notify('Xóa thành công', 'success');
-                                    datatable.draw();
-                                } else {
-                                    notify(res.message, 'error');
-                                }
-                            },
-                            error: function(err) {
-                                console.log(err);
-                                notify(err.message, 'error');
-                            }
-                        });
-                    }
-                })
-            })
-
-
         })
     </script>
 @endsection

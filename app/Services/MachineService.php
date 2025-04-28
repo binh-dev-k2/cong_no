@@ -21,6 +21,10 @@ class MachineService
                 ->orWhere('code', 'like', "%{$search}%");
         }
 
+        if (isset($data['status'])) {
+            $query->where('status', $data['status']);
+        }
+
         if (isset($data['year'])) {
             $query->withSum(['businessFees' => function ($subQuery) use ($data) {
                 $subQuery->where('year', $data['year']);
@@ -66,10 +70,10 @@ class MachineService
         return $model;
     }
 
-    public function delete($id)
-    {
-        $result = Machine::findOrFail($id)->delete();
-        Business::where('machine_id', $id)->update(['machine_id' => null]);
-        return $result;
-    }
+    // public function delete($id)
+    // {
+    //     $result = Machine::findOrFail($id)->delete();
+    //     Business::where('machine_id', $id)->update(['machine_id' => null]);
+    //     return $result;
+    // }
 }

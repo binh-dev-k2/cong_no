@@ -39,11 +39,4 @@ class MachineController extends Controller
         $result = $this->machineService->update($data, $data['id']);
         return jsonResponse($result ? 0 : 1);
     }
-
-    public function delete(MachineRequest $request)
-    {
-        $data = $request->validated();
-        $result = $this->machineService->delete($data['id']);
-        return jsonResponse($result ? 0 : 1);
-    }
 }

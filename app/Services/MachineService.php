@@ -65,22 +65,26 @@ class MachineService
             $query->where('status', $data['status']);
         }
 
-        $businessFeesQuery = function ($subQuery) use ($data) {
-            if (isset($data['year'])) {
+        if (isset($data['year'])) {
+            $query->withSum(['businessFees' => function ($subQuery) use ($data) {
                 $subQuery->where('year', $data['year']);
                 if (isset($data['month'])) {
                     $subQuery->where('month', $data['month']);
                 }
-            }
-        };
+            }], 'fee');
+            $query->withSum(['businessFees' => function ($subQuery) use ($data) {
+                $subQuery->where('year', $data['year']);
+                if (isset($data['month'])) {
+                    $subQuery->where('month', $data['month']);
+                }
+            }], 'total_money');
+        } else {
+            $query->withSum('businessFees', 'fee');
+            $query->withSum('businessFees', 'total_money');
+        }
 
-        $query->withSum(['businessFees' => $businessFeesQuery], 'fee')
-              ->withSum(['businessFees' => $businessFeesQuery], 'total_money');
-
-        $result = $query->get();
-
-        $totalMoney = $result->sum('business_fees_sum_total_money') ?? 0;
-        $totalFee = $result->sum('business_fees_sum_fee') ?? 0;
+        $totalMoney = $query->sum('business_fees_sum_total_money') ?? 0;
+        $totalFee = $query->sum('business_fees_sum_fee') ?? 0;
 
         return ['totalMoney' => $totalMoney, 'totalFee' => $totalFee];
     }

@@ -60,8 +60,7 @@
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>
-                                    <select class="form-select form-select-solid min-w-100px"
-                                        id="machine-year-select">
+                                    <select class="form-select form-select-solid min-w-100px" id="machine-year-select">
                                         <option value="">Năm</option>
                                         @for ($i = now()->year; $i >= 2025; $i--)
                                             <option value="{{ $i }}">{{ $i }}</option>
@@ -98,14 +97,21 @@
                                 <th class="text-center min-w-50px">STT</th>
                                 <th class="text-center min-w-125px">Tên máy</th>
                                 <th class="text-center min-w-125px">Mã máy</th>
-                                <th class="text-center min-w-125px">% lợi nhuận</th>
-                                <th class="text-center min-w-125px">Phí</th>
+                                <th class="text-center min-w-125px">% máy</th>
+                                <th class="text-center min-w-125px">Lợi nhuận</th>
                                 <th class="text-center min-w-125px">Tổng số tiền</th>
                                 <th class="text-center min-w-70px">Hành động</th>
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end">Tổng số tiền:</td>
+                                <td id="machine-total-money"></td>
+                                <td id="machine-total-fee"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -185,6 +191,21 @@
                 })
             }
 
+            const calculateTotalMoney = (data = {}) => {
+                $.ajax({
+                    url: "{{ route('api.machine.totalMoney') }}",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    data: data,
+                    success: function(res) {
+                        $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res.totalMoney ?? 0));
+                        $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.totalFee ?? 0));
+                    }
+                })
+            }
+
             const datatable = $("#machine-table").DataTable({
                 processing: true,
                 serverSide: true,
@@ -201,6 +222,14 @@
                         d.month = $('#machine-month-select').val();
                         d.year = $('#machine-year-select').val();
                         d.status = $('#machine-status-select').val();
+
+                        const data = {
+                            status: d.status,
+                            year: d.year,
+                            month: d.month
+                        }
+
+                        calculateTotalMoney(data);
                     }
                 },
                 columnDefs: [{

@@ -26,7 +26,7 @@ class BusinessController extends Controller
 
     public function index()
     {
-        $businessNote = Setting::firstOrCreate(['key' => 'business_note'], ['key' => 'business_note', 'value' => '']);
+        $businessNote = Setting::firstOrCreate(['key' => 'business_note'], ['key' => 'business_note', 'type' => 'business_note', 'value' => '']);
         $businessMoneys = BusinessSetting::get()->groupBy(['type', 'key']);
         $machines = Machine::all();
         $collaborators = Collaborator::all();

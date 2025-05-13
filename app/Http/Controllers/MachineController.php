@@ -26,6 +26,12 @@ class MachineController extends Controller
         return response()->json($result);
     }
 
+    public function calculateTotalMoney(Request $request)
+    {
+        $result = $this->machineService->calculateTotalMoney($request->all());
+        return jsonResponse(0, $result);
+    }
+
     public function store(MachineRequest $request)
     {
         $data = $request->validated();

@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::post('machine/datatable', [MachineController::class, 'datatable'])->name('api.machine.list')->middleware('can:machine-view');
     Route::post('machine/store', [MachineController::class, 'store'])->name('api.machine.store')->middleware('can:machine-create');
     Route::post('machine/update', [MachineController::class, 'update'])->name('api.machine.update')->middleware('can:machine-update');
+    Route::post('machine/total-money', [MachineController::class, 'calculateTotalMoney'])->name('api.machine.totalMoney')->middleware('can:machine-view');
     // Route::post('machine/delete', [MachineController::class, 'delete'])->name('api.machine.delete')->middleware('can:machine-delete');
 
     //collaborator

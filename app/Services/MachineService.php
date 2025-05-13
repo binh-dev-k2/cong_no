@@ -57,6 +57,34 @@ class MachineService
         ];
     }
 
+    public function calculateTotalMoney($data)
+    {
+        $query = Machine::query();
+
+        if (isset($data['status'])) {
+            $query->where('status', $data['status']);
+        }
+
+        $businessFeesQuery = function ($subQuery) use ($data) {
+            if (isset($data['year'])) {
+                $subQuery->where('year', $data['year']);
+                if (isset($data['month'])) {
+                    $subQuery->where('month', $data['month']);
+                }
+            }
+        };
+
+        $query->withSum(['businessFees' => $businessFeesQuery], 'fee')
+              ->withSum(['businessFees' => $businessFeesQuery], 'total_money');
+
+        $result = $query->get();
+
+        $totalMoney = $result->sum('business_fees_sum_total_money') ?? 0;
+        $totalFee = $result->sum('business_fees_sum_fee') ?? 0;
+
+        return ['totalMoney' => $totalMoney, 'totalFee' => $totalFee];
+    }
+
     public function store(array $data)
     {
         $result = Machine::create($data);

@@ -84,8 +84,8 @@ class MachineService
         }
 
         $machines = $query->get();
-        $totalMoney = $machines->sum('business_fees_sum_total_money') ?? 0;
-        $totalFee = $machines->sum('business_fees_sum_fee') ?? 0;
+        $totalMoney = (float)($machines->sum('business_fees_sum_total_money') ?? 0);
+        $totalFee = (float)($machines->sum('business_fees_sum_fee') ?? 0);
 
         return ['totalMoney' => $totalMoney, 'totalFee' => $totalFee];
     }

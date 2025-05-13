@@ -110,6 +110,7 @@
                                 <td colspan="4" class="text-end">Tổng số tiền:</td>
                                 <td id="machine-total-fee"></td>
                                 <td id="machine-total-money"></td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>

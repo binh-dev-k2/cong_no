@@ -200,8 +200,10 @@
                     },
                     data: data,
                     success: function(res) {
-                        $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res.totalMoney) ?? 0);
-                        $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.totalFee) ?? 0);
+                        console.log(res);
+
+                        $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res.data.totalMoney));
+                        $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.data.totalFee));
                     }
                 })
             }

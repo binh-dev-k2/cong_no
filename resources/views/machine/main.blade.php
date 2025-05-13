@@ -108,8 +108,8 @@
                         <tfoot>
                             <tr>
                                 <td colspan="4" class="text-end">Tổng số tiền:</td>
-                                <td id="machine-total-money"></td>
                                 <td id="machine-total-fee"></td>
+                                <td id="machine-total-money"></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -200,7 +200,7 @@
                     },
                     data: data,
                     success: function(res) {
-                        console.log(res);
+                        // console.log(res);
 
                         $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res.data.totalMoney));
                         $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.data.totalFee));

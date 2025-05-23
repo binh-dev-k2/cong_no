@@ -117,18 +117,21 @@ var BusinessList = function () {
                 const dataId = btn.getAttribute('data-id');
                 const row = btn.closest('tr');
                 const data = datatable.row(row).data();
-                const businessMoney = data.money[dataId]
+                const businessMoney = data.money[dataId] ?? null;
 
                 const td = btn.closest('td');
                 td.querySelector('.container-business-money').classList.add('d-none');
                 td.innerHTML += `
                                     <div class="d-flex align-items-center container-edit-business-money">
-                                        <input type="text" data-type="money" value="${businessMoney.money}" class="form-control me-2" style="min-width: 150px; max-width:200px" min="0" step="any"/>
-                                        <input type="checkbox" data-type="is_money_checked" class="form-check-input me-2" ${businessMoney.is_money_checked ? "checked" : ""}/>
-                                        <input type="text" data-type="note" value="${businessMoney.note ?? ''}" class="form-control me-2" style="min-width: 150px; max-width:200px"/>
-                                        <input type="checkbox" data-type="is_note_checked" class="form-check-input me-2" ${businessMoney.is_note_checked ? "checked" : ""}/>
+                                        <div class="position-relative">
+                                            <i class="fas fa-info-circle text-info cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Tích vào ô trống bên cạnh để tính là đã hoàn thành."></i>
+                                        </div>
+                                        <input type="text" data-type="money" value="${businessMoney?.money ?? 0}" class="form-control me-2" style="min-width: 150px; max-width:200px" min="0" step="any"/>
+                                        <input type="checkbox" data-type="is_money_checked" class="form-check-input me-2" ${businessMoney?.is_money_checked ? "checked" : ""}/>
+                                        <input type="text" data-type="note" value="${businessMoney?.note ?? ''}" class="form-control me-2" style="min-width: 150px; max-width:200px"  placeholder="Mã chuẩn chi"/>
+                                        <input type="checkbox" data-type="is_note_checked" class="form-check-input me-2" ${businessMoney?.is_note_checked ? "checked" : ""}/>
                                         <button class="btn btn-light btn-close-business-money px-3 py-2">Đóng</button>
-                                        <button class="btn btn-success btn-save-business-money px-3 py-2">Lưu</button>
+                                        <button class="btn btn-success btn-save-business-money px-3 py-2" data-business-id="${data.id}">Lưu</button>
                                     </div>
                                 `
 
@@ -142,13 +145,15 @@ var BusinessList = function () {
                     const isMoneyChecked = td.querySelector('.container-edit-business-money input[data-type="is_money_checked"]').checked;
                     const note = td.querySelector('.container-edit-business-money input[data-type="note"]').value;
                     const isNoteChecked = td.querySelector('.container-edit-business-money input[data-type="is_note_checked"]').checked;
+                    const businessId = td.querySelector('.container-edit-business-money .btn-save-business-money').getAttribute('data-business-id');
 
                     const body = {
-                        id: businessMoney.id,
+                        id: businessMoney?.id ?? null,
                         money: parseInt(money),
                         is_money_checked: isMoneyChecked,
                         note: note,
-                        is_note_checked: isNoteChecked
+                        is_note_checked: isNoteChecked,
+                        business_id: businessId
                     }
 
                     axios.post(routes.businessUpdateBusinessMoney, body, { headers: headers })
@@ -314,6 +319,25 @@ var BusinessList = function () {
         return formattedStr.trim();
     }
 
+    function renderBusinessMoneyElement(data, id) {
+        if (!data) return `
+                <div class="d-flex align-items-center justify-content-between container-business-money">
+                    <button class="btn btn-warning btn-edit-business-money p-2" data-id="">Sửa</button>
+                </div>
+                `;
+
+        return `
+            <div class="d-flex align-items-center justify-content-between container-business-money">
+                 <div class="d-flex align-items-center me-2 min-h-40px bg-secondary rounded-2">
+                    <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
+                    <span class="me-2"> - </span>
+                    <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
+                </div>
+                <button class="btn btn-warning btn-edit-business-money p-2" data-id="${id}">Sửa</button>
+            </div>
+            `
+    }
+
     $(document).on('input', 'input[data-type="money"]', function () {
         const value = $(this).val().replace(/[^0-9.]/g, '');
         if (value === '') {
@@ -346,24 +370,13 @@ var BusinessList = function () {
                     }
                 },
                 columnDefs: [
-                    // {
-                    //     targets: 0,
-                    //     data: 'id',
-                    //     orderable: false,
-                    //     render: function (data, type, row) {
-                    //         return `
-                    //                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                    //                     <input class="form-check-input" type="checkbox" value="${data}" />
-                    //                 </div>`;
-                    //     }
-                    // },
                     {
                         targets: 0,
                         data: 'created_at',
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return `<span>${formatDate(data)}</span>`
+                            return `<span class="text-nowrap">${formatDate(data)}</span>`
                         }
                     },
                     {
@@ -391,8 +404,12 @@ var BusinessList = function () {
                                     const url = row.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
 
                                     return `
-                                        <div>${row.name}</div>
-                                        <a href="${url}" target="_blank">${phone}</a>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <div class="fw-bold text-dark mb-1">${row.name}</div>
+                                            <a href="${url}" target="_blank" class="text-primary text-decoration-none hover-scale">
+                                                ${phone}
+                                            </a>
+                                        </div>
                                     `
                                 }
                             }
@@ -406,12 +423,12 @@ var BusinessList = function () {
                         className: 'text-center min-w-175px',
                         render: function (data, type, row) {
                             return `<div class="d-flex flex-column align-items-center">
-                                        <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">
+                                        <img src="${row.bank.logo}" loading="lazy" class="h-40px" alt="${row.bank.code}">
                                         <span>${formatNumber(row.card_number)}</span>
                                         ${formatNumber(row?.card?.account_number ? 'STK: ' + row.card.account_number : '')}
-                                        ${row?.card?.date_due ? `<span class="text-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}
-                                        ${row?.machine ? `<span class="text-success">Máy: ${row.machine.name}</span>` : ''}
-                                        ${row?.collaborator ? `<span class="text-info">CTV: ${row.collaborator.name}</span>` : ''}
+                                        ${row?.card?.date_due ? `<span class="badge badge-primary">Ngày đến hạn: ${row.card.date_due}</span>` : ''}
+                                        ${row?.machine ? `<span class="badge badge-success mt-1">Máy: ${row.machine.name}</span>` : ''}
+                                        ${row?.collaborator ? `<span class="badge badge-info mt-1">CTV: ${row.collaborator.name}</span>` : ''}
                                     </div>
                                     `;
                         }
@@ -430,7 +447,12 @@ var BusinessList = function () {
                         data: 'total_money',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `<span>${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? ''}</span>`;
+                            return `<div class="d-flex flex-column align-items-center">
+                                <span class="fw-bold ${row.is_paid ? 'text-success' : 'text-danger'}">
+                                    ${data?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? ''}
+                                </span>
+                                <small class="text-muted">${row.is_paid ? 'Tiền đã về' : 'Tiền chưa về'}</small>
+                            </div>`;
                         }
                     },
                     {
@@ -439,7 +461,7 @@ var BusinessList = function () {
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return `<span>${data}</span>`;
+                            return `<span class="badge badge-${data === 'R' ? 'warning' : 'primary'}">${data}</span>`;
                         }
                     },
                     {
@@ -455,16 +477,7 @@ var BusinessList = function () {
                         data: 'money.0',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${0}">Sửa</button>
-                                    </div>
-                                    `;
+                            return renderBusinessMoneyElement(data, 0)
                         }
                     },
                     {
@@ -472,16 +485,7 @@ var BusinessList = function () {
                         data: 'money.1',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${1}">Sửa</button>
-                                    </div>
-                                    `;
+                            return renderBusinessMoneyElement(data, 1)
                         }
                     },
                     {
@@ -489,16 +493,7 @@ var BusinessList = function () {
                         data: 'money.2',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${2}">Sửa</button>
-                                    </div>
-                                    `;
+                            return renderBusinessMoneyElement(data, 2)
                         }
                     },
                     {
@@ -506,16 +501,7 @@ var BusinessList = function () {
                         data: 'money.3',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${3}">Sửa</button>
-                                    </div>
-                                    `;
+                            return renderBusinessMoneyElement(data, 3)
                         }
                     },
                     {
@@ -523,16 +509,7 @@ var BusinessList = function () {
                         data: 'money.4',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${4}">Sửa</button>
-                                    </div>
-                                    `;
+                            return renderBusinessMoneyElement(data, 4)
                         }
                     },
                     {
@@ -540,86 +517,9 @@ var BusinessList = function () {
                         data: 'money.5',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `
-                                    <div class="d-flex align-items-center justify-content-between container-business-money">
-                                        <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                                            <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}" style="display: flex; align-items: center; justify-content: center;">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                                            <span class="me-2"> - </span>
-                                            <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px; display: flex; align-items: center; justify-content: center;">${data?.note ?? ''}</span>
-                                        </div>
-                                        <button class="btn btn-warning btn-edit-business-money p-2" data-id="${5}">Sửa</button>
-                                    </div>
-                                    `;
+                            return renderBusinessMoneyElement(data, 5)
                         }
                     },
-                    // {
-                    //     targets: 13,
-                    //     data: 'money.6',
-                    //     orderable: false,
-                    //     render: function (data, type, row) {
-                    //         return `
-                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
-                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                    //                         <span class="me-2"> - </span>
-                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                    //                     </div>
-                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${6}">Sửa</button>
-                    //                 </div>
-                    //                 `;
-                    //     }
-                    // },
-                    // {
-                    //     targets: 14,
-                    //     data: 'money.7',
-                    //     orderable: false,
-                    //     render: function (data, type, row) {
-                    //         return `
-                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
-                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                    //                         <span class="me-2"> - </span>
-                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                    //                     </div>
-                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${7}">Sửa</button>
-                    //                 </div>
-                    //                 `;
-                    //     }
-                    // },
-                    // {
-                    //     targets: 15,
-                    //     data: 'money.8',
-                    //     orderable: false,
-                    //     render: function (data, type, row) {
-                    //         return `
-                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
-                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                    //                         <span class="me-2"> - </span>
-                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                    //                     </div>
-                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${8}">Sửa</button>
-                    //                 </div>
-                    //                 `;
-                    //     }
-                    // },
-                    // {
-                    //     targets: 16,
-                    //     data: 'money.9',
-                    //     orderable: false,
-                    //     render: function (data, type, row) {
-                    //         return `
-                    //                 <div class="d-flex align-items-center justify-content-between container-business-money">
-                    //                     <div class="d-flex align-items-center me-2 min-h-40px" style="${data.money != 0 ? 'background-color: #DBE2EF; border-radius: 4px;' : ''}">
-                    //                         <span class="me-2 min-h-40px text-nowrap p-2 rounded ${data.is_money_checked ? 'bg-info text-white' : ''}">${data?.money?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replaceAll('.', ',').slice(0, -1) ?? 0}</span>
-                    //                         <span class="me-2"> - </span>
-                    //                         <span class="min-w-50px text-nowrap min-h-40px p-2 rounded ${data.is_note_checked ? 'bg-info text-white text-truncate' : ''}" style="max-width: 125px">${data?.note ?? ''}</span>
-                    //                     </div>
-                    //                     <button class="btn btn-warning btn-edit-business-money p-2" data-id="${9}">Sửa</button>
-                    //                 </div>
-                    //                 `;
-                    //     }
-                    // },
                     {
                         targets: 13,
                         data: 'pay_extra',
@@ -652,7 +552,6 @@ var BusinessList = function () {
                                         </span>
                                     </button>
                                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-
                                         <div class="menu-item px-3">
                                             <a href="javascript:void(0);" class="menu-link px-3 btn-edit" data-bs-toggle="modal"
                                             data-bs-target="#modal-edit">

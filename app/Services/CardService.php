@@ -121,49 +121,30 @@ class CardService
 
     function save($data)
     {
-        try {
-            DB::beginTransaction();
-            $card = Card::create($data);
-            if ($card) {
-                DB::commit();
-                return [
-                    'success' => true,
-                    'data' => []
-                ];
-            }
-
+        $card = Card::create($data);
+        if ($card) {
             return [
-                'success' => false,
-                'code' => 1
-            ];
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return [
-                'success' => false,
-                'code' => 1
+                'success' => true,
+                'data' => []
             ];
         }
+
+        return [
+            'success' => false,
+            'code' => 1
+        ];
     }
 
     function update($data)
     {
-        try {
-            DB::beginTransaction();
+        $card = Card::findOrFail($data['id']);
+        $result = $card->update($data);
 
-            $card = Card::findOrFail($data['id']);
-            $result = $card->update($data);
-
-            if (!$result) {
-                return false;
-            }
-            DB::commit();
+        if ($result) {
             return true;
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            Log::error("message: {$th->getMessage()}, line: {$th->getLine()}");
-            return false;
         }
+
+        return false;
     }
 
     function delete($data)

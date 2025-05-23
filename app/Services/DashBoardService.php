@@ -6,6 +6,7 @@ use App\Models\Business;
 use App\Models\Card;
 use App\Models\Debt;
 use App\Models\MachineBusinessFee;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -66,7 +67,7 @@ class DashBoardService
     {
         $debtQuery = Debt::query();
         $totalDebts = $debtQuery->count();
-        $totalAmount = $debtQuery->sum('total_amount');
+        $totalAmount = $debtQuery->sum('total_fee');
         $paidDebts = $debtQuery->where('status', Debt::STATUS_PAID)->count();
         $percentCompleted = $totalDebts > 0 ? round(($paidDebts / $totalDebts) * 100, 2) : 0;
         return [
@@ -126,4 +127,34 @@ class DashBoardService
         ];
     }
 
+    public function getTotalInvestment()
+    {
+        $totalInvestment = Setting::where('key', 'total_investment')->first();
+        if (!$totalInvestment) {
+            $totalInvestment = new Setting();
+            $totalInvestment->key = 'total_investment';
+            $totalInvestment->value = 0;
+            $totalInvestment->type = 'TOTAL_INVESTMENT';
+            $totalInvestment->save();
+        }
+
+        return [
+            'totalInvestment' => $totalInvestment->value
+        ];
+    }
+
+    public function updateTotalInvestment($data)
+    {
+        $totalInvestment = Setting::where('key', 'total_investment')->first();
+        if (!$totalInvestment) {
+            $totalInvestment = new Setting();
+            $totalInvestment->key = 'total_investment';
+            $totalInvestment->value = (float) $data['value'];
+            $totalInvestment->type = 'TOTAL_INVESTMENT';
+        } else {
+            $totalInvestment->value += (float) $data['value'];
+        }
+
+        return $totalInvestment->save();
+    }
 }

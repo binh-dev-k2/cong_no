@@ -130,10 +130,38 @@
                         </div>
                     @endcan
 
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif" href="#">
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-scroll fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title">Đối ứng</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif" href="#">
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-scroll fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title">Dòng tiền</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
                     @can('user-view')
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link @if (Route::currentRouteName() == 'user') active @endif" href="{{ route('user') }}">
+                            <a class="menu-link @if (Route::currentRouteName() == 'user') active @endif"
+                                href="{{ route('user') }}">
                                 <span class="menu-icon">
                                     <i class="ki-duotone ki-user fs-2">
                                         <span class="path1"></span>
@@ -164,21 +192,21 @@
                     @endcan
 
                     @can('activity-log-view')
-                    <div class="menu-item">
-                        <!--begin:Menu link-->
-                        <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif"
-                            href="{{ route('activity-log') }}">
-                            <span class="menu-icon">
-                                <i class="ki-duotone ki-scroll fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                            </span>
-                            <span class="menu-title">Lịch sử</span>
-                        </a>
-                        <!--end:Menu link-->
-                    </div>
-                @endcan
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif"
+                                href="{{ route('activity-log') }}">
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-scroll fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title">Lịch sử</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -222,8 +250,8 @@
 
                         <div class="fv-row mb-7">
                             <label class="required fs-6 fw-semibold mb-2">Tên ngân hàng</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="Nhập tên ngân hàng"
-                                name="shortName" />
+                            <input type="text" class="form-control form-control-solid"
+                                placeholder="Nhập tên ngân hàng" name="shortName" />
                         </div>
 
                         <div class="fv-row mb-7">
@@ -238,14 +266,14 @@
                                     </i>
                                 </span>
                             </label>
-                            <input type="tel" class="form-control form-control-solid" placeholder="Nhập mã ngân hàng"
-                                name="code" />
+                            <input type="tel" class="form-control form-control-solid"
+                                placeholder="Nhập mã ngân hàng" name="code" />
                         </div>
 
                         <div class="fv-row mb-7">
                             <label class="required fs-6 fw-semibold mb-2">Logo</label>
-                            <input type="url" class="form-control form-control-solid" placeholder="Nhập đường dẫn logo ngân hàng"
-                                name="logo" />
+                            <input type="url" class="form-control form-control-solid"
+                                placeholder="Nhập đường dẫn logo ngân hàng" name="logo" />
                         </div>
                     </div>
                 </div>
@@ -321,7 +349,13 @@
             const shortName = document.querySelector('input[name="shortName"]').value;
             const code = document.querySelector('input[name="code"]').value;
             const logo = document.querySelector('input[name="logo"]').value;
-            axios.post("{{ route('api.bank.store') }}", { shortName, code, logo }, { headers: headers })
+            axios.post("{{ route('api.bank.store') }}", {
+                    shortName,
+                    code,
+                    logo
+                }, {
+                    headers: headers
+                })
                 .then((res) => {
                     $('#modal_add_bank').modal('hide');
                     addBankBtn.disabled = false;

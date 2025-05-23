@@ -38,7 +38,7 @@ class BusinessRequest extends FormRequest
                     'fee_percent' => 'required|numeric',
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
-                    'machine_id' => 'nullable|exists:machines,id',
+                    'machine_id' => 'required|exists:machines,id',
                     'collaborator_id' => 'nullable|exists:collaborators,id',
                     'business_setting_key' => 'required|string|exists:business_settings,key',
                     'business_setting_type' => 'required|string|in:MONEY,PERCENT',
@@ -54,7 +54,7 @@ class BusinessRequest extends FormRequest
                     'fee_percent' => 'required|numeric',
                     'formality' => 'required|string',
                     'total_money' => 'required|numeric',
-                    'machine_id' => 'nullable|exists:machines,id',
+                    'machine_id' => 'required|exists:machines,id',
                     'collaborator_id' => 'nullable|exists:collaborators,id',
                 ];
 
@@ -65,7 +65,8 @@ class BusinessRequest extends FormRequest
 
             case 'updateBusinessMoney':
                 return [
-                    'id' => 'required|exists:business_money,id',
+                    'id' => 'nullable|exists:business_money,id',
+                    'business_id' => 'required|exists:businesses,id',
                     'money' => 'nullable|numeric',
                     'note' => 'nullable|string',
                     'is_money_checked' => 'required|boolean',

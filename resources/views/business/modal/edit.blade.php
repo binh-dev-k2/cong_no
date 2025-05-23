@@ -106,14 +106,16 @@
                                 <label class="required fs-6 fw-semibold mb-2" for="machine_id">Mã máy</label>
                                 <select class="form-select form-select-solid" name="machine_id" id="machine_id">
                                     @foreach ($machines as $key => $machine)
-                                        <option value="{{ $machine['id'] }}">{{ $machine['code'] . ' - ' . $machine['name'] }}</option>
+                                        <option value="{{ $machine['id'] }}">
+                                            {{ $machine['code'] . ' - ' . $machine['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="fs-6 fw-semibold mb-2" for="collaborator_id">Cộng tác viên</label>
-                                <select class="form-select form-select-solid" name="collaborator_id" id="collaborator_id">
+                                <select class="form-select form-select-solid" name="collaborator_id"
+                                    id="collaborator_id">
                                     <option value="">Chọn cộng tác viên</option>
                                     @foreach ($collaborators as $key => $collaborator)
                                         <option value="{{ $collaborator['id'] }}">{{ $collaborator['name'] }}</option>
@@ -124,8 +126,7 @@
                             <div class="d-flex flex-column mb-3 fv-row">
                                 <label class="required fs-6 fw-semibold mb-2" for="total_money">Số tiền</label>
                                 <input type="number" class="form-control form-control-solid"
-                                    placeholder="Ex: 1000000" name="total_money" id="total_money" required
-                                    readonly />
+                                    placeholder="Ex: 1000000" name="total_money" id="total_money" required />
                             </div>
                         </div>
                     </div>

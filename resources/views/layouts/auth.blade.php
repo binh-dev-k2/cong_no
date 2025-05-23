@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <base href="../../../" />
@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="description" content="Quản lý công nợ." />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="vi_VN" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Hệ thống quản lý công nợ" />
     <meta property="og:site_name" content="Hệ thống quản lý công nợ" />

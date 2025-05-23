@@ -389,10 +389,15 @@ const CustomerList = function () {
                         if (row.customer.phone !== prevPhone && type === 'display') {
                             return `
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" name="customer-id" value="${row.customer_id}"/>
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="customer-id"
+                                           value="${row.customer_id}"
+                                           style="cursor: pointer;"
+                                    />
                                 </div>`;
                         }
-                        return `<div></div>`
+                        return `<div class="empty-cell"></div>`;
                     }
                 },
                 {
@@ -402,13 +407,19 @@ const CustomerList = function () {
                     orderable: false,
                     render: function (data, type, row) {
                         if (row.customer.phone !== prevPhone && type === 'display') {
-                            prevPhone = row.customer.phone
+                            prevPhone = row.customer.phone;
                             const phone = row.customer.phone.startsWith('@') ? row.customer.phone.substring(1) : row.customer.phone;
                             const url = row.customer.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
-                            return `<div>${row.customer.name}</div>
-                                <a href="${url}" target="_blank">${phone}</a>`;
+                            return `
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="fw-bold mb-1">${row.customer.name}</div>
+                                    <a href="${url}" target="_blank" class="text-primary text-hover-primary">
+                                        <i class="bi ${row.customer.phone.startsWith('@') ? 'bi-telegram' : 'bi-chat-dots'} me-1"></i>
+                                        ${phone}
+                                    </a>
+                                </div>`;
                         }
-                        return `<div></div>`
+                        return `<div class="empty-cell"></div>`;
                     }
                 },
                 {
@@ -417,7 +428,7 @@ const CustomerList = function () {
                     orderable: false,
                     render: function (data, type, row) {
                         return `<div class="d-flex flex-column align-items-center">
-                                    <img src="${data.logo}" class="h-30px" alt="${data.code}">
+                                    <img src="${data.logo}" class="h-40px" alt="${data.code}">
                                     ${data.shortName ?? ''}
                                 </div>
                                 `;
@@ -428,7 +439,7 @@ const CustomerList = function () {
                     data: 'account_name',
                     orderable: false,
                     render: function (data, type, row) {
-                        return `<p class="mb-0">${data ?? ''}</p>`;
+                        return `<span class="text-nowrap">${data ?? ''}</span>`;
                     }
                 },
                 {
@@ -438,10 +449,17 @@ const CustomerList = function () {
                     render: function (data, type, row) {
                         const timeExpired = row.month_expired ? `${row.month_expired}-${row.year_expired}` : '';
                         return `
-                            <div class="px-2 py-3 text-center rounded" ${row.date_return ? 'style="color:white; background-color: #f582ff"' : ''}>
-                                ${data ? formatNumber(data) : ''}
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="px-3 py-2 text-center rounded-3 mb-1 text-nowrap ${row.date_return ? 'bg-light-primary' : 'bg-primary text-white'}">
+                                    ${data ? formatNumber(data) : ''}
+                                </div>
+                                ${timeExpired ? `
+                                    <div class="text-muted fs-7">
+                                        <i class="bi bi-calendar-event me-1"></i>
+                                        Hết hạn: ${timeExpired}
+                                    </div>
+                                ` : ''}
                             </div>
-                            ${timeExpired ? `<div class="text-center">Hết hạn: ${timeExpired}</div>` : ''}
                         `;
                     }
                 },

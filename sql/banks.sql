@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 03, 2024 at 09:13 PM
--- Server version: 10.6.18-MariaDB-cll-lve-log
--- PHP Version: 8.3.8
+-- Generation Time: May 23, 2025 at 08:35 AM
+-- Server version: 10.6.21-MariaDB-cll-lve-log
+-- PHP Version: 8.3.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -104,7 +104,7 @@ INSERT INTO `banks` (`id`, `code`, `bin`, `shortName`, `logo`, `swift_code`) VAL
 (61, 'KEBHANAHN', 970467, 'KEBHanaHN', 'https://api.vietqr.io/img/KEBHANAHN.png', NULL),
 (62, 'MAFC', 977777, 'MAFC', 'https://api.vietqr.io/img/MAFC.png', NULL),
 (63, 'VBSP', 999888, 'VBSP', 'https://api.vietqr.io/img/VBSP.png', NULL),
-(64, 'FECREDIT', NULL, 'FE Credit', 'https://brademar.com/wp-content/uploads/2022/09/FE-CREDIT-Logo-PNG-2.png', NULL),
+(64, 'FECREDIT', NULL, 'FE Credit', 'https://fecredit.com.vn/wp-content/uploads/2021/10/Logo_FullColor.png', NULL),
 (65, 'HOMECREDIT', NULL, 'Home Credit', 'https://trustingsocial.com/uploads/vn-homecredit.png', NULL),
 (66, 'MCREDIT', NULL, 'Mcredit', 'https://trustingsocial.com/uploads/vn-mcredit.png', NULL),
 (67, 'VIETCREDIT', NULL, 'VietCredit', 'https://trustingsocial.com/uploads/vn-viet-credit.png', NULL),
@@ -113,7 +113,7 @@ INSERT INTO `banks` (`id`, `code`, `bin`, `shortName`, `logo`, `swift_code`) VAL
 (70, 'LOTTEFINANCE', NULL, 'LOTTE Finance', 'https://i.pinimg.com/originals/6a/4d/0f/6a4d0fcecee7b9f0f50be9e17a9fd7b7.png', NULL),
 (71, 'SHBFINANCE', NULL, 'SHB Finance', 'https://assets-global.website-files.com/6107d6546b656b27d809cd54/6107d6546b656b31df09d091_shb.svg', NULL),
 (72, 'JACCS', NULL, 'JACCS', 'https://monfin.vn/images/source/Congty/logo%20jaccs.png', NULL),
-(73, 'VIETCAPITAL', NULL, 'Bản Việt', 'https://wikiland.vn/wp-content/uploads/logo-vietcapital.png', NULL);
+(73, 'VIETCAPITAL', NULL, 'Bản Việt', 'https://inuvdp.com/wp-content/uploads/2022/05/logo-ban-viet-03.jpg', NULL);
 
 --
 -- Indexes for dumped tables

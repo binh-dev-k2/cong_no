@@ -53,6 +53,12 @@ class BusinessService extends BaseService
 
         $moneyRecordCount = $businnesses->max('money_count');
 
+        $businnesses->map(function ($business) {
+            $isPaid = $business->money->where('is_money_checked', false);
+            $business->is_paid = count($isPaid) > 0 ? false : true;
+            return $business;
+        });
+
         return [
             "draw" => $data['draw'] ?? 1,
             "recordsTotal" => $recordsTotal,
@@ -105,13 +111,15 @@ class BusinessService extends BaseService
                         $i++;
                     }
 
-                    for ($i; $i < 10; $i++) {
-                        $moneyData[] = $this->createMoneyData($business->id, 0);
-                    }
+                    // for ($i; $i < 10; $i++) {
+                    //     $moneyData[] = $this->createMoneyData($business->id, 0);
+                    // }
 
                     BusinessMoney::insert($moneyData);
                     break;
             }
+
+            $this->updateTotalInvestment($business->id);
 
             DB::commit();
             return true;
@@ -125,13 +133,41 @@ class BusinessService extends BaseService
     public function update(array $data)
     {
         $business = Business::findOrFail($data['id']);
+        switch ($data['formality']) {
+            case 'R':
+                $fee = (float) ($data['total_money'] * $data['fee_percent'] / 100);
+                $data['fee'] = (float) ($data['total_money'] - $fee);
+                break;
+
+            default:
+                $data['fee'] = (float) ($data['total_money'] * $data['fee_percent'] / 100);
+                break;
+        }
+
         return $business->update($data);
+    }
+
+    public function updateTotalInvestment($businessId, $isPlus = false, $plusMoney = 0)
+    {
+        $business = Business::findOrFail($businessId);
+        $totalInvestment = Setting::where('key', 'total_investment')->first();
+        if (!$totalInvestment) {
+            throw new \Exception('Total investment not found');
+        }
+
+        if ($isPlus) {
+            $totalInvestment->value += (float) $plusMoney;
+        } else {
+            $totalInvestment->value -= (float) $business->total_money;
+        }
+
+        return $totalInvestment->save();
     }
 
     public function complete($id)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $business = Business::where('id', $id)->with(['card', 'machine'])->first();
 
             $debtData = [
@@ -175,6 +211,8 @@ class BusinessService extends BaseService
                 ]);
             }
 
+            $this->updateTotalInvestment($business->id, true, $business->total_money * $business->machine->fee_percent / 100);
+
             $business->delete();
             DB::commit();
             return true;
@@ -192,14 +230,24 @@ class BusinessService extends BaseService
 
     public function updateBusinessMoney($data)
     {
-        return BusinessMoney::findOrFail($data['id'])->update(
-            [
-                'money' => $data['money'] ?? 0,
-                'is_money_checked' => $data['is_money_checked'],
-                'note' => $data['note'] ?? '',
-                'is_note_checked' => $data['is_note_checked'],
-            ]
-        );
+        if ($data['id']) {
+            return BusinessMoney::findOrFail($data['id'])->update(
+                [
+                    'money' => $data['money'] ?? 0,
+                    'is_money_checked' => $data['is_money_checked'],
+                    'note' => $data['note'] ?? '',
+                    'is_note_checked' => $data['is_note_checked'],
+                ]
+            );
+        }
+
+        return BusinessMoney::create([
+            'business_id' => $data['business_id'],
+            'money' => $data['money'] ?? 0,
+            'is_money_checked' => $data['is_money_checked'],
+            'note' => $data['note'] ?? '',
+            'is_note_checked' => $data['is_note_checked'],
+        ]);
     }
 
     public function randomMoney($min, $max)
@@ -257,7 +305,9 @@ class BusinessService extends BaseService
 
     public function delete($id)
     {
-        return Business::findOrFail($id)->delete() > 0;
+        $business = Business::findOrFail($id);
+        $this->updateTotalInvestment($business->id, true, $business->total_money);
+        return $business->delete();
     }
 
     public function updateNote($data)

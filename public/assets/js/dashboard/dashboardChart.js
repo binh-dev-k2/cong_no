@@ -16,6 +16,60 @@ const dashboard = function () {
         return formattedStr.trim();
     }
 
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'decimal',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    });
+
+    $(document).on('input', 'input[data-type="money"]', function () {
+        const value = $(this).val().replace(/[^0-9]/g, '');
+        if (value === '') {
+            $(this).val('');
+        } else {
+            $(this).val(formatter.format(parseInt(value)));
+        }
+    });
+
+    const initTotalInvestment = function () {
+        const getTotalInvestment = () => {
+            axios.get(routes.getTotalInvestment, { headers })
+                .then((response) => {
+                    const data = response.data;
+                    const totalInvestment = document.getElementById('total-investment');
+                    totalInvestment.innerText = formatter.format(parseFloat(data.totalInvestment)) + ' VNĐ';
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+        getTotalInvestment();
+
+        $('#btn-update-total-investment').on('click', function () {
+            $('#modal-update-total-investment').modal('show');
+        })
+
+        $('#form-update-total-investment').on('submit', function (e) {
+            e.preventDefault();
+            const money = $('#investment-value').val().replace(/,/g, '');
+            axios.post(routes.updateTotalInvestment, { value: money }, { headers })
+                .then((response) => {
+                    if (response.data.code == 0) {
+                        toastr.success('Thêm quỹ thành công');
+                        getTotalInvestment();
+                        $('#modal-update-total-investment').modal('hide');
+                    } else {
+                        toastr.error('Thêm quỹ thất bại', response.data.message);
+                    }
+                })
+                .catch((error) => {
+                    toastr.error('Thêm quỹ thất bại', error.response.data.message);
+                    console.log(error);
+                })
+        })
+    };
+
     const initDonutChart = function () {
         axios.get(routes.getChartCustomer, { headers })
             .then((response) => {
@@ -159,6 +213,7 @@ const dashboard = function () {
             initTotalBusiness();
             initTotalMachineFee();
             initTableCardExpired();
+            initTotalInvestment();
 
             $('#machine-month-select, #machine-year-select').on('change', function () {
                 const month = $('#machine-month-select').val();

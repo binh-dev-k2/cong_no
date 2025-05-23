@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Services\DashBoardService;
+use App\Services\DebtService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     protected $dashBoardService;
-
     /**
      * @param $dashBoardService
      */
@@ -17,33 +17,49 @@ class DashboardController extends Controller
         $this->dashBoardService = $dashBoardService;
     }
 
-    function index()
+    public function index()
     {
         return view('dashboard');
     }
 
-    function getChartCustomer()
+    public function getTotalInvestment()
+    {
+        $data = $this->dashBoardService->getTotalInvestment();
+        return response()->json($data);
+    }
+
+    public function updateTotalInvestment(Request $request)
+    {
+        $result = $this->dashBoardService->updateTotalInvestment($request->input());
+        return jsonResponse($result ? 0 : 1);
+    }
+
+    public function getChartCustomer()
     {
         $data = $this->dashBoardService->getChartCustomer();
         return response()->json($data);
     }
 
-    function getTotalDebit(){
+    public function getTotalDebit()
+    {
         $data = $this->dashBoardService->getTotalDebit();
         return response()->json($data);
     }
 
-    function getTotalBusiness(){
+    public function getTotalBusiness()
+    {
         $data = $this->dashBoardService->getTotalBusiness();
         return response()->json($data);
     }
 
-    public function getCardExpired(Request $request){
+    public function getCardExpired(Request $request)
+    {
         $data = $this->dashBoardService->getCardExpired($request->input());
         return response()->json($data);
     }
 
-    public function getMachineFee(Request $request){
+    public function getMachineFee(Request $request)
+    {
         $data = $this->dashBoardService->getMachineFee($request->input());
         return response()->json($data);
     }

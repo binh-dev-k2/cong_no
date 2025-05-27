@@ -105,7 +105,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-footer d-flex flex-column py-2">
+                                        <div class="card-footer d-flex flex-column align-items-end py-2">
                                             <div class="d-flex justify-content-end align-items-center mb-1">
                                                 <a href="{{ route('debit') }}" class="btn btn-primary">Xem chi tiết</a>
                                             </div>
@@ -124,7 +124,7 @@
                                                 <h3 class="align-content-center" id="total-business"></h3>
                                             </div>
                                         </div>
-                                        <div class="card-body d-flex flex-column py-2">
+                                        <div class="card-body d-flex flex-column align-items-end py-2">
                                             <div class="d-flex justify-content-end align-items-center mb-1">
                                                 <a href="{{ route('business') }}" class="btn btn-primary">Xem chi tiết</a>
                                             </div>
@@ -162,7 +162,7 @@
                                                 <h3 class="align-content-center" id="total-machine-fee"></h3>
                                             </div>
                                         </div>
-                                        <div class="card-body d-flex flex-column py-2">
+                                        <div class="card-body d-flex flex-column align-items-end py-2">
                                             <div class="d-flex justify-content-end align-items-center mb-1">
                                                 <a href="{{ route('machine') }}" class="btn btn-primary">Xem chi tiết</a>
                                             </div>

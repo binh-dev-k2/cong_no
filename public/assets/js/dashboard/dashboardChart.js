@@ -104,12 +104,26 @@ const dashboard = function () {
                             legend: {
                                 position: 'right',
                             },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            }
                         }
                     },
                 }
                 new Chart(ctx, config);
             })
-
+            .catch((error) => {
+                console.error('Error loading chart data:', error);
+                toastr.error('Không thể tải dữ liệu biểu đồ');
+            });
     };
 
     const initTotalDebit = function () {
@@ -118,7 +132,7 @@ const dashboard = function () {
                 const percentCompleted = response.data.percentCompleted;
                 const countPaidedDebit = response.data.countPaidedDebit;
                 const totalAmount = response.data.totalAmount;
-                const formattedVND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalAmount);
+                const formattedVND = formatter.format(totalAmount) + ' VNĐ';
 
                 document.getElementById('total-debit').innerText = formattedVND;
                 document.getElementById('process-data-complete1').innerText = percentCompleted + '%';
@@ -139,17 +153,13 @@ const dashboard = function () {
         axios.post(routes.getMachineFee, { month, year }, { headers })
             .then((response) => {
                 let total = response.data.total;
-                const formattedVND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total ?? 0)
+                const formattedVND = formatter.format(total ?? 0) + ' VNĐ';
                 document.getElementById('total-machine-fee').innerText = formattedVND;
             })
     };
 
     const initTableCardExpired = function () {
         const datatable = $("#table-card-expired").DataTable({
-            // fixedColumns: {
-            //     leftColumns: 0,
-            //     rightColumns: 1
-            // },
             searching: false,
             lengthMenu: [10, 20, 50, 100],
             pageLength: 50,
@@ -163,7 +173,7 @@ const dashboard = function () {
                     request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                 },
                 data: function (d) {
-
+                    // Add any additional data parameters here if needed
                 }
             },
             columnDefs: [
@@ -173,7 +183,7 @@ const dashboard = function () {
                     orderable: false,
                     className: 'text-center',
                     render: function (data, type, row, meta) {
-                        return `<span>${meta.row + meta.settings._iDisplayStart + 1}</span>`
+                        return `<span>${meta.row + meta.settings._iDisplayStart + 1}</span>`;
                     }
                 },
                 {
@@ -184,8 +194,10 @@ const dashboard = function () {
                     render: function (data, type, row, meta) {
                         const phone = data.phone.startsWith('@') ? data.phone.substring(1) : data.phone;
                         const url = data.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
-                        return `<div>${data.name}</div>
-                                    <a href="${url}" target="_blank">${phone}</a>`;
+                        return `
+                            <div>${data.name}</div>
+                            <a href="${url}" target="_blank" class="text-primary">${phone}</a>
+                        `;
                     }
                 },
                 {
@@ -194,12 +206,13 @@ const dashboard = function () {
                     orderable: false,
                     className: 'text-center min-w-175px',
                     render: function (data, type, row, meta) {
-                        return `<div class="d-flex flex-column align-items-center">
-                                    <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">
-                                    <span>${formatNumber(row.card_number)}</span>
-                                    ${formatNumber(row.account_number ? 'STK: ' + row.account_number : '')}
-                                </div>
-                                `;
+                        return `
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="${row.bank.logo}" loading="lazy" class="h-30px" alt="${row.bank.code}">
+                                <span class="mt-2">${formatNumber(row.card_number)}</span>
+                                ${row.account_number ? `<span class="text-muted">STK: ${formatNumber(row.account_number)}</span>` : ''}
+                            </div>
+                        `;
                     }
                 },
                 {
@@ -208,10 +221,10 @@ const dashboard = function () {
                     orderable: false,
                     className: 'text-center',
                     render: function (data, type, row, meta) {
-                        return `<span>${data.month_expired} - ${data.year_expired}</span>`;
+                        return `<span class="badge badge-light-primary">${data.month_expired} - ${data.year_expired}</span>`;
                     }
-                },
-            ],
+                }
+            ]
         });
     }
 

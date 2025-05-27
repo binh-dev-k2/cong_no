@@ -172,11 +172,15 @@ var DebitsList = function () {
                                 const phone = row.phone.startsWith('@') ? row.phone.substring(1) : row.phone;
                                 const url = row.phone.startsWith('@') ? `https://t.me/${phone}` : `https://zalo.me/${phone}`;
                                 return `
-                                        <div>${row.name ?? ''}</div>
-                                        <a href="${url}" target="_blank">${phone}</a>
-                                    `
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="fw-bold mb-1">${row.name ?? ''}</div>
+                                    <a href="${url}" target="_blank" class="text-primary text-hover-primary">
+                                        <i class="bi ${row.phone.startsWith('@') ? 'bi-telegram' : 'bi-chat-dots'} me-1"></i>
+                                        ${phone}
+                                    </a>
+                                </div>`;
                             }
-                            return `<span></span>`
+                            return `<div class="empty-cell"></div>`;
                         }
                     },
                     {

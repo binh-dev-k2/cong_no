@@ -456,12 +456,12 @@ const CustomerList = function () {
 
                         return `
                             <div class="d-flex flex-column justify-content-center">
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center">
                                     <div class="px-3 py-2 text-center rounded-3 mb-1 text-nowrap bg-light-primary">
                                         ${data ? formatNumber(data) : ''}
                                     </div>
                                     ${elementDateReturn}
-                                <div>
+                                </div>
                                 ${timeExpired ? `
                                     <div class="text-muted fs-7">
                                         <i class="bi bi-calendar-event me-1"></i>

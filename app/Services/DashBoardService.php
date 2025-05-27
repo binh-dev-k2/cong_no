@@ -65,7 +65,7 @@ class DashBoardService
 
     public function getTotalDebit(): array
     {
-        $debtQuery = Debt::query();
+        $debtQuery = Debt::query()->where('created_at', '>=', Carbon::now()->startOfMonth())->where('created_at', '<=', Carbon::now()->endOfMonth());
         $totalDebts = $debtQuery->count();
         $totalAmount = $debtQuery->sum('fee');
         $paidDebts = $debtQuery->where('status', Debt::STATUS_PAID)->count();

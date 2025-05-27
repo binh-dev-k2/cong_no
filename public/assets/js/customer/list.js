@@ -456,11 +456,11 @@ const CustomerList = function () {
                                     </div>
                                     ${row.date_return
                                     ?
-                                        `
+                                        (`
                                         <div class="position-relative">
                                             <i class="fas fa-info-circle text-info cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Ngày trả thẻ: ${formatDate(row.date_return)}"></i>
                                         </div>
-                                        `
+                                        `)
                                     : ''}
                                 <div>
                                 ${timeExpired ? `

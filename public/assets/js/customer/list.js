@@ -449,7 +449,7 @@ const CustomerList = function () {
                     render: function (data, type, row) {
                         const timeExpired = row.month_expired ? `${row.month_expired}-${row.year_expired}` : '';
                         return `
-                            <div class="d-flex flex-column justify-content-center">
+                            <div class="d-flex flex-column align-items-center">
                                 <div class="d-flex justify-content-center">
                                     <div class="px-3 py-2 text-center rounded-3 mb-1 text-nowrap bg-light-primary">
                                         ${data ? formatNumber(data) : ''}

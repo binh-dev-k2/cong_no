@@ -134,7 +134,9 @@
                                 'business_id': 'ID nghiệp vụ',
                                 'machine_id': 'ID máy',
                                 'is_money_checked': 'Đánh dấu số tiền',
-                                'is_note_checked': 'Đánh dấu ghi chú'
+                                'is_note_checked': 'Đánh dấu ghi chú',
+                                'collaborator_id': 'ID Cộng tác viên',
+                                'total_investment': 'Tổng đầu tư',
                             }[key] || key;
 
                             return [newKey, value];

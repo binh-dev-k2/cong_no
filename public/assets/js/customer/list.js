@@ -448,20 +448,19 @@ const CustomerList = function () {
                     orderable: false,
                     render: function (data, type, row) {
                         const timeExpired = row.month_expired ? `${row.month_expired}-${row.year_expired}` : '';
+                        const elementDateReturn = row.date_return ? `
+                            <div class="position-relative">
+                                <i class="fas fa-info-circle text-info cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Ngày trả thẻ: ${formatDate(row.date_return)}"></i>
+                            </div>
+                        ` : '';
+
                         return `
                             <div class="d-flex flex-column align-items-center">
                                 <div class="d-flex justify-content-center">
                                     <div class="px-3 py-2 text-center rounded-3 mb-1 text-nowrap bg-light-primary">
                                         ${data ? formatNumber(data) : ''}
                                     </div>
-                                    ${row.date_return
-                                    ?
-                                        (`
-                                        <div class="position-relative">
-                                            <i class="fas fa-info-circle text-info cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Ngày trả thẻ: ${formatDate(row.date_return)}"></i>
-                                        </div>
-                                        `)
-                                    : ''}
+                                    ${elementDateReturn}
                                 <div>
                                 ${timeExpired ? `
                                     <div class="text-muted fs-7">

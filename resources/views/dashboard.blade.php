@@ -33,6 +33,22 @@
                                 <div class="card-body d-flex flex-column py-2">
                                     <button class="btn btn-primary" id="btn-update-total-investment" data-bs-toggle="modal"
                                         data-bs-target="#modal-update-total-investment">Thêm quỹ</button>
+
+                                    <div class="d-flex flex-column gap-5 mt-5">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold fs-6 text-gray-500">Tiền nghiệp vụ:</span>
+                                            <span class="fw-bold fs-6 text-gray-900" id="total-business-value">0 VNĐ</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold fs-6 text-gray-500">Tiền ghi nợ:</span>
+                                            <span class="fw-bold fs-6 text-gray-900" id="total-debt-value">0 VNĐ</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold fs-6 text-gray-500">Lãi máy tháng này:</span>
+                                            <span class="fw-bold fs-6 text-gray-900" id="total-interest-machine-value">0
+                                                VNĐ</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -63,13 +79,13 @@
                         <div class="col-12">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="card card-flush mb-10">
+                                    <div class="card card-flush mb-10" style="min-height: 230px">
                                         <div class="card-header pt-5">
                                             <h3 class="card-title align-items-start flex-column">
                                                 <span class="card-label fw-bold text-gray-900">Ghi nợ</span>
-                                                <span class="text-gray-500 pt-2 fw-semibold fs-6">Tổng số tiền khách hàng
-                                                    đang
-                                                    nợ</span>
+                                                <span class="text-gray-500 pt-2 fw-semibold fs-6">
+                                                    Tổng số tiền khách hàng đang nợ
+                                                </span>
                                             </h3>
                                             <div class="card-toolbar">
                                                 <h3 class="align-content-center" id="total-debit"></h3>
@@ -97,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="card card-flush mb-10">
+                                    <div class="card card-flush mb-10" style="min-height: 230px">
                                         <div class="card-header pt-5">
                                             <h3 class="card-title align-items-start flex-column">
                                                 <span class="card-label fw-bold text-gray-900">Nghiệp vụ</span>
@@ -116,7 +132,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="card card-flush">
+                                    <div class="card card-flush" style="min-height: 230px">
                                         <div class="card-header pt-5">
                                             <h3 class="card-title align-items-start flex-column">
                                                 <span class="card-label fw-bold text-gray-900">Máy</span>

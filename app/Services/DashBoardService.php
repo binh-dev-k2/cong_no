@@ -67,7 +67,7 @@ class DashBoardService
     {
         $debtQuery = Debt::query();
         $totalDebts = $debtQuery->count();
-        $totalAmount = $debtQuery->sum('total_fee');
+        $totalAmount = $debtQuery->sum('fee');
         $paidDebts = $debtQuery->where('status', Debt::STATUS_PAID)->count();
         $percentCompleted = $totalDebts > 0 ? round(($paidDebts / $totalDebts) * 100, 2) : 0;
         return [
@@ -139,7 +139,10 @@ class DashBoardService
         }
 
         return [
-            'totalInvestment' => $totalInvestment->value
+            'totalInvestment' => $totalInvestment->value,
+            'totalBusiness' => Business::sum('total_money'),
+            'totalDebt' => Debt::sum('fee'),
+            'todalInterestMachine' => MachineBusinessFee::where('year', Carbon::now()->year)->where('month', Carbon::now()->month)->sum('fee'),
         ];
     }
 

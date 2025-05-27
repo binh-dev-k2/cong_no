@@ -13,6 +13,8 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use function PHPUnit\Framework\isNull;
+
 class BusinessService extends BaseService
 {
     public function filterDatatable(array $data)
@@ -147,7 +149,7 @@ class BusinessService extends BaseService
         return $business->update($data);
     }
 
-    public function updateTotalInvestment($businessId, $isPlus = false, $plusMoney = 0)
+    public function updateTotalInvestment($businessId, $plusMoney = null)
     {
         $business = Business::findOrFail($businessId);
         $totalInvestment = Setting::where('key', 'total_investment')->first();
@@ -155,7 +157,7 @@ class BusinessService extends BaseService
             throw new \Exception('Total investment not found');
         }
 
-        if ($isPlus) {
+        if (is_numeric($plusMoney)) {
             $totalInvestment->value += (float) $plusMoney;
         } else {
             $totalInvestment->value -= (float) $business->total_money;
@@ -211,7 +213,7 @@ class BusinessService extends BaseService
                 ]);
             }
 
-            $this->updateTotalInvestment($business->id, true, $business->total_money * $business->machine->fee_percent / 100);
+            $this->updateTotalInvestment($business->id, $business->total_money * $business->machine->fee_percent / 100);
 
             $business->delete();
             DB::commit();
@@ -306,7 +308,7 @@ class BusinessService extends BaseService
     public function delete($id)
     {
         $business = Business::findOrFail($id);
-        $this->updateTotalInvestment($business->id, true, $business->total_money);
+        $this->updateTotalInvestment($business->id, $business->total_money);
         return $business->delete();
     }
 

@@ -38,6 +38,15 @@ const dashboard = function () {
                     const data = response.data;
                     const totalInvestment = document.getElementById('total-investment');
                     totalInvestment.innerText = formatter.format(parseFloat(data.totalInvestment)) + ' VNĐ';
+
+                    const totalBusiness = document.getElementById('total-business-value');
+                    totalBusiness.innerText = formatter.format(parseFloat(data.totalBusiness)) + ' VNĐ';
+
+                    const totalDebt = document.getElementById('total-debt-value');
+                    totalDebt.innerText = formatter.format(parseFloat(data.totalDebt)) + ' VNĐ';
+
+                    const totalInterestMachine = document.getElementById('total-interest-machine-value');
+                    totalInterestMachine.innerText = formatter.format(parseFloat(data.todalInterestMachine)) + ' VNĐ';
                 })
                 .catch((error) => {
                     console.log(error);

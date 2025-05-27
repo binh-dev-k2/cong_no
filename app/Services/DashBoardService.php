@@ -65,9 +65,9 @@ class DashBoardService
 
     public function getTotalDebit(): array
     {
-        $debtQuery = Debt::query()->where('status', Debt::STATUS_UNPAID);
+        $debtQuery = Debt::query();
         $totalDebts = $debtQuery->count();
-        $totalAmount = $debtQuery->sum('fee');
+        $totalAmount = $debtQuery->where('status', Debt::STATUS_UNPAID)->sum('fee');
         $paidDebts = $debtQuery->where('status', Debt::STATUS_PAID)->count();
         $percentCompleted = $totalDebts > 0 ? round(($paidDebts / $totalDebts) * 100, 2) : 0;
         return [

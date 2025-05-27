@@ -3,7 +3,7 @@
 set -e  # Dừng script ngay khi gặp lỗi
 
 # Đường dẫn đến repo GitHub
-REPO_URL="https://github.com/binh-dev-k2/cong_no.git"
+REPO_URL="https://github.com/binhtn02/cong_no.git"
 REMOTE_NAME="binh.dev.02"  # Đúng remote name
 BRANCH="live1"
 

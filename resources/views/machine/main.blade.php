@@ -1,42 +1,44 @@
 @extends('layouts.layout')
 @section('title')
-    Máy
+    Quản lý máy
 @endsection
 @section('header')
     <style>
         tr td {
-            padding: 0.5rem !important;
+            padding: 0.75rem !important;
             margin: 0 !important;
         }
     </style>
 @endsection
 
 @section('content')
-    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
             <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
                 data-kt-swapper-parent="{default: '#kt_app_content_container', lg: '#kt_app_toolbar_container'}"
                 class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
 
-                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Máy
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-2 flex-column justify-content-center my-0">
+                    Quản lý máy
                 </h1>
 
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{ route('dashboard') }}" class="text-muted text-hover-primary">Thống kê</a>
+                        <a href="{{ route('dashboard') }}" class="text-muted text-hover-primary">
+                            Thống kê
+                        </a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-500 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Máy</li>
+                    <li class="breadcrumb-item text-muted">Quản lý máy</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <div id="kt_app_content" class="app-content flex-column-fluid">
-        <div id="kt_app_content_container" class="app-container ">
+        <div id="kt_app_content_container" class="app-container">
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-title">
@@ -47,11 +49,11 @@
                                     <span class="path2"></span>
                                 </i>
                                 <input type="text" id="machine-search"
-                                    class="form-control form-control-solid w-250px ps-12 "
-                                    data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
+                                    class="form-control form-control-solid w-250px ps-12"
+                                    data-kt-debit-table-filter="search" placeholder="Tìm kiếm máy..." />
                             </div>
 
-                            <div class="d-flex flex-wrap gap-2 ms-2">
+                            <div class="d-flex flex-wrap gap-3 ms-4">
                                 <div class="d-flex">
                                     <select class="form-select form-select-solid me-2 min-w-100px"
                                         id="machine-month-select">
@@ -69,23 +71,34 @@
                                 </div>
 
                                 <div class="ms-2">
-                                    <select class="form-select form-select-solid min-w-100px" name="status"
+                                    <select class="form-select form-select-solid min-w-120px py-4" name="status"
                                         id="machine-status-select">
                                         <option value="0">Máy đã ẩn</option>
-                                        <option value="1" selected>Mặc định</option>
+                                        <option value="1" selected>Máy đang hiển thị</option>
                                     </select>
                                 </div>
 
-                                <button class="btn btn-primary" id="machine-filter">Lọc</button>
+                                <button class="btn btn-primary px-4" id="machine-filter">
+                                    <i class="ki-duotone ki-filter fs-2 me-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                    Lọc
+                                </button>
                             </div>
-
                         </div>
                     </div>
 
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#machine-modal">Thêm máy</button>
+                                data-bs-target="#machine-modal">
+                                <i class="ki-duotone ki-plus fs-2 me-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                                Thêm máy mới
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -106,10 +119,10 @@
                         <tbody class="fw-semibold text-gray-600">
                         </tbody>
                         <tfoot>
-                            <tr>
+                            <tr class="fw-bold">
                                 <td colspan="4" class="text-end">Tổng số tiền:</td>
-                                <td id="machine-total-fee"></td>
-                                <td id="machine-total-money"></td>
+                                <td id="machine-total-fee" class="text-primary"></td>
+                                <td id="machine-total-money" class="text-primary"></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -118,7 +131,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="machine-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -203,8 +215,10 @@
                     success: function(res) {
                         // console.log(res);
 
-                        $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res.data.totalMoney));
-                        $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.data.totalFee));
+                        $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res
+                            .data.totalMoney));
+                        $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.data
+                            .totalFee));
                     }
                 })
             }

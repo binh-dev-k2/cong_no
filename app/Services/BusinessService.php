@@ -56,7 +56,7 @@ class BusinessService extends BaseService
         $moneyRecordCount = $businnesses->max('money_count');
 
         $businnesses->map(function ($business) {
-            $isPaid = $business->money->where('is_money_checked', false);
+            $isPaid = $business->money->where('is_note_checked', false);
             $business->is_paid = count($isPaid) > 0 ? false : true;
             return $business;
         });

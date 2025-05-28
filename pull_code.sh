@@ -189,13 +189,7 @@ if [ -f "artisan" ]; then
     if php artisan migrate:status &>/dev/null; then
         log "⚙️ Running database migrations"
         if ! php artisan migrate --force; then
-            log "⚠️ Migration failed, attempting to install doctrine/dbal and retry"
-            composer require doctrine/dbal --no-interaction
-            if ! php artisan migrate --force; then
-                log "❌ Migration failed even after installing doctrine/dbal"
-                exit 1
-            fi
-            log "✅ Migration completed successfully"
+            log "⚠️ Migration failed"
         fi
 
         # Only run seeders if explicitly needed (check if seeders directory has files)

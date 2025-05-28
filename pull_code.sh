@@ -21,6 +21,19 @@ log() {
     echo "$message" | tee -a "$LOG_FILE"
 }
 
+# Set HOME and COMPOSER_HOME environment variables if not set
+# This is crucial for Composer to work correctly
+if [ -z "${HOME:-}" ]; then
+    export HOME="$(pwd)"
+    log "⚠️ HOME environment variable was not set. Setting to $(pwd)"
+fi
+
+if [ -z "${COMPOSER_HOME:-}" ]; then
+    export COMPOSER_HOME="${HOME}/.composer"
+    mkdir -p "${COMPOSER_HOME}"
+    log "ℹ️ COMPOSER_HOME set to ${COMPOSER_HOME}"
+fi
+
 run_command() {
     local desc="$1"
     shift
@@ -59,33 +72,58 @@ check_command() {
 
 install_composer() {
     log "📥 Installing Composer..."
-    EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
 
-    if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then
-        log "❌ Composer installer corrupt"
-        rm composer-setup.php
+    # Ensure temporary directory exists and is writable
+    TEMP_DIR="${HOME}/tmp"
+    mkdir -p "${TEMP_DIR}"
+    cd "${TEMP_DIR}"
+
+    # Download and verify Composer installer
+    log "Downloading Composer installer..."
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+
+    # Skip checksum verification if curl is not available
+    if command -v curl &>/dev/null; then
+        EXPECTED_CHECKSUM="$(curl -s https://composer.github.io/installer.sig)"
+        ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+        if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then
+            log "❌ Composer installer corrupt"
+            rm composer-setup.php
+            exit 1
+        fi
+    else
+        log "⚠️ curl not available, skipping Composer installer verification"
+    fi
+
+    # Install Composer
+    php composer-setup.php --quiet
+    INSTALL_RESULT=$?
+    rm composer-setup.php
+
+    if [ $INSTALL_RESULT -ne 0 ]; then
+        log "❌ Composer installation failed"
         exit 1
     fi
 
-    php composer-setup.php --quiet
-    rm composer-setup.php
+    # Move composer.phar to project directory
+    SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+    mv composer.phar "${SCRIPT_DIR}/"
+    cd "${SCRIPT_DIR}"
 
-    # Move to a global location or use locally
-    if [ -d "/usr/local/bin" ] && [ -w "/usr/local/bin" ]; then
-        mv composer.phar /usr/local/bin/composer
-        log "✅ Installed Composer globally"
-    else
-        chmod +x composer.phar
-        log "✅ Installed Composer locally as composer.phar"
-        # Create an alias for composer in this script session
-        composer() {
-            php "${PWD}/composer.phar" "$@"
-        }
-        export -f composer
-    fi
+    chmod +x composer.phar
+    log "✅ Installed Composer locally as composer.phar"
+
+    # Create composer function to use local composer.phar
+    composer() {
+        php "${SCRIPT_DIR}/composer.phar" "$@"
+    }
+    export -f composer
 }
+
+# Get absolute path of script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+log "📂 Script directory: ${SCRIPT_DIR}"
 
 # Check for required commands
 check_command git
@@ -93,7 +131,7 @@ check_command php
 check_command composer
 
 # Move to script directory
-cd "$(dirname "$0")" || { log "❌ Failed to change to script directory"; exit 1; }
+cd "${SCRIPT_DIR}" || { log "❌ Failed to change to script directory"; exit 1; }
 log "📂 Working directory: $(pwd)"
 
 # Repository setup/update
@@ -135,21 +173,15 @@ if [ -f "composer.lock" ]; then
 fi
 
 # Use local composer.phar if it exists and global command failed
-if [ ! -f "/usr/local/bin/composer" ] && [ -f "composer.phar" ]; then
+if [ -f "${SCRIPT_DIR}/composer.phar" ]; then
     log "🔄 Using local composer.phar"
-    COMPOSER_CMD="php composer.phar"
+    COMPOSER_CMD="php ${SCRIPT_DIR}/composer.phar"
 else
     COMPOSER_CMD="composer"
 fi
 
-run_command "Clearing composer cache" $COMPOSER_CMD clear-cache
+run_command "Clearing composer cache" $COMPOSER_CMD clear-cache || log "⚠️ Failed to clear composer cache, continuing anyway"
 run_command "Installing dependencies" $COMPOSER_CMD install --no-interaction --prefer-dist --optimize-autoloader
-
-# Install dbal if not already installed (prevents migration schema errors)
-if ! $COMPOSER_CMD show | grep -q "doctrine/dbal"; then
-    log "📦 Installing doctrine/dbal for schema support"
-    run_command "Installing doctrine/dbal" $COMPOSER_CMD require doctrine/dbal --no-interaction
-fi
 
 # Database operations
 if [ -f "artisan" ]; then
@@ -182,8 +214,34 @@ if [ -f "artisan" ]; then
     # Update permissions if needed (for Linux/Unix environments)
     if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
         log "🔒 Setting proper permissions"
-        run_command "Setting storage permissions" chmod -R 775 storage bootstrap/cache
-        run_command "Setting ownership" chown -R $(whoami):www-data .
+
+        # Set directory permissions
+        if [ -d "storage" ]; then
+            run_command "Setting storage permissions" chmod -R 775 storage || log "⚠️ Failed to set storage permissions"
+        fi
+
+        if [ -d "bootstrap/cache" ]; then
+            run_command "Setting bootstrap cache permissions" chmod -R 775 bootstrap/cache || log "⚠️ Failed to set bootstrap cache permissions"
+        fi
+
+        # Try to set ownership, but don't fail if it doesn't work
+        CURRENT_USER=$(whoami)
+
+        # Check if www-data group exists
+        if getent group www-data >/dev/null 2>&1; then
+            log "🔄 Attempting to set ownership to ${CURRENT_USER}:www-data"
+            if ! chown -R "${CURRENT_USER}:www-data" . 2>/dev/null; then
+                log "⚠️ Could not set ownership to ${CURRENT_USER}:www-data, trying current user only"
+                if ! chown -R "${CURRENT_USER}" . 2>/dev/null; then
+                    log "⚠️ Could not change ownership, continuing without ownership changes"
+                fi
+            fi
+        else
+            log "⚠️ www-data group not found, setting ownership to current user only"
+            if ! chown -R "${CURRENT_USER}" . 2>/dev/null; then
+                log "⚠️ Could not change ownership to ${CURRENT_USER}, continuing without ownership changes"
+            fi
+        fi
     fi
 fi
 

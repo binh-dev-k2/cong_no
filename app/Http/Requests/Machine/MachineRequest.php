@@ -32,9 +32,9 @@ class MachineRequest extends FormRequest
                 return [
                     'name' => 'required|string|max:255',
                     'code' => 'required|string|max:255|unique:machines,code',
-                    'visa_fee_percent' => 'required|numeric',
-                    'master_fee_percent' => 'required|numeric',
-                    'jcb_fee_percent' => 'required|numeric',
+                    'visa_fee_percent' => 'nullable|numeric',
+                    'master_fee_percent' => 'nullable|numeric',
+                    'jcb_fee_percent' => 'nullable|numeric',
                     'fee_percent' => 'required|numeric',
                 ];
 
@@ -43,9 +43,9 @@ class MachineRequest extends FormRequest
                     'id' => 'required|exists:machines,id',
                     'name' => 'required|string|max:255',
                     'code' => 'required|string|max:255|unique:machines,code,' . $this->input('id'),
-                    'visa_fee_percent' => 'required|numeric',
-                    'master_fee_percent' => 'required|numeric',
-                    'jcb_fee_percent' => 'required|numeric',
+                    'visa_fee_percent' => 'nullable|numeric',
+                    'master_fee_percent' => 'nullable|numeric',
+                    'jcb_fee_percent' => 'nullable|numeric',
                     'fee_percent' => 'required|numeric',
                     'status' => 'required|in:0,1'
                 ];

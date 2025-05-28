@@ -21,13 +21,6 @@ log() {
     echo "$message" | tee -a "$LOG_FILE"
 }
 
-check_command() {
-    if ! command -v "$1" &>/dev/null; then
-        log "❌ Required command '$1' not found. Please install it and try again."
-        exit 1
-    fi
-}
-
 run_command() {
     local desc="$1"
     shift
@@ -40,10 +33,64 @@ run_command() {
     log "✅ Done: $desc"
 }
 
+# Check for required commands and install if missing
+check_command() {
+    if ! command -v "$1" &>/dev/null; then
+        log "⚠️ Required command '$1' not found. Attempting to install it..."
+        case "$1" in
+            composer)
+                install_composer
+                ;;
+            git)
+                log "❌ Git is required but not found. Please install Git manually and try again."
+                exit 1
+                ;;
+            php)
+                log "❌ PHP is required but not found. Please install PHP manually and try again."
+                exit 1
+                ;;
+            *)
+                log "❌ Required command '$1' not found and can't be auto-installed."
+                exit 1
+                ;;
+        esac
+    fi
+}
+
+install_composer() {
+    log "📥 Installing Composer..."
+    EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+    if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then
+        log "❌ Composer installer corrupt"
+        rm composer-setup.php
+        exit 1
+    fi
+
+    php composer-setup.php --quiet
+    rm composer-setup.php
+
+    # Move to a global location or use locally
+    if [ -d "/usr/local/bin" ] && [ -w "/usr/local/bin" ]; then
+        mv composer.phar /usr/local/bin/composer
+        log "✅ Installed Composer globally"
+    else
+        chmod +x composer.phar
+        log "✅ Installed Composer locally as composer.phar"
+        # Create an alias for composer in this script session
+        composer() {
+            php "${PWD}/composer.phar" "$@"
+        }
+        export -f composer
+    fi
+}
+
 # Check for required commands
 check_command git
-check_command composer
 check_command php
+check_command composer
 
 # Move to script directory
 cd "$(dirname "$0")" || { log "❌ Failed to change to script directory"; exit 1; }
@@ -86,13 +133,22 @@ log "📦 Managing composer dependencies"
 if [ -f "composer.lock" ]; then
     run_command "Removing composer lock file" rm composer.lock
 fi
-run_command "Clearing composer cache" composer clear-cache
-run_command "Installing dependencies" composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Use local composer.phar if it exists and global command failed
+if [ ! -f "/usr/local/bin/composer" ] && [ -f "composer.phar" ]; then
+    log "🔄 Using local composer.phar"
+    COMPOSER_CMD="php composer.phar"
+else
+    COMPOSER_CMD="composer"
+fi
+
+run_command "Clearing composer cache" $COMPOSER_CMD clear-cache
+run_command "Installing dependencies" $COMPOSER_CMD install --no-interaction --prefer-dist --optimize-autoloader
 
 # Install dbal if not already installed (prevents migration schema errors)
-if ! composer show | grep -q "doctrine/dbal"; then
+if ! $COMPOSER_CMD show | grep -q "doctrine/dbal"; then
     log "📦 Installing doctrine/dbal for schema support"
-    run_command "Installing doctrine/dbal" composer require doctrine/dbal --no-interaction
+    run_command "Installing doctrine/dbal" $COMPOSER_CMD require doctrine/dbal --no-interaction
 fi
 
 # Database operations

@@ -27,7 +27,7 @@ class EditCardRequest extends FormRequest
     {
         return [
             'id' => 'required|numeric|exists:cards,id',
-            'card_number' => 'required|numeric|digits:16',
+            'card_number' => 'required|numeric|digits_between:15,16',
             'account_number' => 'nullable|numeric',
             'date_due' => 'nullable|numeric|min:0|max:31',
             'date_return' => 'nullable|date_format:Y-m-d',
@@ -40,6 +40,7 @@ class EditCardRequest extends FormRequest
             'year_expired' => 'nullable|numeric|min:2000|max:3000',
         ];
     }
+    
     function messages()
     {
         return [

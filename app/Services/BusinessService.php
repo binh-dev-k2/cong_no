@@ -213,29 +213,37 @@ class BusinessService extends BaseService
     public function getMachineFeePercent($business)
     {
         $firstNumber = (string)substr($business->card_number, 0, 1);
+        $firstTwoNumbers = (string)substr($business->card_number, 0, 2);
         $machine = $business->machine;
 
         switch ($firstNumber) {
-            case '3': // JCB
-                return !empty($machine->jcb_fee_percent)
-                    ? $machine->jcb_fee_percent
-                    : $machine->fee_percent;
+            case '3':
+                // JCB cards have 16 digits, AMEX cards have 15 digits
+                if (strlen((string)$business->card_number) === 16) {
+                    return $machine->jcb_fee_percent;
+                } else {
+                    return $machine->amex_fee_percent;
+                }
 
             case '4': // VISA
-                return !empty($machine->visa_fee_percent)
-                    ? $machine->visa_fee_percent
-                    : $machine->fee_percent;
+                return $machine->visa_fee_percent;
 
             case '5': // MasterCard
-                return !empty($machine->master_fee_percent)
-                    ? $machine->master_fee_percent
-                    : $machine->fee_percent;
+                // MasterCard numbers start with 50-55
+                if ($firstTwoNumbers >= '50' && $firstTwoNumbers <= '55') {
+                    return $machine->master_fee_percent;
+                }
+                return 0;
 
-            default:
-                return $machine->fee_percent;
+            case '6':
+            case '7':
+                return $machine->visa_fee_percent;
+
+            case '9': // NAPAS
+                return $machine->napas_fee_percent;
         }
+        return 0;
     }
-
 
     /**
      * Complete a business transaction

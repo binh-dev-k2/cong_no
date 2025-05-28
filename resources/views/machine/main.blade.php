@@ -8,11 +8,37 @@
             padding: 0.75rem !important;
             margin: 0 !important;
         }
+
+        /* Hiệu ứng fade in đơn giản */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hiệu ứng khi hover vào dòng bảng */
+        #machine-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        #machine-table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 @endsection
 
 @section('content')
-    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6">
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6 fade-in">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
             <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
                 data-kt-swapper-parent="{default: '#kt_app_content_container', lg: '#kt_app_toolbar_container'}"
@@ -37,9 +63,21 @@
         </div>
     </div>
 
-    <div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content" class="app-content flex-column-fluid fade-in">
         <div id="kt_app_content_container" class="app-container">
-            <div class="card">
+            <div class="alert alert-primary d-flex align-items-center p-5 mb-5 fade-in">
+                <i class="ki-duotone ki-information-5 fs-2hx text-primary me-4">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                    <span class="path3"></span>
+                </i>
+                <div class="d-flex flex-column">
+                    <h4 class="mb-1 text-primary">Lưu ý</h4>
+                    <span>Set % = 0 nếu máy chặn thẻ.</span>
+                </div>
+            </div>
+
+            <div class="card fade-in">
                 <div class="card-header border-0 pt-6">
                     <div class="card-title">
                         <div class="d-flex flex-wrap gap-3">
@@ -112,6 +150,7 @@
                                 <th class="text-center min-w-50px">% VISA</th>
                                 <th class="text-center min-w-50px">% MASTER</th>
                                 <th class="text-center min-w-50px">% JCB</th>
+                                <th class="text-center min-w-50px">% AMEX</th>
                                 <th class="text-center min-w-50px">% NAPAS</th>
                                 <th class="text-center min-w-125px">Lợi nhuận</th>
                                 <th class="text-center min-w-125px">Tổng số tiền</th>
@@ -122,7 +161,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="fw-bold">
-                                <td colspan="6" class="text-end">Tổng số tiền:</td>
+                                <td colspan="7" class="text-end">Tổng số tiền:</td>
                                 <td id="machine-total-fee" class="text-primary"></td>
                                 <td id="machine-total-money" class="text-primary"></td>
                                 <td></td>
@@ -177,9 +216,15 @@
                             </div>
                             <div class="fv-row mb-7">
                                 <label class="required fs-6 fw-semibold mb-2">
+                                    % phí AMEX:
+                                </label>
+                                <input type="text" class="form-control" name="amex_fee_percent" />
+                            </div>
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-semibold mb-2">
                                     % phí NAPAS:
                                 </label>
-                                <input type="text" class="form-control" name="fee_percent" />
+                                <input type="text" class="form-control" name="napas_fee_percent" />
                             </div>
 
                             <div class="fv-row mb-7">
@@ -208,6 +253,16 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            // Thêm hiệu ứng khi tải trang
+            setTimeout(function() {
+                $('.fade-in').each(function(i) {
+                    const item = $(this);
+                    setTimeout(function() {
+                        item.addClass('visible');
+                    }, 100 * i);
+                });
+            }, 200);
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             const formatter = new Intl.NumberFormat('en-US', {
@@ -301,61 +356,70 @@
                         targets: 2,
                         data: 'visa_fee_percent',
                         orderable: false,
-                        className: 'text-center min-w-150px',
+                        className: 'text-center min-w-50px',
                         render: function(data, type, row) {
-                            return `<span>${formatter.format(data)}</span>`;
+                            return data !== null ? formatter.format(data) : '0';
                         }
                     },
                     {
                         targets: 3,
                         data: 'master_fee_percent',
                         orderable: false,
-                        className: 'text-center min-w-150px',
+                        className: 'text-center min-w-50px',
                         render: function(data, type, row) {
-                            return data ? formatter.format(data) : 0;
+                            return data !== null ? formatter.format(data) : '0';
                         }
                     },
                     {
                         targets: 4,
                         data: 'jcb_fee_percent',
                         orderable: false,
-                        className: 'text-center min-w-150px',
+                        className: 'text-center min-w-50px',
                         render: function(data, type, row) {
-                            return data ? formatter.format(data) : 0;
+                            return data !== null ? formatter.format(data) : '0';
                         }
                     },
                     {
                         targets: 5,
-                        data: 'fee_percent',
+                        data: 'amex_fee_percent',
                         orderable: false,
-                        className: 'text-center min-w-150px',
+                        className: 'text-center min-w-50px',
                         render: function(data, type, row) {
-                            return data ? formatter.format(data) : 0;
+                            return data !== null ? formatter.format(data) : '0';
                         }
                     },
                     {
                         targets: 6,
-                        data: 'business_fees_sum_fee',
+                        data: 'napas_fee_percent',
                         orderable: false,
-                        className: 'text-center min-w-150px',
+                        className: 'text-center min-w-50px',
                         render: function(data, type, row) {
-                            return data ? new Intl.NumberFormat('vi-VN').format(data) : 0;
+                            return data !== null ? formatter.format(data) : '0';
                         }
                     },
                     {
                         targets: 7,
-                        data: 'business_fees_sum_total_money',
+                        data: 'business_fees_sum_fee',
                         orderable: false,
                         className: 'text-center min-w-150px',
                         render: function(data, type, row) {
-                            return data ? new Intl.NumberFormat('vi-VN').format(data) : 0;
+                            return data ? new Intl.NumberFormat('vi-VN').format(data) : '0';
+                        }
+                    },
+                    {
+                        targets: 8,
+                        data: 'business_fees_sum_total_money',
+                        orderable: false,
+                        className: 'text-center min-w-100px',
+                        render: function(data, type, row) {
+                            return data ? new Intl.NumberFormat('vi-VN').format(data) : '0';
                         }
                     },
                     {
                         targets: -1,
                         data: null,
                         orderable: false,
-                        className: 'text-center min-w-150px',
+                        className: 'text-center min-w-100px',
                         render: function(data, type, row) {
                             return `
                                     <button class="btn btn-warning btn-active-light-warning btn-sm btn-edit">Sửa</button>
@@ -363,6 +427,13 @@
                         },
                     },
                 ],
+                drawCallback: function() {
+                    // Thêm hiệu ứng khi render lại bảng
+                    $('#machine-table').find('tbody tr').addClass('fade-in');
+                    setTimeout(function() {
+                        $('#machine-table').find('tbody tr').addClass('visible');
+                    }, 100);
+                }
             });
 
             $('#machine-filter').on('click', function(e) {
@@ -372,12 +443,12 @@
                     return;
                 }
                 datatable.ajax.reload();
-            })
+            });
 
             $('#machine-modal').on('hidden.bs.modal', function(e) {
                 $(this).find('input[name="id"]').val('');
                 $(this).find('form')[0].reset();
-            })
+            });
 
             $('#form-machine').on('submit', function(e) {
                 e.preventDefault();
@@ -385,24 +456,39 @@
                 const id = form.find('input[name="id"]').val();
                 const name = form.find('input[name="name"]').val();
                 const code = form.find('input[name="code"]').val();
+
+                // Lấy giá trị và xử lý đúng dấu phân cách
                 const visa_fee_percent = form.find('input[name="visa_fee_percent"]').val().replace(/[,]/g, '.');
                 const master_fee_percent = form.find('input[name="master_fee_percent"]').val().replace(/[,]/g, '.');
                 const jcb_fee_percent = form.find('input[name="jcb_fee_percent"]').val().replace(/[,]/g, '.');
-                const fee_percent = form.find('input[name="fee_percent"]').val().replace(/[,]/g, '.');
+                const napas_fee_percent = form.find('input[name="napas_fee_percent"]').val().replace(/[,]/g, '.');
+                const amex_fee_percent = form.find('input[name="amex_fee_percent"]').val().replace(/[,]/g, '.');
                 const status = form.find('select[name="status"]').val();
 
+                // Hàm chuyển đổi giá trị sang số thực, giữ lại số 0
+                const parseFloatSafe = (value) => {
+                    // Kiểm tra xem chuỗi có phải là rỗng không
+                    if (value === '' || value === null || value === undefined) {
+                        return 0;
+                    }
+                    // Chuyển đổi thành số thực
+                    const parsedValue = parseFloat(value);
+                    // Nếu giá trị không phải là số (NaN), trả về 0
+                    return isNaN(parsedValue) ? 0 : parsedValue;
+                };
+
                 $.ajax({
-                    url: id ? "{{ route('api.machine.update') }}" :
-                        "{{ route('api.machine.store') }}",
+                    url: id ? "{{ route('api.machine.update') }}" : "{{ route('api.machine.store') }}",
                     type: "POST",
                     data: {
                         id: id,
                         name: name,
                         code: code,
-                        visa_fee_percent: parseFloat(visa_fee_percent) || null,
-                        master_fee_percent: parseFloat(master_fee_percent) || null,
-                        jcb_fee_percent: parseFloat(jcb_fee_percent) || null,
-                        fee_percent: parseFloat(fee_percent) || null,
+                        visa_fee_percent: parseFloatSafe(visa_fee_percent),
+                        master_fee_percent: parseFloatSafe(master_fee_percent),
+                        jcb_fee_percent: parseFloatSafe(jcb_fee_percent),
+                        napas_fee_percent: parseFloatSafe(napas_fee_percent),
+                        amex_fee_percent: parseFloatSafe(amex_fee_percent),
                         status: status
                     },
                     beforeSend: function(request) {
@@ -423,20 +509,39 @@
                         notify(err.message, 'error');
                     }
                 });
-            })
+            });
+
+            // Thêm định dạng số thập phân và validate cho các trường phí
+            $('input[name="visa_fee_percent"], input[name="master_fee_percent"], input[name="jcb_fee_percent"], input[name="napas_fee_percent"], input[name="amex_fee_percent"]').on('input', function() {
+                const value = $(this).val();
+                // Chỉ cho phép nhập số và dấu chấm/phẩy
+                const cleanedValue = value.replace(/[^0-9.,]/g, '');
+                // Đảm bảo chỉ có một dấu phân cách thập phân
+                const parts = cleanedValue.split(/[.,]/);
+                if (parts.length > 2) {
+                    const decimalPart = parts.slice(1).join('');
+                    $(this).val(parts[0] + '.' + decimalPart);
+                } else {
+                    $(this).val(cleanedValue);
+                }
+            });
 
             $(document).on('click', '.btn-edit', function() {
                 const data = datatable.row($(this).closest('tr')).data();
                 $('#form-machine').find('input[name="id"]').val(data.id);
                 $('#form-machine').find('input[name="name"]').val(data.name);
                 $('#form-machine').find('input[name="code"]').val(data.code);
-                $('#form-machine').find('input[name="visa_fee_percent"]').val(data.visa_fee_percent);
-                $('#form-machine').find('input[name="master_fee_percent"]').val(data.master_fee_percent);
-                $('#form-machine').find('input[name="jcb_fee_percent"]').val(data.jcb_fee_percent);
-                $('#form-machine').find('input[name="fee_percent"]').val(data.fee_percent);
+
+                // Hiển thị giá trị 0 thay vì để trống
+                $('#form-machine').find('input[name="visa_fee_percent"]').val(data.visa_fee_percent !== null ? data.visa_fee_percent : 0);
+                $('#form-machine').find('input[name="master_fee_percent"]').val(data.master_fee_percent !== null ? data.master_fee_percent : 0);
+                $('#form-machine').find('input[name="jcb_fee_percent"]').val(data.jcb_fee_percent !== null ? data.jcb_fee_percent : 0);
+                $('#form-machine').find('input[name="napas_fee_percent"]').val(data.napas_fee_percent !== null ? data.napas_fee_percent : 0);
+                $('#form-machine').find('input[name="amex_fee_percent"]').val(data.amex_fee_percent !== null ? data.amex_fee_percent : 0);
+
                 $('#form-machine').find('select[name="status"]').val(data.status);
                 $('#machine-modal').modal('show');
-            })
+            });
         })
     </script>
 @endsection

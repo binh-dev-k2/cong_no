@@ -32,10 +32,12 @@ class MachineRequest extends FormRequest
                 return [
                     'name' => 'required|string|max:255',
                     'code' => 'required|string|max:255|unique:machines,code',
-                    'visa_fee_percent' => 'nullable|numeric',
-                    'master_fee_percent' => 'nullable|numeric',
-                    'jcb_fee_percent' => 'nullable|numeric',
-                    'fee_percent' => 'required|numeric',
+                    'visa_fee_percent' => 'required|numeric|min:0',
+                    'master_fee_percent' => 'required|numeric|min:0',
+                    'jcb_fee_percent' => 'required|numeric|min:0',
+                    'napas_fee_percent' => 'required|numeric|min:0',
+                    'amex_fee_percent' => 'required|numeric|min:0',
+                    'status' => 'required|in:0,1'
                 ];
 
             case 'update':
@@ -43,10 +45,11 @@ class MachineRequest extends FormRequest
                     'id' => 'required|exists:machines,id',
                     'name' => 'required|string|max:255',
                     'code' => 'required|string|max:255|unique:machines,code,' . $this->input('id'),
-                    'visa_fee_percent' => 'nullable|numeric',
-                    'master_fee_percent' => 'nullable|numeric',
-                    'jcb_fee_percent' => 'nullable|numeric',
-                    'fee_percent' => 'required|numeric',
+                    'visa_fee_percent' => 'required|numeric|min:0',
+                    'master_fee_percent' => 'required|numeric|min:0',
+                    'jcb_fee_percent' => 'required|numeric|min:0',
+                    'napas_fee_percent' => 'required|numeric|min:0',
+                    'amex_fee_percent' => 'required|numeric|min:0',
                     'status' => 'required|in:0,1'
                 ];
         }
@@ -58,6 +61,13 @@ class MachineRequest extends FormRequest
             'visa_fee_percent.numeric' => 'Phần trăm phí VISA phải là số',
             'master_fee_percent.numeric' => 'Phần trăm phí MasterCard phải là số',
             'jcb_fee_percent.numeric' => 'Phần trăm phí JCB phải là số',
+            'napas_fee_percent.numeric' => 'Phần trăm phí NAPAS phải là số',
+            'amex_fee_percent.numeric' => 'Phần trăm phí AMEX phải là số',
+            'amex_fee_percent.required' => 'Phần trăm phí AMEX là bắt buộc',
+            'napas_fee_percent.required' => 'Phần trăm phí NAPAS là bắt buộc',
+            'master_fee_percent.required' => 'Phần trăm phí MasterCard là bắt buộc',
+            'jcb_fee_percent.required' => 'Phần trăm phí JCB là bắt buộc',
+            'visa_fee_percent.required' => 'Phần trăm phí VISA là bắt buộc',
             'fee_percent.numeric' => 'Phần trăm phí phải là số',
             'fee_percent.required' => 'Phần trăm phí là bắt buộc',
             'id.required' => 'Máy không tồn tại',

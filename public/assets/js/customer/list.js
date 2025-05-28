@@ -454,6 +454,15 @@ const CustomerList = function () {
                             </div>
                         ` : '';
 
+                        const elementNote = row.note ? `
+                            <div class="position-relative ms-1">
+                                <i class="fas fa-sticky-note text-warning cursor-pointer"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="${row.note}"></i>
+                            </div>
+                        ` : '';
+
                         return `
                             <div class="d-flex flex-column align-items-center">
                                 <div class="d-flex justify-content-center align-items-center">
@@ -461,6 +470,7 @@ const CustomerList = function () {
                                         ${data ? formatNumber(data) : ''}
                                     </div>
                                     ${elementDateReturn}
+                                    ${elementNote}
                                 </div>
                                 ${timeExpired ? `
                                     <div class="text-muted fs-7">

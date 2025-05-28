@@ -26,7 +26,7 @@ class AddCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'card_number' => 'required|numeric|digits:16|unique:cards,card_number',
+            'card_number' => 'required|numeric|digits_between:15,16|unique:cards,card_number',
             'account_number' => 'nullable|numeric',
             'date_due' => 'nullable|numeric|min:1|max:31',
             'date_return' => 'nullable|date_format:Y-m-d',

@@ -84,6 +84,8 @@
 
     @yield('script')
 
+    @include('layouts.components.machine-warning')
+
 </body>
 
 </html>

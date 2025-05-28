@@ -33,7 +33,7 @@ const FormAddCard = () => {
                     validators: {
                         notEmpty: { message: "Số thẻ là bắt buộc" },
                         numeric: { message: "Số thẻ phải là số" },
-                        stringLength: { message: "Số thẻ phải có đúng 16 chữ số", min: 16, max: 16 },
+                        stringLength: { message: "Số thẻ phải có đúng 15 hoặc 16 chữ số", min: 15, max: 16 },
                     },
                 },
                 account_name: { validators: { notEmpty: { message: "Chủ tài khoản là bắt buộc" } } },

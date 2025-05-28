@@ -399,10 +399,10 @@
                         id: id,
                         name: name,
                         code: code,
-                        visa_fee_percent: parseFloat(visa_fee_percent),
-                        master_fee_percent: parseFloat(master_fee_percent),
-                        jcb_fee_percent: parseFloat(jcb_fee_percent),
-                        fee_percent: parseFloat(fee_percent),
+                        visa_fee_percent: parseFloat(visa_fee_percent) || null,
+                        master_fee_percent: parseFloat(master_fee_percent) || null,
+                        jcb_fee_percent: parseFloat(jcb_fee_percent) || null,
+                        fee_percent: parseFloat(fee_percent) || null,
                         status: status
                     },
                     beforeSend: function(request) {

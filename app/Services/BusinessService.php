@@ -216,11 +216,11 @@ class BusinessService extends BaseService
 
         switch ($firstNumber) {
             case '3':
-                return $business->machine->jcb_fee_percent;
+                return $business->machine->jcb_fee_percent ?? $business->machine->fee_percent;
             case '4':
-                return $business->machine->visa_fee_percent;
+                return $business->machine->visa_fee_percent ?? $business->machine->fee_percent;
             case '5':
-                return $business->machine->master_fee_percent;
+                return $business->machine->master_fee_percent ?? $business->machine->fee_percent;
             default:
                 return $business->machine->fee_percent;
         }

@@ -108,7 +108,7 @@
                             </div>
 
                             <div class="d-flex flex-column mb-3 fv-row">
-                                <label class="fs-6 fw-semibold mb-2" for="machine_id">Mã máy</label>
+                                <label class="fs-6 fw-semibold mb-2 required" for="machine_id">Mã máy</label>
                                 <select class="form-select form-select-solid" name="machine_id" id="machine_id">
                                     <option value="">Chọn mã máy</option>
                                     @foreach ($machines as $key => $machine)

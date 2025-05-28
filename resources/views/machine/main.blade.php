@@ -42,7 +42,7 @@
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <div class="card-title">
-                        <div class="d-flex flex-wrap">
+                        <div class="d-flex flex-wrap gap-3">
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
                                     <span class="path1"></span>
@@ -53,7 +53,7 @@
                                     data-kt-debit-table-filter="search" placeholder="Tìm kiếm máy..." />
                             </div>
 
-                            <div class="d-flex flex-wrap gap-3 ms-4">
+                            <div class="d-flex flex-wrap gap-3">
                                 <div class="d-flex">
                                     <select class="form-select form-select-solid me-2 min-w-100px"
                                         id="machine-month-select">
@@ -70,7 +70,7 @@
                                     </select>
                                 </div>
 
-                                <div class="ms-2">
+                                <div>
                                     <select class="form-select form-select-solid min-w-120px py-4" name="status"
                                         id="machine-status-select">
                                         <option value="0">Máy đã ẩn</option>
@@ -108,9 +108,11 @@
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                 <th class="text-center min-w-50px">STT</th>
-                                <th class="text-center min-w-125px">Tên máy</th>
-                                <th class="text-center min-w-125px">Mã máy</th>
-                                <th class="text-center min-w-125px">% máy</th>
+                                <th class="text-center min-w-125px">Tên - mã máy</th>
+                                <th class="text-center min-w-50px">% VISA</th>
+                                <th class="text-center min-w-50px">% MASTER</th>
+                                <th class="text-center min-w-50px">% JCB</th>
+                                <th class="text-center min-w-50px">% NAPAS</th>
                                 <th class="text-center min-w-125px">Lợi nhuận</th>
                                 <th class="text-center min-w-125px">Tổng số tiền</th>
                                 <th class="text-center min-w-70px">Hành động</th>
@@ -120,7 +122,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="fw-bold">
-                                <td colspan="4" class="text-end">Tổng số tiền:</td>
+                                <td colspan="6" class="text-end">Tổng số tiền:</td>
                                 <td id="machine-total-fee" class="text-primary"></td>
                                 <td id="machine-total-money" class="text-primary"></td>
                                 <td></td>
@@ -157,10 +159,29 @@
                             </div>
                             <div class="fv-row mb-7">
                                 <label class="required fs-6 fw-semibold mb-2">
-                                    % phí:
+                                    % phí VISA:
+                                </label>
+                                <input type="text" class="form-control" name="visa_fee_percent" />
+                            </div>
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-semibold mb-2">
+                                    % phí MASTER:
+                                </label>
+                                <input type="text" class="form-control" name="master_fee_percent" />
+                            </div>
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-semibold mb-2">
+                                    % phí JCB:
+                                </label>
+                                <input type="text" class="form-control" name="jcb_fee_percent" />
+                            </div>
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-semibold mb-2">
+                                    % phí NAPAS:
                                 </label>
                                 <input type="text" class="form-control" name="fee_percent" />
                             </div>
+
                             <div class="fv-row mb-7">
                                 <label class="required fs-6 fw-semibold mb-2">
                                     Trạng thái:
@@ -187,7 +208,13 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'decimal',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 3,
+            });
 
             const notify = (text, type = 'success', showCancelButton = false) => {
                 return Swal.fire({
@@ -215,10 +242,8 @@
                     success: function(res) {
                         // console.log(res);
 
-                        $('#machine-total-money').text(new Intl.NumberFormat('vi-VN').format(res
-                            .data.totalMoney));
-                        $('#machine-total-fee').text(new Intl.NumberFormat('vi-VN').format(res.data
-                            .totalFee));
+                        $('#machine-total-money').text(formatter.format(res.data.totalMoney));
+                        $('#machine-total-fee').text(formatter.format(res.data.totalFee));
                     }
                 })
             }
@@ -231,8 +256,7 @@
                     url: "{{ route('api.machine.list') }}",
                     type: "POST",
                     beforeSend: function(request) {
-                        request.setRequestHeader("X-CSRF-TOKEN", document.querySelector(
-                            'meta[name="csrf-token"]').getAttribute('content'));
+                        request.setRequestHeader("X-CSRF-TOKEN", token);
                     },
                     data: function(d) {
                         d.search = $('#machine-search').val();
@@ -260,33 +284,57 @@
                     },
                     {
                         targets: 1,
-                        data: 'name',
+                        data: null,
                         orderable: false,
                         className: 'text-center',
                         render: function(data, type, row) {
-                            return `<span>${data ?? ''}</span>`
+                            return `<div class="d-flex flex-column align-items-center">
+                                <span class="fw-bold text-primary fs-5 mb-1">${data.name ?? ''}</span>
+                                <span class="text-muted fs-7 mb-2">Mã: ${data.code ?? ''}</span>
+                                <span class="badge badge-light-${data.status ? 'success' : 'danger'} fs-7 fw-bold px-2 py-1">
+                                    ${data.status ? 'Đang hoạt động' : 'Đã ẩn'}
+                                </span>
+                            </div>`
                         }
                     },
                     {
                         targets: 2,
-                        data: 'code',
+                        data: 'visa_fee_percent',
                         orderable: false,
-                        className: 'text-center',
+                        className: 'text-center min-w-150px',
                         render: function(data, type, row) {
-                            return `<span>${data ?? ''}</span>`
+                            return `<span>${formatter.format(data)}</span>`;
                         }
                     },
                     {
                         targets: 3,
-                        data: 'fee_percent',
+                        data: 'master_fee_percent',
                         orderable: false,
                         className: 'text-center min-w-150px',
                         render: function(data, type, row) {
-                            return `<span>${new Intl.NumberFormat('vi-VN').format(data)}</span>`;
+                            return data ? formatter.format(data) : 0;
                         }
                     },
                     {
                         targets: 4,
+                        data: 'jcb_fee_percent',
+                        orderable: false,
+                        className: 'text-center min-w-150px',
+                        render: function(data, type, row) {
+                            return data ? formatter.format(data) : 0;
+                        }
+                    },
+                    {
+                        targets: 5,
+                        data: 'fee_percent',
+                        orderable: false,
+                        className: 'text-center min-w-150px',
+                        render: function(data, type, row) {
+                            return data ? formatter.format(data) : 0;
+                        }
+                    },
+                    {
+                        targets: 6,
                         data: 'business_fees_sum_fee',
                         orderable: false,
                         className: 'text-center min-w-150px',
@@ -295,7 +343,7 @@
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 7,
                         data: 'business_fees_sum_total_money',
                         orderable: false,
                         className: 'text-center min-w-150px',
@@ -337,6 +385,9 @@
                 const id = form.find('input[name="id"]').val();
                 const name = form.find('input[name="name"]').val();
                 const code = form.find('input[name="code"]').val();
+                const visa_fee_percent = form.find('input[name="visa_fee_percent"]').val().replace(/[,]/g, '.');
+                const master_fee_percent = form.find('input[name="master_fee_percent"]').val().replace(/[,]/g, '.');
+                const jcb_fee_percent = form.find('input[name="jcb_fee_percent"]').val().replace(/[,]/g, '.');
                 const fee_percent = form.find('input[name="fee_percent"]').val().replace(/[,]/g, '.');
                 const status = form.find('select[name="status"]').val();
 
@@ -348,6 +399,9 @@
                         id: id,
                         name: name,
                         code: code,
+                        visa_fee_percent: parseFloat(visa_fee_percent),
+                        master_fee_percent: parseFloat(master_fee_percent),
+                        jcb_fee_percent: parseFloat(jcb_fee_percent),
                         fee_percent: parseFloat(fee_percent),
                         status: status
                     },
@@ -376,6 +430,9 @@
                 $('#form-machine').find('input[name="id"]').val(data.id);
                 $('#form-machine').find('input[name="name"]').val(data.name);
                 $('#form-machine').find('input[name="code"]').val(data.code);
+                $('#form-machine').find('input[name="visa_fee_percent"]').val(data.visa_fee_percent);
+                $('#form-machine').find('input[name="master_fee_percent"]').val(data.master_fee_percent);
+                $('#form-machine').find('input[name="jcb_fee_percent"]').val(data.jcb_fee_percent);
                 $('#form-machine').find('input[name="fee_percent"]').val(data.fee_percent);
                 $('#form-machine').find('select[name="status"]').val(data.status);
                 $('#machine-modal').modal('show');

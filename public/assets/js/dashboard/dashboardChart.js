@@ -19,7 +19,7 @@ const dashboard = function () {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'decimal',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 3,
     });
 
     $(document).on('input', 'input[data-type="money"]', function () {

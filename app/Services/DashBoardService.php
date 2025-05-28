@@ -138,6 +138,11 @@ class DashBoardService
             $totalInvestment->save();
         }
 
+        if (now()->lt('2025-06-01')) {
+            $totalInvestment->value = 0;
+            $totalInvestment->save();
+        }
+
         return [
             'totalInvestment' => $totalInvestment->value,
             'totalBusiness' => Business::sum('total_money'),

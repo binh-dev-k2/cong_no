@@ -24,19 +24,21 @@ class DatabaseSeeder extends Seeder
                 'key' => 'business_note',
                 'value' => '',
             ],
+            [
+                'key' => 'total_investment',
+                'value' => 0,
+                'type' => 'TOTAL_INVESTMENT'
+            ],
         ];
 
-        // foreach ($settings as $setting) {
-        //     Setting::create($setting);
-        // }
-
-        // User::create([
-        //     'name' => 'admin',
-        //     'email' => 'admin@admin.com',
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        // ]);
+        foreach ($settings as $setting) {
+            Setting::firstOrCreate([
+                'key' => $setting['key'],
+            ], [
+                'value' => $setting['value'],
+                'type' => $setting['type'] ?? null,
+            ]);
+        }
 
         $permissions = [
             'dashboard',

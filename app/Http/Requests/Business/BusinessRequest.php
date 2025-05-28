@@ -122,6 +122,9 @@ class BusinessRequest extends FormRequest
             'pay_extra.numeric' => 'Số tiền trả thêm phải là số.',
             'collaborator_id.exists' => 'Cộng tác viên này không tồn tại trong hệ thống của chúng tôi.',
             'machine_id.exists' => 'Máy này không tồn tại trong hệ thống của chúng tôi.',
+            'business_setting_key.required' => 'Bạn vui lòng chọn loại phí.',
+            'business_setting_key.exists' => 'Loại phí này không tồn tại trong hệ thống của chúng tôi.',
+            'business_setting_type.required' => 'Bạn vui lòng chọn loại phí.',
         ];
     }
 

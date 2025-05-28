@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\BusinessMoney;
 use App\Models\Debt;
+use App\Models\Setting;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DebtService
@@ -88,14 +90,14 @@ class DebtService
             $phoneArray[] = $item['phone'];
             $sumAmount = $item['status'] === Debt::STATUS_PAID
                 ? Debt::where('status', Debt::STATUS_PAID)
-                    ->whereMonth('created_at', $month)
-                    ->whereYear('created_at', $year ?? Carbon::now()->year)
-                    ->where('phone', $item['phone'])
-                    ->sum('total_amount')
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year ?? Carbon::now()->year)
+                ->where('phone', $item['phone'])
+                ->sum('total_amount')
                 : Debt::where('status', Debt::STATUS_UNPAID)
-                    ->whereYear('created_at', $year ?? Carbon::now()->year)
-                    ->where('phone', $item['phone'])
-                    ->sum('total_amount');
+                ->whereYear('created_at', $year ?? Carbon::now()->year)
+                ->where('phone', $item['phone'])
+                ->sum('total_amount');
 
             $item['sum_amount'] = (int) $sumAmount;
         }
@@ -103,18 +105,23 @@ class DebtService
         return $array;
     }
 
-
     function updateStatus($id)
     {
+        DB::beginTransaction();
         try {
             $debt = Debt::where('id', $id)->first();
             if ($debt) {
                 $debt->status = Debt::STATUS_PAID;
                 $debt->save();
+                if ($debt->created_at->gte('2025-06-01')) {
+                    $this->updateTotalInvestment($debt->fee);
+                }
+                DB::commit();
                 return true;
             }
             return false;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return false;
         }
@@ -149,5 +156,22 @@ class DebtService
     public function getBusinessMoney(int $businessId)
     {
         return BusinessMoney::where('business_id', $businessId)->get();
+    }
+
+    public function updateTotalInvestment($plusMoney)
+    {
+        $totalInvestment = Setting::where('key', 'total_investment')->first();
+
+        if (!$totalInvestment || now()->lt('2025-06-01')) {
+            return false;
+        }
+
+        $totalInvestment->value += (float) $plusMoney;
+
+        if (!$totalInvestment->save()) {
+            throw new \Exception('Failed to update total investment');
+        }
+
+        return true;
     }
 }

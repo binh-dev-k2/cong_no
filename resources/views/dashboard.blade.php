@@ -25,30 +25,41 @@
                                 <div class="card-header py-5">
                                     <h3 class="card-title align-items-start flex-column">
                                         <span class="card-label fw-bold text-gray-900">Dòng tiền</span>
-                                        <span class="text-gray-500 mt-1 fw-semibold fs-6">Tổng quan về tình hình tài chính</span>
+                                        <span class="text-gray-500 mt-1 fw-semibold fs-6">Tổng quan về tình hình tài
+                                            chính</span>
+                                        @if (now()->lt('2025-06-01'))
+                                            <span class="text-danger mt-1 fs-7">Tính năng sẽ được khởi chạy vào ngày
+                                                01/06/2025</span>
+                                        @endif
                                     </h3>
                                     <div class="card-toolbar">
                                         <h3 class="align-content-center text-primary" id="total-investment">0 VNĐ</h3>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex flex-column py-2">
-                                    <button class="btn btn-primary btn-sm" id="btn-update-total-investment" data-bs-toggle="modal"
-                                        data-bs-target="#modal-update-total-investment">
-                                        <i class="fas fa-plus me-2"></i>Thêm quỹ
-                                    </button>
+                                    @if (now()->gte('2025-06-01'))
+                                        <button class="btn btn-primary btn-sm" id="btn-update-total-investment"
+                                            data-bs-toggle="modal" data-bs-target="#modal-update-total-investment">
+                                            <i class="fas fa-plus me-2"></i>Thêm quỹ
+                                        </button>
+                                    @endif
 
                                     <div class="d-flex flex-column gap-5 mt-5">
-                                        <div class="d-flex justify-content-between align-items-center p-3 bg-light-primary rounded">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center p-3 bg-light-primary rounded">
                                             <span class="fw-bold fs-6 text-gray-700">Tiền nghiệp vụ:</span>
                                             <span class="fw-bold fs-6 text-primary" id="total-business-value">0 VNĐ</span>
                                         </div>
-                                        <div class="d-flex justify-content-between align-items-center p-3 bg-light-warning rounded">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center p-3 bg-light-warning rounded">
                                             <span class="fw-bold fs-6 text-gray-700">Tiền ghi nợ:</span>
                                             <span class="fw-bold fs-6 text-warning" id="total-debt-value">0 VNĐ</span>
                                         </div>
-                                        <div class="d-flex justify-content-between align-items-center p-3 bg-light-success rounded">
+                                        <div
+                                            class="d-flex justify-content-between align-items-center p-3 bg-light-success rounded">
                                             <span class="fw-bold fs-6 text-gray-700">Lãi máy tháng này:</span>
-                                            <span class="fw-bold fs-6 text-success" id="total-interest-machine-value">0 VNĐ</span>
+                                            <span class="fw-bold fs-6 text-success" id="total-interest-machine-value">0
+                                                VNĐ</span>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +112,8 @@
                                             <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                 <div class="d-flex justify-content-between w-100 mt-auto mb-2">
                                                     <span class="fw-bolder fs-6 text-gray-900" id="count-paid-debit"></span>
-                                                    <span class="fw-bold fs-6 text-gray-500" id="process-data-complete1"></span>
+                                                    <span class="fw-bold fs-6 text-gray-500"
+                                                        id="process-data-complete1"></span>
                                                 </div>
                                                 <div class="h-8px mx-3 w-100 bg-light-success rounded">
                                                     <div class="bg-success rounded h-8px" id="process-data-complete2"
@@ -153,14 +165,17 @@
                                                             id="machine-month-select">
                                                             <option value="">Tháng</option>
                                                             @for ($i = 1; $i <= 12; $i++)
-                                                                <option value="{{ $i }}">{{ $i }}</option>
+                                                                <option value="{{ $i }}">{{ $i }}
+                                                                </option>
                                                             @endfor
                                                         </select>
                                                         <select class="form-select form-select-solid" name="year"
                                                             id="machine-year-select">
                                                             <option value="">Toàn bộ</option>
                                                             @for ($i = now()->year; $i >= 2025; $i--)
-                                                                <option value="{{ $i }}" {{ $i == now()->year ? 'selected' : '' }}>{{ $i }}</option>
+                                                                <option value="{{ $i }}"
+                                                                    {{ $i == now()->year ? 'selected' : '' }}>
+                                                                    {{ $i }}</option>
                                                             @endfor
                                                         </select>
                                                     </div>

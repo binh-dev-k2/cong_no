@@ -29,7 +29,7 @@
                                             chính</span>
                                         @if (now()->lt('2025-06-01'))
                                             <span class="text-danger mt-1 fs-7">Tính năng sẽ được khởi chạy vào ngày
-                                                01/06/2025</span>
+                                                01/06/2025, toàn bộ dữ liệu được lưu trước ngày này sẽ được bỏ qua.</span>
                                         @endif
                                     </h3>
                                     <div class="card-toolbar">

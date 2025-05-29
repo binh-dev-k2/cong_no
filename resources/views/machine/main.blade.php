@@ -5,40 +5,19 @@
 @section('header')
     <style>
         tr td {
-            padding: 0.75rem !important;
+            padding: 0.5rem !important;
             margin: 0 !important;
         }
 
-        /* Hiệu ứng fade in đơn giản */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease-in-out;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Hiệu ứng khi hover vào dòng bảng */
-        #machine-table tbody tr {
-            transition: background-color 0.3s ease;
-        }
-
+        /* Hiệu ứng hover đơn giản */
         #machine-table tbody tr:hover {
             background-color: rgba(0, 0, 0, 0.02);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 @endsection
 
 @section('content')
-    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6 fade-in">
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
             <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
                 data-kt-swapper-parent="{default: '#kt_app_content_container', lg: '#kt_app_toolbar_container'}"
@@ -63,116 +42,101 @@
         </div>
     </div>
 
-    <div id="kt_app_content" class="app-content flex-column-fluid fade-in">
-        <div id="kt_app_content_container" class="app-container">
-            <div class="alert alert-primary d-flex align-items-center p-5 mb-5 fade-in">
-                <i class="ki-duotone ki-information-5 fs-2hx text-primary me-4">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                    <span class="path3"></span>
-                </i>
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="alert alert-primary d-flex align-items-center p-5 mb-5">
                 <div class="d-flex flex-column">
                     <h4 class="mb-1 text-primary">Lưu ý</h4>
                     <span>Set % = 0 nếu máy chặn thẻ.</span>
                 </div>
             </div>
 
-            <div class="card fade-in">
-                <div class="card-header border-0 pt-6">
-                    <div class="card-title">
-                        <div class="d-flex flex-wrap gap-3">
-                            <div class="d-flex align-items-center position-relative my-1">
-                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                                <input type="text" id="machine-search"
-                                    class="form-control form-control-solid w-250px ps-12"
-                                    data-kt-debit-table-filter="search" placeholder="Tìm kiếm máy..." />
+            <div class="card shadow-sm">
+                <div class="card-header bg-success">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+                        <div class="flex-grow-1">
+                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                                Danh sách máy
+                            </h3>
+                            <p class="text-white-75 mb-0 mt-2">Quản lý thông tin và phí máy trong hệ thống</p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
+                                data-bs-target="#machine-modal">
+                                Thêm máy mới
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Search and Filter Section -->
+                    <div class="row mb-6">
+                        <div class="col-lg-6 col-md-12 mb-3 mb-lg-0">
+                            <div class="position-relative">
+                                <i class="bi bi-search fs-4 position-absolute top-50 start-0 translate-middle-y ms-4 text-gray-500"></i>
+                                <input type="text" id="machine-search" class="form-control form-control-lg ps-12"
+                                    placeholder="Tìm kiếm máy..." />
                             </div>
-
-                            <div class="d-flex flex-wrap gap-3">
-                                <div class="d-flex">
-                                    <select class="form-select form-select-solid me-2 min-w-100px"
-                                        id="machine-month-select">
-                                        <option value="">Tháng</option>
-                                        @for ($i = 1; $i <= 12; $i++)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                    <select class="form-select form-select-solid min-w-100px" id="machine-year-select">
-                                        <option value="">Năm</option>
-                                        @for ($i = now()->year; $i >= 2025; $i--)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <select class="form-select form-select-solid min-w-120px py-4" name="status"
-                                        id="machine-status-select">
-                                        <option value="0">Máy đã ẩn</option>
-                                        <option value="1" selected>Máy đang hiển thị</option>
-                                    </select>
-                                </div>
-
-                                <button class="btn btn-primary px-4" id="machine-filter">
-                                    <i class="ki-duotone ki-filter fs-2 me-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                                <select class="form-select form-select-sm form-select-solid" id="machine-month-select" style="min-width: 80px; max-width: 90px;">
+                                    <option value="">Tháng</option>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <select class="form-select form-select-sm form-select-solid" id="machine-year-select" style="min-width: 80px; max-width: 90px;">
+                                    <option value="">Năm</option>
+                                    @for ($i = now()->year; $i >= 2025; $i--)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <select class="form-select form-select-sm form-select-solid" name="status" id="machine-status-select" style="min-width: 120px; max-width: 140px;">
+                                    <option value="0">Đã ẩn</option>
+                                    <option value="1" selected>Hiển thị</option>
+                                </select>
+                                <button class="btn btn-sm btn-primary" id="machine-filter">
                                     Lọc
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card-toolbar">
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#machine-modal">
-                                <i class="ki-duotone ki-plus fs-2 me-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                                Thêm máy mới
-                            </button>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle fs-6" id="machine-table">
+                            <thead class="table-success">
+                                <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
+                                    <th class="text-center min-w-50px">STT</th>
+                                    <th class="text-center min-w-125px">Tên - mã máy</th>
+                                    <th class="text-center min-w-50px">% VISA</th>
+                                    <th class="text-center min-w-50px">% MASTER</th>
+                                    <th class="text-center min-w-50px">% JCB</th>
+                                    <th class="text-center min-w-50px">% AMEX</th>
+                                    <th class="text-center min-w-50px">% NAPAS</th>
+                                    <th class="text-center min-w-125px">Lợi nhuận</th>
+                                    <th class="text-center min-w-125px">Tổng số tiền</th>
+                                    <th class="text-center min-w-70px">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-700">
+                            </tbody>
+                            <tfoot>
+                                <tr class="fw-bold">
+                                    <td colspan="7" class="text-end">Tổng số tiền:</td>
+                                    <td id="machine-total-fee" class="text-primary"></td>
+                                    <td id="machine-total-money" class="text-primary"></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                </div>
-                <div class="card-body pt-0">
-                    <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
-                        id="machine-table">
-                        <thead>
-                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-50px">STT</th>
-                                <th class="text-center min-w-125px">Tên - mã máy</th>
-                                <th class="text-center min-w-50px">% VISA</th>
-                                <th class="text-center min-w-50px">% MASTER</th>
-                                <th class="text-center min-w-50px">% JCB</th>
-                                <th class="text-center min-w-50px">% AMEX</th>
-                                <th class="text-center min-w-50px">% NAPAS</th>
-                                <th class="text-center min-w-125px">Lợi nhuận</th>
-                                <th class="text-center min-w-125px">Tổng số tiền</th>
-                                <th class="text-center min-w-70px">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody class="fw-semibold text-gray-600">
-                        </tbody>
-                        <tfoot>
-                            <tr class="fw-bold">
-                                <td colspan="7" class="text-end">Tổng số tiền:</td>
-                                <td id="machine-total-fee" class="text-primary"></td>
-                                <td id="machine-total-money" class="text-primary"></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal -->
     <div class="modal fade" id="machine-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
             <div class="modal-content">
@@ -244,25 +208,13 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 @endsection
 
-
 @section('script')
     <script>
         $(document).ready(function() {
-            // Thêm hiệu ứng khi tải trang
-            setTimeout(function() {
-                $('.fade-in').each(function(i) {
-                    const item = $(this);
-                    setTimeout(function() {
-                        item.addClass('visible');
-                    }, 100 * i);
-                });
-            }, 200);
-
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             const formatter = new Intl.NumberFormat('en-US', {
@@ -295,8 +247,6 @@
                     },
                     data: data,
                     success: function(res) {
-                        // console.log(res);
-
                         $('#machine-total-money').text(formatter.format(res.data.totalMoney));
                         $('#machine-total-fee').text(formatter.format(res.data.totalFee));
                     }
@@ -426,14 +376,7 @@
                                 `;
                         },
                     },
-                ],
-                drawCallback: function() {
-                    // Thêm hiệu ứng khi render lại bảng
-                    $('#machine-table').find('tbody tr').addClass('fade-in');
-                    setTimeout(function() {
-                        $('#machine-table').find('tbody tr').addClass('visible');
-                    }, 100);
-                }
+                ]
             });
 
             $('#machine-filter').on('click', function(e) {

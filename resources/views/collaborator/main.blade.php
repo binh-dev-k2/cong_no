@@ -12,14 +12,14 @@
 @endsection
 
 @section('content')
-    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
             <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
                 data-kt-swapper-parent="{default: '#kt_app_content_container', lg: '#kt_app_toolbar_container'}"
                 class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
 
-                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Cộng tác viên
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-2 flex-column justify-content-center my-0">
+                    Quản lý cộng tác viên
                 </h1>
 
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -36,73 +36,74 @@
     </div>
 
     <div id="kt_app_content" class="app-content flex-column-fluid">
-        <div id="kt_app_content_container" class="app-container ">
-            <div class="card">
-                <div class="card-header border-0 pt-6">
-                    <div class="card-title">
-                        <div class="d-flex flex-wrap">
-                            <div class="d-flex align-items-center position-relative my-1">
-                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                                <input type="text" id="collaborator-search"
-                                    class="form-control form-control-solid w-250px ps-12 "
-                                    data-kt-debit-table-filter="search" placeholder="Tìm kiếm" />
-                            </div>
-
-                            <div class="d-flex gap-2 ms-2">
-                                <div class="d-flex">
-                                    <select class="form-select form-select-sm form-select-solid me-2" name="month"
-                                        id="collaborator-month-select">
-                                        <option value="">Tháng</option>
-                                        @for ($i = 1; $i <= 12; $i++)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                    <select class="form-select form-select-sm form-select-solid min-w-100px" name="year"
-                                        id="collaborator-year-select">
-                                        <option value="">Năm</option>
-                                        @for ($i = now()->year; $i >= 2025; $i--)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                                <button class="btn btn-primary" id="collaborator-filter">Lọc</button>
-                            </div>
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+                        <div class="flex-grow-1">
+                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                                Danh sách cộng tác viên
+                            </h3>
+                            <p class="text-white-75 mb-0 mt-2">Quản lý thông tin và phí cộng tác viên</p>
                         </div>
-                    </div>
-
-                    <div class="card-toolbar">
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        <div class="flex-shrink-0">
+                            <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
                                 data-bs-target="#collaborator-modal">Thêm cộng tác viên</button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body pt-0">
-                    <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
-                        id="collaborator-table">
-                        <thead>
-                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-50px">STT</th>
-                                <th class="text-center min-w-125px">Tên máy</th>
-                                <th class="text-center min-w-125px">Mã máy</th>
-                                <th class="text-center min-w-125px">% lợi nhuận</th>
-                                <th class="text-center min-w-125px">Phí</th>
-                                <th class="text-center min-w-125px">Tổng số tiền</th>
-                                <th class="text-center min-w-70px">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody class="fw-semibold text-gray-600">
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <!-- Search and Filter Section -->
+                    <div class="row mb-6">
+                        <div class="col-lg-6 col-md-12 mb-3 mb-lg-0">
+                            <div class="position-relative">
+                                <i class="bi bi-search fs-4 position-absolute top-50 start-0 translate-middle-y ms-4 text-gray-500"></i>
+                                <input type="text" id="collaborator-search" class="form-control form-control-lg ps-12"
+                                    placeholder="Tìm kiếm cộng tác viên..." />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="d-flex flex-wrap gap-3 justify-content-lg-end">
+                                <select class="form-select form-select-solid flex-grow-1 flex-lg-grow-0" name="month" id="collaborator-month-select" style="min-width: 120px;">
+                                    <option value="">Tháng</option>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <select class="form-select form-select-solid flex-grow-1 flex-lg-grow-0" name="year" id="collaborator-year-select" style="min-width: 120px;">
+                                    <option value="">Năm</option>
+                                    @for ($i = now()->year; $i >= 2025; $i--)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <button class="btn btn-primary flex-shrink-0" id="collaborator-filter">Lọc</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive-md">
+                        <table class="table table-bordered table-hover align-middle fs-6" id="collaborator-table">
+                            <thead class="table-success">
+                                <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
+                                    <th class="text-center min-w-50px">STT</th>
+                                    <th class="text-center min-w-125px">Tên máy</th>
+                                    <th class="text-center min-w-125px">Mã máy</th>
+                                    <th class="text-center min-w-125px">% lợi nhuận</th>
+                                    <th class="text-center min-w-125px">Phí</th>
+                                    <th class="text-center min-w-125px">Tổng số tiền</th>
+                                    <th class="text-center min-w-70px">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-700">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
+    <!-- Modal -->
     <div class="modal fade" id="collaborator-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
             <div class="modal-content">
@@ -140,11 +141,9 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 @endsection
-
 
 @section('script')
     <script>

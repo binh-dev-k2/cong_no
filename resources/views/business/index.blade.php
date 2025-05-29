@@ -4,11 +4,6 @@
 @endsection
 @section('header')
     <style>
-        tr td {
-            padding: 0.5rem !important;
-            margin: 0 !important;
-        }
-
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -42,20 +37,13 @@
 @endsection
 
 @section('content')
-    <div class="app-container ">
-        <label class="form-label" for="business_note">Thông báo</label>
-        <textarea class="form-control" name="business_note" id="business_note" cols="30" rows="2">{{ $businessNote->value }}</textarea>
-    </div>
-    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <!-- Toolbar -->
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack flex-wrap flex-md-nowrap">
-            <div data-kt-swapper="true" data-kt-swapper-mode="{default: 'prepend', lg: 'prepend'}"
-                data-kt-swapper-parent="{default: '#kt_app_content_container', lg: '#kt_app_toolbar_container'}"
-                class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
-
-                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                    Nghiệp vụ
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-2 flex-column justify-content-center my-0">
+                    Quản lý nghiệp vụ
                 </h1>
-
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                     <li class="breadcrumb-item text-muted">
                         <a href="{{ route('dashboard') }}" class="text-muted text-hover-primary">Thống kê</a>
@@ -69,61 +57,93 @@
         </div>
     </div>
 
+    <!-- Content -->
     <div id="kt_app_content" class="app-content flex-column-fluid">
-        <div id="kt_app_content_container" class="app-container ">
-            <div class="card">
-                <div class="card-header border-0 pt-6">
-                    <div class="card-title">
-                        <div class="d-flex align-items-center position-relative my-1">
-                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                            <input type="text" id="business_search" class="form-control form-control-solid w-250px ps-12"
-                                placeholder="Tìm kiếm" />
+        <div id="kt_app_content_container" class="app-container container-fluid">
+
+            <!-- Business Note Card -->
+            <div class="card shadow-sm mb-8">
+                <div class="card-header bg-warning">
+                    <h3 class="card-title text-white fw-bold">
+                        <i class="bi bi-bell me-2"></i>
+                        Thông báo
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control" name="business_note" id="business_note" rows="2"
+                        placeholder="Nhập thông báo cho nghiệp vụ...">{{ $businessNote->value }}</textarea>
+                </div>
+            </div>
+
+            <!-- Main Business Card -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+                        <div class="flex-grow-1">
+                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                                Danh sách nghiệp vụ
+                            </h3>
+                            <p class="text-white-75 mb-0 mt-2">Quản lý tất cả các nghiệp vụ trong hệ thống</p>
                         </div>
-                    </div>
-                    <div class="card-toolbar">
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <button type="button" class="btn btn-warning me-2 btn-edit-setting">Sửa tiền chia</button>
-                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
-                                data-bs-target="#modal-add">Thêm nghiệp vụ</button>
+                        <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 flex-shrink-0">
+                            <button type="button" class="btn btn-light-warning btn-edit-setting">
+                                Sửa tiền chia
+                            </button>
+                            <button type="button" class="btn btn-light-success btn-add-customer" data-bs-toggle="modal"
+                                data-bs-target="#modal-add">
+                                Thêm nghiệp vụ
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body pt-0">
-                    <table class="table table-reponsive align-middle table-row-dashed table-bordered fs-6 gy-5"
-                        id="business_table">
-                        <thead>
-                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-75px">Ngày tạo</th>
-                                <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
-                                <th class="text-center min-w-125px">Số thẻ</th>
-                                <th class="text-center min-w-50px">Phí (%)</th>
-                                <th class="text-center min-w-100px">Số tiền</th>
-                                <th class="text-center min-w-75px">Hình thức</th>
-                                <th class="text-center">Phí</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Trả thêm</th>
-                                <th class="text-center min-w-100px">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody class="fw-semibold text-gray-600">
-                        </tbody>
-                    </table>
+
+                <div class="card-body">
+                    <!-- Search Section -->
+                    <div class="row mb-6">
+                        <div class="col-lg-6 col-md-8 mb-3 mb-lg-0">
+                            <div class="position-relative">
+                                <i
+                                    class="bi bi-search fs-4 position-absolute top-50 start-0 translate-middle-y ms-4 text-gray-500"></i>
+                                <input type="text" id="business_search" class="form-control form-control-lg ps-12"
+                                    placeholder="Tìm kiếm nghiệp vụ..." />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle fs-6" id="business_table">
+                            <thead class="table-success">
+                                <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
+                                    <th class="text-center min-w-75px">Ngày tạo</th>
+                                    <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
+                                    <th class="text-center min-w-125px">Số thẻ</th>
+                                    <th class="text-center min-w-50px">Phí (%)</th>
+                                    <th class="text-center min-w-100px">Số tiền</th>
+                                    <th class="text-center min-w-75px">Hình thức</th>
+                                    <th class="text-center">Phí</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Trả thêm</th>
+                                    <th class="text-center min-w-100px">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-700">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal Container -->
     <div class="modal fade" id="modal-edit-setting" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-650px">
-
         </div>
     </div>
 @endsection

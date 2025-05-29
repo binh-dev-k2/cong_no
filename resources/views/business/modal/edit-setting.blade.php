@@ -34,25 +34,14 @@ $index = 0;
     }
 }
 
-.setting-type-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
 .money-input:focus {
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15) !important;
-}
-
-@media (max-width: 768px) {
-    .modal-dialog {
-        margin: 1rem;
-    }
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15) !important;
 }
 </style>
 
 <div class="modal-content">
     <form action="#" id="form-edit-setting">
-        <div class="modal-header bg-primary">
+        <div class="modal-header bg-success">
             <h4 class="modal-title text-white">
                 <i class="bi bi-gear-wide-connected me-2"></i>
                 Cấu hình tiền chia
@@ -60,69 +49,71 @@ $index = 0;
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <div class="modal-body bg-light-primary">
+        <div class="modal-body bg-light">
             <div class="scroll-y me-n7 pe-7" style="max-height: calc(100vh - 25rem)">
-                <div class="content">
 
-                    {{-- Money Settings Section --}}
-                    @if(isset($businessSettingMoney) && $businessSettingMoney->count() > 0)
-                        <div class="text-center mb-5">
-                            <span class="badge badge-light-success fs-7">
-                                <i class="bi bi-cash-coin me-1"></i>
-                                Cài đặt khoảng giá
-                            </span>
-                        </div>
-                        @foreach ($businessSettingMoney as $key => $businessSetting)
-                            @include('business.components.setting-form-item', [
-                                'index' => $index,
-                                'type' => 'MONEY',
-                                'key' => $key,
-                                'values' => $businessSetting->toArray(),
-                                'isExisting' => true
-                            ])
-                            @php $index++; @endphp
+                {{-- Money Settings Section --}}
+                @if(isset($businessSettingMoney) && $businessSettingMoney->count() > 0)
+                    <div class="text-center mb-5">
+                        <span class="badge bg-success fs-7 fw-bold text-white">
+                            <i class="bi bi-cash-coin me-1"></i>
+                            Cài đặt khoảng giá
+                        </span>
+                                    </div>
+
+                    @foreach ($businessSettingMoney as $key => $businessSetting)
+                        @include('business.components.setting-form-item', [
+                            'index' => $index,
+                            'type' => 'MONEY',
+                            'key' => $key,
+                            'values' => $businessSetting->toArray(),
+                            'isExisting' => true
+                        ])
+                        @php $index++; @endphp
                         @endforeach
-                        <div class="separator border-primary my-10"></div>
-                    @endif
 
-                    {{-- Percent Settings Section --}}
-                    @if(isset($businessSettingPercent) && $businessSettingPercent->count() > 0)
-                        <div class="text-center mb-5">
-                            <span class="badge badge-light-info fs-7">
-                                <i class="bi bi-percent me-1"></i>
-                                Cài đặt phần trăm phí
-                            </span>
-                        </div>
-                        @foreach ($businessSettingPercent as $key => $businessSetting)
-                            @include('business.components.setting-form-item', [
-                                'index' => $index,
-                                'type' => 'PERCENT',
-                                'key' => $key,
-                                'values' => $businessSetting->toArray(),
-                                'isExisting' => true
-                            ])
-                            @php $index++; @endphp
-                        @endforeach
-                        <div class="separator border-primary my-10"></div>
-                    @endif
+                    <div class="separator border-success my-8"></div>
+                @endif
 
-                    {{-- Empty State --}}
-                    @if((!isset($businessSettingMoney) || $businessSettingMoney->count() == 0) &&
-                        (!isset($businessSettingPercent) || $businessSettingPercent->count() == 0))
-                        <div class="text-center py-20">
-                            <i class="bi bi-gear-wide-connected fs-3x text-muted mb-5"></i>
-                            <h5 class="text-gray-600">Chưa có cài đặt nào</h5>
-                            <p class="text-muted">Hãy tạo cài đặt đầu tiên để bắt đầu!</p>
-                        </div>
-                    @endif
+                {{-- Percent Settings Section --}}
+                @if(isset($businessSettingPercent) && $businessSettingPercent->count() > 0)
+                    <div class="text-center mb-5">
+                        <span class="badge bg-warning fs-7 fw-bold text-dark">
+                            <i class="bi bi-percent me-1"></i>
+                            Cài đặt phần trăm phí
+                        </span>
+                                    </div>
 
-                    {{-- Add New Setting Button --}}
-                    <div class="text-center">
-                        <button type="button" class="btn btn-primary add-business-setting">
-                            <i class="bi bi-plus-circle me-2"></i>
-                            Thêm cài đặt mới
-                        </button>
+                    @foreach ($businessSettingPercent as $key => $businessSetting)
+                        @include('business.components.setting-form-item', [
+                            'index' => $index,
+                            'type' => 'PERCENT',
+                            'key' => $key,
+                            'values' => $businessSetting->toArray(),
+                            'isExisting' => true
+                        ])
+                        @php $index++; @endphp
+                                        @endforeach
+
+                    <div class="separator border-success my-8"></div>
+                @endif
+
+                {{-- Empty State --}}
+                @if((!isset($businessSettingMoney) || $businessSettingMoney->count() == 0) &&
+                    (!isset($businessSettingPercent) || $businessSettingPercent->count() == 0))
+                    <div class="text-center py-15">
+                        <i class="bi bi-gear-wide-connected fs-3x text-muted mb-5"></i>
+                        <h5 class="text-gray-700 fw-bold mb-3">Chưa có cài đặt nào</h5>
+                        <p class="text-muted mb-5">Hãy tạo cài đặt đầu tiên để bắt đầu quản lý tiền chia hiệu quả!</p>
                     </div>
+                @endif
+
+                {{-- Add New Setting Button --}}
+                <div class="text-center">
+                    <button type="button" class="btn btn-light-success add-business-setting">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Thêm cài đặt mới
+                    </button>
                 </div>
             </div>
         </div>
@@ -131,7 +122,7 @@ $index = 0;
             <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                 <i class="bi bi-x-circle me-2"></i>Hủy bỏ
             </button>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-success">
                 <span class="indicator-label">
                     <i class="bi bi-check-circle me-2"></i>Lưu thay đổi
                 </span>
@@ -145,7 +136,7 @@ $index = 0;
 </div>
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
     /**
      * Business Setting Modal Handler
      * Using theme classes for consistency
@@ -172,7 +163,7 @@ $(document).ready(function() {
             $('.business-setting-container').each(function() {
                 const $container = $(this);
                 const type = $container.find('.type-radio:checked').val();
-                const badgeClass = type === 'MONEY' ? 'badge-light-success' : 'badge-light-info';
+                const badgeClass = type === 'MONEY' ? 'bg-success text-white' : 'bg-warning text-dark';
                 const icon = type === 'MONEY' ? 'bi-cash-coin' : 'bi-percent';
                 const text = type === 'MONEY' ? 'Khoảng giá' : 'Phần trăm';
 
@@ -265,10 +256,10 @@ $(document).ready(function() {
                 if (response.data.code === 0) {
                     await this.showNotification('Cập nhật thành công!', 'success');
                     $(this.modalId).modal('hide');
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
                     const errors = Array.isArray(response.data.data)
                         ? response.data.data.join(', ')
                         : response.data.message || 'Có lỗi xảy ra';
@@ -375,7 +366,7 @@ $(document).ready(function() {
 
             // Update badge
             const $badge = $(e.target).closest('.business-setting-container').find('.setting-type-badge');
-            const badgeClass = type === 'MONEY' ? 'badge-light-success' : 'badge-light-info';
+            const badgeClass = type === 'MONEY' ? 'bg-success text-white' : 'bg-warning text-dark';
             const icon = type === 'MONEY' ? 'bi-cash-coin' : 'bi-percent';
             const text = type === 'MONEY' ? 'Khoảng giá' : 'Phần trăm';
 
@@ -410,14 +401,14 @@ $(document).ready(function() {
                 <div class="card shadow-sm mb-7 business-setting-container" data-index="${this.count}">
                     <div class="card-header border-0 pt-6 pb-2">
                         <div class="card-title">
-                            <span class="badge badge-light-success setting-type-badge">
+                            <span class="badge bg-success text-white setting-type-badge">
                                 <i class="bi bi-cash-coin me-1"></i>Khoảng giá
                             </span>
                         </div>
                         <div class="card-toolbar">
                             <button type="button" class="btn btn-sm btn-icon btn-color-danger btn-active-light-danger delete-business-setting">
                                 <i class="bi bi-x-lg fs-2"></i>
-                            </button>
+                                    </button>
                         </div>
                     </div>
                     <div class="card-body pt-0">
@@ -455,7 +446,7 @@ $(document).ready(function() {
                         <span class="input-group-text">%</span>
                         <button type="button" class="btn btn-outline-danger delete-business-percent">
                             <i class="bi bi-x-lg"></i>
-                        </button>
+                    </button>
                     </div>
                 </div>
             `;
@@ -487,7 +478,7 @@ $(document).ready(function() {
                     </div>
                 </div>
                 <div class="text-center mt-5">
-                    <button type="button" class="btn btn-light-primary btn-sm add-business-percent">
+                    <button type="button" class="btn btn-light-success btn-sm add-business-percent">
                         <i class="bi bi-plus-circle me-2"></i>Thêm % phí
                     </button>
                 </div>
@@ -515,7 +506,7 @@ $(document).ready(function() {
                 confirmButtonText: "Đã hiểu",
                 cancelButtonText: "Đóng",
                 customClass: {
-                    confirmButton: "btn btn-primary",
+                    confirmButton: "btn btn-success",
                     cancelButton: "btn btn-light"
                 },
                 timer: type === 'success' ? 3000 : undefined,

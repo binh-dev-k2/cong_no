@@ -92,7 +92,10 @@ Route::middleware('auth')->group(function () {
     Route::post('role/update', [RoleController::class, 'update'])->name('api.role.update');
     Route::post('role/delete', [RoleController::class, 'delete'])->name('api.role.delete');
 
-    Route::post('activity-log/datatable', [ActivityLogController::class, 'datatable'])->name('api.activity-log.list');
+    //activity log
+    Route::post('activity-log/datatable', [ActivityLogController::class, 'datatable'])->name('api.activity-log.list')->middleware('can:activity-log-view');
+    Route::post('activity-log/statistics', [ActivityLogController::class, 'statistics'])->name('api.activity-log.statistics')->middleware('can:activity-log-view');
+    Route::post('activity-log/cleanup', [ActivityLogController::class, 'cleanup'])->name('api.activity-log.cleanup')->middleware('can:activity-log-delete');
 
     Route::post('bank/store', [BankController::class, 'store'])->name('api.bank.store');
 });

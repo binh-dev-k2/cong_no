@@ -361,13 +361,8 @@ const CustomerList = function () {
             searchDelay: 500,
             processing: true,
             serverSide: true,
-            ordering: true, // bật ordering
+            ordering: false, // bật ordering
             // stateSave: true,
-            select: {
-                style: 'multi',
-                selector: 'td:first-child input[type="checkbox"]',
-                className: 'row-selected'
-            },
             ajax: {
                 url: routes.getAllCustomers,
                 type: "POST",
@@ -383,21 +378,11 @@ const CustomerList = function () {
             columnDefs: [
                 {
                     targets: 0,
-                    data: 'id',
-                    orderable: true,
-                    render: function (data, type, row) {
-                        if (row.customer.phone !== prevPhone && type === 'display') {
-                            return `
-                                <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           name="customer-id"
-                                           value="${row.customer_id}"
-                                           style="cursor: pointer;"
-                                    />
-                                </div>`;
-                        }
-                        return `<div class="empty-cell"></div>`;
+                    data: null,
+                    orderable: false,
+                    className: 'text-center',
+                    render: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
                 {

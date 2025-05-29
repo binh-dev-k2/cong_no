@@ -51,12 +51,9 @@ class DatabaseSeeder extends Seeder
             'business-view',
             'business-create',
             'business-update',
-            // 'business-delete',
 
             'debit-view',
             'debit-update',
-            // 'debit-create',
-            // 'debit-delete',
 
             'user-view',
             'user-create',
@@ -77,6 +74,9 @@ class DatabaseSeeder extends Seeder
             'collaborator-create',
             'collaborator-update',
             'collaborator-delete',
+
+            'activity-log-view',
+            'activity-log-delete',
         ];
 
         foreach ($permissions as $permission) {

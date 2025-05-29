@@ -76,19 +76,19 @@
 
             <!-- Main Business Card -->
             <div class="card shadow-sm">
-                <div class="card-header bg-success">
+                <div class="card-header bg-light-primary">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
                         <div class="flex-grow-1">
-                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                            <h3 class="card-title text-primary fw-bold fs-3 mb-0">
                                 Danh sách nghiệp vụ
                             </h3>
-                            <p class="text-white-75 mb-0 mt-2">Quản lý tất cả các nghiệp vụ trong hệ thống</p>
+                            <p class="text-gray-600 mb-0 mt-2">Quản lý tất cả các nghiệp vụ trong hệ thống</p>
                         </div>
                         <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 flex-shrink-0">
-                            <button type="button" class="btn btn-light-warning btn-edit-setting">
+                            <button type="button" class="btn btn-warning btn-edit-setting">
                                 Sửa tiền chia
                             </button>
-                            <button type="button" class="btn btn-light-primary btn-add-customer" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary btn-add-customer" data-bs-toggle="modal"
                                 data-bs-target="#modal-add">
                                 Thêm nghiệp vụ
                             </button>
@@ -112,7 +112,7 @@
                     <!-- Business Table -->
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover align-middle fs-6" id="business_table">
-                            <thead class="table-success">
+                            <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
                                     <th class="text-center min-w-75px">Ngày tạo</th>
                                     <th class="text-center min-w-125px">Chủ thẻ/Khách</th>

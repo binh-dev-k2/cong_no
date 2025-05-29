@@ -50,16 +50,16 @@
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-fluid">
             <div class="card shadow-sm">
-                <div class="card-header bg-success">
+                <div class="card-header bg-light-primary">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
                         <div class="flex-grow-1">
-                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                            <h3 class="card-title text-primary fw-bold fs-3 mb-0">
                                 Danh sách người dùng
                             </h3>
-                            <p class="text-white-75 mb-0 mt-2">Quản lý tài khoản và quyền hạn người dùng</p>
+                            <p class="text-gray-600 mb-0 mt-2">Quản lý tài khoản và quyền hạn người dùng</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#modal-user">Thêm người dùng</button>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
 
                     <div class="table-responsive-md">
                         <table class="table table-bordered table-hover align-middle fs-6" id="user_table">
-                            <thead class="table-success">
+                            <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
                                     <th class="text-center min-w-125px">STT</th>
                                     <th class="text-center min-w-125px">Tên</th>

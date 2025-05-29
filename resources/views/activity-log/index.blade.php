@@ -113,17 +113,17 @@
 
             <!-- Main Activity Log Card -->
             <div class="card shadow-sm">
-                <div class="card-header bg-success">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <div>
-                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                <div class="card-header bg-light-primary">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+                        <div class="flex-grow-1">
+                            <h3 class="card-title text-primary fw-bold fs-3 mb-0">
                                 Chi tiết hoạt động
                             </h3>
-                            <p class="text-white-75 mb-0 mt-2">Theo dõi tất cả các thay đổi trong hệ thống</p>
+                            <p class="text-gray-600 mb-0 mt-2">Theo dõi tất cả các thay đổi trong hệ thống</p>
                         </div>
-                        <div class="d-flex gap-3">
+                        <div class="flex-shrink-0">
                             @can('activity-log-delete')
-                                <button type="button" class="btn btn-light-primary" id="cleanupLogsBtn">
+                                <button type="button" class="btn btn-primary" id="cleanupLogsBtn">
                                     <i class="bi bi-trash3 me-2"></i>
                                     Dọn dẹp log cũ
                                 </button>
@@ -155,7 +155,7 @@
                             <input type="date" class="form-control form-control-lg" id="dateFilter" />
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-light-success btn-lg w-100" id="resetFilters">
+                            <button type="button" class="btn btn-light-primary btn-lg w-100" id="resetFilters">
                                 <i class="bi bi-arrow-clockwise me-2"></i>
                                 Reset
                             </button>
@@ -164,8 +164,8 @@
 
                     <!-- Activity Table -->
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle fs-6" id="activityLogTable">
-                            <thead class="table-success">
+                        <table class="table table-bordered table-hover align-middle fs-6" id="activityLogTable">
+                            <thead class="table-primary">
                                 <tr class="text-start fw-bold text-uppercase">
                                     <th class="text-center min-w-50px">STT</th>
                                     <th class="text-center min-w-125px">Người thực hiện</th>

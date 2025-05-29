@@ -66,18 +66,18 @@
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-fluid">
             <div class="card shadow-sm">
-                <div class="card-header bg-success">
+                <div class="card-header bg-light-primary">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
                         <div class="flex-grow-1">
-                            <h3 class="card-title text-white fw-bold fs-3 mb-0">
+                            <h3 class="card-title text-primary fw-bold fs-3 mb-0">
                                 Danh sách khách hàng
                             </h3>
-                            <p class="text-white-75 mb-0 mt-2">Quản lý thông tin khách hàng và thẻ</p>
+                            <p class="text-gray-600 mb-0 mt-2">Quản lý thông tin khách hàng và thẻ</p>
                         </div>
                         <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 flex-shrink-0">
-                            <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
+                            <button type="button" id="btn-add-customer" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
-                            <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
+                            <button type="button" id="btn-add-card" class="btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_card">Thêm thẻ</button>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
 
                     <div class="table-responsive-lg">
                         <table class="table table-bordered table-hover align-middle fs-6" id="kt_customers_table">
-                            <thead class="table-success">
+                            <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
                                     <th class="text-center min-w-50px">STT</th>
                                     <th class="text-center min-w-125px">Tên - SĐT</th>
@@ -146,11 +146,9 @@
             updateCardNote: "{{ route('api.card.updateNote') }}",
         }
         var datatable;
-        </script>
+    </script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
-    <script src="{{ asset('assets/js/customer/list.js') }}"></script>
-    <script src="{{ asset('assets/js/customer/add.js') }}"></script>
-    <script src="{{ asset('assets/js/customer/add_card.js') }}"></script>
+    <script src="{{ asset('assets/js/customer/index.js') }}"></script>
 @endsection
 
 @section('modal')

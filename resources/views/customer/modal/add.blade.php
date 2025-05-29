@@ -40,11 +40,11 @@
                         </div>
 
                         <div class="fv-row mb-7">
-                            <label for="select_add_card" class="required fs-6 fw-semibold mb-2">
+                            <label for="customer_select_card" class="required fs-6 fw-semibold mb-2">
                                 Nhập số tài khoản hoặc số thẻ
                             </label>
 
-                            <select class="form-select form-select-solid" id="select_add_card" multiple>
+                            <select class="form-select form-select-solid" id="customer_select_card" multiple>
                                 <option value="" disabled></option>
                                 {{-- @foreach ($blankCards as $card)
                                     <option value="{{ $card->id }}"

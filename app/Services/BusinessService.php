@@ -11,7 +11,6 @@ use App\Models\MachineBusinessFee;
 use App\Models\CollaboratorBusinessFee;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class BusinessService extends BaseService
 {
@@ -493,33 +492,5 @@ class BusinessService extends BaseService
     public function updateNote($data)
     {
         return Setting::updateOrCreate(['key' => 'business_note'], ['value' => $data['business_note']]);
-    }
-
-    /**
-     * Update business settings
-     *
-     * @param array $data
-     * @return bool
-     */
-    public function updateSetting($data)
-    {
-        BusinessSetting::truncate();
-        DB::beginTransaction();
-        try {
-            foreach ($data as $value) {
-                BusinessSetting::create([
-                    'type' => $value['type'],
-                    'key' => $value['key'],
-                    'value' => $value['value']
-                ]);
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-            DB::rollBack();
-            return false;
-        }
     }
 }

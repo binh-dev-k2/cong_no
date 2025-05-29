@@ -8,20 +8,18 @@ use App\Models\Machine;
 use App\Models\Collaborator;
 use App\Models\Setting;
 use App\Services\BusinessService;
+use App\Services\BusinessSettingService;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
 {
     public $businessService;
+    public $businessSettingService;
 
     public function __construct()
     {
-        $this->businessService = $this->businessServiceProperty();
-    }
-
-    public function businessServiceProperty()
-    {
-        return app(BusinessService::class);
+        $this->businessService = app(BusinessService::class);
+        $this->businessSettingService = app(BusinessSettingService::class);
     }
 
     public function index()
@@ -83,19 +81,35 @@ class BusinessController extends Controller
 
     public function editSetting()
     {
-        $businessMoneys = Setting::where('type', 'business_money')
-            ->orderBy('key', 'asc')
-            ->orderBy('value', 'asc')
-            ->get()
-            ->groupBy('key');
-        return view('business.modal.edit-setting', compact('businessMoneys'));
+        try {
+            // Use the new BusinessSettingService to get data
+            return view('business.modal.edit-setting');
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Có lỗi xảy ra khi tải cài đặt: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function updateSetting(BusinessRequest $request)
     {
-        $data = $request->validated();
-        $result = $this->businessService->updateSetting($data);
-        return jsonResponse($result ? 0 : 1);
+        try {
+            $data = $request->validated();
+            $result = $this->businessSettingService->updateSettings($data);
+
+            if ($result['success']) {
+                return jsonResponse(0, 'Cập nhật cài đặt thành công');
+            } else {
+                return jsonResponse(1, $result['errors']);
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('BusinessController updateSetting error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
+            return jsonResponse(1, ['Có lỗi xảy ra khi xử lý yêu cầu: ' . $e->getMessage()]);
+        }
     }
 
     public function updateNote(Request $request)

@@ -20,6 +20,24 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-results li:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
     </style>
 @endsection
 
@@ -78,12 +96,6 @@
                         id="business_table">
                         <thead>
                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                {{-- <th class="w-10px pe-2">
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                        <input class="form-check-input" type="checkbox" data-kt-check="true"
-                                            data-kt-check-target="#business_table .form-check-input" value="1" />
-                                    </div>
-                                </th> --}}
                                 <th class="text-center min-w-75px">Ngày tạo</th>
                                 <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
                                 <th class="text-center min-w-125px">Số thẻ</th>
@@ -97,10 +109,6 @@
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
                                 <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                {{-- <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th> --}}
                                 <th class="text-center min-w-125px">Trả thêm</th>
                                 <th class="text-center min-w-100px">Hành động</th>
                             </tr>
@@ -121,12 +129,13 @@
 @endsection
 
 @section('modal')
-    @include('business.modal.add')
-    @include('business.modal.edit')
+    @include('business.components.modal-add')
+    @include('business.components.modal-edit')
 @endsection
 
 @section('script')
     <script>
+        // Global variables
         var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         var routes = {
             datatable: "{{ route('api.business.datatable') }}",
@@ -136,8 +145,14 @@
             businessUpdateBusinessMoney: "{{ route('api.business.updateBusinessMoney') }}",
             businessEditSetting: "{{ route('api.business.editSetting') }}",
             businessUpdateNote: "{{ route('api.business.updateNote') }}",
+            businessStore: "{{ route('api.business.store') }}",
+            businessUpdate: "{{ route('api.business.update') }}",
+            cardFind: "{{ route('api.card.find') }}"
         }
         var datatable;
+        var allMachines = @json($machines);
+        var collaborators = @json($collaborators);
+        var businessMoneys = @json($businessMoneys);
     </script>
 
     <script src="{{ asset('assets/js/business/list.js') }}"></script>

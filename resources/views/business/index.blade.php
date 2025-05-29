@@ -63,10 +63,9 @@
 
             <!-- Business Note Card -->
             <div class="card shadow-sm mb-8">
-                <div class="card-header bg-warning">
-                    <h3 class="card-title text-white fw-bold">
-                        <i class="bi bi-bell me-2"></i>
-                        Thông báo
+                <div class="card-header py-2">
+                    <h3 class="card-title fw-bold fs-3">
+                        Ghi chú nghiệp vụ
                     </h3>
                 </div>
                 <div class="card-body">

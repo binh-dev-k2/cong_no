@@ -59,7 +59,7 @@
                             <p class="text-white-75 mb-0 mt-2">Quản lý tài khoản và quyền hạn người dùng</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
                                 data-bs-target="#modal-user">Thêm người dùng</button>
                         </div>
                     </div>

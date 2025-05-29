@@ -88,7 +88,7 @@
                             <button type="button" class="btn btn-light-warning btn-edit-setting">
                                 Sửa tiền chia
                             </button>
-                            <button type="button" class="btn btn-light-success btn-add-customer" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-light-primary btn-add-customer" data-bs-toggle="modal"
                                 data-bs-target="#modal-add">
                                 Thêm nghiệp vụ
                             </button>

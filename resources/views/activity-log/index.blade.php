@@ -123,7 +123,7 @@
                         </div>
                         <div class="d-flex gap-3">
                             @can('activity-log-delete')
-                                <button type="button" class="btn btn-light-warning" id="cleanupLogsBtn">
+                                <button type="button" class="btn btn-light-primary" id="cleanupLogsBtn">
                                     <i class="bi bi-trash3 me-2"></i>
                                     Dọn dẹp log cũ
                                 </button>

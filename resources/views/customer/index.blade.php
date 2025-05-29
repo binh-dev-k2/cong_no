@@ -75,7 +75,7 @@
                             <p class="text-white-75 mb-0 mt-2">Quản lý thông tin khách hàng và thẻ</p>
                         </div>
                         <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 flex-shrink-0">
-                            <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-light-warning" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_customer">Thêm khách hàng</button>
                             <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_add_card">Thêm thẻ</button>

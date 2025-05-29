@@ -61,7 +61,7 @@
                             <p class="text-white-75 mb-0 mt-2">Quản lý thông tin và phí máy trong hệ thống</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <button type="button" class="btn btn-light-success" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
                                 data-bs-target="#machine-modal">
                                 Thêm máy mới
                             </button>

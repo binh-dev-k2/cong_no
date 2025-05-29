@@ -63,20 +63,20 @@
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
-                            <div class="d-flex flex-wrap gap-3 justify-content-lg-end">
-                                <select class="form-select form-select-solid flex-grow-1 flex-lg-grow-0" name="month" id="collaborator-month-select" style="min-width: 120px;">
+                            <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                                <select class="form-select form-select-sm form-select-solid" name="month" id="collaborator-month-select" style="min-width: 80px; max-width: 90px;">
                                     <option value="">Tháng</option>
                                     @for ($i = 1; $i <= 12; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
                                 </select>
-                                <select class="form-select form-select-solid flex-grow-1 flex-lg-grow-0" name="year" id="collaborator-year-select" style="min-width: 120px;">
+                                <select class="form-select form-select-sm form-select-solid" name="year" id="collaborator-year-select" style="min-width: 80px; max-width: 90px;">
                                     <option value="">Năm</option>
                                     @for ($i = now()->year; $i >= 2025; $i--)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
                                 </select>
-                                <button class="btn btn-primary flex-shrink-0" id="collaborator-filter">Lọc</button>
+                                <button class="btn btn-sm btn-primary" id="collaborator-filter">Lọc</button>
                             </div>
                         </div>
                     </div>

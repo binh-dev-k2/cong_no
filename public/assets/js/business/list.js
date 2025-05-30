@@ -883,21 +883,21 @@ const BusinessDataTable = {
             td.find('.container-business-money').addClass('d-none');
             td.append(`
                 <div class="d-flex align-items-center container-edit-business-money">
-                    <div class="position-relative">
-                        <i class="fas fa-info-circle text-info cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Tích vào ô trống bên cạnh để tính là đã hoàn thành."></i>
-                    </div>
                     <input type="text" data-type="money" value="${businessMoney?.money ?? 0}" class="form-control me-2" style="min-width: 150px; max-width:200px" min="0" step="any"/>
-                    <input type="checkbox" data-type="is_money_checked" class="form-check-input me-2" ${businessMoney?.is_money_checked ? "checked" : ""}/>
+                    <input type="checkbox" data-type="is_money_checked" class="form-check-input me-2 border-primary" ${businessMoney?.is_money_checked ? "checked" : ""}/>
                     <input type="text" data-type="note" value="${businessMoney?.note ?? ''}" class="form-control me-2" style="min-width: 150px; max-width:200px" placeholder="Mã chuẩn chi"/>
-                    <input type="checkbox" data-type="is_note_checked" class="form-check-input me-2" ${businessMoney?.is_note_checked ? "checked" : ""}/>
+                    <input type="checkbox" data-type="is_note_checked" class="form-check-input me-2 border-primary" ${businessMoney?.is_note_checked ? "checked" : ""}/>
+                    <div class="position-relative">
+                        <i class="fas fa-info-circle text-info cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Tích vào ô trống bên cạnh để tính là đã hoàn thành mã này."></i>
+                    </div>
                     <button class="btn btn-light btn-close-business-money px-3 py-2">Đóng</button>
                     <button class="btn btn-success btn-save-business-money px-3 py-2" data-business-id="${data.id}">Lưu</button>
                 </div>
             `);
 
             td.find('.btn-close-business-money').on('click', () => {
-                BusinessDataTable.prevPhone = null;
-                BusinessDataTable.refresh();
+                td.find('.container-edit-business-money').remove();
+                td.find('.container-business-money').removeClass('d-none');
             });
 
             td.find('.btn-save-business-money').on('click', async () => {

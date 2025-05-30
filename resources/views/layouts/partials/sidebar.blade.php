@@ -130,9 +130,10 @@
                         </div>
                     @endcan
 
+                    @can('agency-view')
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link @if (Route::currentRouteName() == 'activity-log') active @endif" href="#">
+                            <a class="menu-link @if (Route::currentRouteName() == 'agency') active @endif" href="{{ route('agency') }}">
                                 <span class="menu-icon">
                                     <i class="ki-duotone ki-scroll fs-2">
                                         <span class="path1"></span>
@@ -143,6 +144,7 @@
                             </a>
                             <!--end:Menu link-->
                         </div>
+                    @endcan
 
                     @can('user-view')
                         <div class="menu-item">

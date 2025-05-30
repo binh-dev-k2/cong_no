@@ -65,17 +65,17 @@
                         <div class="col-lg-6 col-md-12">
                             <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
                                 <select class="form-select form-select-sm form-select-solid" name="month" id="collaborator-month-select" style="min-width: 80px; max-width: 90px;">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                        <option value="">Tháng</option>
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                 <select class="form-select form-select-sm form-select-solid" name="year" id="collaborator-year-select" style="min-width: 80px; max-width: 90px;">
-                                    <option value="">Năm</option>
-                                    @for ($i = now()->year; $i >= 2025; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                        <option value="">Năm</option>
+                                        @for ($i = now()->year; $i >= 2025; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                 <button class="btn btn-sm btn-primary" id="collaborator-filter">Lọc</button>
                             </div>
                         </div>
@@ -85,18 +85,18 @@
                         <table class="table table-bordered table-hover align-middle fs-6" id="collaborator-table">
                             <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="text-center min-w-50px">STT</th>
-                                    <th class="text-center min-w-125px">Tên máy</th>
-                                    <th class="text-center min-w-125px">Mã máy</th>
-                                    <th class="text-center min-w-125px">% lợi nhuận</th>
-                                    <th class="text-center min-w-125px">Phí</th>
-                                    <th class="text-center min-w-125px">Tổng số tiền</th>
-                                    <th class="text-center min-w-70px">Hành động</th>
-                                </tr>
-                            </thead>
+                                <th class="text-center min-w-50px">STT</th>
+                                <th class="text-center min-w-125px">Tên máy</th>
+                                <th class="text-center min-w-125px">Mã máy</th>
+                                <th class="text-center min-w-125px">% lợi nhuận</th>
+                                <th class="text-center min-w-125px">Phí</th>
+                                <th class="text-center min-w-125px">Tổng số tiền</th>
+                                <th class="text-center min-w-70px">Hành động</th>
+                            </tr>
+                        </thead>
                             <tbody class="fw-semibold text-gray-700">
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>

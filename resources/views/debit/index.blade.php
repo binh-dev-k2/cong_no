@@ -63,55 +63,55 @@
                             <div class="d-flex flex-wrap gap-3 justify-content-lg-end">
                                 <div class="form-floating flex-grow-1 flex-lg-grow-0" style="min-width: 150px;">
                                     <select class="form-select form-select-solid" id="debit_month" name="month">
-                                        <option value="" selected>Toàn bộ</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                    </select>
-                                    <label for="debit_month">Tháng</label>
-                                </div>
+                                    <option value="" selected>Toàn bộ</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <label for="debit_month">Tháng</label>
+                            </div>
                                 <div class="form-floating flex-grow-1 flex-lg-grow-0" style="min-width: 150px;">
                                     <select class="form-select form-select-solid" id="debit_year" name="year">
-                                        @foreach (range(2022, date('Y')) as $year)
-                                            <option value="{{ $year }}" @if ($year == date('Y')) selected @endif>{{ $year }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="debit_year">Năm</label>
-                                </div>
+                                    @foreach (range(2022, date('Y')) as $year)
+                                        <option value="{{ $year }}" @if ($year == date('Y')) selected @endif>{{ $year }}</option>
+                                    @endforeach
+                                </select>
+                                <label for="debit_year">Năm</label>
                             </div>
                         </div>
                     </div>
+                </div>
 
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover align-middle fs-6" id="kt_debit_table">
                             <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="text-center min-w-125px">Tên - SĐT</th>
-                                    <th class="text-center min-w-125px">Ngày cập nhật</th>
-                                    <th class="text-center min-w-125px">Chủ tài khoản</th>
-                                    <th class="text-center min-w-150px">Số thẻ</th>
-                                    <th class="text-center min-w-75px">Hình thức</th>
-                                    <th class="text-center min-w-125px">Số tiền</th>
-                                    <th class="text-center min-w-125px">Phí</th>
-                                    <th class="text-center min-w-125px">Tiền trả thêm</th>
-                                    <th class="text-center min-w-125px">Tổng số tiền</th>
-                                    <th class="text-center min-w-125px">Tổng nợ</th>
-                                    <th class="text-center min-w-70px">Hành động</th>
-                                </tr>
-                            </thead>
+                                <th class="text-center min-w-125px">Tên - SĐT</th>
+                                <th class="text-center min-w-125px">Ngày cập nhật</th>
+                                <th class="text-center min-w-125px">Chủ tài khoản</th>
+                                <th class="text-center min-w-150px">Số thẻ</th>
+                                <th class="text-center min-w-75px">Hình thức</th>
+                                <th class="text-center min-w-125px">Số tiền</th>
+                                <th class="text-center min-w-125px">Phí</th>
+                                <th class="text-center min-w-125px">Tiền trả thêm</th>
+                                <th class="text-center min-w-125px">Tổng số tiền</th>
+                                <th class="text-center min-w-125px">Tổng nợ</th>
+                                <th class="text-center min-w-70px">Hành động</th>
+                            </tr>
+                        </thead>
                             <tbody class="fw-semibold text-gray-700">
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
+                </div>
 
                     <div class="d-flex justify-content-end mt-4">
                         <div>

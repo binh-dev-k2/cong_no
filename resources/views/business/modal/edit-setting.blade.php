@@ -264,7 +264,7 @@ $index = 0;
                         ? response.data.data.join(', ')
                         : response.data.message || 'Có lỗi xảy ra';
                     this.showNotification(errors, 'error');
-                }
+                    }
             } catch (error) {
                 console.error('Submit error:', error);
                 let errorMessage = 'Có lỗi xảy ra khi cập nhật';

@@ -14,18 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::
-        namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
-            Route::get('/', 'DashboardController@index')->name('dashboard')->middleware('can:dashboard');
-            Route::get('/customer', 'CustomerController@index')->name('customer')->middleware('can:customer-view');
-            Route::get('/business', 'BusinessController@index')->name('business')->middleware('can:business-view');
-            Route::get('/debit', 'DebitController@index')->name('debit')->middleware('can:debit-view');
-            Route::get('/user', 'UserController@index')->name('user')->middleware('can:user-view');
-            Route::get('/machine', 'MachineController@index')->name('machine')->middleware('can:machine-view');
-            Route::get('/collaborator', 'CollaboratorController@index')->name('collaborator')->middleware('can:collaborator-view');
-            Route::get('/role', 'RoleController@index')->name('role');
-            Route::get('/activity-log', 'ActivityLogController@index')->name('activity-log')->middleware('can:activity-log-view');
-        });
+// Web routes với auth middleware
+Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function () {
+    Route::get('/', 'DashboardController@index')->name('dashboard')->middleware('can:dashboard');
+    Route::get('/customer', 'CustomerController@index')->name('customer')->middleware('can:customer-view');
+    Route::get('/business', 'BusinessController@index')->name('business')->middleware('can:business-view');
+    Route::get('/debit', 'DebitController@index')->name('debit')->middleware('can:debit-view');
+    Route::get('/user', 'UserController@index')->name('user')->middleware('can:user-view');
+    Route::get('/machine', 'MachineController@index')->name('machine')->middleware('can:machine-view');
+    Route::get('/collaborator', 'CollaboratorController@index')->name('collaborator')->middleware('can:collaborator-view');
+    Route::get('/role', 'RoleController@index')->name('role');
+    Route::get('/activity-log', 'ActivityLogController@index')->name('activity-log')->middleware('can:activity-log-view');
+    Route::get('/agency', 'AgencyController@index')->name('agency')->middleware('can:agency-view');
+});
 
 Route::get('/@@binhcoder02/update', function () {
     exec('sed -i \'s/\r$//\' ' . base_path('pull_code.sh'));

@@ -81,21 +81,21 @@
                         <div class="col-lg-6 col-md-12">
                             <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
                                 <select class="form-select form-select-sm form-select-solid" id="machine-month-select" style="min-width: 80px; max-width: 90px;">
-                                    <option value="">Tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                        <option value="">Tháng</option>
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                 <select class="form-select form-select-sm form-select-solid" id="machine-year-select" style="min-width: 80px; max-width: 90px;">
-                                    <option value="">Năm</option>
-                                    @for ($i = now()->year; $i >= 2025; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                        <option value="">Năm</option>
+                                        @for ($i = now()->year; $i >= 2025; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
                                 <select class="form-select form-select-sm form-select-solid" name="status" id="machine-status-select" style="min-width: 120px; max-width: 140px;">
                                     <option value="0">Đã ẩn</option>
                                     <option value="1" selected>Hiển thị</option>
-                                </select>
+                                    </select>
                                 <button class="btn btn-sm btn-primary" id="machine-filter">
                                     Lọc
                                 </button>
@@ -107,29 +107,29 @@
                         <table class="table table-bordered table-hover align-middle fs-6" id="machine-table">
                             <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="text-center min-w-50px">STT</th>
-                                    <th class="text-center min-w-125px">Tên - mã máy</th>
-                                    <th class="text-center min-w-50px">% VISA</th>
-                                    <th class="text-center min-w-50px">% MASTER</th>
-                                    <th class="text-center min-w-50px">% JCB</th>
-                                    <th class="text-center min-w-50px">% AMEX</th>
-                                    <th class="text-center min-w-50px">% NAPAS</th>
-                                    <th class="text-center min-w-125px">Lợi nhuận</th>
-                                    <th class="text-center min-w-125px">Tổng số tiền</th>
-                                    <th class="text-center min-w-70px">Hành động</th>
-                                </tr>
-                            </thead>
+                                <th class="text-center min-w-50px">STT</th>
+                                <th class="text-center min-w-125px">Tên - mã máy</th>
+                                <th class="text-center min-w-50px">% VISA</th>
+                                <th class="text-center min-w-50px">% MASTER</th>
+                                <th class="text-center min-w-50px">% JCB</th>
+                                <th class="text-center min-w-50px">% AMEX</th>
+                                <th class="text-center min-w-50px">% NAPAS</th>
+                                <th class="text-center min-w-125px">Lợi nhuận</th>
+                                <th class="text-center min-w-125px">Tổng số tiền</th>
+                                <th class="text-center min-w-70px">Hành động</th>
+                            </tr>
+                        </thead>
                             <tbody class="fw-semibold text-gray-700">
-                            </tbody>
-                            <tfoot>
-                                <tr class="fw-bold">
-                                    <td colspan="7" class="text-end">Tổng số tiền:</td>
-                                    <td id="machine-total-fee" class="text-primary"></td>
-                                    <td id="machine-total-money" class="text-primary"></td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="7" class="text-end">Tổng số tiền:</td>
+                                <td id="machine-total-fee" class="text-primary"></td>
+                                <td id="machine-total-money" class="text-primary"></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                     </div>
                 </div>
             </div>

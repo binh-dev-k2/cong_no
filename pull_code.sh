@@ -211,6 +211,28 @@ if [ -f "artisan" ]; then
     # Clear any compiled views
     run_command "Clearing compiled views" php artisan view:clear
 
+    # Create storage link with error handling
+    log "🔗 Creating storage link"
+    if ! php artisan storage:link; then
+        log "⚠️ Failed to create storage link, attempting to create it manually"
+        # Try to create the symbolic link manually
+        if [ -d "public" ] && [ -d "storage/app/public" ]; then
+            if [ -L "public/storage" ]; then
+                log "🔄 Removing existing storage link"
+                rm -f "public/storage"
+            fi
+            if ln -sf "../storage/app/public" "public/storage"; then
+                log "✅ Created storage link manually"
+            else
+                log "❌ Failed to create storage link manually"
+            fi
+        else
+            log "❌ Could not create storage link: public directory or storage/app/public not found"
+        fi
+    else
+        log "✅ Storage link created successfully"
+    fi
+
     # Update permissions if needed (for Linux/Unix environments)
     if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
         log "🔒 Setting proper permissions"

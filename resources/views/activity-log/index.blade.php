@@ -168,15 +168,15 @@
                             <thead class="table-primary">
                                 <tr class="text-start fw-bold text-uppercase">
                                     <th class="text-center min-w-50px">STT</th>
-                                    <th class="text-center min-w-125px">Người thực hiện</th>
+                                <th class="text-center min-w-125px">Người thực hiện</th>
                                     <th class="text-center min-w-100px">Sự kiện</th>
                                     <th class="min-w-200px">Chi tiết thay đổi</th>
                                     <th class="text-center min-w-150px">Thời gian</th>
-                                </tr>
-                            </thead>
+                            </tr>
+                        </thead>
                             <tbody class="fw-semibold text-gray-700">
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -211,44 +211,44 @@
             // Format key attributes
             function formatKeyAttributes(attributes) {
                 const keyMapping = {
-                    'id': 'ID',
-                    'name': 'Tên',
-                    'code': 'Mã',
-                    'fee_percent': '% phí',
-                    'account_name': 'Tên tài khoản',
+                                'id': 'ID',
+                                'name': 'Tên',
+                                'code': 'Mã',
+                                'fee_percent': '% phí',
+                                'account_name': 'Tên tài khoản',
                     'phone': 'Số điện thoại',
                     'card_number': 'Số thẻ',
-                    'total_money': 'Tổng số tiền',
-                    'formality': 'Hình thức',
-                    'fee': 'Phí',
-                    'pay_extra': 'Tiền trả thêm',
-                    'bank_code': 'Ngân hàng',
-                    'money': 'Số tiền',
-                    'note': 'Ghi chú',
-                    'key': 'Key',
-                    'value': 'Giá trị',
-                    'type': 'Loại',
-                    'customer_id': 'ID khách hàng',
-                    'account_number': 'Số tài khoản',
-                    'login_info': 'Thông tin đăng nhập',
-                    'date_due': 'Ngày đến hạn',
-                    'date_return': 'Ngày trả',
-                    'status': 'Trạng thái',
-                    'month_expired': 'Tháng hết hạn',
-                    'year_expired': 'Năm hết hạn',
-                    'total_amount': 'Tổng số tiền',
-                    'business_id': 'ID nghiệp vụ',
-                    'machine_id': 'ID máy',
-                    'is_money_checked': 'Đánh dấu số tiền',
-                    'is_note_checked': 'Đánh dấu ghi chú',
-                    'collaborator_id': 'ID Cộng tác viên',
-                    'total_investment': 'Tổng đầu tư',
-                    'business_setting_type': 'Loại cài đặt',
-                    'business_setting_key': 'Key cài đặt',
-                    'napas_fee_percent': '% Napas',
-                    'visa_fee_percent': '% Visa',
-                    'amex_fee_percent': '% Amex',
-                    'master_fee_percent': '% Master',
+                                'total_money': 'Tổng số tiền',
+                                'formality': 'Hình thức',
+                                'fee': 'Phí',
+                                'pay_extra': 'Tiền trả thêm',
+                                'bank_code': 'Ngân hàng',
+                                'money': 'Số tiền',
+                                'note': 'Ghi chú',
+                                'key': 'Key',
+                                'value': 'Giá trị',
+                                'type': 'Loại',
+                                'customer_id': 'ID khách hàng',
+                                'account_number': 'Số tài khoản',
+                                'login_info': 'Thông tin đăng nhập',
+                                'date_due': 'Ngày đến hạn',
+                                'date_return': 'Ngày trả',
+                                'status': 'Trạng thái',
+                                'month_expired': 'Tháng hết hạn',
+                                'year_expired': 'Năm hết hạn',
+                                'total_amount': 'Tổng số tiền',
+                                'business_id': 'ID nghiệp vụ',
+                                'machine_id': 'ID máy',
+                                'is_money_checked': 'Đánh dấu số tiền',
+                                'is_note_checked': 'Đánh dấu ghi chú',
+                                'collaborator_id': 'ID Cộng tác viên',
+                                'total_investment': 'Tổng đầu tư',
+                                'business_setting_type': 'Loại cài đặt',
+                                'business_setting_key': 'Key cài đặt',
+                                'napas_fee_percent': '% Napas',
+                                'visa_fee_percent': '% Visa',
+                                'amex_fee_percent': '% Amex',
+                                'master_fee_percent': '% Master',
                     'jcb_fee_percent': '% JCB'
                 };
 
@@ -263,16 +263,16 @@
                         }
 
                         return [displayKey, value];
-                    })
+                        })
                 );
             }
 
             // Initialize DataTable
             function initActivityTable() {
                 activityTable = $("#activityLogTable").DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering: false,
+                processing: true,
+                serverSide: true,
+                ordering: false,
                     language: {
                         processing: "Đang tải dữ liệu...",
                         search: "Tìm kiếm:",
@@ -287,44 +287,44 @@
                             previous: "Trước"
                         }
                     },
-                    ajax: {
-                        url: "{{ route('api.activity-log.list') }}",
-                        type: "POST",
-                        beforeSend: function(request) {
+                ajax: {
+                    url: "{{ route('api.activity-log.list') }}",
+                    type: "POST",
+                    beforeSend: function(request) {
                             request.setRequestHeader("X-CSRF-TOKEN", token);
-                        },
-                        data: function(d) {
+                    },
+                    data: function(d) {
                             d.search = $('#activitySearch').val();
                             d.event = $('#eventFilter').val();
                             d.date = $('#dateFilter').val();
+                    }
+                },
+                columnDefs: [{
+                        targets: 0,
+                        data: null,
+                        orderable: false,
+                        className: 'text-center',
+                        render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    columnDefs: [{
-                            targets: 0,
-                            data: null,
-                            orderable: false,
-                            className: 'text-center',
-                            render: function(data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        {
-                            targets: 1,
-                            data: 'user',
-                            orderable: false,
-                            className: 'text-center',
-                            render: function(data, type, row) {
+                    {
+                        targets: 1,
+                        data: 'user',
+                        orderable: false,
+                        className: 'text-center',
+                        render: function(data, type, row) {
                                 return `
                                 <span class="fw-semibold">${data?.name || 'N/A'}</span>
                         `;
-                            }
-                        },
-                        {
-                            targets: 2,
-                            data: 'log',
-                            orderable: false,
+                        }
+                    },
+                    {
+                        targets: 2,
+                        data: 'log',
+                        orderable: false,
                             className: 'text-center',
-                            render: function(data, type, row) {
+                        render: function(data, type, row) {
                                 const logData = JSON.parse(data);
                                 const event = logData.event;
 
@@ -339,15 +339,15 @@
                                     eventText = 'Xóa';
                                 }
 
-                                return `
+                            return `
                             <span class="badge ${badgeClass}">
                                 ${eventText}
                             </span>
                                     `;
-                            }
-                        },
-                        {
-                            targets: 3,
+                        }
+                    },
+                    {
+                        targets: 3,
                             data: 'log',
                             orderable: false,
                             render: function(data, type, row) {
@@ -388,10 +388,10 @@
                         },
                         {
                             targets: 4,
-                            data: 'created_at',
-                            orderable: false,
+                        data: 'created_at',
+                        orderable: false,
                             className: 'text-center',
-                            render: function(data, type, row) {
+                        render: function(data, type, row) {
                                 return `
                             <div class="d-flex flex-column align-items-center">
                                 <span class="fw-bold text-gray-800">${formatTime(data)}</span>

@@ -82,7 +82,6 @@ class BusinessController extends Controller
     public function editSetting()
     {
         try {
-            // Use the new BusinessSettingService to get data
             return view('business.modal.edit-setting');
         } catch (\Exception $e) {
             return response()->json([

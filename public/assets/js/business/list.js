@@ -368,12 +368,12 @@ const ModalManager = {
             if (!feeField) return;
 
             // Get fee percentage from selected machine
-            const dataField = feeField.replace('_fee_percent', '');
-            const feePercent = selectedOption.data(dataField);
+            // const dataField = feeField.replace('_fee_percent', '');
+            // const feePercent = selectedOption.data(dataField);
 
-            if (feePercent > 0) {
-                $modal.find('input[name="fee_percent"]').val(feePercent);
-            }
+            // if (feePercent > 0) {
+            //     $modal.find('input[name="fee_percent"]').val(feePercent);
+            // }
         });
     },
 

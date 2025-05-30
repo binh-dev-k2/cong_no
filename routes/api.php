@@ -11,6 +11,7 @@ use App\Http\Controllers\MachineController;
 use App\Http\Controllers\CollaboratorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AgencyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -96,6 +97,27 @@ Route::middleware('auth')->group(function () {
     Route::post('activity-log/datatable', [ActivityLogController::class, 'datatable'])->name('api.activity-log.list')->middleware('can:activity-log-view');
     Route::post('activity-log/statistics', [ActivityLogController::class, 'statistics'])->name('api.activity-log.statistics')->middleware('can:activity-log-view');
     Route::post('activity-log/cleanup', [ActivityLogController::class, 'cleanup'])->name('api.activity-log.cleanup')->middleware('can:activity-log-delete');
+
+    //agency
+    Route::get('agency/list', [AgencyController::class, 'getAgencies'])->name('api.agency.list')->middleware('can:agency-view');
+    Route::get('agency/statistics', [AgencyController::class, 'getStatistics'])->name('api.agency.statistics')->middleware('can:agency-view');
+    Route::get('agency/search', [AgencyController::class, 'searchAgencies'])->name('api.agency.search')->middleware('can:agency-view');
+    Route::post('agency/store', [AgencyController::class, 'store'])->name('api.agency.store')->middleware('can:agency-create');
+    Route::post('agency/update', [AgencyController::class, 'update'])->name('api.agency.update')->middleware('can:agency-update');
+    Route::post('agency/delete', [AgencyController::class, 'destroy'])->name('api.agency.delete')->middleware('can:agency-delete');
+    Route::get('agency/businesses', [AgencyController::class, 'getAgencyBusinesses'])->name('api.agency.businesses')->middleware('can:agency-view');
+    Route::get('agency/business-details', [AgencyController::class, 'getAgencyBusinessById'])->name('api.agency.business-details')->middleware('can:agency-view');
+    Route::get('agency/summary', [AgencyController::class, 'getAgencyBusinessSummary'])->name('api.agency.summary')->middleware('can:agency-view');
+    Route::get('agency/machines', [AgencyController::class, 'getMachines'])->name('api.agency.machines')->middleware('can:agency-view');
+    Route::get('agency/machines-for-agency', [AgencyController::class, 'getMachinesForAgency'])->name('api.agency.machines-for-agency')->middleware('can:agency-view');
+    Route::get('agency/completed-businesses', [AgencyController::class, 'getCompletedBusinesses'])->name('api.agency.completed-businesses')->middleware('can:agency-view');
+    Route::post('agency/completed-businesses-datatable', [AgencyController::class, 'getCompletedBusinessesDatatable'])->name('api.agency.completed-businesses-datatable')->middleware('can:agency-view');
+
+    //agency business
+    Route::post('agency-business/store', [AgencyController::class, 'storeAgencyBusiness'])->name('api.agency-business.store')->middleware('can:agency-create');
+    Route::post('agency-business/update', [AgencyController::class, 'updateAgencyBusiness'])->name('api.agency-business.update')->middleware('can:agency-update');
+    Route::post('agency-business/complete', [AgencyController::class, 'completeAgencyBusiness'])->name('api.agency-business.complete')->middleware('can:agency-update');
+    Route::post('agency-business/delete', [AgencyController::class, 'destroyAgencyBusiness'])->name('api.agency-business.delete')->middleware('can:agency-delete');
 
     Route::post('bank/store', [BankController::class, 'store'])->name('api.bank.store');
 });

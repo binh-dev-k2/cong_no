@@ -75,6 +75,11 @@ class DatabaseSeeder extends Seeder
             'collaborator-update',
             'collaborator-delete',
 
+            'agency-view',
+            'agency-create',
+            'agency-update',
+            'agency-delete',
+
             'activity-log-view',
             'activity-log-delete',
         ];

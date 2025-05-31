@@ -1373,7 +1373,7 @@
                             data: 'standard_code',
                             name: 'standard_code',
                             render: function(data, type, row) {
-                                return `<code class="bg-light px-2 py-1 rounded">${data ? data : 'N/A'}</code>`;
+                                return data ? `<code class="bg-light px-2 py-1 rounded">${data}</code>` : '';
                             },
                             className: 'text-center'
                         },
@@ -1401,7 +1401,7 @@
                                 const url = window.location.origin + '/storage/' + data;
                                 return `<img src="${url}" alt="Ảnh trước" class="img-fluid" style="width: 100px; height: 100px;">`;
                             },
-                            className: 'text-center'
+                            className: 'text-center min-w-100'
                         },
                         {
                             data: 'profit',

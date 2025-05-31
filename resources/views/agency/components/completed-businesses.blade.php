@@ -48,8 +48,8 @@
                         <th class="text-center">Máy</th>
                         <th class="text-center">Tổng tiền</th>
                         <th class="text-center">Mã chuẩn</th>
-                        <th class="text-center">Ảnh mặt trước</th>
-                        <th class="text-center">Ảnh tổng quan</th>
+                        <th class="text-center min-w-125px">Ảnh mặt trước</th>
+                        <th class="text-center min-w-125px">Ảnh tổng quan</th>
                         <th class="text-center">Số tiền trả đại lý</th>
                         <th class="text-center">Ngày hoàn thành</th>
                     </tr>

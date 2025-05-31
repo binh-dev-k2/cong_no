@@ -14,8 +14,8 @@ class ChangeColumsTypeToAgencyBusinessessTable extends Migration
     public function up()
     {
         Schema::table('agency_businessess', function (Blueprint $table) {
-            $table->float('profit')->nullable()->after('total_money');
-            $table->float('machine_fee_percent')->nullable()->after('profit');
+            $table->decimal('profit', 15, 2)->nullable()->after('total_money');
+            $table->decimal('machine_fee_percent', 5, 2)->nullable()->after('profit');
             $table->string('image_front')->nullable()->change();
             $table->string('image_summary')->nullable()->change();
             $table->string('standard_code')->nullable()->change();

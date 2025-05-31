@@ -529,14 +529,12 @@
                     // Calculate agency fee: fee_percent * total_money / 100
                     const currentAgency = agencies.find(a => a.id == agencyId);
                     const agencyFeePercent = currentAgency ? currentAgency.fee_percent : 0;
-                    const agencyMoney = Math.round(business.total_money * agencyFeePercent / 100);
+                    const agencyMoney = Math.round(business.total_money - (business.total_money * agencyFeePercent / 100));
                     const formattedAgencyMoney = new Intl.NumberFormat('vi-VN').format(agencyMoney);
 
                     const formattedMoney = new Intl.NumberFormat('vi-VN').format(business.total_money);
 
                     const machineName = business.machine ? business.machine.name : 'N/A';
-                    const machineFee = business.machine && business.machine.fee ?
-                        `<small class="text-muted ms-1">(${business.machine.fee}%)</small>` : '';
 
                     tableHtml += `
                         <tr>
@@ -545,19 +543,17 @@
                                 <div class="d-flex align-items-center justify-content-center">
                                     <i class="bi bi-cpu me-2 text-primary"></i>
                                     <span class="fw-bold">${machineName}</span>
-                                    ${machineFee}
                                 </div>
                             </td>
                             <td class="text-center">
-                                <span class="fw-bold text-success">${formattedMoney} VNĐ</span>
+                                <span class="fw-bold text-success">${formattedMoney}</span>
                             </td>
                             <td class="text-center">
                                 ${business.standard_code ? `<span class="badge badge-light px-3 py-2">${business.standard_code}</span>` : '<span class="text-muted">--</span>'}
                             </td>
                             <td class="text-center">
                                 <div class="fw-bold text-warning">
-                                    ${formattedAgencyMoney} VNĐ
-                                    <small class="text-muted d-block">(${agencyFeePercent}%)</small>
+                                    ${formattedAgencyMoney}
                                 </div>
                             </td>
                             <td class="text-center">

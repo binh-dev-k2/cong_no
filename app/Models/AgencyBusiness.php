@@ -15,6 +15,7 @@ class AgencyBusiness extends Model
         'agency_id',
         'machine_id',
         'total_money',
+        'profit',
         'image_front',
         'image_summary',
         'standard_code',

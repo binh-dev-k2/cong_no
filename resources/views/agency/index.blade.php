@@ -5,26 +5,16 @@
 
 @section('header')
     <style>
-        .agency-accordion {
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
+        /* Minimal custom styles - using mostly utility classes */
+        .hover-lift {
+            transition: transform 0.2s ease;
         }
 
-        .agency-accordion:hover {
-            transform: translateY(-1px);
-        }
-
-        .cursor-pointer {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .cursor-pointer:hover {
+        .hover-lift:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
         }
 
-        .agency-accordion .accordion-header::before {
+        .gradient-border::before {
             content: '';
             position: absolute;
             left: 0;
@@ -32,116 +22,6 @@
             height: 100%;
             width: 3px;
             background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-        }
-
-        .agency-info {
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        .agency-name {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .agency-stats {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .stat-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1rem;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border: 1px solid;
-        }
-
-        .stat-badge:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .stat-badge i {
-            font-size: 1rem;
-        }
-
-        .stat-badge.fee-badge {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1565c0;
-            border-color: #90caf9;
-        }
-
-        .stat-badge.business-badge {
-            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
-            color: #2e7d32;
-            border-color: #81c784;
-        }
-
-        .stat-badge.machine-badge {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
-            color: #ef6c00;
-            border-color: #ffb74d;
-        }
-
-        .agency-header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .btn-edit-agency {
-            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-            border: none;
-            color: white;
-            padding: 0.6rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-left: 0.5rem;
-        }
-
-        .btn-edit-agency:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
-            color: white;
-            background: linear-gradient(135deg, #ffb300 0%, #ff8f00 100%);
-        }
-
-        .money-display {
-            font-weight: 600;
-            color: #1cc88a;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .agency-stats {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-            .agency-name {
-                font-size: 1.2rem;
-            }
-            .agency-header-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
         }
     </style>
 @endsection
@@ -174,7 +54,7 @@
             <!-- Statistics Cards -->
             <div class="row g-5 mb-8">
                 <div class="col-md-3">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm hover-lift">
                         <div class="card-body p-6">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -190,7 +70,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm hover-lift">
                         <div class="card-body p-6">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -206,7 +86,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm cursor-pointer" onclick="showCompletedBusinesses()">
+                    <div class="card shadow-sm hover-lift" style="cursor: pointer;" onclick="showCompletedBusinesses()">
                         <div class="card-body p-6">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -222,7 +102,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm cursor-pointer" onclick="showPendingBusinesses()">
+                    <div class="card shadow-sm hover-lift" style="cursor: pointer;" onclick="showPendingBusinesses()">
                         <div class="card-body p-6">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -255,17 +135,20 @@
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="mb-4">
-                                            <label for="agencyName" class="form-label fw-semibold">Tên đại lý</label>
+                                            <label for="agencyName" class="form-label fw-semibold required">Tên đại
+                                                lý</label>
                                             <input type="text" class="form-control form-control-lg" id="agencyName"
-                                                   placeholder="Nhập tên đại lý..." required>
+                                                placeholder="Nhập tên đại lý..." required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-4">
-                                            <label for="agencyFeePercent" class="form-label fw-semibold">% Phí</label>
+                                            <label for="agencyFeePercent" class="form-label fw-semibold required">%
+                                                Phí</label>
                                             <div class="input-group">
-                                                <input type="number" class="form-control form-control-lg" id="agencyFeePercent"
-                                                       placeholder="0.00" step="0.01" min="0" max="100" required>
+                                                <input type="number" class="form-control form-control-lg"
+                                                    id="agencyFeePercent" placeholder="0.00" step="0.01" min="0"
+                                                    max="100" required>
                                                 <span class="input-group-text">%</span>
                                             </div>
                                         </div>
@@ -274,15 +157,17 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="mb-4">
-                                            <label class="form-label fw-semibold">Chọn máy cho đại lý</label>
-                                            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;" id="machineSelector">
+                                            <label class="form-label fw-semibold required">Chọn máy cho đại lý</label>
+                                            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;"
+                                                id="machineSelector">
                                                 <div class="text-center text-muted">
                                                     <div class="spinner-border spinner-border-sm me-2"></div>
                                                     Đang tải danh sách máy...
                                                 </div>
                                             </div>
                                             <div class="form-text text-muted mt-2">
-                                                <span class="fw-bold text-primary" id="selectedMachineCount">Đã chọn: 0 máy</span>
+                                                <span class="fw-bold text-primary" id="selectedMachineCount">Đã chọn: 0
+                                                    máy</span>
                                             </div>
                                         </div>
                                     </div>
@@ -301,12 +186,14 @@
             </div>
 
             <!-- Agency Business Modal -->
-            <div class="modal fade" id="agencyBusinessModal" tabindex="-1" aria-labelledby="agencyBusinessModalLabel" aria-hidden="true">
+            <div class="modal fade" id="agencyBusinessModal" tabindex="-1" aria-labelledby="agencyBusinessModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="agencyBusinessModalLabel">Thêm nghiệp vụ mới</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="agencyBusinessForm">
@@ -314,7 +201,8 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-4">
-                                            <label for="businessMachineId" class="form-label fw-semibold">Máy</label>
+                                            <label for="businessMachineId"
+                                                class="form-label fw-semibold required">Máy</label>
                                             <select class="form-select form-select-lg" id="businessMachineId" required>
                                                 <option value="">Chọn máy...</option>
                                             </select>
@@ -322,69 +210,77 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-4">
-                                            <label for="businessTotalMoney" class="form-label fw-semibold">Tổng số tiền</label>
+                                            <label for="businessTotalMoney" class="form-label fw-semibold required">Tổng
+                                                số tiền</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control form-control-lg" id="businessTotalMoney"
-                                                       placeholder="0" required>
+                                                <input type="text" class="form-control form-control-lg"
+                                                    id="businessTotalMoney" placeholder="0" required>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
-                                            <div class="form-text text-muted">Nhập số tiền, hệ thống sẽ tự động format</div>
+                                            <div class="form-text text-muted">Nhập số tiền, hệ thống sẽ tự động format
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-4">
-                                            <label for="businessStandardCode" class="form-label fw-semibold">Mã chuẩn</label>
-                                            <input type="text" class="form-control form-control-lg" id="businessStandardCode"
-                                                   placeholder="Nhập mã chuẩn..." required>
+                                            <label for="businessStandardCode" class="form-label fw-semibold">
+                                                Mã chuẩn chi
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="businessStandardCode" placeholder="Nhập mã chuẩn chi...">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <!-- Empty column for balanced layout -->
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row image-upload-fields">
                                     <div class="col-md-6">
                                         <div class="mb-4">
-                                            <label for="businessImageFront" class="form-label fw-semibold">Ảnh mặt trước</label>
-                                            <input type="file" class="form-control form-control-lg" id="businessImageFront"
-                                                   accept="image/*">
+                                            <label for="businessImageFront" class="form-label fw-semibold">Ảnh mặt
+                                                trước</label>
+                                            <input type="file" class="form-control form-control-lg"
+                                                id="businessImageFront" accept="image/*">
                                             <div class="form-text text-muted">Chọn file ảnh (jpg, png, gif...)</div>
                                             <div id="currentImageFront" class="mt-2 d-none">
                                                 <small class="text-muted">Ảnh hiện tại:</small>
                                                 <div class="mt-1">
                                                     <img id="previewImageFront" src="" alt="Current front image"
-                                                         style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                                                        style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
                                                 </div>
                                             </div>
                                             <div id="newImageFrontPreview" class="mt-2 d-none">
                                                 <small class="text-muted">Ảnh vừa chọn:</small>
                                                 <div class="mt-1">
                                                     <img id="newPreviewImageFront" src="" alt="New front image"
-                                                         style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                                                        style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-4">
-                                            <label for="businessImageSummary" class="form-label fw-semibold">Ảnh tổng kết</label>
-                                            <input type="file" class="form-control form-control-lg" id="businessImageSummary"
-                                                   accept="image/*">
+                                            <label for="businessImageSummary" class="form-label fw-semibold">Ảnh tổng
+                                                kết</label>
+                                            <input type="file" class="form-control form-control-lg"
+                                                id="businessImageSummary" accept="image/*">
                                             <div class="form-text text-muted">Chọn file ảnh (jpg, png, gif...)</div>
                                             <div id="currentImageSummary" class="mt-2 d-none">
                                                 <small class="text-muted">Ảnh hiện tại:</small>
                                                 <div class="mt-1">
-                                                    <img id="previewImageSummary" src="" alt="Current summary image"
-                                                         style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                                                    <img id="previewImageSummary" src=""
+                                                        alt="Current summary image"
+                                                        style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
                                                 </div>
                                             </div>
                                             <div id="newImageSummaryPreview" class="mt-2 d-none">
                                                 <small class="text-muted">Ảnh vừa chọn:</small>
                                                 <div class="mt-1">
-                                                    <img id="newPreviewImageSummary" src="" alt="New summary image"
-                                                         style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
+                                                    <img id="newPreviewImageSummary" src=""
+                                                        alt="New summary image"
+                                                        style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">
                                                 </div>
                                             </div>
                                         </div>
@@ -418,6 +314,11 @@
             let currentView = 'agencies'; // 'agencies' or 'completed'
             let allCompletedBusinesses = [];
 
+            // Setup axios defaults with CSRF token
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
+            axios.defaults.headers.common['Accept'] = 'application/json';
+            axios.defaults.headers.common['Content-Type'] = 'application/json';
+
             // Initialize
             init();
 
@@ -431,21 +332,14 @@
                 showMainLoading(true);
 
                 try {
-                    const response = await fetch("/api/agency/list", {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                        },
-                    });
+                    const response = await axios.get("/api/agency/list");
 
-                    const data = await response.json();
-                    if (data.code === 0) {
-                        agencies = data.data;
+                    if (response.data.code === 0) {
+                        agencies = response.data.data;
                         renderAgencies();
                         updateStatistics();
                     } else {
-                        showError(data.data || 'Lỗi khi tải danh sách đại lý');
+                        showError(response.data.data || 'Lỗi khi tải danh sách đại lý');
                     }
                 } catch (error) {
                     console.error('Error loading agencies:', error);
@@ -458,26 +352,20 @@
             // Load statistics
             async function updateStatistics() {
                 try {
-                    const response = await fetch("/api/agency/statistics", {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                        },
-                    });
+                    const response = await axios.get("/api/agency/statistics");
 
-                    const data = await response.json();
-                    if (data.code === 0) {
-                        $('#totalAgencies').text(data.data.total_agencies);
-                        $('#totalBusinesses').text(data.data.total_businesses);
-                        $('#completedBusinesses').text(data.data.completed_businesses);
-                        $('#pendingBusinesses').text(data.data.pending_businesses);
+                    if (response.data.code === 0) {
+                        $('#totalAgencies').text(response.data.data.total_agencies);
+                        $('#totalBusinesses').text(response.data.data.total_businesses);
+                        $('#completedBusinesses').text(response.data.data.completed_businesses);
+                        $('#pendingBusinesses').text(response.data.data.pending_businesses);
                     }
                 } catch (error) {
                     console.error('Error loading statistics:', error);
                     // Fallback to basic count
                     const totalAgencies = agencies.length;
-                    const totalBusinesses = agencies.reduce((sum, agency) => sum + agency.agency_businesses_count, 0);
+                    const totalBusinesses = agencies.reduce((sum, agency) => sum + agency
+                        .agency_businesses_count, 0);
 
                     $('#totalAgencies').text(totalAgencies);
                     $('#totalBusinesses').text(totalBusinesses);
@@ -502,38 +390,37 @@
 
                 agencies.forEach((agency, index) => {
                     const accordionHtml = `
-                        <div class="accordion agency-accordion" id="agencyAccordion${agency.id}">
+                        <div class="accordion mb-4 hover-lift" id="agencyAccordion${agency.id}">
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading${agency.id}">
+                                <h2 class="accordion-header position-relative gradient-border" id="heading${agency.id}">
                                     <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapse${agency.id}"
                                             aria-expanded="false" aria-controls="collapse${agency.id}"
                                             data-agency-id="${agency.id}">
-                                        <div class="agency-header-content">
-                                            <div class="agency-info">
-                                                <div class="agency-name">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="flex-grow-1 min-width-0">
+                                                <div class="d-flex align-items-center mb-3 fs-5 fw-bold text-dark">
                                                     <i class="bi bi-building-fill me-2 text-primary"></i>
                                                     ${agency.name}
-                                                    <div class="btn btn-sm btn-edit-agency"
+                                                    <div class="btn btn-sm btn-warning rounded-pill ms-2 hover-lift"
                                                             onclick="editAgency(event, ${agency.id})" title="Sửa đại lý">
                                                         <i class="bi bi-pencil-square me-1"></i>
                                                         Sửa
                                                     </div>
                                                 </div>
-                                                <div class="agency-stats">
-                                                    <span class="stat-badge fee-badge">
+                                                <div class="d-flex gap-3 flex-wrap align-items-center">
+                                                    <span class="badge badge-light-primary d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
                                                         <i class="bi bi-percent"></i>
-                                                        Phí: <span class="fw-bold">${agency.fee_percent}%</span>
+                                                        Phí: ${agency.fee_percent}%
                                                     </span>
-                                                    <span class="stat-badge business-badge">
+                                                    <span class="badge badge-light-success d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
                                                         <i class="bi bi-briefcase-fill"></i>
-                                                        Nghiệp vụ: <span class="fw-bold">${agency.agency_businesses_count}</span>
+                                                        Nghiệp vụ: ${agency.agency_businesses_count}
                                                     </span>
-                                                    <span class="stat-badge machine-badge">
+                                                    <span class="badge badge-light-warning d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
                                                         <i class="bi bi-cpu-fill"></i>
-                                                        Máy: <span class="fw-bold">${agency.agency_machines ? agency.agency_machines.length : 0}</span>
+                                                        Máy: ${agency.agency_machines ? agency.agency_machines.length : 0}
                                                     </span>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -594,17 +481,10 @@
                 const container = $(`#businessTableContainer${agencyId}`);
 
                 try {
-                    const response = await fetch(`/api/agency/businesses?agency_id=${agencyId}`, {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                        },
-                    });
+                    const response = await axios.get(`/api/agency/businesses?agency_id=${agencyId}`);
 
-                    const data = await response.json();
-                    if (data.code === 0) {
-                        renderBusinessTable(agencyId, data.data);
+                    if (response.data.code === 0) {
+                        renderBusinessTable(agencyId, response.data.data);
                     } else {
                         container.html('<div class="alert alert-danger">Lỗi khi tải nghiệp vụ</div>');
                     }
@@ -637,7 +517,7 @@
                                     <th class="text-center">STT</th>
                                     <th class="text-center">Máy</th>
                                     <th class="text-center">Tổng tiền</th>
-                                    <th class="text-center">Mã chuẩn</th>
+                                    <th class="text-center">Mã chuẩn chi</th>
                                     <th class="text-center">Số tiền trả đại lý</th>
                                     <th class="text-center">Thao tác</th>
                                 </tr>
@@ -660,34 +540,39 @@
 
                     tableHtml += `
                         <tr>
-                            <td class="fw-bold">${index + 1}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
+                            <td class="text-center fw-bold">${index + 1}</td>
+                            <td class="text-center">
+                                <div class="d-flex align-items-center justify-content-center">
                                     <i class="bi bi-cpu me-2 text-primary"></i>
-                                    ${machineName}${machineFee}
+                                    <span class="fw-bold">${machineName}</span>
+                                    ${machineFee}
                                 </div>
                             </td>
-                            <td class="money-display text-success">${formattedMoney} VNĐ</td>
-                            <td>
-                                <code class="bg-light px-2 py-1 rounded">${business.standard_code}</code>
+                            <td class="text-center">
+                                <span class="fw-bold text-success">${formattedMoney} VNĐ</span>
                             </td>
-                            <td class="money-display text-warning">
-                                ${formattedAgencyMoney} VNĐ
-                                <small class="text-muted d-block">(${agencyFeePercent}%)</small>
+                            <td class="text-center">
+                                ${business.standard_code ? `<span class="badge badge-light px-3 py-2">${business.standard_code}</span>` : '<span class="text-muted">--</span>'}
+                            </td>
+                            <td class="text-center">
+                                <div class="fw-bold text-warning">
+                                    ${formattedAgencyMoney} VNĐ
+                                    <small class="text-muted d-block">(${agencyFeePercent}%)</small>
+                                </div>
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" style="z-index: 1000;"
+                                    <button type="button" class="btn btn-sm btn-outline-primary hover-lift"
                                             onclick="editAgencyBusiness(${business.id})" title="Sửa nghiệp vụ">
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
                                     ${!business.is_completed ? `
-                                        <button type="button" class="btn btn-sm btn-success"
-                                                onclick="completeAgencyBusiness(${business.id})" title="Đánh dấu hoàn thành">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    ` : ''}
-                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                <button type="button" class="btn btn-sm btn-success hover-lift"
+                                                        onclick="completeAgencyBusiness(${business.id})" title="Đánh dấu hoàn thành">
+                                                    <i class="bi bi-check-circle"></i>
+                                                </button>
+                                            ` : ''}
+                                    <button type="button" class="btn btn-sm btn-outline-danger hover-lift"
                                             onclick="deleteAgencyBusiness(${business.id})" title="Xóa nghiệp vụ">
                                         <i class="bi bi-trash3"></i>
                                     </button>
@@ -813,7 +698,8 @@
 
                 const button = $('#saveAgencyBtn');
                 const originalText = button.html();
-                button.html('<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...').prop('disabled', true);
+                button.html('<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...').prop(
+                    'disabled', true);
 
                 try {
                     let url, requestData;
@@ -835,31 +721,30 @@
                         };
                     }
 
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(requestData)
-                    });
+                    const response = await axios.post(url, requestData);
 
-                    const data = await response.json();
-
-                    if (data.code === 0) {
+                    if (response.data.code === 0) {
                         $('#agencyModal').modal('hide');
-                        showSuccess(data.data);
+                        showSuccess(response.data.data);
                         await loadAgencies();
                     } else {
-                        if (Array.isArray(data.data)) {
-                            showError(data.data.join(', '));
+                        if (Array.isArray(response.data.data)) {
+                            showError(response.data.data.join(', '));
                         } else {
-                            showError(data.data);
+                            showError(response.data.data);
                         }
                     }
                 } catch (error) {
                     console.error('Error saving agency:', error);
-                    showError('Lỗi khi lưu đại lý');
+                    if (error.response && error.response.data && error.response.data.data) {
+                        if (Array.isArray(error.response.data.data)) {
+                            showError(error.response.data.data.join(', '));
+                        } else {
+                            showError(error.response.data.data);
+                        }
+                    } else {
+                        showError('Lỗi khi lưu đại lý');
+                    }
                 } finally {
                     button.html(originalText).prop('disabled', false);
                 }
@@ -894,12 +779,20 @@
 
                 $('#businessAgencyId').val(agencyId);
 
+                // Show/hide image upload fields based on editing mode
+                const imageFields = $('.image-upload-fields');
+                if (isEditing) {
+                    imageFields.show();
+                } else {
+                    imageFields.hide();
+                }
+
                 if (businessData) {
                     $('#businessMachineId').val(businessData.machine_id);
                     // Format money value for display
                     const formattedMoney = businessData.total_money.toLocaleString('vi-VN');
                     $('#businessTotalMoney').val(formattedMoney);
-                    $('#businessStandardCode').val(businessData.standard_code);
+                    $('#businessStandardCode').val(businessData.standard_code || '');
 
                     // Reset file inputs (can't pre-fill file inputs for security reasons)
                     $('#businessImageFront').val('');
@@ -936,7 +829,9 @@
 
                 // Load machines for this specific agency, then set selected machine
                 populateAgencyMachineSelect(agencyId).then(() => {
-                    $('#businessMachineId').val(businessData.machine_id);
+                    if (businessData) {
+                        $('#businessMachineId').val(businessData.machine_id);
+                    }
                 });
 
                 $('#agencyBusinessModal').modal('show');
@@ -946,67 +841,90 @@
             async function saveAgencyBusiness() {
                 const totalMoneyFormatted = $('#businessTotalMoney').val().trim();
                 const totalMoney = getNumericValue(totalMoneyFormatted);
+                const standardCode = $('#businessStandardCode').val().trim();
 
-                if (!$('#businessMachineId').val() || !totalMoney || !$('#businessStandardCode').val().trim()) {
-                    showError('Vui lòng điền đầy đủ thông tin bắt buộc');
+                if (!$('#businessMachineId').val() || !totalMoney) {
+                    showError('Vui lòng điền đầy đủ thông tin bắt buộc (Máy và Tổng số tiền)');
                     return;
                 }
 
                 const button = $('#saveAgencyBusinessBtn');
                 const originalText = button.html();
-                button.html('<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...').prop('disabled', true);
+                button.html('<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...').prop(
+                    'disabled', true);
 
                 try {
-                    const formData = new FormData();
-                    formData.append('agency_id', $('#businessAgencyId').val());
-                    formData.append('machine_id', $('#businessMachineId').val());
-                    formData.append('total_money', totalMoney);
-                    formData.append('standard_code', $('#businessStandardCode').val().trim());
-
-                    // Handle file uploads
-                    const imageFront = $('#businessImageFront')[0].files[0];
-                    const imageSummary = $('#businessImageSummary')[0].files[0];
-
-                    if (imageFront) {
-                        formData.append('image_front', imageFront);
-                    }
-                    if (imageSummary) {
-                        formData.append('image_summary', imageSummary);
-                    }
-
-                    let url;
                     if (isEditing) {
-                        url = '/api/agency-business/update';
+                        // For editing, use FormData to handle file uploads
+                        const formData = new FormData();
                         formData.append('business_id', currentBusinessId);
-                    } else {
-                        url = '/api/agency-business/store';
-                    }
+                        formData.append('agency_id', $('#businessAgencyId').val());
+                        formData.append('machine_id', $('#businessMachineId').val());
+                        formData.append('total_money', totalMoney);
+                        formData.append('standard_code', standardCode);
 
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                        },
-                        body: formData
-                    });
+                        // Handle file uploads only in edit mode
+                        const imageFront = $('#businessImageFront')[0].files[0];
+                        const imageSummary = $('#businessImageSummary')[0].files[0];
 
-                    const data = await response.json();
+                        if (imageFront) {
+                            formData.append('image_front', imageFront);
+                        }
+                        if (imageSummary) {
+                            formData.append('image_summary', imageSummary);
+                        }
 
-                    if (data.code === 0) {
-                        $('#agencyBusinessModal').modal('hide');
-                        showSuccess(data.data);
-                        // Data will be refreshed when loadAgencies() is called
-                        await loadAgencies();
-                    } else {
-                        if (Array.isArray(data.data)) {
-                            showError(data.data.join(', '));
+                        const response = await axios.post('/api/agency-business/update', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+
+                        if (response.data.code === 0) {
+                            $('#agencyBusinessModal').modal('hide');
+                            showSuccess(response.data.data);
+                            await loadAgencies();
                         } else {
-                            showError(data.data);
+                            if (Array.isArray(response.data.data)) {
+                                showError(response.data.data.join(', '));
+                            } else {
+                                showError(response.data.data);
+                            }
+                        }
+                    } else {
+                        // For new business, use JSON (no file uploads)
+                        const requestData = {
+                            agency_id: $('#businessAgencyId').val(),
+                            machine_id: $('#businessMachineId').val(),
+                            total_money: totalMoney,
+                            standard_code: standardCode
+                        };
+
+                        const response = await axios.post('/api/agency-business/store', requestData);
+
+                        if (response.data.code === 0) {
+                            $('#agencyBusinessModal').modal('hide');
+                            showSuccess(response.data.data);
+                            await loadAgencies();
+                        } else {
+                            if (Array.isArray(response.data.data)) {
+                                showError(response.data.data.join(', '));
+                            } else {
+                                showError(response.data.data);
+                            }
                         }
                     }
                 } catch (error) {
                     console.error('Error saving business:', error);
-                    showError('Lỗi khi lưu nghiệp vụ');
+                    if (error.response && error.response.data && error.response.data.data) {
+                        if (Array.isArray(error.response.data.data)) {
+                            showError(error.response.data.data.join(', '));
+                        } else {
+                            showError(error.response.data.data);
+                        }
+                    } else {
+                        showError('Lỗi khi lưu nghiệp vụ');
+                    }
                 } finally {
                     button.html(originalText).prop('disabled', false);
                 }
@@ -1027,22 +945,15 @@
                     }
 
                     // Fetch business details
-                    const response = await fetch(`/api/agency/business-details?business_id=${businessId}`, {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                        },
-                    });
+                    const response = await axios.get(
+                        `/api/agency/business-details?business_id=${businessId}`);
 
-                    const data = await response.json();
-
-                    if (data.code === 0) {
-                        const business = data.data;
+                    if (response.data.code === 0) {
+                        const business = response.data.data;
                         // Open modal with business data
                         openAgencyBusinessModal(business.agency_id, business);
                     } else {
-                        showError(data.data || 'Lỗi khi tải thông tin nghiệp vụ');
+                        showError(response.data.data || 'Lỗi khi tải thông tin nghiệp vụ');
                     }
                 } catch (error) {
                     console.error('Error editing business:', error);
@@ -1074,31 +985,35 @@
 
                 if (result.isConfirmed) {
                     try {
-                        const response = await fetch('/api/agency-business/complete', {
-                            method: 'POST',
+                        const response = await axios.post('/api/agency-business/complete', {
+                            business_id: businessId
+                        }, {
                             headers: {
                                 'X-CSRF-TOKEN': token,
                                 'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ business_id: businessId })
+                                'Accept': 'application/json'
+                            }
                         });
 
-                        const data = await response.json();
-
-                        if (data.code === 0) {
-                            showSuccess(data.data);
-                            // Data will be refreshed when loadAgencies() is called
+                        if (response.data.code === 0) {
+                            showSuccess(response.data.data);
                             await loadAgencies();
                         } else {
-                            if (Array.isArray(data.data)) {
-                                showError(data.data.join(', '));
+                            if (Array.isArray(response.data.data)) {
+                                showError(response.data.data.join(', '));
                             } else {
-                                showError(data.data);
+                                showError(response.data.data);
                             }
                         }
                     } catch (error) {
                         console.error('Error completing business:', error);
-                        showError('Lỗi khi đánh dấu hoàn thành nghiệp vụ');
+                        if (error.response && error.response.data && error.response.data.message) {
+                            showError(error.response.data.message);
+                        } else if (error.response && error.response.data && error.response.data.data) {
+                            showError(error.response.data.data);
+                        } else {
+                            showError('Lỗi khi đánh dấu hoàn thành nghiệp vụ');
+                        }
                     }
                 }
             };
@@ -1121,31 +1036,35 @@
 
                 if (result.isConfirmed) {
                     try {
-                        const response = await fetch('/api/agency-business/delete', {
-                            method: 'POST',
+                        const response = await axios.post('/api/agency-business/delete', {
+                            business_id: businessId
+                        }, {
                             headers: {
                                 'X-CSRF-TOKEN': token,
                                 'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ business_id: businessId })
+                                'Accept': 'application/json'
+                            }
                         });
 
-                        const data = await response.json();
-
-                        if (data.code === 0) {
-                            showSuccess(data.data);
-                            // Data will be refreshed when loadAgencies() is called
+                        if (response.data.code === 0) {
+                            showSuccess(response.data.data);
                             await loadAgencies();
                         } else {
-                            if (Array.isArray(data.data)) {
-                                showError(data.data.join(', '));
+                            if (Array.isArray(response.data.data)) {
+                                showError(response.data.data.join(', '));
                             } else {
-                                showError(data.data);
+                                showError(response.data.data);
                             }
                         }
                     } catch (error) {
                         console.error('Error deleting business:', error);
-                        showError('Lỗi khi xóa nghiệp vụ');
+                        if (error.response && error.response.data && error.response.data.message) {
+                            showError(error.response.data.message);
+                        } else if (error.response && error.response.data && error.response.data.data) {
+                            showError(error.response.data.data);
+                        } else {
+                            showError('Lỗi khi xóa nghiệp vụ');
+                        }
                     }
                 }
             };
@@ -1250,36 +1169,31 @@
                 const select = $('#businessMachineId');
                 select.empty().append('<option value="">Đang tải máy...</option>');
 
-                return fetch(`/api/agency/machines-for-agency?agency_id=${agencyId}`, {
-                    method: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': token,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    select.empty().append('<option value="">Chọn máy...</option>');
+                return axios.get(`/api/agency/machines-for-agency?agency_id=${agencyId}`)
+                    .then(response => {
+                        select.empty().append('<option value="">Chọn máy...</option>');
 
-                    if (data.code === 0) {
-                        if (data.data.length === 0) {
-                            select.append('<option value="" disabled>Đại lý chưa có máy nào</option>');
+                        if (response.data.code === 0) {
+                            if (response.data.data.length === 0) {
+                                select.append('<option value="" disabled>Đại lý chưa có máy nào</option>');
+                            } else {
+                                response.data.data.forEach(machine => {
+                                    const feeText = machine.fee ? ` (${machine.fee}%)` : '';
+                                    select.append(
+                                        `<option value="${machine.id}">${machine.name}${feeText}</option>`
+                                    );
+                                });
+                            }
                         } else {
-                            data.data.forEach(machine => {
-                                const feeText = machine.fee ? ` (${machine.fee}%)` : '';
-                                select.append(`<option value="${machine.id}">${machine.name}${feeText}</option>`);
-                            });
+                            select.append('<option value="" disabled>Lỗi khi tải máy</option>');
                         }
-                    } else {
-                        select.append('<option value="" disabled>Lỗi khi tải máy</option>');
-                    }
-                    return true; // Return success
-                })
-                .catch(error => {
-                    console.error('Error loading agency machines:', error);
-                    select.empty().append('<option value="" disabled>Lỗi kết nối</option>');
-                    return false; // Return error
-                });
+                        return true; // Return success
+                    })
+                    .catch(error => {
+                        console.error('Error loading agency machines:', error);
+                        select.empty().append('<option value="" disabled>Lỗi kết nối</option>');
+                        return false; // Return error
+                    });
             }
 
             // Populate agency machines select dropdown for agency modal (select multiple)
@@ -1287,28 +1201,24 @@
                 const container = $('#machineSelector');
 
                 // Show loading state
-                container.html('<div class="text-center text-muted"><div class="spinner-border spinner-border-sm me-2"></div>Đang tải danh sách máy...</div>');
+                container.html(
+                    '<div class="text-center text-muted"><div class="spinner-border spinner-border-sm me-2"></div>Đang tải danh sách máy...</div>'
+                );
 
                 try {
-                    const response = await fetch("/api/agency/machines", {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    const data = await response.json();
+                    const response = await axios.get("/api/agency/machines");
                     container.empty();
 
-                    if (data.code === 0) {
-                        machines = data.data; // Update global machines variable
+                    if (response.data.code === 0) {
+                        machines = response.data.data; // Update global machines variable
 
                         if (machines.length === 0) {
-                            container.html('<div class="text-center text-muted">Chưa có máy nào trong hệ thống</div>');
+                            container.html(
+                                '<div class="text-center text-muted">Chưa có máy nào trong hệ thống</div>');
                         } else {
                             machines.forEach(machine => {
-                                const feeDisplay = machine.fee ? ` <span class="text-muted">(${machine.fee}%)</span>` : '';
+                                const feeDisplay = machine.fee ?
+                                    ` <span class="text-muted">(${machine.fee}%)</span>` : '';
                                 container.append(`
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" value="${machine.id}" id="machine${machine.id}">
@@ -1333,7 +1243,8 @@
 
                 } catch (error) {
                     console.error('Error loading machines:', error);
-                    container.html('<div class="text-center text-muted">Lỗi kết nối khi tải danh sách máy</div>');
+                    container.html(
+                        '<div class="text-center text-muted">Lỗi kết nối khi tải danh sách máy</div>');
                 }
             }
 
@@ -1399,8 +1310,6 @@
 
             // Initialize DataTable when component is shown
             window.initCompletedBusinessesTable = function() {
-                console.log('Initializing completed businesses DataTable...');
-
                 if (completedBusinessesTable) {
                     completedBusinessesTable.destroy();
                 }
@@ -1408,11 +1317,12 @@
                 completedBusinessesTable = $('#completedBusinessesTable').DataTable({
                     processing: true,
                     serverSide: true,
+                    ordering: false,
                     ajax: {
                         url: '/api/agency/completed-businesses-datatable',
                         type: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': token
+                            'X-CSRF-TOKEN': token,
                         },
                         data: function(d) {
                             d.agency_id = $('#agencyFilterSelect').val();
@@ -1421,10 +1331,9 @@
                         },
                         error: function(xhr, error, code) {
                             console.error('DataTable AJAX Error:', error, code, xhr.responseText);
-                        }
+                        },
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: null,
                             name: 'stt',
                             orderable: false,
@@ -1439,13 +1348,7 @@
                             name: 'agency.name',
                             render: function(data, type, row) {
                                 return `
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-building me-2 text-primary"></i>
-                                        <div>
-                                            <div class="fw-semibold">${data.name}</div>
-                                            <small class="text-muted">${data.fee_percent}% fee</small>
-                                        </div>
-                                    </div>
+                                    <div class="fw-bold text-primary text-center">${data.name}</div>
                                 `;
                             }
                         },
@@ -1453,12 +1356,10 @@
                             data: 'machine',
                             name: 'machine.name',
                             render: function(data, type, row) {
-                                const machineFee = data && data.fee ? ` <small class="text-muted">(${data.fee}%)</small>` : '';
                                 const machineName = data ? data.name : 'N/A';
                                 return `
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-cpu me-2 text-primary"></i>
-                                        ${machineName}${machineFee}
+                                    <div class="text-center">
+                                        ${machineName}
                                     </div>
                                 `;
                             }
@@ -1468,82 +1369,86 @@
                             name: 'total_money',
                             render: function(data, type, row) {
                                 const formatted = new Intl.NumberFormat('vi-VN').format(data);
-                                return `<span class="money-display text-success">${formatted} VNĐ</span>`;
+                                return `<span class="fw-bold text-success">${formatted}</span>`;
                             },
-                            className: 'text-end'
+                            className: 'text-center'
                         },
                         {
                             data: 'standard_code',
                             name: 'standard_code',
                             render: function(data, type, row) {
-                                return `<code class="bg-light px-2 py-1 rounded">${data}</code>`;
+                                return `<code class="bg-light px-2 py-1 rounded">${data ? data : 'N/A'}</code>`;
                             },
                             className: 'text-center'
                         },
                         {
-                            data: null,
-                            name: 'agency_money',
-                            orderable: false,
+                            data: 'image_front',
+                            name: 'image_front',
+                            render: function(data, type, row) {
+                                if (!data) return 'N/A';
+                                const url = window.location.origin + '/storage/' + data;
+                                return `
+                                    <div class="text-center">
+                                        <img src="${url}"
+                                            alt="Ảnh trước"
+                                            class="img-fluid rounded"
+                                            style="width: 100px; height: 100px; object-fit: cover;"
+                                            onerror="this.onerror=null; this.src='/images/no-image.png';">
+                                    </div>`;
+                            },
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'image_summary',
+                            name: 'image_summary',
+                            render: function(data, type, row) {
+                                const url = window.location.origin + '/storage/' + data;
+                                return `<img src="${url}" alt="Ảnh trước" class="img-fluid" style="width: 100px; height: 100px;">`;
+                            },
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'profit',
+                            name: 'profit',
                             searchable: false,
                             render: function(data, type, row) {
-                                const agencyMoney = Math.round(row.total_money * row.agency.fee_percent / 100);
-                                const formatted = new Intl.NumberFormat('vi-VN').format(agencyMoney);
+                                const formatted = new Intl.NumberFormat('vi-VN').format(data);
                                 return `
-                                    <div class="money-display text-warning">
-                                        ${formatted} VNĐ
-                                        <small class="text-muted d-block">(${row.agency.fee_percent}%)</small>
+                                    <div class="fw-bold text-warning text-center">
+                                        ${formatted}
                                     </div>
                                 `;
                             },
-                            className: 'text-end'
                         },
                         {
                             data: 'updated_at',
                             name: 'updated_at',
+                            orderable: false,
                             render: function(data, type, row) {
                                 return new Date(data).toLocaleDateString('vi-VN');
-                            },
-                            className: 'text-center text-muted'
-                        },
-                        {
-                            data: null,
-                            name: 'actions',
-                            orderable: false,
-                            searchable: false,
-                            render: function(data, type, row) {
-                                return `
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary"
-                                                onclick="viewBusinessDetails(${row.id})" title="Xem chi tiết">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-info"
-                                                onclick="editAgencyBusiness(${row.id})" title="Sửa nghiệp vụ">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                    </div>
-                                `;
                             },
                             className: 'text-center'
                         }
                     ],
-                    order: [[6, 'desc']], // Sort by completion date desc
+                    order: [
+                        [6, 'desc']
+                    ], // Sort by completion date desc
                     pageLength: 25,
-                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-                    language: {
-                        url: '/assets/plugins/custom/datatables/i18n/vi.json'
-                    },
+                    lengthMenu: [
+                        [10, 25, 50, 100],
+                        [10, 25, 50, 100]
+                    ],
                     dom: '<"row"<"col-sm-6 d-flex align-items-center justify-content-start"l><"col-sm-6 d-flex align-items-center justify-content-end"f>>' +
-                         '<"table-responsive"t>' +
-                         '<"row"<"col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end"p>>',
+                        '<"table-responsive"t>' +
+                        '<"row"<"col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"i><"col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end"p>>',
                     drawCallback: function(settings) {
                         // Custom styling after table draw
-                        $('#completedBusinessesTable_wrapper .dataTables_filter input').addClass('form-control');
-                        $('#completedBusinessesTable_wrapper .dataTables_length select').addClass('form-select');
+                        $('#completedBusinessesTable_wrapper .dataTables_filter input').addClass(
+                            'form-control');
+                        $('#completedBusinessesTable_wrapper .dataTables_length select').addClass(
+                            'form-select');
                     }
                 });
-
-                console.log('DataTable initialized successfully');
 
                 // Load agency filter options
                 loadAgencyFilterOptions();
@@ -1554,43 +1459,34 @@
 
             // Load agency options for filter
             function loadAgencyFilterOptions() {
-                console.log('Loading agency filter options...');
-                fetch('/api/agency/list', {
-                    headers: {
-                        'X-CSRF-TOKEN': token
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 0) {
-                        const select = $('#agencyFilterSelect');
-                        select.empty().append('<option value="">Tất cả đại lý</option>');
+                axios.get('/api/agency/list')
+                    .then(response => {
+                        if (response.data.code === 0) {
+                            const select = $('#agencyFilterSelect');
+                            select.empty().append('<option value="">Tất cả đại lý</option>');
 
-                        data.data.forEach(agency => {
-                            select.append(`<option value="${agency.id}">${agency.name}</option>`);
-                        });
-                        console.log('Agency filter options loaded successfully');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading agencies for filter:', error);
-                });
+                            response.data.data.forEach(agency => {
+                                select.append(`<option value="${agency.id}">${agency.name}</option>`);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading agencies for filter:', error);
+                    });
             }
 
             // Bind events for completed business filters
             function bindCompletedBusinessEvents() {
-                console.log('Binding completed business filter events...');
-
                 // Remove existing handlers to prevent duplicates
                 $('#agencyFilterSelect, #dateFromFilter, #dateToFilter').off('change.completedBusinesses');
 
                 // Bind new handlers
-                $('#agencyFilterSelect, #dateFromFilter, #dateToFilter').on('change.completedBusinesses', function() {
-                    console.log('Filter changed, reloading DataTable...');
-                    if (completedBusinessesTable) {
-                        completedBusinessesTable.ajax.reload();
-                    }
-                });
+                $('#agencyFilterSelect, #dateFromFilter, #dateToFilter').on('change.completedBusinesses',
+                    function() {
+                        if (completedBusinessesTable) {
+                            completedBusinessesTable.ajax.reload();
+                        }
+                    });
             }
         });
     </script>

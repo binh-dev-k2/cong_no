@@ -32,9 +32,7 @@ class AgencyBusinessRequest extends FormRequest
                     'agency_id' => 'required|exists:agencies,id',
                     'machine_id' => 'required|exists:machines,id',
                     'total_money' => 'required|numeric|min:0',
-                    'image_front' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                    'image_summary' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                    'standard_code' => 'required|string|max:255',
+                    'standard_code' => 'nullable|string|max:255',
                 ];
 
             case 'updateAgencyBusiness':
@@ -44,10 +42,15 @@ class AgencyBusinessRequest extends FormRequest
                     'total_money' => 'required|numeric|min:0',
                     'image_front' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                     'image_summary' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                    'standard_code' => 'required|string|max:255',
+                    'standard_code' => 'nullable|string|max:255',
                 ];
 
             case 'destroyAgencyBusiness':
+                return [
+                    'business_id' => 'required|exists:agency_businessess,id'
+                ];
+
+            case 'completeAgencyBusiness':
                 return [
                     'business_id' => 'required|exists:agency_businessess,id'
                 ];
@@ -59,28 +62,28 @@ class AgencyBusinessRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
+     *
+     * @return array
      */
-    public function messages(): array
+    public function messages()
     {
         return [
-            'agency_id.required' => 'Bạn vui lòng chọn đại lý cho nghiệp vụ này nhé!',
-            'agency_id.exists' => 'Đại lý này không tồn tại trong hệ thống của chúng tôi.',
-            'machine_id.required' => 'Bạn vui lòng chọn máy cho nghiệp vụ này nhé!',
-            'machine_id.exists' => 'Máy này không tồn tại trong hệ thống của chúng tôi.',
-            'total_money.required' => 'Bạn vui lòng nhập tổng số tiền cho nghiệp vụ.',
-            'total_money.numeric' => 'Tổng số tiền phải là số nhé!',
-            'total_money.min' => 'Tổng số tiền không được nhỏ hơn 0.',
-            'standard_code.required' => 'Bạn vui lòng nhập mã chuẩn cho nghiệp vụ.',
-            'standard_code.string' => 'Mã chuẩn phải là chuỗi ký tự.',
-            'standard_code.max' => 'Mã chuẩn không được vượt quá 255 ký tự.',
-            'image_front.image' => 'Ảnh mặt trước phải là hình ảnh.',
-            'image_front.mimes' => 'Ảnh mặt trước chỉ được phép là các định dạng: jpeg, png, jpg, gif.',
-            'image_front.max' => 'Ảnh mặt trước không được vượt quá 2MB.',
-            'image_summary.image' => 'Ảnh tóm tắt phải là hình ảnh.',
-            'image_summary.mimes' => 'Ảnh tóm tắt chỉ được phép là các định dạng: jpeg, png, jpg, gif.',
-            'image_summary.max' => 'Ảnh tóm tắt không được vượt quá 2MB.',
-            'business_id.required' => 'ID nghiệp vụ là bắt buộc, bạn vui lòng nhập nhé!',
-            'business_id.exists' => 'Nghiệp vụ này không tồn tại trong hệ thống của chúng tôi.',
+            'agency_id.required' => 'Vui lòng chọn đại lý',
+            'agency_id.exists' => 'Đại lý không tồn tại',
+            'machine_id.required' => 'Vui lòng chọn máy',
+            'machine_id.exists' => 'Máy không tồn tại',
+            'total_money.required' => 'Vui lòng nhập tổng số tiền',
+            'total_money.numeric' => 'Tổng số tiền phải là số',
+            'total_money.min' => 'Tổng số tiền phải lớn hơn 0',
+            'image_front.image' => 'Ảnh mặt trước phải là file hình ảnh',
+            'image_front.mimes' => 'Ảnh mặt trước phải có định dạng: jpeg, png, jpg, gif',
+            'image_front.max' => 'Ảnh mặt trước không được vượt quá 2MB',
+            'image_summary.image' => 'Ảnh tổng kết phải là file hình ảnh',
+            'image_summary.mimes' => 'Ảnh tổng kết phải có định dạng: jpeg, png, jpg, gif',
+            'image_summary.max' => 'Ảnh tổng kết không được vượt quá 2MB',
+            'standard_code.max' => 'Mã chuẩn chi không được vượt quá 255 ký tự',
+            'business_id.required' => 'ID nghiệp vụ là bắt buộc',
+            'business_id.exists' => 'Nghiệp vụ không tồn tại',
         ];
     }
 
@@ -113,9 +116,21 @@ class AgencyBusinessRequest extends FormRequest
         }
     }
 
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     */
     protected function failedValidation(Validator $validator)
     {
-        $errors = $validator->errors()->all();
-        throw new HttpResponseException(jsonResponse(1, $errors));
+        throw new HttpResponseException(
+            response()->json([
+                'code' => 1,
+                'data' => $validator->errors()->all()
+            ], 422)
+        );
     }
 }

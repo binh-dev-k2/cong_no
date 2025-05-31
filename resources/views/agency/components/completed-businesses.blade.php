@@ -1,7 +1,8 @@
 <!-- Completed Businesses Component -->
 <div class="card shadow-sm d-none" id="completedBusinessComponent">
     <div class="card-header bg-light-success">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+        <div
+            class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
             <div class="flex-grow-1">
                 <h3 class="card-title text-success fw-bold fs-3 mb-0">
                     <i class="bi bi-check-circle me-2"></i>
@@ -47,9 +48,10 @@
                         <th class="text-center">Máy</th>
                         <th class="text-center">Tổng tiền</th>
                         <th class="text-center">Mã chuẩn</th>
+                        <th class="text-center">Ảnh mặt trước</th>
+                        <th class="text-center">Ảnh tổng quan</th>
                         <th class="text-center">Số tiền trả đại lý</th>
                         <th class="text-center">Ngày hoàn thành</th>
-                        <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>

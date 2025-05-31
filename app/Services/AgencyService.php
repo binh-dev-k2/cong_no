@@ -147,26 +147,14 @@ class AgencyService
     public function createAgencyBusiness(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // Handle file uploads
-            $imageFrontPath = null;
-            $imageSummaryPath = null;
-
-            if (isset($data['image_front']) && $data['image_front']) {
-                $imageFrontPath = $data['image_front']->store('agency_business/front', 'public');
-            }
-
-            if (isset($data['image_summary']) && $data['image_summary']) {
-                $imageSummaryPath = $data['image_summary']->store('agency_business/summary', 'public');
-            }
-
             $business = AgencyBusiness::create([
                 'agency_id' => $data['agency_id'],
                 'machine_id' => $data['machine_id'],
                 'total_money' => $data['total_money'],
-                'image_front' => $imageFrontPath,
-                'image_summary' => $imageSummaryPath,
-                'standard_code' => $data['standard_code'],
-                'is_completed' => false
+                'standard_code' => $data['standard_code'] ?? null,
+                'is_completed' => false,
+                'image_front' => null,
+                'image_summary' => null
             ]);
 
             $business->load(['machine', 'agency']);
@@ -182,11 +170,11 @@ class AgencyService
         return DB::transaction(function () use ($id, $data) {
             $business = AgencyBusiness::findOrFail($id);
 
-            // Handle file uploads
+            // Prepare update data
             $updateData = [
                 'machine_id' => $data['machine_id'],
                 'total_money' => $data['total_money'],
-                'standard_code' => $data['standard_code'],
+                'standard_code' => $data['standard_code'] ?? null,
                 'is_completed' => $data['is_completed'] ?? $business->is_completed
             ];
 
@@ -196,7 +184,8 @@ class AgencyService
                 if ($business->image_front && Storage::disk('public')->exists($business->image_front)) {
                     Storage::disk('public')->delete($business->image_front);
                 }
-                $updateData['image_front'] = $data['image_front']->store('agency_business/front', 'public');
+                $fileName = 'front_' . time() . '_' . $data['image_front']->getClientOriginalName();
+                $updateData['image_front'] = $data['image_front']->storeAs('agency_business', $fileName, 'public');
             }
 
             // Handle summary image upload
@@ -205,7 +194,8 @@ class AgencyService
                 if ($business->image_summary && Storage::disk('public')->exists($business->image_summary)) {
                     Storage::disk('public')->delete($business->image_summary);
                 }
-                $updateData['image_summary'] = $data['image_summary']->store('agency_business/summary', 'public');
+                $fileName = 'summary_' . time() . '_' . $data['image_summary']->getClientOriginalName();
+                $updateData['image_summary'] = $data['image_summary']->storeAs('agency_business', $fileName, 'public');
             }
 
             $business->update($updateData);
@@ -239,7 +229,10 @@ class AgencyService
                 throw new \InvalidArgumentException('Nghiệp vụ này đã được hoàn thành rồi');
             }
 
-            $business->update(['is_completed' => true]);
+            $agency = $business->agency;
+            $profit = $business->total_money - ($business->total_money * $agency->fee_percent / 100);
+
+            $business->update(['is_completed' => true, 'profit' => $profit]);
             return true;
         });
     }
@@ -393,8 +386,8 @@ class AgencyService
 
         // Apply ordering
         if ($request->filled('order')) {
-            $orderColumn = $request->input('order.0.column');
-            $orderDir = $request->input('order.0.dir');
+            $orderColumn = 'updated_at';
+            $orderDir = 'desc';
 
             $columns = [
                 0 => 'id', // STT

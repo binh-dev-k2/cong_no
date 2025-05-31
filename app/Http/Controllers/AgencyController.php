@@ -154,6 +154,15 @@ class AgencyController extends Controller
     {
         try {
             $data = $request->validated();
+
+            // Include file uploads if present
+            if ($request->hasFile('image_front')) {
+                $data['image_front'] = $request->file('image_front');
+            }
+            if ($request->hasFile('image_summary')) {
+                $data['image_summary'] = $request->file('image_summary');
+            }
+
             $result = $this->agencyService->updateAgencyBusiness($data['business_id'], $data);
             return jsonResponse($result ? 0 : 1, $result ? 'Cập nhật nghiệp vụ thành công' : 'Cập nhật nghiệp vụ thất bại');
         } catch (\Exception $e) {
@@ -178,16 +187,14 @@ class AgencyController extends Controller
     /**
      * Complete an agency business.
      */
-    public function completeAgencyBusiness(Request $request)
+    public function completeAgencyBusiness(AgencyBusinessRequest $request)
     {
         try {
-            $businessId = $request->input('business_id');
-            if (!$businessId) {
-                return jsonResponse(1, 'ID nghiệp vụ là bắt buộc');
-            }
-
-            $result = $this->agencyService->completeAgencyBusiness($businessId);
+            $data = $request->validated();
+            $result = $this->agencyService->completeAgencyBusiness($data['business_id']);
             return jsonResponse($result ? 0 : 1, $result ? 'Đánh dấu hoàn thành nghiệp vụ thành công' : 'Đánh dấu hoàn thành nghiệp vụ thất bại');
+        } catch (\InvalidArgumentException $e) {
+            return jsonResponse(1, $e->getMessage());
         } catch (\Exception $e) {
             return jsonResponse(1, 'Lỗi khi đánh dấu hoàn thành nghiệp vụ: ' . $e->getMessage());
         }

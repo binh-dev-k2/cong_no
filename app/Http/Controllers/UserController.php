@@ -48,6 +48,12 @@ class UserController extends Controller
         return $this->userService()->filterDatatable($request->all());
     }
 
+    public function getAll()
+    {
+        $result = $this->userService()->getAll();
+        return jsonResponse(0, $result);
+    }
+
     public function delete(UserRequest $request)
     {
         $data = $request->validated();

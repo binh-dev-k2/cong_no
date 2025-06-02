@@ -13,12 +13,17 @@ class Agency extends Model
 
     protected $fillable = [
         'name',
-        'fee_percent'
+        'fee_percent',
+        'machine_fee_percent',
+        'owner_id'
     ];
 
     protected $casts = [
-        'fee_percent' => 'float'
+        'fee_percent' => 'float',
+        'machine_fee_percent' => 'float'
     ];
+
+    protected $with = ['users'];
 
     /**
      * Get the agency businesses for the agency.
@@ -42,5 +47,15 @@ class Agency extends Model
     public function machines()
     {
         return $this->belongsToMany(Machine::class, 'agency_machines');
+    }
+
+    public function agencyUsers()
+    {
+        return $this->hasMany(AgencyUser::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'agency_users');
     }
 }

@@ -44,4 +44,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function agencyUsers()
+    {
+        return $this->hasMany(AgencyUser::class);
+    }
+
+    public function agencies()
+    {
+        return $this->belongsToMany(Agency::class, 'agency_users');
+    }
 }

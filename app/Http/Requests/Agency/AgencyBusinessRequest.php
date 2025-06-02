@@ -37,6 +37,7 @@ class AgencyBusinessRequest extends FormRequest
 
             case 'updateAgencyBusiness':
                 return [
+                    'agency_id' => 'required|exists:agencies,id',
                     'business_id' => 'required|exists:agency_businessess,id',
                     'machine_id' => 'required|exists:machines,id',
                     'total_money' => 'required|numeric|min:0',

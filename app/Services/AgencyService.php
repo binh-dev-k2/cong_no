@@ -11,34 +11,15 @@ use Illuminate\Support\Facades\Storage;
 class AgencyService
 {
     /**
-     * Get all agencies with business count and statistics.
-     */
-    public function getInCompleteAgencies()
-    {
-        return Agency::query()
-            ->withCount(['agencyBusinesses' => function ($query) {
-                $query->where('is_completed', false);
-            }])
-            ->with([
-                'agencyMachines.machine',
-                'agencyBusinesses' => function ($query) {
-                    $query->where('is_completed', false)
-                        ->with('machine');
-                }
-            ])
-            ->orderBy('created_at', 'desc')
-            ->get();
-    }
-
-    /**
      * Get agency statistics for dashboard.
      */
     public function getAgencyStatistics()
     {
-        $totalAgencies = Agency::count();
-        $totalBusinesses = AgencyBusiness::count();
-        $completedBusinesses = AgencyBusiness::where('is_completed', true)->count();
-        $pendingBusinesses = AgencyBusiness::where('is_completed', false)->count();
+        $agencyQuery = Agency::where('owner_id', auth()->user()->id);
+        $totalAgencies = $agencyQuery->count();
+        $totalBusinesses = AgencyBusiness::whereIn('agency_id', $agencyQuery->pluck('id'))->count();
+        $completedBusinesses = AgencyBusiness::whereIn('agency_id', $agencyQuery->pluck('id'))->where('is_completed', true)->count();
+        $pendingBusinesses = AgencyBusiness::whereIn('agency_id', $agencyQuery->pluck('id'))->where('is_completed', false)->count();
 
         return [
             'total_agencies' => $totalAgencies,
@@ -56,16 +37,18 @@ class AgencyService
         return DB::transaction(function () use ($data) {
             $agency = Agency::create([
                 'name' => $data['name'],
-                'fee_percent' => $data['fee_percent']
+                'fee_percent' => $data['fee_percent'],
+                'machine_fee_percent' => $data['machine_fee_percent'],
+                'owner_id' => auth()->user()->id
             ]);
 
             // Attach machines if provided
             if (!empty($data['machines'])) {
-                $agency->agencyMachines()->createMany(
-                    collect($data['machines'])->map(function ($machineId) {
-                        return ['machine_id' => $machineId];
-                    })->toArray()
-                );
+                $agency->machines()->attach($data['machines']);
+            }
+
+            if (!empty($data['users'])) {
+                $agency->users()->attach($data['users']);
             }
 
             return $agency;
@@ -81,23 +64,15 @@ class AgencyService
             $agency = Agency::findOrFail($id);
             $agency->update([
                 'name' => $data['name'],
-                'fee_percent' => $data['fee_percent']
+                'fee_percent' => $data['fee_percent'],
+                'machine_fee_percent' => $data['machine_fee_percent']
             ]);
 
             // Sync machines
-            if (isset($data['machines'])) {
-                // Delete existing machine relationships
-                $agency->agencyMachines()->delete();
+            $agency->machines()->sync($data['machines'] ?? []);
 
-                // Create new relationships
-                if (!empty($data['machines'])) {
-                    $agency->agencyMachines()->createMany(
-                        collect($data['machines'])->map(function ($machineId) {
-                            return ['machine_id' => $machineId];
-                        })->toArray()
-                    );
-                }
-            }
+            // Sync users
+            $agency->users()->sync($data['users'] ?? []);
 
             return $agency;
         });
@@ -398,6 +373,196 @@ class AgencyService
                 5 => 'total_money', // Agency money (calculated)
                 6 => 'updated_at',
                 7 => 'id' // Actions
+            ];
+
+            if (isset($columns[$orderColumn])) {
+                if ($columns[$orderColumn] == 'agency.name') {
+                    $query->join('agencies', 'agency_businessess.agency_id', '=', 'agencies.id')
+                        ->orderBy('agencies.name', $orderDir)
+                        ->select('agency_businessess.*');
+                } elseif ($columns[$orderColumn] == 'machine.name') {
+                    $query->join('machines', 'agency_businessess.machine_id', '=', 'machines.id')
+                        ->orderBy('machines.name', $orderDir)
+                        ->select('agency_businessess.*');
+                } else {
+                    $query->orderBy($columns[$orderColumn], $orderDir);
+                }
+            }
+        } else {
+            $query->orderBy('updated_at', 'desc');
+        }
+
+        // Apply pagination
+        if ($request->filled('start') && $request->filled('length')) {
+            $query->skip($request->start)->take($request->length);
+        }
+
+        $data = $query->get();
+
+        return [
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data
+        ];
+    }
+
+    /**
+     * Get agencies based on user permissions
+     */
+    public function getAgenciesForUser()
+    {
+        $user = auth()->user();
+
+        // If user is owner, return all agencies
+        if (Agency::where('owner_id', $user->id)->exists()) {
+            return Agency::query()
+                ->where('owner_id', $user->id)
+                ->withCount(['agencyBusinesses' => function ($query) {
+                    $query->where('is_completed', false);
+                }])
+                ->withCount('agencyUsers')
+                ->with([
+                    'agencyMachines.machine',
+                    'agencyBusinesses' => function ($query) {
+                        $query->where('is_completed', false)
+                            ->with('machine');
+                    }
+                ])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        // For other users, return only assigned agencies
+        return Agency::query()
+            ->whereHas('agencyUsers', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->withCount(['agencyBusinesses' => function ($query) {
+                $query->where('is_completed', false);
+            }])
+            ->with([
+                'agencyMachines.machine',
+                'agencyBusinesses' => function ($query) {
+                    $query->where('is_completed', false)
+                        ->with('machine');
+                }
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    /**
+     * Check if user can manage agency business
+     */
+    public function canManageAgencyBusiness($agencyId)
+    {
+        $user = auth()->user();
+
+        if (Agency::where('id', $agencyId)->where('owner_id', $user->id)->exists()) {
+            return true;
+        }
+
+        // Check if user is assigned to this agency
+        return Agency::where('id', $agencyId)
+            ->whereHas('agencyUsers', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->exists();
+    }
+
+    /**
+     * Get agency statistics based on user permissions
+     */
+    public function getAgencyStatisticsForUser()
+    {
+        $user = auth()->user();
+
+        // If user is owner, return all statistics
+        if (Agency::where('owner_id', $user->id)->exists()) {
+            return $this->getAgencyStatistics();
+        }
+
+        // For other users, return statistics only for assigned agencies
+        $agencyIds = $user->agencyUsers()->pluck('agency_id');
+
+        $totalAgencies = Agency::whereIn('id', $agencyIds)->count();
+        $totalBusinesses = AgencyBusiness::whereIn('agency_id', $agencyIds)->count();
+        $completedBusinesses = AgencyBusiness::whereIn('agency_id', $agencyIds)
+            ->where('is_completed', true)
+            ->count();
+        $pendingBusinesses = AgencyBusiness::whereIn('agency_id', $agencyIds)
+            ->where('is_completed', false)
+            ->count();
+
+        return [
+            'total_agencies' => $totalAgencies,
+            'total_businesses' => $totalBusinesses,
+            'completed_businesses' => $completedBusinesses,
+            'pending_businesses' => $pendingBusinesses
+        ];
+    }
+
+    /**
+     * Get completed businesses for datatable based on user permissions
+     */
+    public function getCompletedBusinessesDatatableForUser($request)
+    {
+        $user = auth()->user();
+        $query = AgencyBusiness::with(['agency', 'machine'])
+            ->where('is_completed', true);
+
+        // If not owner of any agency, filter by assigned agencies
+        if (!Agency::where('owner_id', $user->id)->exists()) {
+            $agencyIds = $user->agencyUsers()->pluck('agency_id');
+            $query->whereIn('agency_id', $agencyIds);
+        }
+
+        // Apply filters
+        if ($request->filled('agency_id')) {
+            $query->where('agency_id', $request->agency_id);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('updated_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('updated_at', '<=', $request->date_to);
+        }
+
+        // Search functionality
+        if ($request->filled('search.value')) {
+            $search = $request->input('search.value');
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('agency', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                })
+                    ->orWhereHas('machine', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhere('standard_code', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Get total records
+        $totalRecords = $query->count();
+        $filteredRecords = $query->count();
+
+        // Apply ordering
+        if ($request->filled('order')) {
+            $orderColumn = 'updated_at';
+            $orderDir = 'desc';
+
+            $columns = [
+                0 => 'id',
+                1 => 'agency.name',
+                2 => 'machine.name',
+                3 => 'total_money',
+                4 => 'standard_code',
+                5 => 'total_money',
+                6 => 'updated_at',
+                7 => 'id'
             ];
 
             if (isset($columns[$orderColumn])) {

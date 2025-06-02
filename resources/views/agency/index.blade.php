@@ -23,7 +23,22 @@
             width: 3px;
             background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
         }
+
+        /* Style cho ảnh thumbnail */
+        .thumbnail-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .thumbnail-image:hover {
+            transform: scale(1.05);
+        }
     </style>
+    <!-- Thêm Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 @endsection
 
 @section('content')
@@ -53,37 +68,39 @@
 
             <!-- Statistics Cards -->
             <div class="row g-5 mb-8">
-                <div class="col-md-3">
-                    <div class="card shadow-sm hover-lift">
-                        <div class="card-body p-6">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <div class="text-muted fw-semibold fs-6 mb-2">Tổng đại lý</div>
-                                    <div class="fs-2x fw-bold text-primary" id="totalAgencies">0</div>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <i class="bi bi-building fs-3x text-primary opacity-75"></i>
+                @if (auth()->user()->can('agency-create') || auth()->user()->can('agency-update'))
+                    <div class="col-md-3">
+                        <div class="card shadow-sm hover-lift">
+                            <div class="card-body p-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <div class="text-muted fw-semibold fs-6 mb-2">Tổng đại lý</div>
+                                        <div class="fs-2x fw-bold text-primary" id="totalAgencies">0</div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="bi bi-building fs-3x text-primary opacity-75"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-3">
-                    <div class="card shadow-sm hover-lift">
-                        <div class="card-body p-6">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <div class="text-muted fw-semibold fs-6 mb-2">Tổng nghiệp vụ</div>
-                                    <div class="fs-2x fw-bold text-success" id="totalBusinesses">0</div>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <i class="bi bi-briefcase fs-3x text-success opacity-75"></i>
+                    <div class="col-md-3">
+                        <div class="card shadow-sm hover-lift">
+                            <div class="card-body p-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <div class="text-muted fw-semibold fs-6 mb-2">Tổng nghiệp vụ</div>
+                                        <div class="fs-2x fw-bold text-success" id="totalBusinesses">0</div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="bi bi-briefcase fs-3x text-success opacity-75"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="col-md-3">
                     <div class="card shadow-sm hover-lift" style="cursor: pointer;" onclick="showCompletedBusinesses()">
@@ -157,6 +174,20 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="mb-4">
+                                            <label for="agencyMachineFeePercent" class="form-label fw-semibold required">%
+                                                Phí máy</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control form-control-lg"
+                                                    id="agencyMachineFeePercent" placeholder="0.00" step="0.01"
+                                                    min="0" max="100" required>
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-4">
                                             <label class="form-label fw-semibold required">Chọn máy cho đại lý</label>
                                             <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;"
                                                 id="machineSelector">
@@ -168,6 +199,25 @@
                                             <div class="form-text text-muted mt-2">
                                                 <span class="fw-bold text-primary" id="selectedMachineCount">Đã chọn: 0
                                                     máy</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Thêm phần chọn users -->
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold required">Chọn người dùng quản lý</label>
+                                            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;"
+                                                id="userSelector">
+                                                <div class="text-center text-muted">
+                                                    <div class="spinner-border spinner-border-sm me-2"></div>
+                                                    Đang tải danh sách người dùng...
+                                                </div>
+                                            </div>
+                                            <div class="form-text text-muted mt-2">
+                                                <span class="fw-bold text-primary" id="selectedUserCount">Đã chọn: 0 người
+                                                    dùng</span>
                                             </div>
                                         </div>
                                     </div>
@@ -303,11 +353,14 @@
 @endsection
 
 @section('script')
+    <!-- Thêm Fancybox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     <script>
         $(document).ready(function() {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             let agencies = [];
             let machines = [];
+            let users = [];
             let currentAgencyId = null;
             let currentBusinessId = null;
             let isEditing = false;
@@ -346,6 +399,19 @@
                     showError('Lỗi kết nối khi tải danh sách đại lý');
                 } finally {
                     showMainLoading(false);
+                }
+            }
+
+            // Hàm load danh sách users
+            async function loadUsers() {
+                try {
+                    const response = await axios.get('/api/user/list');
+                    if (response.data.code === 0) {
+                        users = response.data.data;
+                        renderUserSelector();
+                    }
+                } catch (error) {
+                    console.error('Error loading users:', error);
                 }
             }
 
@@ -388,7 +454,13 @@
                 emptyState.addClass('d-none');
                 container.empty();
 
+                const user = @json(auth()->user());
                 agencies.forEach((agency, index) => {
+                    const canEdit = @json(auth()->user()->can('agency-update'));
+                    const canManage = agency.users.some(u => u.id === user.id) || agency.owner_id === user
+                        .id;
+                    const isOwner = user.id === agency.owner_id;
+
                     const accordionHtml = `
                         <div class="accordion mb-4 hover-lift" id="agencyAccordion${agency.id}">
                             <div class="accordion-item">
@@ -402,14 +474,16 @@
                                                 <div class="d-flex align-items-center mb-3 fs-5 fw-bold text-dark">
                                                     <i class="bi bi-building-fill me-2 text-primary"></i>
                                                     ${agency.name}
-                                                    <div class="btn btn-sm btn-warning rounded-pill ms-2 hover-lift"
-                                                            onclick="editAgency(event, ${agency.id})" title="Sửa đại lý">
-                                                        <i class="bi bi-pencil-square me-1"></i>
-                                                        Sửa
-                                                    </div>
+                                                    ${canEdit ? `
+                                                        <div class="btn btn-sm btn-warning rounded-pill ms-2 hover-lift"
+                                                                onclick="editAgency(event, ${agency.id})" title="Sửa đại lý">
+                                                            <i class="bi bi-pencil-square me-1"></i>
+                                                            Sửa
+                                                        </div>
+                                                    ` : ''}
                                                 </div>
                                                 <div class="d-flex gap-3 flex-wrap align-items-center">
-                                                    <span class="badge badge-light-primary d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
+                                                    <span class="badge badge-light-danger d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
                                                         <i class="bi bi-percent"></i>
                                                         Phí: ${agency.fee_percent}%
                                                     </span>
@@ -421,6 +495,16 @@
                                                         <i class="bi bi-cpu-fill"></i>
                                                         Máy: ${agency.agency_machines ? agency.agency_machines.length : 0}
                                                     </span>
+                                                    ${isOwner ? `
+                                                        <span class="badge badge-light-info d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
+                                                            <i class="bi bi-person-fill"></i>
+                                                            Người dùng: ${agency.agency_users_count}
+                                                        </span>
+                                                        <span class="badge badge-light-primary d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
+                                                            <i class="bi bi-gear-fill"></i>
+                                                            Phí máy: ${agency.machine_fee_percent}%
+                                                        </span>
+                                                    ` : ''}
                                                 </div>
                                             </div>
                                         </div>
@@ -436,11 +520,13 @@
                                                         <i class="bi bi-list-ul me-2 text-primary"></i>
                                                         Nghiệp vụ của ${agency.name}
                                                     </h6>
-                                                    <button type="button" class="btn btn-sm btn-primary"
-                                                            onclick="addAgencyBusiness(${agency.id})">
-                                                        <i class="bi bi-plus-circle me-1"></i>
-                                                        Thêm nghiệp vụ
-                                                    </button>
+                                                    ${canManage ? `
+                                                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                                                            onclick="addAgencyBusiness(${agency.id})">
+                                                                                        <i class="bi bi-plus-circle me-1"></i>
+                                                                                        Thêm nghiệp vụ
+                                                                                    </button>
+                                                                                ` : ''}
                                                 </div>
                                                 <div id="businessTableContainer${agency.id}">
                                                     <div class="text-center py-4">
@@ -459,6 +545,62 @@
                     container.append(accordionHtml);
                 });
             }
+
+
+            // Hàm render user selector
+            function renderUserSelector() {
+                const container = $('#userSelector');
+                container.empty();
+
+                const currentUserId = @json(auth()->id());
+
+                users.forEach(user => {
+                    // Bỏ qua user hiện tại
+                    if (user.id === currentUserId) return;
+
+                    container.append(`
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="${user.id}" id="user${user.id}">
+                            <label class="form-check-label" for="user${user.id}">
+                                ${user.name} (${user.email})
+                            </label>
+                        </div>
+                    `);
+                });
+
+                // Bind change events
+                container.find('input[type="checkbox"]').on('change', function() {
+                    updateSelectedUserCount();
+                });
+            }
+
+            // Hàm cập nhật số lượng user đã chọn
+            function updateSelectedUserCount() {
+                const selectedCount = $('#userSelector').find('input:checked').length;
+                $('#selectedUserCount').text(`Đã chọn: ${selectedCount} người dùng`);
+            }
+
+            // Hàm lấy danh sách user đã chọn
+            function getSelectedUsers() {
+                return $('#userSelector').find('input:checked').map(function() {
+                    return this.value;
+                }).get();
+            }
+
+            // Hàm set selected users
+            function setSelectedUsers(userIds) {
+                const container = $('#userSelector');
+                container.find('input[type="checkbox"]').prop('checked', false);
+
+                if (userIds && userIds.length > 0) {
+                    userIds.forEach(id => {
+                        container.find(`#user${id}`).prop('checked', true);
+                    });
+                }
+
+                updateSelectedUserCount();
+            }
+
 
             // Load agency businesses when accordion is opened
             $(document).on('shown.bs.collapse', '[id^="collapse"]', function() {
@@ -529,7 +671,8 @@
                     // Calculate agency fee: fee_percent * total_money / 100
                     const currentAgency = agencies.find(a => a.id == agencyId);
                     const agencyFeePercent = currentAgency ? currentAgency.fee_percent : 0;
-                    const agencyMoney = Math.round(business.total_money - (business.total_money * agencyFeePercent / 100));
+                    const agencyMoney = Math.round(business.total_money - (business.total_money *
+                        agencyFeePercent / 100));
                     const formattedAgencyMoney = new Intl.NumberFormat('vi-VN').format(agencyMoney);
 
                     const formattedMoney = new Intl.NumberFormat('vi-VN').format(business.total_money);
@@ -563,11 +706,11 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
                                     ${!business.is_completed ? `
-                                                <button type="button" class="btn btn-sm btn-success hover-lift"
-                                                        onclick="completeAgencyBusiness(${business.id})" title="Đánh dấu hoàn thành">
-                                                    <i class="bi bi-check-circle"></i>
-                                                </button>
-                                            ` : ''}
+                                                                                    <button type="button" class="btn btn-sm btn-success hover-lift"
+                                                                                            onclick="completeAgencyBusiness(${business.id})" title="Đánh dấu hoàn thành">
+                                                                                        <i class="bi bi-check-circle"></i>
+                                                                                    </button>
+                                                                                ` : ''}
                                     <button type="button" class="btn btn-sm btn-outline-danger hover-lift"
                                             onclick="deleteAgencyBusiness(${business.id})" title="Xóa nghiệp vụ">
                                         <i class="bi bi-trash3"></i>
@@ -665,17 +808,27 @@
                 if (agencyData) {
                     $('#agencyName').val(agencyData.name);
                     $('#agencyFeePercent').val(agencyData.fee_percent);
+                    $('#agencyMachineFeePercent').val(agencyData.machine_fee_percent);
                 } else {
                     $('#agencyForm')[0].reset();
                 }
 
-                // Populate machines dropdown first
-                await populateAgencyMachineSelectForModal();
+                // Load users và machines
+                await Promise.all([
+                    loadUsers(),
+                    populateAgencyMachineSelectForModal()
+                ]);
 
-                // Set selected machines if editing (use data from agencies list)
-                if (agencyData && agencyData.agency_machines) {
-                    const machineIds = agencyData.agency_machines.map(am => am.machine.id);
-                    setSelectedMachines(machineIds);
+                // Set selected machines và users nếu đang edit
+                if (agencyData) {
+                    if (agencyData.agency_machines) {
+                        const machineIds = agencyData.agency_machines.map(am => am.machine.id);
+                        setSelectedMachines(machineIds);
+                    }
+                    if (agencyData.users) {
+                        const userIds = agencyData.users.map(u => u.id);
+                        setSelectedUsers(userIds);
+                    }
                 }
 
                 $('#agencyModal').modal('show');
@@ -685,9 +838,11 @@
             async function saveAgency() {
                 const name = $('#agencyName').val().trim();
                 const feePercent = $('#agencyFeePercent').val();
+                const machineFeePercent = $('#agencyMachineFeePercent').val();
                 const selectedMachines = getSelectedMachines();
+                const selectedUsers = getSelectedUsers();
 
-                if (!name || !feePercent) {
+                if (!name || !feePercent || !machineFeePercent) {
                     showError('Vui lòng điền đầy đủ thông tin');
                     return;
                 }
@@ -706,14 +861,18 @@
                             id: currentAgencyId,
                             name: name,
                             fee_percent: parseFloat(feePercent),
-                            machines: selectedMachines
+                            machine_fee_percent: parseFloat(machineFeePercent),
+                            machines: selectedMachines,
+                            users: selectedUsers
                         };
                     } else {
                         url = '/api/agency/store';
                         requestData = {
                             name: name,
                             fee_percent: parseFloat(feePercent),
-                            machines: selectedMachines
+                            machine_fee_percent: parseFloat(machineFeePercent),
+                            machines: selectedMachines,
+                            users: selectedUsers
                         };
                     }
 
@@ -1373,7 +1532,9 @@
                             data: 'standard_code',
                             name: 'standard_code',
                             render: function(data, type, row) {
-                                return data ? `<code class="bg-light px-2 py-1 rounded">${data}</code>` : '';
+                                return data ?
+                                    `<code class="bg-light px-2 py-1 rounded">${data}</code>` :
+                                    '';
                             },
                             className: 'text-center'
                         },
@@ -1383,14 +1544,9 @@
                             render: function(data, type, row) {
                                 if (!data) return 'N/A';
                                 const url = window.location.origin + '/storage/' + data;
-                                return `
-                                    <div class="text-center">
-                                        <img src="${url}"
-                                            alt="Ảnh trước"
-                                            class="img-fluid rounded"
-                                            style="width: 100px; height: 100px; object-fit: cover;"
-                                            onerror="this.onerror=null; this.src='/images/no-image.png';">
-                                    </div>`;
+                                return `<a href="${url}" data-fancybox="gallery" data-caption="Ảnh trước">
+                                    <img src="${url}" loading="lazy" alt="Ảnh trước" class="thumbnail-image">
+                                </a>`;
                             },
                             className: 'text-center'
                         },
@@ -1398,8 +1554,11 @@
                             data: 'image_summary',
                             name: 'image_summary',
                             render: function(data, type, row) {
+                                if (!data) return 'N/A';
                                 const url = window.location.origin + '/storage/' + data;
-                                return `<img src="${url}" alt="Ảnh trước" class="img-fluid" style="width: 100px; height: 100px;">`;
+                                return `<a href="${url}" data-fancybox="gallery" data-caption="Ảnh tổng quan">
+                                    <img src="${url}" loading="lazy" alt="Ảnh tổng quan" class="thumbnail-image">
+                                </a>`;
                             },
                             className: 'text-center min-w-100'
                         },
@@ -1484,6 +1643,20 @@
                         }
                     });
             }
+
+            // Khởi tạo Fancybox
+            Fancybox.bind("[data-fancybox]", {
+                // Tùy chọn Fancybox
+                loop: true,
+                buttons: [
+                    "zoom",
+                    "slideShow",
+                    "fullScreen",
+                    "close"
+                ],
+                animationEffect: "zoom-in-out",
+                transitionEffect: "fade"
+            });
         });
     </script>
 @endsection

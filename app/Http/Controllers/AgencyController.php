@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agency;
-use App\Models\AgencyBusiness;
-use App\Models\Machine;
 use Illuminate\Http\Request;
 use App\Services\AgencyService;
 use App\Http\Requests\Agency\AgencyRequest;
@@ -14,9 +11,9 @@ class AgencyController extends Controller
 {
     public $agencyService;
 
-    public function __construct()
+    public function __construct(AgencyService $agencyService)
     {
-        $this->agencyService = app(AgencyService::class);
+        $this->agencyService = $agencyService;
     }
 
     /**
@@ -33,7 +30,7 @@ class AgencyController extends Controller
     public function getAgencies()
     {
         try {
-            $agencies = $this->agencyService->getInCompleteAgencies();
+            $agencies = $this->agencyService->getAgenciesForUser();
             return jsonResponse(0, $agencies);
         } catch (\Exception $e) {
             return jsonResponse(1, 'Lỗi khi tải danh sách đại lý: ' . $e->getMessage());
@@ -46,7 +43,7 @@ class AgencyController extends Controller
     public function getStatistics()
     {
         try {
-            $statistics = $this->agencyService->getAgencyStatistics();
+            $statistics = $this->agencyService->getAgencyStatisticsForUser();
             return jsonResponse(0, $statistics);
         } catch (\Exception $e) {
             return jsonResponse(1, 'Lỗi khi tải thống kê: ' . $e->getMessage());
@@ -84,18 +81,18 @@ class AgencyController extends Controller
     /**
      * Delete an agency.
      */
-    public function destroy(AgencyRequest $request)
-    {
-        try {
-            $data = $request->validated();
-            $result = $this->agencyService->deleteAgency($data['id']);
-            return jsonResponse($result ? 0 : 1, $result ? 'Xóa đại lý thành công' : 'Xóa đại lý thất bại');
-        } catch (\InvalidArgumentException $e) {
-            return jsonResponse(1, $e->getMessage());
-        } catch (\Exception $e) {
-            return jsonResponse(1, 'Lỗi khi xóa đại lý: ' . $e->getMessage());
-        }
-    }
+    // public function destroy(AgencyRequest $request)
+    // {
+    //     try {
+    //         $data = $request->validated();
+    //         $result = $this->agencyService->deleteAgency($data['id']);
+    //         return jsonResponse($result ? 0 : 1, $result ? 'Xóa đại lý thành công' : 'Xóa đại lý thất bại');
+    //     } catch (\InvalidArgumentException $e) {
+    //         return jsonResponse(1, $e->getMessage());
+    //     } catch (\Exception $e) {
+    //         return jsonResponse(1, 'Lỗi khi xóa đại lý: ' . $e->getMessage());
+    //     }
+    // }
 
     /**
      * Get agency businesses.
@@ -140,6 +137,12 @@ class AgencyController extends Controller
     {
         try {
             $data = $request->validated();
+
+            // Check if user can manage this agency
+            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+                return jsonResponse(1, 'Bạn không có quyền thêm nghiệp vụ cho đại lý này');
+            }
+
             $result = $this->agencyService->createAgencyBusiness($data);
             return jsonResponse($result ? 0 : 1, $result ? 'Tạo nghiệp vụ thành công' : 'Tạo nghiệp vụ thất bại');
         } catch (\Exception $e) {
@@ -154,6 +157,11 @@ class AgencyController extends Controller
     {
         try {
             $data = $request->validated();
+
+            // Check if user can manage this agency
+            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+                return jsonResponse(1, 'Bạn không có quyền cập nhật nghiệp vụ của đại lý này');
+            }
 
             // Include file uploads if present
             if ($request->hasFile('image_front')) {
@@ -177,6 +185,12 @@ class AgencyController extends Controller
     {
         try {
             $data = $request->validated();
+
+            // Check if user can manage this agency
+            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+                return jsonResponse(1, 'Bạn không có quyền xóa nghiệp vụ của đại lý này');
+            }
+
             $result = $this->agencyService->deleteAgencyBusiness($data['business_id']);
             return jsonResponse($result ? 0 : 1, $result ? 'Xóa nghiệp vụ thành công' : 'Xóa nghiệp vụ thất bại');
         } catch (\Exception $e) {
@@ -191,6 +205,12 @@ class AgencyController extends Controller
     {
         try {
             $data = $request->validated();
+
+            // Check if user can manage this agency
+            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+                return jsonResponse(1, 'Bạn không có quyền đánh dấu hoàn thành nghiệp vụ của đại lý này');
+            }
+
             $result = $this->agencyService->completeAgencyBusiness($data['business_id']);
             return jsonResponse($result ? 0 : 1, $result ? 'Đánh dấu hoàn thành nghiệp vụ thành công' : 'Đánh dấu hoàn thành nghiệp vụ thất bại');
         } catch (\InvalidArgumentException $e) {
@@ -300,7 +320,7 @@ class AgencyController extends Controller
     public function getCompletedBusinessesDatatable(Request $request)
     {
         try {
-            $result = $this->agencyService->getCompletedBusinessesDatatable($request);
+            $result = $this->agencyService->getCompletedBusinessesDatatableForUser($request);
             return response()->json($result);
         } catch (\Exception $e) {
             return response()->json([

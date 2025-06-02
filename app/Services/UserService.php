@@ -78,4 +78,9 @@ class UserService
 
         return true;
     }
+
+    public function getAll()
+    {
+        return User::all();
+    }
 }

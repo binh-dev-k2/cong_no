@@ -33,8 +33,11 @@ class AgencyRequest extends FormRequest
                 return [
                     'name' => 'required|string|max:255|unique:agencies,name',
                     'fee_percent' => 'required|numeric|min:0|max:100',
+                    'machine_fee_percent' => 'required|numeric|min:0|max:100',
                     'machines' => 'nullable|array',
-                    'machines.*' => 'exists:machines,id'
+                    'machines.*' => 'exists:machines,id',
+                    'users' => 'nullable|array',
+                    'users.*' => 'exists:users,id'
                 ];
 
             case 'update':
@@ -42,8 +45,11 @@ class AgencyRequest extends FormRequest
                     'id' => 'required|exists:agencies,id',
                     'name' => 'required|string|max:255|unique:agencies,name,' . $this->input('id'),
                     'fee_percent' => 'required|numeric|min:0|max:100',
+                    'machine_fee_percent' => 'required|numeric|min:0|max:100',
                     'machines' => 'nullable|array',
-                    'machines.*' => 'exists:machines,id'
+                    'machines.*' => 'exists:machines,id',
+                    'users' => 'nullable|array',
+                    'users.*' => 'exists:users,id'
                 ];
 
             case 'destroy':
@@ -68,6 +74,12 @@ class AgencyRequest extends FormRequest
             'id.exists' => 'Đại lý này không tồn tại trong hệ thống của chúng tôi.',
             'machines.array' => 'Danh sách máy phải là một mảng.',
             'machines.*.exists' => 'Một số máy được chọn không tồn tại trong hệ thống của chúng tôi.',
+            'machine_fee_percent.required' => 'Bạn vui lòng nhập phần trăm phí cho đại lý.',
+            'machine_fee_percent.numeric' => 'Phần trăm phí phải là số nhé!',
+            'machine_fee_percent.min' => 'Phần trăm phí không được nhỏ hơn 0.',
+            'machine_fee_percent.max' => 'Phần trăm phí không được lớn hơn 100.',
+            'users.array' => 'Danh sách người dùng phải là một mảng.',
+            'users.*.exists' => 'Một số người dùng được chọn không tồn tại trong hệ thống của chúng tôi.',
         ];
     }
 

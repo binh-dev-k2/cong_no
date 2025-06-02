@@ -186,6 +186,12 @@ class AgencyService
     {
         return DB::transaction(function () use ($id) {
             $business = AgencyBusiness::findOrFail($id);
+            if ($business->image_front && Storage::disk('public')->exists($business->image_front)) {
+                Storage::disk('public')->delete($business->image_front);
+            }
+            if ($business->image_summary && Storage::disk('public')->exists($business->image_summary)) {
+                Storage::disk('public')->delete($business->image_summary);
+            }
             $business->delete();
             return true;
         });
@@ -197,18 +203,23 @@ class AgencyService
     public function completeAgencyBusiness($id)
     {
         return DB::transaction(function () use ($id) {
-            $business = AgencyBusiness::findOrFail($id);
+            $agencyBusiness = AgencyBusiness::findOrFail($id);
 
             // Check if already completed
-            if ($business->is_completed) {
+            if ($agencyBusiness->is_completed) {
                 throw new \InvalidArgumentException('Nghiệp vụ này đã được hoàn thành rồi');
             }
 
-            $agency = $business->agency;
-            $profit = $business->total_money - ($business->total_money * $agency->fee_percent / 100);
-
-            $business->update(['is_completed' => true, 'profit' => $profit]);
-            return true;
+            $agency = $agencyBusiness->agency;
+            $profit = (float)($agencyBusiness->total_money * ($agency->fee_percent - $agency->machine_fee_percent) / 100);
+            $amountToPay = (float)$agencyBusiness->total_money - ($agencyBusiness->total_money * $agency->fee_percent / 100);
+            return $agencyBusiness->update(
+                [
+                    'is_completed' => true,
+                    'profit' => $profit,
+                    'amount_to_pay' => $amountToPay
+                ]
+            );
         });
     }
 
@@ -219,39 +230,6 @@ class AgencyService
     {
         return Machine::orderBy('name')
             ->get(['id', 'name']);
-    }
-
-    /**
-     * Get business summary for an agency.
-     */
-    public function getAgencyBusinessSummary($agencyId)
-    {
-        $agency = Agency::findOrFail($agencyId);
-
-        $businessStats = AgencyBusiness::where('agency_id', $agencyId)
-            ->selectRaw('
-                COUNT(*) as total_count,
-                SUM(CASE WHEN is_completed = 1 THEN 1 ELSE 0 END) as completed_count,
-                SUM(total_money) as total_amount,
-                AVG(total_money) as average_amount
-            ')
-            ->first();
-
-        return [
-            'agency' => $agency,
-            'stats' => $businessStats
-        ];
-    }
-
-    /**
-     * Search agencies by name.
-     */
-    public function searchAgencies($searchTerm)
-    {
-        return Agency::withCount('agencyBusinesses')
-            ->where('name', 'LIKE', "%{$searchTerm}%")
-            ->orderBy('name')
-            ->get();
     }
 
     /**
@@ -286,15 +264,6 @@ class AgencyService
     }
 
     /**
-     * Get machines for an agency.
-     */
-    public function getAgencyMachines($agencyId)
-    {
-        $agency = Agency::findOrFail($agencyId);
-        return $agency->agencyMachines()->with('machine')->get()->pluck('machine');
-    }
-
-    /**
      * Get machines for specific agency (for business modal).
      */
     public function getMachinesForAgency($agencyId)
@@ -310,107 +279,9 @@ class AgencyService
     }
 
     /**
-     * Get all completed businesses from all agencies.
-     */
-    public function getAllCompletedBusinesses()
-    {
-        return AgencyBusiness::with(['agency', 'machine'])
-            ->where('is_completed', true)
-            ->orderBy('updated_at', 'desc')
-            ->get();
-    }
-
-    /**
-     * Get completed businesses for datatable.
-     */
-    public function getCompletedBusinessesDatatable($request)
-    {
-        $query = AgencyBusiness::with(['agency', 'machine'])
-            ->where('is_completed', true);
-
-        // Apply filters
-        if ($request->filled('agency_id')) {
-            $query->where('agency_id', $request->agency_id);
-        }
-
-        if ($request->filled('date_from')) {
-            $query->whereDate('updated_at', '>=', $request->date_from);
-        }
-
-        if ($request->filled('date_to')) {
-            $query->whereDate('updated_at', '<=', $request->date_to);
-        }
-
-        // Search functionality
-        if ($request->filled('search.value')) {
-            $search = $request->input('search.value');
-            $query->where(function ($q) use ($search) {
-                $q->whereHas('agency', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%");
-                })
-                    ->orWhereHas('machine', function ($q) use ($search) {
-                        $q->where('name', 'LIKE', "%{$search}%");
-                    })
-                    ->orWhere('standard_code', 'LIKE', "%{$search}%");
-            });
-        }
-
-        // Get total records
-        $totalRecords = AgencyBusiness::where('is_completed', true)->count();
-        $filteredRecords = $query->count();
-
-        // Apply ordering
-        if ($request->filled('order')) {
-            $orderColumn = 'updated_at';
-            $orderDir = 'desc';
-
-            $columns = [
-                0 => 'id', // STT
-                1 => 'agency.name',
-                2 => 'machine.name',
-                3 => 'total_money',
-                4 => 'standard_code',
-                5 => 'total_money', // Agency money (calculated)
-                6 => 'updated_at',
-                7 => 'id' // Actions
-            ];
-
-            if (isset($columns[$orderColumn])) {
-                if ($columns[$orderColumn] == 'agency.name') {
-                    $query->join('agencies', 'agency_businessess.agency_id', '=', 'agencies.id')
-                        ->orderBy('agencies.name', $orderDir)
-                        ->select('agency_businessess.*');
-                } elseif ($columns[$orderColumn] == 'machine.name') {
-                    $query->join('machines', 'agency_businessess.machine_id', '=', 'machines.id')
-                        ->orderBy('machines.name', $orderDir)
-                        ->select('agency_businessess.*');
-                } else {
-                    $query->orderBy($columns[$orderColumn], $orderDir);
-                }
-            }
-        } else {
-            $query->orderBy('updated_at', 'desc');
-        }
-
-        // Apply pagination
-        if ($request->filled('start') && $request->filled('length')) {
-            $query->skip($request->start)->take($request->length);
-        }
-
-        $data = $query->get();
-
-        return [
-            'draw' => intval($request->input('draw')),
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
-            'data' => $data
-        ];
-    }
-
-    /**
      * Get agencies based on user permissions
      */
-    public function getAgenciesForUser()
+    public function getAgenciesForUser($search = null)
     {
         $user = auth()->user();
 
@@ -418,6 +289,9 @@ class AgencyService
         if (Agency::where('owner_id', $user->id)->exists()) {
             return Agency::query()
                 ->where('owner_id', $user->id)
+                ->when($search, function ($query, $search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
                 ->withCount(['agencyBusinesses' => function ($query) {
                     $query->where('is_completed', false);
                 }])
@@ -455,9 +329,14 @@ class AgencyService
     /**
      * Check if user can manage agency business
      */
-    public function canManageAgencyBusiness($agencyId)
+    public function canManageAgencyBusiness($agencyId = null, $businessId = null)
     {
         $user = auth()->user();
+
+        if ($businessId) {
+            $business = AgencyBusiness::findOrFail($businessId);
+            $agencyId = $business->agency_id;
+        }
 
         if (Agency::where('id', $agencyId)->where('owner_id', $user->id)->exists()) {
             return true;
@@ -506,7 +385,7 @@ class AgencyService
     /**
      * Get completed businesses for datatable based on user permissions
      */
-    public function getCompletedBusinessesDatatableForUser($request)
+    public function getCompletedBusinessesDatatable($request)
     {
         $user = auth()->user();
         $query = AgencyBusiness::with(['agency', 'machine'])
@@ -567,13 +446,13 @@ class AgencyService
 
             if (isset($columns[$orderColumn])) {
                 if ($columns[$orderColumn] == 'agency.name') {
-                    $query->join('agencies', 'agency_businessess.agency_id', '=', 'agencies.id')
+                    $query->join('agencies', 'agency_businesses.agency_id', '=', 'agencies.id')
                         ->orderBy('agencies.name', $orderDir)
-                        ->select('agency_businessess.*');
+                        ->select('agency_businesses.*');
                 } elseif ($columns[$orderColumn] == 'machine.name') {
-                    $query->join('machines', 'agency_businessess.machine_id', '=', 'machines.id')
+                    $query->join('machines', 'agency_businesses.machine_id', '=', 'machines.id')
                         ->orderBy('machines.name', $orderDir)
-                        ->select('agency_businessess.*');
+                        ->select('agency_businesses.*');
                 } else {
                     $query->orderBy($columns[$orderColumn], $orderDir);
                 }

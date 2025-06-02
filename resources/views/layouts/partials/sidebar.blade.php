@@ -131,18 +131,40 @@
                     @endcan
 
                     @can('agency-view')
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link @if (Route::currentRouteName() == 'agency') active @endif" href="{{ route('agency') }}">
+                        <div data-kt-menu-trigger="click"
+                            class="menu-item menu-accordion @if (in_array(Route::currentRouteName(), ['agency', 'agency-business'])) show @endif">
+                            <span class="menu-link">
                                 <span class="menu-icon">
-                                    <i class="ki-duotone ki-scroll fs-2">
+                                    <i class="ki-duotone ki-bucket fs-2">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
                                     </i>
                                 </span>
                                 <span class="menu-title">Đối ứng</span>
-                            </a>
-                            <!--end:Menu link-->
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link @if (Route::currentRouteName() == 'agency') active @endif"
+                                        href="{{ route('agency') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Danh sách đại lý</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item">
+                                    <a class="menu-link @if (Route::currentRouteName() == 'agency-business') active @endif"
+                                        href="{{ route('agency-business') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Nghiệp vụ đã hoàn thành</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     @endcan
 

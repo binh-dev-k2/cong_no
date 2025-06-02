@@ -37,8 +37,7 @@ class AgencyBusinessRequest extends FormRequest
 
             case 'updateAgencyBusiness':
                 return [
-                    'agency_id' => 'required|exists:agencies,id',
-                    'business_id' => 'required|exists:agency_businessess,id',
+                    'business_id' => 'required|exists:agency_businesses,id',
                     'machine_id' => 'required|exists:machines,id',
                     'total_money' => 'required|numeric|min:0',
                     'image_front' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -48,13 +47,12 @@ class AgencyBusinessRequest extends FormRequest
 
             case 'destroyAgencyBusiness':
                 return [
-                    'agency_id' => 'required|exists:agencies,id',
-                    'business_id' => 'required|exists:agency_businessess,id'
+                    'business_id' => 'required|exists:agency_businesses,id'
                 ];
 
             case 'completeAgencyBusiness':
                 return [
-                    'business_id' => 'required|exists:agency_businessess,id'
+                    'business_id' => 'required|exists:agency_businesses,id'
                 ];
 
             default:

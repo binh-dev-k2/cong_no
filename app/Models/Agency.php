@@ -22,8 +22,8 @@ class Agency extends Model
     ];
 
     protected $casts = [
-        'fee_percent' => 'float',
-        'machine_fee_percent' => 'float'
+        'fee_percent' => 'decimal:2',
+        'machine_fee_percent' => 'decimal:2'
     ];
 
     protected $with = ['users'];

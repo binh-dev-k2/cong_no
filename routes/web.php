@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +24,8 @@ Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function (
     Route::get('/collaborator', 'CollaboratorController@index')->name('collaborator')->middleware('can:collaborator-view');
     Route::get('/role', 'RoleController@index')->name('role');
     Route::get('/activity-log', 'ActivityLogController@index')->name('activity-log')->middleware('can:activity-log-view');
-    Route::get('/agency', 'AgencyController@index')->name('agency')->middleware('can:agency-view');
+    Route::get('/agency', 'AgencyController@indexAgency')->name('agency')->middleware('can:agency-view');
+    Route::get('/agency/business', 'AgencyController@indexAgencyBusiness')->name('agency-business')->middleware('can:agency-view');
 });
 
 Route::get('/@@binhcoder02/update', function () {

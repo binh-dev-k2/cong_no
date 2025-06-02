@@ -19,18 +19,23 @@ class AgencyController extends Controller
     /**
      * Display the agencies management page.
      */
-    public function index()
+    public function indexAgency()
     {
         return view('agency.index');
+    }
+
+    public function indexAgencyBusiness()
+    {
+        return view('agency.business.index');
     }
 
     /**
      * Get all agencies with their business count.
      */
-    public function getAgencies()
+    public function getAgencies(Request $request)
     {
         try {
-            $agencies = $this->agencyService->getAgenciesForUser();
+            $agencies = $this->agencyService->getAgenciesForUser($request->search ?? null);
             return jsonResponse(0, $agencies);
         } catch (\Exception $e) {
             return jsonResponse(1, 'Lỗi khi tải danh sách đại lý: ' . $e->getMessage());
@@ -159,7 +164,7 @@ class AgencyController extends Controller
             $data = $request->validated();
 
             // Check if user can manage this agency
-            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+            if (!$this->agencyService->canManageAgencyBusiness(businessId: $data['business_id'])) {
                 return jsonResponse(1, 'Bạn không có quyền cập nhật nghiệp vụ của đại lý này');
             }
 
@@ -187,7 +192,7 @@ class AgencyController extends Controller
             $data = $request->validated();
 
             // Check if user can manage this agency
-            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+            if (!$this->agencyService->canManageAgencyBusiness(businessId: $data['business_id'])) {
                 return jsonResponse(1, 'Bạn không có quyền xóa nghiệp vụ của đại lý này');
             }
 
@@ -207,7 +212,7 @@ class AgencyController extends Controller
             $data = $request->validated();
 
             // Check if user can manage this agency
-            if (!$this->agencyService->canManageAgencyBusiness($data['agency_id'])) {
+            if (!$this->agencyService->canManageAgencyBusiness(businessId: $data['business_id'])) {
                 return jsonResponse(1, 'Bạn không có quyền đánh dấu hoàn thành nghiệp vụ của đại lý này');
             }
 
@@ -234,56 +239,6 @@ class AgencyController extends Controller
     }
 
     /**
-     * Get machines for a specific agency.
-     */
-    public function getAgencyMachines(Request $request)
-    {
-        try {
-            $agencyId = $request->query('agency_id');
-            if (!$agencyId) {
-                return jsonResponse(1, 'ID đại lý là bắt buộc');
-            }
-
-            $machines = $this->agencyService->getAgencyMachines($agencyId);
-            return jsonResponse(0, $machines);
-        } catch (\Exception $e) {
-            return jsonResponse(1, 'Lỗi khi tải danh sách máy của đại lý: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Get business summary for an agency.
-     */
-    public function getAgencyBusinessSummary(Request $request)
-    {
-        try {
-            $agencyId = $request->query('agency_id');
-            if (!$agencyId) {
-                return jsonResponse(1, 'ID đại lý là bắt buộc');
-            }
-
-            $summary = $this->agencyService->getAgencyBusinessSummary($agencyId);
-            return jsonResponse(0, $summary);
-        } catch (\Exception $e) {
-            return jsonResponse(1, 'Lỗi khi tải thống kê nghiệp vụ: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Search agencies.
-     */
-    public function searchAgencies(Request $request)
-    {
-        try {
-            $searchTerm = $request->get('search', '');
-            $agencies = $this->agencyService->searchAgencies($searchTerm);
-            return jsonResponse(0, $agencies);
-        } catch (\Exception $e) {
-            return jsonResponse(1, 'Lỗi khi tìm kiếm đại lý: ' . $e->getMessage());
-        }
-    }
-
-    /**
      * Get machines for specific agency.
      */
     public function getMachinesForAgency(Request $request)
@@ -294,23 +249,15 @@ class AgencyController extends Controller
                 return jsonResponse(1, 'ID đại lý là bắt buộc');
             }
 
+            // Check if user can manage this agency
+            if (!$this->agencyService->canManageAgencyBusiness(agencyId: $agencyId)) {
+                return jsonResponse(1, 'Bạn không có quyền tải danh sách máy của đại lý này');
+            }
+
             $machines = $this->agencyService->getMachinesForAgency($agencyId);
             return jsonResponse(0, $machines);
         } catch (\Exception $e) {
             return jsonResponse(1, 'Lỗi khi tải danh sách máy: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Get all completed businesses from all agencies.
-     */
-    public function getCompletedBusinesses()
-    {
-        try {
-            $completedBusinesses = $this->agencyService->getAllCompletedBusinesses();
-            return jsonResponse(0, $completedBusinesses);
-        } catch (\Exception $e) {
-            return jsonResponse(1, 'Lỗi khi tải danh sách nghiệp vụ đã hoàn thành: ' . $e->getMessage());
         }
     }
 
@@ -320,7 +267,7 @@ class AgencyController extends Controller
     public function getCompletedBusinessesDatatable(Request $request)
     {
         try {
-            $result = $this->agencyService->getCompletedBusinessesDatatableForUser($request);
+            $result = $this->agencyService->getCompletedBusinessesDatatable($request);
             return response()->json($result);
         } catch (\Exception $e) {
             return response()->json([

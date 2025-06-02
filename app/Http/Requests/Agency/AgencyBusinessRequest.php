@@ -48,6 +48,7 @@ class AgencyBusinessRequest extends FormRequest
 
             case 'destroyAgencyBusiness':
                 return [
+                    'agency_id' => 'required|exists:agencies,id',
                     'business_id' => 'required|exists:agency_businessess,id'
                 ];
 

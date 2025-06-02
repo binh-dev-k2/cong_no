@@ -712,7 +712,7 @@
                                                                                     </button>
                                                                                 ` : ''}
                                     <button type="button" class="btn btn-sm btn-outline-danger hover-lift"
-                                            onclick="deleteAgencyBusiness(${business.id})" title="Xóa nghiệp vụ">
+                                            onclick="deleteAgencyBusiness(${business.id}, ${business.agency_id})" title="Xóa nghiệp vụ">
                                         <i class="bi bi-trash3"></i>
                                     </button>
                                 </div>
@@ -1174,7 +1174,7 @@
             };
 
             // Delete agency business
-            window.deleteAgencyBusiness = async function(businessId) {
+            window.deleteAgencyBusiness = async function(businessId, agencyId) {
                 const result = await Swal.fire({
                     title: 'Xác nhận xóa',
                     text: 'Bạn có chắc chắn muốn xóa nghiệp vụ này?',
@@ -1192,7 +1192,8 @@
                 if (result.isConfirmed) {
                     try {
                         const response = await axios.post('/api/agency-business/delete', {
-                            business_id: businessId
+                            business_id: businessId,
+                            agency_id: agencyId
                         }, {
                             headers: {
                                 'X-CSRF-TOKEN': token,

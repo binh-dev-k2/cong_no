@@ -475,12 +475,12 @@
                                                     <i class="bi bi-building-fill me-2 text-primary"></i>
                                                     ${agency.name}
                                                     ${canEdit ? `
-                                                            <div class="btn btn-sm btn-warning rounded-pill ms-2 hover-lift"
-                                                                    onclick="editAgency(event, ${agency.id})" title="Sửa đại lý">
-                                                                <i class="bi bi-pencil-square me-1"></i>
-                                                                Sửa
-                                                            </div>
-                                                        ` : ''}
+                                                                <div class="btn btn-sm btn-warning rounded-pill ms-2 hover-lift"
+                                                                        onclick="editAgency(event, ${agency.id})" title="Sửa đại lý">
+                                                                    <i class="bi bi-pencil-square me-1"></i>
+                                                                    Sửa
+                                                                </div>
+                                                            ` : ''}
                                                 </div>
                                                 <div class="d-flex gap-3 flex-wrap align-items-center">
                                                     <span class="badge badge-light-danger d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
@@ -496,15 +496,15 @@
                                                         Máy: ${agency.agency_machines ? agency.agency_machines.length : 0}
                                                     </span>
                                                     ${isOwner ? `
-                                                            <span class="badge badge-light-info d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
-                                                                <i class="bi bi-person-fill"></i>
-                                                                Người dùng: ${agency.agency_users_count}
-                                                            </span>
-                                                            <span class="badge badge-light-primary d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
-                                                                <i class="bi bi-gear-fill"></i>
-                                                                Phí máy: ${agency.machine_fee_percent}%
-                                                            </span>
-                                                        ` : ''}
+                                                                <span class="badge badge-light-info d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
+                                                                    <i class="bi bi-person-fill"></i>
+                                                                    Người dùng: ${agency.agency_users_count}
+                                                                </span>
+                                                                <span class="badge badge-light-primary d-flex align-items-center gap-2 px-3 py-2 fs-7 fw-bold">
+                                                                    <i class="bi bi-gear-fill"></i>
+                                                                    Phí máy: ${agency.machine_fee_percent}%
+                                                                </span>
+                                                            ` : ''}
                                                 </div>
                                             </div>
                                         </div>
@@ -521,12 +521,12 @@
                                                         Nghiệp vụ của ${agency.name}
                                                     </h6>
                                                     ${canManage ? `
-                                                                                        <button type="button" class="btn btn-sm btn-primary"
-                                                                                                onclick="addAgencyBusiness(${agency.id})">
-                                                                                            <i class="bi bi-plus-circle me-1"></i>
-                                                                                            Thêm nghiệp vụ
-                                                                                        </button>
-                                                                                    ` : ''}
+                                                                                            <button type="button" class="btn btn-sm btn-primary"
+                                                                                                    onclick="addAgencyBusiness(${agency.id})">
+                                                                                                <i class="bi bi-plus-circle me-1"></i>
+                                                                                                Thêm nghiệp vụ
+                                                                                            </button>
+                                                                                        ` : ''}
                                                 </div>
                                                 <div id="businessTableContainer${agency.id}">
                                                     <div class="text-center py-4">
@@ -706,11 +706,11 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
                                     ${!business.is_completed ? `
-                                                                                        <button type="button" class="btn btn-sm btn-success hover-lift"
-                                                                                                onclick="completeAgencyBusiness(${business.id})" title="Đánh dấu hoàn thành">
-                                                                                            <i class="bi bi-check-circle"></i>
-                                                                                        </button>
-                                                                                    ` : ''}
+                                                                                            <button type="button" class="btn btn-sm btn-success hover-lift"
+                                                                                                    onclick="completeAgencyBusiness(${business.id})" title="Đánh dấu hoàn thành">
+                                                                                                <i class="bi bi-check-circle"></i>
+                                                                                            </button>
+                                                                                        ` : ''}
                                     <button type="button" class="btn btn-sm btn-outline-danger hover-lift"
                                             onclick="deleteAgencyBusiness(${business.id}, ${business.agency_id})" title="Xóa nghiệp vụ">
                                         <i class="bi bi-trash3"></i>

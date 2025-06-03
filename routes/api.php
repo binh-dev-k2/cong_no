@@ -119,5 +119,7 @@ Route::middleware('auth')->group(function () {
     //agency business datatable
     Route::post('agency/business/list', [AgencyController::class, 'getCompletedBusinessesDatatable'])->name('api.agency-business.list')->middleware('can:agency-view');
 
+    Route::post('agency/analytics/list', [AgencyController::class, 'getAgencyAnalyticsDatatable'])->name('api.agency-analytics.list')->middleware('can:agency-view');
+
     Route::post('bank/store', [BankController::class, 'store'])->name('api.bank.store');
 });

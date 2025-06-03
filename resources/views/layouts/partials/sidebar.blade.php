@@ -132,7 +132,7 @@
 
                     @can('agency-view')
                         <div data-kt-menu-trigger="click"
-                            class="menu-item menu-accordion @if (in_array(Route::currentRouteName(), ['agency', 'agency-business'])) show @endif">
+                            class="menu-item menu-accordion @if (in_array(Route::currentRouteName(), ['agency', 'agency-business', 'agency-analytics'])) show @endif">
                             <span class="menu-link">
                                 <span class="menu-icon">
                                     <i class="ki-duotone ki-bucket fs-2">
@@ -162,6 +162,15 @@
                                             <span class="bullet bullet-dot"></span>
                                         </span>
                                         <span class="menu-title">Nghiệp vụ đã hoàn thành</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item">
+                                    <a class="menu-link @if (Route::currentRouteName() == 'agency-analytics') active @endif"
+                                        href="{{ route('agency-analytics') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Thống kê</span>
                                     </a>
                                 </div>
                             </div>

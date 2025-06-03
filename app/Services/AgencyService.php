@@ -6,6 +6,7 @@ use App\Models\Agency;
 use App\Models\AgencyBusiness;
 use App\Models\Machine;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class AgencyService
@@ -308,7 +309,10 @@ class AgencyService
         }
 
         // For other users, return only assigned agencies
+        $columns = Schema::getColumnListing('agencies');
+        $columns = array_diff($columns, ['machine_fee_percent']); // loại bỏ cột 'machine_fee_percent'
         return Agency::query()
+            ->select($columns)
             ->whereHas('agencyUsers', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
@@ -381,6 +385,62 @@ class AgencyService
             'pending_businesses' => $pendingBusinesses
         ];
     }
+
+    public function getAgencyAnalyticsDatatable($request)
+    {
+        $user = auth()->user();
+
+        $query = Agency::query()
+            ->where('owner_id', $user->id)
+            ->with([
+                'agencyBusinesses' => fn($q) => $q->where('is_completed', true),
+            ])
+            ->withCount([
+                'agencyBusinesses as completed_businesses_count' => fn($q) => $q->where('is_completed', true),
+                'agencyBusinesses as uncompleted_businesses_count' => fn($q) => $q->where('is_completed', false),
+            ])
+            ->withSum([
+                'agencyBusinesses' => fn($q) => $q->where('is_completed', true),
+            ], 'total_money')
+            ->withSum([
+                'agencyBusinesses' => fn($q) => $q->where('is_completed', true),
+            ], 'profit');
+
+        if ($request->filled('agency_id')) {
+            $query->where('id', $request->agency_id);
+        }
+
+        if ($request->filled('date_from') || $request->filled('date_to')) {
+            $query->whereHas('agencyBusinesses', function ($q) use ($request) {
+                if ($request->filled('date_from')) {
+                    $q->whereDate('updated_at', '>=', $request->date_from);
+                }
+                if ($request->filled('date_to')) {
+                    $q->whereDate('updated_at', '<=', $request->date_to);
+                }
+            });
+        }
+
+        $totalRecords = $query->count(); // Nếu cần recordsTotal cho toàn bộ data không filter thì cần clone() trước filter
+        $filteredRecords = $totalRecords;
+
+        $queryClone = clone $query;
+
+        $agencies = $query
+            ->skip((int) $request->input('start', 0))
+            ->take((int) $request->input('length', 10))
+            ->get();
+
+        return [
+            'draw' => (int) $request->input('draw', 1),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $agencies,
+            'total_profit' => $queryClone->get()->sum('agency_businesses_sum_profit'),
+            'total_money' => $queryClone->get()->sum('agency_businesses_sum_total_money')
+        ];
+    }
+
 
     /**
      * Get completed businesses for datatable based on user permissions

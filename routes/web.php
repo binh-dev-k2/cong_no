@@ -25,7 +25,8 @@ Route::namespace('App\Http\Controllers')->middleware(["auth"])->group(function (
     Route::get('/role', 'RoleController@index')->name('role');
     Route::get('/activity-log', 'ActivityLogController@index')->name('activity-log')->middleware('can:activity-log-view');
     Route::get('/agency', 'AgencyController@indexAgency')->name('agency')->middleware('can:agency-view');
-    Route::get('/agency/business', 'AgencyController@indexAgencyBusiness')->name('agency-business')->middleware('can:agency-view');
+    Route::get('/agency/completed-business', 'AgencyController@indexAgencyBusiness')->name('agency-business')->middleware('can:agency-view');
+    Route::get('/agency/analytics', 'AgencyController@indexAgencyAnalytics')->name('agency-analytics')->middleware('can:agency-view');
 });
 
 Route::get('/@@binhcoder02/update', function () {
@@ -36,7 +37,7 @@ Route::get('/@@binhcoder02/update', function () {
         return response("Failed to update: " . implode("<br>", $output), 500);
     }
 
-    return redirect()->route('dashboard')->with('status', 'Quay lai trang chu');
+    return redirect()->route('dashboard');
 })->name('update-code');
 
 include "auth.php";

@@ -50,7 +50,7 @@
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-fluid">
             <!-- Statistics Cards -->
-            <div class="row g-5 mb-8">
+            {{-- <div class="row g-5 mb-8">
                 <div class="col-md-3">
                     <div class="card shadow-sm hover-lift">
                         <div class="card-body p-6">
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Filters -->
             <div class="card shadow-sm mb-8">
@@ -124,12 +124,6 @@
                             <label class="form-label">Đại lý</label>
                             <select class="form-select" id="agencyFilter">
                                 <option value="">Tất cả đại lý</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Máy</label>
-                            <select class="form-select" id="machineFilter">
-                                <option value="">Tất cả máy</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -156,35 +150,42 @@
 
             <!-- Data Table -->
             <div class="card shadow-sm">
+                <div class="card-header bg-light-primary">
+                    <div
+                        class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+                        <div class="flex-grow-1">
+                            <h3 class="card-title text-primary fw-bold fs-3 mb-0">
+                                Thống kê lợi nhuận
+                            </h3>
+                            <p class="text-gray-600 mb-0 mt-2">Quản lý thông tin thống kê lợi nhuận</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle" id="profitTable">
+                        <table class="table table-bordered table-hover align-middle" id="agencyAnalyticsTable">
                             <thead class="table-primary">
                                 <tr>
                                     <th class="text-center">STT</th>
                                     <th class="text-center">Đại lý</th>
-                                    <th class="text-center">Máy</th>
+                                    <th class="text-center">Nghiệp vụ hoàn thành</th>
+                                    <th class="text-center">Nghiệp vụ chưa hoàn thành</th>
                                     <th class="text-center">Tổng tiền</th>
-                                    <th class="text-center">Phí đại lý</th>
-                                    <th class="text-center">Phí máy</th>
                                     <th class="text-center">Lợi nhuận</th>
-                                    <th class="text-center">Ngày tạo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Data will be loaded dynamically -->
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-center">Tổng</td>
+                                    <td id="totalMoney" class="text-center text-primary fw-bold"></td>
+                                    <td id="totalProfit" class="text-center text-primary fw-bold"></td>
+                                </tr>
+                            </tfoot>
                         </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <div class="text-muted">
-                            Hiển thị <span id="startRecord">0</span> - <span id="endRecord">0</span> của <span id="totalRecords">0</span> bản ghi
-                        </div>
-                        <div class="pagination-container">
-                            <!-- Pagination will be loaded dynamically -->
-                        </div>
                     </div>
                 </div>
             </div>
@@ -196,224 +197,12 @@
     <script>
         $(document).ready(function() {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            let currentPage = 1;
-            const perPage = 10;
 
-            // Setup axios defaults
-            axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
-            axios.defaults.headers.common['Accept'] = 'application/json';
-            axios.defaults.headers.common['Content-Type'] = 'application/json';
-
-            // Initialize
-            init();
-
-            async function init() {
-                await Promise.all([
-                    loadAgencies(),
-                    loadMachines(),
-                    loadProfitData()
-                ]);
-                bindEvents();
-            }
-
-            // Load agencies for filter
-            async function loadAgencies() {
-                try {
-                    const response = await axios.get('/api/agency/list');
-                    if (response.data.code === 0) {
-                        const agencies = response.data.data;
-                        const select = $('#agencyFilter');
-                        agencies.forEach(agency => {
-                            select.append(`<option value="${agency.id}">${agency.name}</option>`);
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading agencies:', error);
-                }
-            }
-
-            // Load machines for filter
-            async function loadMachines() {
-                try {
-                    const response = await axios.get('/api/agency/machines');
-                    if (response.data.code === 0) {
-                        const machines = response.data.data;
-                        const select = $('#machineFilter');
-                        machines.forEach(machine => {
-                            select.append(`<option value="${machine.id}">${machine.name}</option>`);
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading machines:', error);
-                }
-            }
-
-            // Load profit data
-            async function loadProfitData() {
-                showMainLoading(true);
-
-                try {
-                    const filters = {
-                        agency_id: $('#agencyFilter').val(),
-                        machine_id: $('#machineFilter').val(),
-                        start_date: $('#startDate').val(),
-                        end_date: $('#endDate').val(),
-                        page: currentPage,
-                        per_page: perPage
-                    };
-
-                    const response = await axios.get('/api/agency/profit-analytics', { params: filters });
-
-                    if (response.data.code === 0) {
-                        const data = response.data.data;
-                        renderProfitTable(data.items);
-                        updatePagination(data.pagination);
-                        updateStatistics(data.statistics);
-                    } else {
-                        showError(response.data.data || 'Lỗi khi tải dữ liệu');
-                    }
-                } catch (error) {
-                    console.error('Error loading profit data:', error);
-                    showError('Lỗi kết nối khi tải dữ liệu');
-                } finally {
-                    showMainLoading(false);
-                }
-            }
-
-            // Render profit table
-            function renderProfitTable(items) {
-                const tbody = $('#profitTable tbody');
-                tbody.empty();
-
-                if (items.length === 0) {
-                    tbody.html(`
-                        <tr>
-                            <td colspan="8" class="text-center py-4">
-                                <div class="text-muted">
-                                    <i class="bi bi-inbox fs-1 mb-3"></i>
-                                    <p class="mb-0">Không có dữ liệu</p>
-                                </div>
-                            </td>
-                        </tr>
-                    `);
-                    return;
-                }
-
-                items.forEach((item, index) => {
-                    const row = `
-                        <tr>
-                            <td class="text-center">${(currentPage - 1) * perPage + index + 1}</td>
-                            <td>${item.agency_name}</td>
-                            <td>${item.machine_name}</td>
-                            <td class="text-end">${formatMoney(item.total_money)}</td>
-                            <td class="text-end">${formatMoney(item.agency_fee)}</td>
-                            <td class="text-end">${formatMoney(item.machine_fee)}</td>
-                            <td class="text-end fw-bold text-success">${formatMoney(item.profit)}</td>
-                            <td class="text-center">${formatDate(item.created_at)}</td>
-                        </tr>
-                    `;
-                    tbody.append(row);
-                });
-            }
-
-            // Update pagination
-            function updatePagination(pagination) {
-                const container = $('.pagination-container');
-                const { total, current_page, last_page } = pagination;
-
-                // Update record count
-                $('#startRecord').text((current_page - 1) * perPage + 1);
-                $('#endRecord').text(Math.min(current_page * perPage, total));
-                $('#totalRecords').text(total);
-
-                // Generate pagination HTML
-                let html = '<ul class="pagination">';
-
-                // Previous button
-                html += `
-                    <li class="page-item ${current_page === 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#" data-page="${current_page - 1}">
-                            <i class="bi bi-chevron-left"></i>
-                        </a>
-                    </li>
-                `;
-
-                // Page numbers
-                for (let i = 1; i <= last_page; i++) {
-                    if (
-                        i === 1 || // First page
-                        i === last_page || // Last page
-                        (i >= current_page - 2 && i <= current_page + 2) // Pages around current
-                    ) {
-                        html += `
-                            <li class="page-item ${i === current_page ? 'active' : ''}">
-                                <a class="page-link" href="#" data-page="${i}">${i}</a>
-                            </li>
-                        `;
-                    } else if (
-                        i === current_page - 3 || // Before current range
-                        i === current_page + 3 // After current range
-                    ) {
-                        html += '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                    }
-                }
-
-                // Next button
-                html += `
-                    <li class="page-item ${current_page === last_page ? 'disabled' : ''}">
-                        <a class="page-link" href="#" data-page="${current_page + 1}">
-                            <i class="bi bi-chevron-right"></i>
-                        </a>
-                    </li>
-                `;
-
-                html += '</ul>';
-                container.html(html);
-            }
-
-            // Update statistics
-            function updateStatistics(stats) {
-                $('#totalProfit').text(formatMoney(stats.total_profit));
-                $('#totalBusinesses').text(stats.total_businesses);
-                $('#totalAgencies').text(stats.total_agencies);
-                $('#averageProfit').text(formatMoney(stats.average_profit));
-            }
-
-            // Bind events
-            function bindEvents() {
-                // Filter form submit
-                $('#filterForm').on('submit', function(e) {
-                    e.preventDefault();
-                    currentPage = 1;
-                    loadProfitData();
-                });
-
-                // Reset filters
-                $('#filterForm').on('reset', function() {
-                    setTimeout(() => {
-                        currentPage = 1;
-                        loadProfitData();
-                    }, 0);
-                });
-
-                // Pagination click
-                $(document).on('click', '.pagination .page-link', function(e) {
-                    e.preventDefault();
-                    const page = $(this).data('page');
-                    if (page && page !== currentPage) {
-                        currentPage = page;
-                        loadProfitData();
-                    }
-                });
-            }
-
-            // Utility functions
-            function formatMoney(amount) {
-                return new Intl.NumberFormat('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                }).format(amount);
-            }
+            const formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'decimal',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            });
 
             function formatDate(dateString) {
                 return new Date(dateString).toLocaleDateString('vi-VN', {
@@ -425,27 +214,99 @@
                 });
             }
 
-            function showMainLoading(show) {
-                const overlay = $('#mainLoadingOverlay');
-                if (show) {
-                    overlay.removeClass('d-none');
-                } else {
-                    overlay.addClass('d-none');
-                }
-            }
+            const datatable = $("#agencyAnalyticsTable").DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: "{{ route('api.agency-analytics.list') }}",
+                    type: "POST",
+                    beforeSend: function(request) {
+                        request.setRequestHeader("X-CSRF-TOKEN", token);
+                    },
+                    data: function(d) {
+                        d.agency_id = $('#agencyFilter').val();
+                        d.start_date = $('#startDate').val();
+                        d.end_date = $('#endDate').val();
+                    },
+                },
+                columnDefs: [{
+                        targets: 0,
+                        data: null,
+                        orderable: false,
+                        className: 'text-center',
+                        render: function(data, type, row, meta) {
+                            return `<span>${meta.row + meta.settings._iDisplayStart + 1}</span>`
+                        }
+                    },
+                    {
+                        targets: 1,
+                        data: 'name',
+                        orderable: false,
+                        className: 'text-center',
+                        render: function(data, type, row) {
+                            return `<span class="fw-bold text-primary fs-5 mb-1">${data ?? ''}</span>`
+                        }
+                    },
+                    {
+                        targets: 2,
+                        data: 'completed_businesses_count',
+                        orderable: false,
+                        className: 'text-center min-w-50px',
+                    },
+                    {
+                        targets: 3,
+                        data: 'uncompleted_businesses_count',
+                        orderable: false,
+                        className: 'text-center min-w-50px',
+                    },
+                    {
+                        targets: 4,
+                        data: 'agency_businesses_sum_total_money',
+                        orderable: false,
+                        className: 'text-center min-w-50px',
+                        render: function(data, type, row) {
+                            return data !== null ? formatter.format(data) : '0';
+                        }
+                    },
+                    {
+                        targets: 5,
+                        data: 'agency_businesses_sum_profit',
+                        orderable: false,
+                        className: 'text-center min-w-50px',
+                        render: function(data, type, row) {
+                            return data !== null ? formatter.format(data) : '0';
+                        }
+                    },
+                ]
+            });
 
-            function showError(message) {
-                Swal.fire({
-                    title: 'Lỗi!',
-                    text: message,
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-danger'
-                    }
+            datatable.on('xhr.dt', function(e, settings, json, xhr) {
+                $('#totalProfit').text(formatter.format(json.total_profit ?? 0));
+                $('#totalMoney').text(formatter.format(json.total_money ?? 0));
+            });
+
+            const getAgencies = async () => {
+                const response = await axios.get("{{ route('api.agency.list') }}");
+                const agencies = response.data.data;
+                const select = $('#agencyFilter');
+                agencies.forEach(agency => {
+                    select.append(`<option value="${agency.id}">${agency.name}</option>`);
                 });
             }
+
+            getAgencies();
+
+            $('#filterForm').on('submit', function(e) {
+                e.preventDefault();
+                datatable.ajax.reload();
+            });
+
+            $('#resetFilter').on('click', function(e) {
+                e.preventDefault();
+                $('#filterForm')[0].reset();
+                datatable.ajax.reload();
+            });
         });
     </script>
 @endsection

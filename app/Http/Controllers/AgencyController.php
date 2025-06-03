@@ -29,6 +29,11 @@ class AgencyController extends Controller
         return view('agency.business.index');
     }
 
+    public function indexAgencyAnalytics()
+    {
+        return view('agency.analytics.index');
+    }
+
     /**
      * Get all agencies with their business count.
      */
@@ -268,6 +273,18 @@ class AgencyController extends Controller
     {
         try {
             $result = $this->agencyService->getCompletedBusinessesDatatable($request);
+            return response()->json($result);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Lỗi khi tải dữ liệu: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getAgencyAnalyticsDatatable(Request $request)
+    {
+        try {
+            $result = $this->agencyService->getAgencyAnalyticsDatatable($request);
             return response()->json($result);
         } catch (\Exception $e) {
             return response()->json([

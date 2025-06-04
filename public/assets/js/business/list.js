@@ -1,13 +1,5 @@
 "use strict";
 
-/**
- * Business Management System
- * Refactored with modular architecture for better maintainability
- */
-
-// =====================================================
-// CORE UTILITIES & CONSTANTS
-// =====================================================
 const BusinessConstants = {
     SELECTORS: {
         BUSINESS_TABLE: '#business_table',
@@ -105,7 +97,7 @@ const BusinessAPI = {
         BusinessAPI.request(routes.businessUpdateNote, { business_note }),
 
     findCard: (search) =>
-        BusinessAPI.request(routes.cardFind, { search }),
+        BusinessAPI.request(routes.cardFind, search),
 
     store: (data) =>
         BusinessAPI.request(routes.businessStore, data),
@@ -293,18 +285,23 @@ const ModalManager = {
         // Remove existing event listeners
         $modal.off('hide.bs.modal submit');
         $modal.find('input[name="card_number"]').off('keyup');
-        $modal.off('click', '.search-results li');
+        $modal.off('click', '.search-card-results li');
+        $modal.off('click', '.search-account-results li');
         $modal.off('change', 'select[name="machine_id"]');
 
         // Modal close event
         $modal.on('hide.bs.modal', () => {
             $modal.find('form')[0].reset();
             $modal.find('#machine-info-hint').text('');
-            $modal.find('.search-results').hide();
+            $modal.find('.search-card-results').hide();
+            $modal.find('.search-account-results').hide();
         });
 
         // Card search
-        ModalManager.bindCardSearch($modal, modalType);
+        ModalManager.bindCardSearch($modal);
+
+        // Account search
+        ModalManager.bindAccountSearch($modal);
 
         // Card selection
         ModalManager.bindCardSelection($modal);
@@ -316,22 +313,40 @@ const ModalManager = {
         ModalManager.bindFormSubmit($modal, modalType);
     },
 
-    bindCardSearch: ($modal, modalType) => {
+    bindCardSearch: ($modal) => {
         let searchTimeout = null;
-        const $results = $modal.find('.search-results');
+        const $results = $modal.find('.search-card-results');
         const $cardInput = $modal.find('input[name="card_number"]');
 
-        $cardInput.on('keyup', function() {
+        $cardInput.on('keyup', function () {
             clearTimeout(searchTimeout);
             const cardNumber = $(this).val();
-
-            // Filter machines based on card type
-            ModalManager.filterMachines($modal, cardNumber);
 
             // Search in database (only for add modal)
             searchTimeout = setTimeout(async () => {
                 try {
-                    const response = await BusinessAPI.findCard(cardNumber);
+                    const response = await BusinessAPI.findCard({ card_search: cardNumber });
+                    ModalManager.renderSearchResults($results, response.data?.data || []);
+                } catch (error) {
+                    console.error('Card search error:', error);
+                    $results.hide();
+                }
+            }, BusinessConstants.API_DELAY);
+        });
+    },
+    bindAccountSearch: ($modal) => {
+        let searchTimeout = null;
+        const $results = $modal.find('.search-account-results');
+        const $accountInput = $modal.find('input[name="account_name"]');
+
+        $accountInput.on('keyup', function () {
+            clearTimeout(searchTimeout);
+            const accountName = $(this).val();
+
+            // Search in database (only for add modal)
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const response = await BusinessAPI.findCard({ account_search: accountName });
                     ModalManager.renderSearchResults($results, response.data?.data || []);
                 } catch (error) {
                     console.error('Card search error:', error);
@@ -342,7 +357,7 @@ const ModalManager = {
     },
 
     bindCardSelection: ($modal) => {
-        $modal.on('click', '.search-results li', function() {
+        $modal.on('click', '.search-card-results li, .search-account-results li', function () {
             const data = $(this).data();
 
             $modal.find('input[name="card_number"]').val(data.card_number);
@@ -350,7 +365,8 @@ const ModalManager = {
             $modal.find('input[name="name"]').val(data.customer?.name ?? '');
             $modal.find('input[name="phone"]').val(data.customer?.phone ?? '');
             $modal.find('input[name="fee_percent"]').val(data.fee_percent ?? '');
-            $modal.find('.search-results').hide();
+            $modal.find('.search-card-results').hide();
+            $modal.find('.search-account-results').hide();
 
             // Filter machines after card selection
             ModalManager.filterMachines($modal, data.card_number);
@@ -358,7 +374,7 @@ const ModalManager = {
     },
 
     bindMachineChange: ($modal) => {
-        $modal.on('change', 'select[name="machine_id"]', function() {
+        $modal.on('change', 'select[name="machine_id"]', function () {
             const selectedOption = $(this).find('option:selected');
             const cardNumber = $modal.find('input[name="card_number"]').val();
 
@@ -378,7 +394,7 @@ const ModalManager = {
     },
 
     bindFormSubmit: ($modal, modalType) => {
-        $modal.on('submit', 'form', async function(e) {
+        $modal.on('submit', 'form', async function (e) {
             e.preventDefault();
             const $submitBtn = $(this).find('button[type="submit"]');
             $submitBtn.attr('data-kt-indicator', 'on');
@@ -439,15 +455,22 @@ const ModalManager = {
 
     renderSearchResults: ($results, cards) => {
         $results.empty();
+console.log($results);
 
         cards.forEach(card => {
             const image = `<img src="${card.bank.logo}" class="h-20px mb-1" style="min-width: 52px" alt="image"/>`;
-            const text = `${card.card_number} ${card.customer ? `- ${card.customer.name} - ${card.customer.phone}` : ''}`;
+            const text = `${card.card_number} - ${card.account_name} ${card.customer ? `- ${card.customer.name} - ${card.customer.phone}` : ''}`;
             const $li = $('<li>').html(image + text).addClass('p-3').data(card);
             $results.append($li);
         });
 
         $results.toggle(cards.length > 0);
+
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest($results).length) {
+                $results.hide();
+            }
+        });
     },
 
     setupSharedEvents: () => {
@@ -569,7 +592,7 @@ const BusinessDataTable = {
             render: (data, type, row) => `<span>${BusinessUtils.formatMoney(row?.fee)}</span>`
         },
         // Business money columns (7-12)
-        ...Array.from({length: 6}, (_, i) => ({
+        ...Array.from({ length: 6 }, (_, i) => ({
             targets: 7 + i,
             data: `money.${i}`,
             orderable: false,
@@ -757,7 +780,7 @@ const BusinessDataTable = {
     },
 
     initComplete: () => {
-        $('.btn-complete').off('click').on('click', async function() {
+        $('.btn-complete').off('click').on('click', async function () {
             const row = $(this).closest('tr');
             const data = BusinessDataTable.instance.row(row).data();
 
@@ -781,7 +804,7 @@ const BusinessDataTable = {
     },
 
     initDelete: () => {
-        $('.btn-delete').off('click').on('click', async function() {
+        $('.btn-delete').off('click').on('click', async function () {
             const row = $(this).closest('tr');
             const data = BusinessDataTable.instance.row(row).data();
 
@@ -804,7 +827,7 @@ const BusinessDataTable = {
     },
 
     initEdit: () => {
-        $('.btn-edit').off('click').on('click', function() {
+        $('.btn-edit').off('click').on('click', function () {
             const row = $(this).closest('tr');
             const data = BusinessDataTable.instance.row(row).data();
             const $modal = $(BusinessConstants.SELECTORS.MODAL_EDIT);
@@ -835,7 +858,7 @@ const BusinessDataTable = {
     },
 
     initEditPayExtra: () => {
-        $('.btn-edit-pay-extra').off('click').on('click', function() {
+        $('.btn-edit-pay-extra').off('click').on('click', function () {
             const row = $(this).closest('tr');
             const data = BusinessDataTable.instance.row(row).data();
             const td = $(this).closest('td');
@@ -873,7 +896,7 @@ const BusinessDataTable = {
     },
 
     initEditBusinessMoney: () => {
-        $('.btn-edit-business-money').off('click').on('click', function() {
+        $('.btn-edit-business-money').off('click').on('click', function () {
             const dataId = $(this).data('id');
             const row = $(this).closest('tr');
             const data = BusinessDataTable.instance.row(row).data();
@@ -934,8 +957,8 @@ const BusinessDataTable = {
     },
 
     initActionMenus: () => {
-        $('[data-kt-menu-trigger="click"]').off('click').on('click', function() {
-            $('[data-kt-menu-trigger="click"]').each(function() {
+        $('[data-kt-menu-trigger="click"]').off('click').on('click', function () {
+            $('[data-kt-menu-trigger="click"]').each(function () {
                 $(this).closest('td').css('z-index', 0);
             });
             $(this).closest('td').css('z-index', 99);

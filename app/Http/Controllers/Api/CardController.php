@@ -65,7 +65,7 @@ class CardController extends Controller
     public function find(Request $request)
     {
         $data = $request->input();
-        $result = $this->cardService->find($data['search']);
+        $result = $this->cardService->findBySearch($data);
         return jsonResponse(0, $result);
     }
 }

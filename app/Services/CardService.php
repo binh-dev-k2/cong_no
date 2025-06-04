@@ -100,6 +100,18 @@ class CardService
         return Card::where('card_number', 'like', '%' . $search . '%')->with(['customer', 'bank'])->get();
     }
 
+    public function findBySearch(array $data)
+    {
+        logger()->info(json_encode($data));
+        if (array_key_exists('card_search', $data)) {
+            return Card::where('card_number', 'like', '%' . $data['card_search'] . '%')->with(['customer', 'bank'])->get();
+        }
+
+        if (array_key_exists('account_search', $data)) {
+            return Card::where('account_name', 'like', '%' . $data['account_search'] . '%')->with(['customer', 'bank'])->get();
+        }
+    }
+
     public function updateNote(array $data)
     {
         return Card::where('id', $data['id'])->update(['note' => $data['note']]);

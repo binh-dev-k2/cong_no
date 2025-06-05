@@ -1,4 +1,9 @@
 <!-- Form Fields Component -->
+<div class="form-check form-switch mt-1 mb-3 fv-row">
+    <input class="form-check-input" type="checkbox" role="switch" id="is_stranger" name="is_stranger" />
+    <label class="form-check-label" for="is_stranger">Khách vãng lai</label>
+</div>
+
 <div class="mb-3 fv-row position-relative search-container">
     <div class="d-flex flex-column position-relative">
         <label class="required fs-6 fw-semibold mb-2" for="card_number">

@@ -28,35 +28,34 @@ class BusinessRequest extends FormRequest
         $arr = explode('@', $this->route()->getActionName());
         $action = $arr[1];
 
+        $rules = [
+            'is_stranger' => 'required|boolean',
+            'account_name' => 'nullable|string',
+            'name' => 'required|string',
+            'phone' => 'required|digits:10',
+            'fee_percent' => 'required|numeric',
+            'formality' => 'required|string',
+            'total_money' => 'required|numeric',
+            'machine_id' => 'required|exists:machines,id',
+            'collaborator_id' => 'nullable|exists:collaborators,id',
+            'business_setting_key' => 'required|string|exists:business_settings,key',
+            'business_setting_type' => 'required|string|in:MONEY,PERCENT',
+        ];
+
+        if ($action === 'store' || $action === 'update') {
+            if ($this->input('is_stranger', false)) {
+                $rules['card_number'] = 'required|digits:16';
+            } else {
+                $rules['card_number'] = 'required|digits:16|exists:cards,card_number';
+            }
+        }
+
         switch ($action) {
             case 'store':
-                return [
-                    'card_number' => 'required|digits:16|exists:cards,card_number',
-                    'account_name' => 'nullable|string',
-                    'name' => 'required|string',
-                    'phone' => 'required|digits:10',
-                    'fee_percent' => 'required|numeric',
-                    'formality' => 'required|string',
-                    'total_money' => 'required|numeric',
-                    'machine_id' => 'required|exists:machines,id',
-                    'collaborator_id' => 'nullable|exists:collaborators,id',
-                    'business_setting_key' => 'required|string|exists:business_settings,key',
-                    'business_setting_type' => 'required|string|in:MONEY,PERCENT',
-                ];
+                return $rules;
 
             case 'update':
-                return [
-                    'id' => 'required|exists:businesses,id',
-                    'card_number' => 'required|digits:16|exists:cards,card_number',
-                    'account_name' => 'nullable|string',
-                    'name' => 'required|string',
-                    'phone' => 'required|digits:10',
-                    'fee_percent' => 'required|numeric',
-                    'formality' => 'required|string',
-                    'total_money' => 'required|numeric',
-                    'machine_id' => 'required|exists:machines,id',
-                    'collaborator_id' => 'nullable|exists:collaborators,id',
-                ];
+                return $rules;
 
             case 'complete':
                 return [

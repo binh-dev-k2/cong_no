@@ -75,9 +75,12 @@ class BusinessService extends BaseService
         DB::beginTransaction();
         try {
             $data = $this->calculateBusinessFee($data);
+            // logger($data);
+            if (!$data['is_stranger']) {
+                $card = Card::where('card_number', $data['card_number'])->first();
+                $data['bank_code'] = $card->bank->code;
+            }
 
-            $card = Card::where('card_number', $data['card_number'])->first();
-            $data['bank_code'] = $card->bank->code;
             $business = Business::create($data);
 
             $this->processBusinessMoney($business, $data);
@@ -211,14 +214,14 @@ class BusinessService extends BaseService
      */
     public function getMachineFeePercent($business)
     {
-        $firstNumber = (string)substr($business->card_number, 0, 1);
-        $firstTwoNumbers = (string)substr($business->card_number, 0, 2);
+        $firstNumber = (string) substr($business->card_number, 0, 1);
+        $firstTwoNumbers = (string) substr($business->card_number, 0, 2);
         $machine = $business->machine;
 
         switch ($firstNumber) {
             case '3':
                 // JCB cards have 16 digits, AMEX cards have 15 digits
-                if (strlen((string)$business->card_number) === 16) {
+                if (strlen((string) $business->card_number) === 16) {
                     return $machine->jcb_fee_percent;
                 } else {
                     return $machine->amex_fee_percent;

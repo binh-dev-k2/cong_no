@@ -285,9 +285,11 @@ const ModalManager = {
         // Remove existing event listeners
         $modal.off('hide.bs.modal submit');
         $modal.find('input[name="card_number"]').off('keyup');
+        $modal.find('input[name="account_name"]').off('keyup');
         $modal.off('click', '.search-card-results li');
         $modal.off('click', '.search-account-results li');
         $modal.off('change', 'select[name="machine_id"]');
+        $modal.off('change', 'input[name="is_stranger"]');
 
         // Modal close event
         $modal.on('hide.bs.modal', () => {
@@ -311,6 +313,33 @@ const ModalManager = {
 
         // Form submission
         ModalManager.bindFormSubmit($modal, modalType);
+
+        $modal.on('change', 'input[name="is_stranger"]', function () {
+            $modal.find('input[name="card_number"]').off('keyup');
+            $modal.find('input[name="account_name"]').off('keyup');
+            $modal.off('click', '.search-card-results li');
+            $modal.off('click', '.search-account-results li');
+            $modal.off('change', 'select[name="machine_id"]');
+
+            if ($(this).is(':checked')) {
+                $modal.on('keyup', 'input[name="card_number"]', function () {
+                    const card_number = $(this).val();
+                    ModalManager.filterMachines($modal, card_number);
+                })
+            } else {
+                // Card search
+                ModalManager.bindCardSearch($modal);
+
+                // Account search
+                ModalManager.bindAccountSearch($modal);
+
+                // Card selection
+                ModalManager.bindCardSelection($modal);
+
+                // Machine change
+                ModalManager.bindMachineChange($modal);
+            }
+        })
     },
 
     bindCardSearch: ($modal) => {
@@ -431,7 +460,8 @@ const ModalManager = {
             formality: $modal.find('input[name="formality"]:checked').val(),
             machine_id: $modal.find('select[name="machine_id"]').val(),
             collaborator_id: $modal.find('select[name="collaborator_id"]').val(),
-            total_money: parseInt($modal.find('input[name="total_money"]').val().replace(/[.,]/g, ''), 10)
+            total_money: parseInt($modal.find('input[name="total_money"]').val().replace(/[.,]/g, ''), 10),
+            is_stranger: $modal.find('input[name="is_stranger"]:checked').val() == 'on' ? true : false
         };
 
         if (modalType === 'add') {
@@ -455,7 +485,6 @@ const ModalManager = {
 
     renderSearchResults: ($results, cards) => {
         $results.empty();
-console.log($results);
 
         cards.forEach(card => {
             const image = `<img src="${card.bank.logo}" class="h-20px mb-1" style="min-width: 52px" alt="image"/>`;
@@ -642,6 +671,15 @@ const BusinessDataTable = {
     },
 
     renderCardInfo: (data, type, row) => {
+        if (row.is_stranger) {
+            return `
+            <div class="d-flex flex-column align-items-center">
+                <span>${BusinessUtils.formatNumber(row.card_number)}</span>
+                ${row?.machine ? `<span class="badge badge-success mt-1">Máy: ${row.machine.name}</span>` : ''}
+                ${row?.collaborator ? `<span class="badge badge-info mt-1">CTV: ${row.collaborator.name}</span>` : ''}
+            </div>
+        `;
+        }
         return `
             <div class="d-flex flex-column align-items-center">
                 <img src="${row.bank.logo}" loading="lazy" class="h-40px" alt="${row.bank.code}">
@@ -840,6 +878,14 @@ const BusinessDataTable = {
             $modal.find('input[name="phone"]').val(data.phone);
             $modal.find('input[name="fee_percent"]').val(data.fee_percent);
             $modal.find('input[name="total_money"]').val(data.total_money);
+            $modal.find('input[name="is_stranger"]').prop('checked', data.is_stranger);
+
+            if (data.is_stranger) {
+                $modal.on('keyup', 'input[name="card_number"]', function () {
+                    const card_number = $(this).val();
+                    ModalManager.filterMachines($modal, card_number);
+                })
+            }
 
             if (data.formality) {
                 $modal.find(`input[name="formality"][value="${data.formality}"]`).prop('checked', true);

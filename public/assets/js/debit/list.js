@@ -155,7 +155,7 @@ var DebitsList = function () {
                         request.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                     },
                     data: function (d) {
-                        d.search = $('input[data-kt-debit-table-filter]').val();
+                        d.search = $('#debit_search').val();
                         d.month = $('#debit_month').val();
                         d.year = $('#debit_year').val();
                     }

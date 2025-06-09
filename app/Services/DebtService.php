@@ -90,12 +90,12 @@ class DebtService
             $phoneArray[] = $item['phone'];
             $sumAmount = $item['status'] === Debt::STATUS_PAID
                 ? Debt::where('status', Debt::STATUS_PAID)
-                ->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year ?? Carbon::now()->year)
+                ->whereMonth('updated_at', $month)
+                ->whereYear('updated_at', $year ?? Carbon::now()->year)
                 ->where('phone', $item['phone'])
                 ->sum('total_amount')
                 : Debt::where('status', Debt::STATUS_UNPAID)
-                ->whereYear('created_at', $year ?? Carbon::now()->year)
+                ->whereYear('updated_at', $year ?? Carbon::now()->year)
                 ->where('phone', $item['phone'])
                 ->sum('total_amount');
 

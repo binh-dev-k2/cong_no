@@ -102,7 +102,6 @@ class CardService
 
     public function findBySearch(array $data)
     {
-        logger()->info(json_encode($data));
         if (array_key_exists('card_search', $data)) {
             return Card::where('card_number', 'like', '%' . $data['card_search'] . '%')->with(['customer', 'bank'])->get();
         }

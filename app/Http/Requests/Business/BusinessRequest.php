@@ -38,8 +38,6 @@ class BusinessRequest extends FormRequest
             'total_money' => 'required|numeric',
             'machine_id' => 'required|exists:machines,id',
             'collaborator_id' => 'nullable|exists:collaborators,id',
-            'business_setting_key' => 'required|string|exists:business_settings,key',
-            'business_setting_type' => 'required|string|in:MONEY,PERCENT',
         ];
 
         if ($action === 'store' || $action === 'update') {
@@ -52,10 +50,17 @@ class BusinessRequest extends FormRequest
 
         switch ($action) {
             case 'store':
-                return $rules;
+                return [
+                    ...$rules,
+                    'business_setting_key' => 'required|string|exists:business_settings,key',
+                    'business_setting_type' => 'required|string|in:MONEY,PERCENT',
+                ];
 
             case 'update':
-                return $rules;
+                return [
+                    ...$rules,
+                    'id' => 'required|exists:businesses,id',
+                ];
 
             case 'complete':
                 return [

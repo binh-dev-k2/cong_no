@@ -536,12 +536,17 @@ const BusinessDataTable = {
     },
 
     initTable: async () => {
-        BusinessDataTable.instance = $(BusinessConstants.SELECTORS.BUSINESS_TABLE).DataTable({
+        // Check if device is mobile
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Base DataTable configuration
+        const config = {
             lengthMenu: [10, 20, 50, 100],
             pageLength: 50,
             ordering: false,
             processing: true,
             serverSide: true,
+            scrollX: true,
             ajax: {
                 url: routes.datatable,
                 type: "POST",
@@ -553,7 +558,17 @@ const BusinessDataTable = {
                 }
             },
             columnDefs: BusinessDataTable.getColumnDefinitions()
-        });
+        };
+
+        // Only add fixedColumns if not mobile
+        if (!isMobile) {
+            config.fixedColumns = {
+                leftColumns: 0,
+                rightColumns: 1
+            };
+        }
+
+        BusinessDataTable.instance = $(BusinessConstants.SELECTORS.BUSINESS_TABLE).DataTable(config);
 
         // Re-init functions on table draw
         BusinessDataTable.instance.on('draw', () => {
@@ -623,9 +638,12 @@ const BusinessDataTable = {
         // Business money columns (7-12)
         ...Array.from({ length: 6 }, (_, i) => ({
             targets: 7 + i,
-            data: `money.${i}`,
+            data: null,
             orderable: false,
-            render: (data) => BusinessDataTable.renderBusinessMoneyElement(data, i)
+            render: (data, type, row) => {
+                const moneyData = row.money && row.money[i] ? row.money[i] : null;
+                return BusinessDataTable.renderBusinessMoneyElement(moneyData, i);
+            }
         })),
         // Pay extra column
         {
@@ -639,7 +657,7 @@ const BusinessDataTable = {
             targets: -1,
             data: null,
             orderable: false,
-            className: 'text-center min-w-150px',
+            className: 'text-center min-w-125px',
             render: BusinessDataTable.renderActions
         }
     ],

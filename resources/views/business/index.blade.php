@@ -77,7 +77,8 @@
             <!-- Main Business Card -->
             <div class="card shadow-sm">
                 <div class="card-header bg-light-primary">
-                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
+                    <div
+                        class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center w-100 gap-3">
                         <div class="flex-grow-1">
                             <h3 class="card-title text-primary fw-bold fs-3 mb-0">
                                 Danh sách nghiệp vụ
@@ -114,26 +115,26 @@
                         <table class="table table-bordered table-hover align-middle fs-6" id="business_table">
                             <thead class="table-primary">
                                 <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-center min-w-75px">Ngày tạo</th>
-                                <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
-                                <th class="text-center min-w-125px">Số thẻ</th>
-                                <th class="text-center min-w-50px">Phí (%)</th>
-                                <th class="text-center min-w-100px">Số tiền</th>
-                                <th class="text-center min-w-75px">Hình thức</th>
-                                <th class="text-center">Phí</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Tiền - Ghi chú</th>
-                                <th class="text-center min-w-125px">Trả thêm</th>
-                                <th class="text-center min-w-100px">Hành động</th>
-                            </tr>
-                        </thead>
+                                    <th class="text-center min-w-75px">Ngày tạo</th>
+                                    <th class="text-center min-w-125px">Chủ thẻ/Khách</th>
+                                    <th class="text-center min-w-125px">Số thẻ</th>
+                                    <th class="text-center min-w-50px">Phí (%)</th>
+                                    <th class="text-center min-w-100px">Số tiền</th>
+                                    <th class="text-center min-w-75px">Hình thức</th>
+                                    <th class="text-center">Phí</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Tiền - Ghi chú</th>
+                                    <th class="text-center min-w-125px">Trả thêm</th>
+                                    <th class="text-center min-w-125px bg-light-primary">Hành động</th>
+                                </tr>
+                            </thead>
                             <tbody class="fw-semibold text-gray-700">
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

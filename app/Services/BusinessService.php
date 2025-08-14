@@ -10,31 +10,30 @@ use App\Models\Debt;
 use App\Models\MachineBusinessFee;
 use App\Models\CollaboratorBusinessFee;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class BusinessService extends BaseService
 {
-    /**
-     * Filter businesses for datatable
-     *
-     * @param array $data
-     * @return array
-     */
     public function filterDatatable(array $data)
     {
-        $pageNumber = ($data['start'] ?? 0) / ($data['length'] ?? 1) + 1;
-        $pageLength = $data['length'] ?? 50;
-        $skip = ($pageNumber - 1) * $pageLength;
+        $start = $data['start'] ?? 0;
+        $length = $data['length'] ?? 50;
+        $pageNumber = ($start / $length) + 1;
+        $skip = ($pageNumber - 1) * $length;
 
         $query = Business::query();
 
         if (isset($data['search'])) {
             $search = $data['search'];
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('card_number', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('card_number', 'like', "%{$search}%");
+            });
         }
 
         $query->orderBy('id', 'desc');
+
         $recordsFiltered = $recordsTotal = $query->count();
 
         $businesses = $query->skip($skip)
@@ -44,14 +43,12 @@ class BusinessService extends BaseService
                     $query->where('money', '!=', 0);
                 }
             ])
-            ->take($pageLength)
+            ->take($length)
             ->get();
 
-        $moneyRecordCount = $businesses->max('money_count');
-
-        $businesses->map(function ($business) {
+        $businesses->transform(function ($business) {
             $isPaid = $business->money->where('is_note_checked', false);
-            $business->is_paid = count($isPaid) > 0 ? false : true;
+            $business->is_paid = $isPaid->isEmpty();
             return $business;
         });
 
@@ -60,230 +57,204 @@ class BusinessService extends BaseService
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
             'data' => $businesses,
-            'money_record_count' => $moneyRecordCount
+            'money_record_count' => $businesses->max('money_count')
         ];
     }
 
-    /**
-     * Store a new business
-     *
-     * @param array $data
-     * @return bool
-     */
     public function store(array $data)
     {
-        DB::beginTransaction();
         try {
-            $data = $this->calculateBusinessFee($data);
-            // logger($data);
-            if (!$data['is_stranger']) {
-                $card = Card::where('card_number', $data['card_number'])->first();
-                $data['bank_code'] = $card->bank->code;
-            }
+            return DB::transaction(function () use ($data) {
+                $data = $this->calculateBusinessFee($data);
 
-            $business = Business::create($data);
+                if (empty($data['is_stranger'])) {
+                    $data['bank_code'] = $this->getCardBankCode($data['card_number']);
+                }
 
-            $this->processBusinessMoney($business, $data);
-            $this->updateTotalInvestment($business->id);
+                $business = Business::create($data);
 
-            DB::commit();
-            return true;
+                $this->processBusinessMoney($business, $data);
+                $this->updateTotalInvestment($business->id);
+
+                return true;
+            });
         } catch (\Throwable $th) {
             $this->handleException($th);
-            DB::rollBack();
             return false;
         }
     }
 
-    /**
-     * Calculate business fee based on formality
-     *
-     * @param array $data
-     * @return array
-     */
+    private function getCardBankCode(string $cardNumber): ?string
+    {
+        if (empty($cardNumber)) {
+            return null;
+        }
+
+        $card = Card::where('card_number', $cardNumber)->with('bank')->first();
+        return $card && $card->bank ? $card->bank->code : null;
+    }
+
     private function calculateBusinessFee(array $data)
     {
-        switch ($data['formality']) {
-            case 'R':
-                $fee = (float) ($data['total_money'] * $data['fee_percent'] / 100);
-                $data['fee'] = (float) ($data['total_money'] - $fee);
-                break;
+        $totalMoney = (float) ($data['total_money'] ?? 0);
+        $feePercent = (float) ($data['fee_percent'] ?? 0);
+        $formality = $data['formality'] ?? null;
 
-            default:
-                $data['fee'] = (float) ($data['total_money'] * $data['fee_percent'] / 100);
-                break;
+        if ($formality === 'R') {
+            $fee = $totalMoney * $feePercent / 100.0;
+            $data['fee'] = (float) ($totalMoney - $fee);
+        } else {
+            $data['fee'] = (float) ($totalMoney * $feePercent / 100.0);
         }
 
         return $data;
     }
 
-    /**
-     * Process business money based on settings
-     *
-     * @param Business $business
-     * @param array $data
-     * @return void
-     */
     private function processBusinessMoney(Business $business, array $data)
     {
-        $businessMoneySetting = BusinessSetting::where('type', $data['business_setting_type'])
-            ->where('key', $data['business_setting_key'])
+        $type = $data['business_setting_type'] ?? null;
+        $key = $data['business_setting_key'] ?? null;
+
+        if (empty($type) || empty($key)) {
+            return;
+        }
+
+        $businessMoneySetting = BusinessSetting::where('type', $type)
+            ->where('key', $key)
             ->pluck('value')
             ->toArray();
 
-        switch ($data['business_setting_type']) {
-            case 'MONEY':
-                $minRangeMoney = (int) min($businessMoneySetting);
-                $maxRangeMoney = (int) max($businessMoneySetting);
+        if (empty($businessMoneySetting)) {
+            return;
+        }
 
-                $this->calculateFee($business->id, $data['total_money'], $minRangeMoney, $maxRangeMoney);
+        switch ($type) {
+            case 'MONEY':
+                $minRange = (int) min($businessMoneySetting);
+                $maxRange = (int) max($businessMoneySetting);
+
+                $this->calculateFee($business->id, $data['total_money'], $minRange, $maxRange);
                 break;
 
             case 'PERCENT':
                 $this->processPercentBasedMoney($business->id, $data['total_money'], $businessMoneySetting);
                 break;
+
+            default:
+                break;
         }
     }
 
-    /**
-     * Process percent-based money calculation
-     *
-     * @param int $businessId
-     * @param float $totalMoney
-     * @param array $businessMoneySetting
-     * @return void
-     */
     private function processPercentBasedMoney(int $businessId, float $totalMoney, array $businessMoneySetting)
     {
         BusinessMoney::where('business_id', $businessId)->delete();
-        $moneyData = [];
 
-        foreach ($businessMoneySetting as $bsm) {
-            $fee = $totalMoney * $bsm / 100;
-            $moneyData[] = $this->createMoneyData($businessId, $fee);
+        $moneyData = array_map(function ($percent) use ($businessId, $totalMoney) {
+            $fee = $totalMoney * ((float) $percent) / 100.0;
+            return $this->createMoneyData($businessId, (int) round($fee));
+        }, $businessMoneySetting);
+
+        if (!empty($moneyData)) {
+            BusinessMoney::insert($moneyData);
         }
-
-        BusinessMoney::insert($moneyData);
     }
 
-    /**
-     * Update a business
-     *
-     * @param array $data
-     * @return bool
-     */
     public function update(array $data)
     {
-        $business = Business::findOrFail($data['id']);
-        $data = $this->calculateBusinessFee($data);
+        return DB::transaction(function () use ($data) {
+            $business = Business::findOrFail($data['id']);
+            $data = $this->calculateBusinessFee($data);
 
-        return $business->update($data);
+            return $business->update($data);
+        });
     }
 
-    /**
-     * Update total investment
-     *
-     * @param int $businessId
-     * @param float|null $plusMoney
-     * @return bool|false
-     */
-    public function updateTotalInvestment($businessId, $plusMoney = null)
+    public function updateTotalInvestment(int $businessId, ?float $plusMoney = null)
     {
         $totalInvestment = Setting::where('key', 'total_investment')->first();
-        if (!$totalInvestment || now()->lt('2025-06-01')) {
+        if (!$totalInvestment) {
             return false;
         }
 
         if (is_numeric($plusMoney)) {
-            $totalInvestment->value += (float) $plusMoney;
+            $totalInvestment->value = (float) $totalInvestment->value + (float) $plusMoney;
         } else {
             $business = Business::findOrFail($businessId);
-            if ($business->created_at->gte('2025-06-01')) {
-                $totalInvestment->value -= (float) $business->total_money;
-            }
+            $totalInvestment->value -= (float) $business->total_money;
         }
 
-        return $totalInvestment->save();
+        return (bool) $totalInvestment->save();
     }
 
-    /**
-     * Get machine fee percent based on card number
-     *
-     * @param Business $business
-     * @return float
-     */
-    public function getMachineFeePercent($business)
+    public function getMachineFeePercent(Business $business)
     {
-        $firstNumber = (string) substr($business->card_number, 0, 1);
-        $firstTwoNumbers = (string) substr($business->card_number, 0, 2);
+        $cardNumber = (string) $business->card_number;
+        $firstNumber = $cardNumber[0] ?? '';
+        $firstTwo = (int) substr($cardNumber, 0, 2);
         $machine = $business->machine;
+
+        if (!$machine) {
+            return 0.0;
+        }
 
         switch ($firstNumber) {
             case '3':
                 // JCB cards have 16 digits, AMEX cards have 15 digits
-                if (strlen((string) $business->card_number) === 16) {
-                    return $machine->jcb_fee_percent;
-                } else {
-                    return $machine->amex_fee_percent;
-                }
+                $len = strlen($cardNumber);
+                return $len === 16 ? (float) $machine->jcb_fee_percent : (float) $machine->amex_fee_percent;
 
             case '4': // VISA
-                return $machine->visa_fee_percent;
+                return (float) $machine->visa_fee_percent;
 
-            case '5': // MasterCard
-                // MasterCard numbers start with 50-55
-                if ($firstTwoNumbers >= '50' && $firstTwoNumbers <= '55') {
-                    return $machine->master_fee_percent;
-                }
-                return 0;
+            case '5': // MasterCard range 50-55
+                return ($firstTwo >= 50 && $firstTwo <= 55) ? (float) $machine->master_fee_percent : 0.0;
 
             case '6':
             case '7':
-                return $machine->visa_fee_percent;
+                return (float) $machine->visa_fee_percent;
 
             case '9': // NAPAS
-                return $machine->napas_fee_percent;
+                return (float) $machine->napas_fee_percent;
+
+            default:
+                return 0.0;
         }
-        return 0;
     }
 
-    /**
-     * Complete a business transaction
-     *
-     * @param int $id
-     * @return bool
-     */
-    public function complete($id)
+    public function complete(int $id): bool
     {
-        DB::beginTransaction();
         try {
-            $business = Business::where('id', $id)->with(['card', 'machine'])->first();
+            return DB::transaction(function () use ($id) {
+                $business = Business::with(['card', 'machine', 'collaborator'])->findOrFail($id);
 
-            $this->createDebtFromBusiness($business);
-            $this->processBusinessFees($business);
+                $this->createDebtFromBusiness($business);
+                $this->processBusinessFees($business);
 
-            // Calculate money back after deducting machine fee
-            $moneyBack = (float) ($business->total_money - ($business->total_money * $this->getMachineFeePercent($business) / 100));
-            $this->updateTotalInvestment($business->id, $moneyBack);
+                // Calculate money back after deducting machine fee
+                $machinePercent = $this->getMachineFeePercent($business);
+                $moneyBack = (float) ($business->total_money - ($business->total_money * $machinePercent / 100.0));
 
-            $business->delete();
-            DB::commit();
-            return true;
+                $this->updateTotalInvestment($business->id, $moneyBack);
+
+                $business->delete();
+
+                return true;
+            });
         } catch (\Throwable $th) {
             $this->handleException($th);
-            DB::rollBack();
             return false;
         }
     }
 
-    /**
-     * Create debt record from business
-     *
-     * @param Business $business
-     * @return void
-     */
     private function createDebtFromBusiness(Business $business)
     {
+        $fee = (float) ($business->fee ?? 0);
+        $payExtra = (float) ($business->pay_extra ?? 0);
+
+        if ($business->formality === 'R') {
+            $fee = (float) ($business->total_money * ($business->fee_percent ?? 0) / 100.0);
+        }
+
         $debtData = [
             'account_name' => $business->account_name,
             'name' => $business->name,
@@ -291,155 +262,105 @@ class BusinessService extends BaseService
             'card_number' => $business->card_number,
             'total_money' => $business->total_money,
             'formality' => $business->formality,
-            'fee' => $business->fee ?? 0,
-            'pay_extra' => $business->pay_extra ?? 0,
+            'fee' => $fee,
+            'pay_extra' => $payExtra,
             'status' => Debt::STATUS_UNPAID,
-            'total_amount' => ($business->fee ?? 0) + ($business->pay_extra ?? 0),
-            'business_id' => $business->id
+            'total_amount' => $fee + $payExtra,
+            'business_id' => $business->id,
         ];
-
-        if ($business->formality == 'R') {
-            $debtData['fee'] = (float) ($business->total_money * ($business->fee_percent ?? $business->card->fee_percent) / 100);
-            $debtData['total_amount'] = $debtData['fee'] + ($business->pay_extra ?? 0);
-        }
 
         Debt::create($debtData);
     }
 
-    /**
-     * Process business fees for machine and collaborator
-     *
-     * @param Business $business
-     * @return void
-     */
     private function processBusinessFees(Business $business)
     {
-        if ($business->machine) {
+        if ($business->machine_id) {
             $this->createMachineFee($business);
         }
 
-        if ($business->collaborator) {
+        if ($business->collaborator_id) {
             $this->createCollaboratorFee($business);
         }
     }
 
-    /**
-     * Create machine fee record
-     *
-     * @param Business $business
-     * @return void
-     */
     private function createMachineFee(Business $business)
     {
+        $machinePercent = $this->getMachineFeePercent($business);
+        $feePercent = (float) ($business->fee_percent ?? 0);
+
         MachineBusinessFee::create([
             'machine_id' => $business->machine_id,
             'total_money' => $business->total_money,
-            'fee' => (float) ($business->total_money * ($business->fee_percent - $this->getMachineFeePercent($business)) / 100),
+            'fee' => (float) ($business->total_money * ($feePercent - $machinePercent) / 100.0),
             'month' => now()->month,
             'year' => now()->year
         ]);
     }
 
-    /**
-     * Create collaborator fee record
-     *
-     * @param Business $business
-     * @return void
-     */
     private function createCollaboratorFee(Business $business)
     {
+        $collabPercent = (float) ($business->collaborator->fee_percent ?? 0);
+        $feePercent = (float) ($business->fee_percent ?? 0);
+
         CollaboratorBusinessFee::create([
             'collaborator_id' => $business->collaborator_id,
             'total_money' => $business->total_money,
-            'fee' => (float) ($business->total_money * ($business->fee_percent - $business->collaborator->fee_percent) / 100),
+            'fee' => (float) ($business->total_money * ($feePercent - $collabPercent) / 100.0),
             'month' => now()->month,
             'year' => now()->year
         ]);
     }
 
-    /**
-     * Update business pay extra
-     *
-     * @param array $data
-     * @return bool
-     */
     public function updatePayExtra($data)
     {
-        return Business::findOrFail($data['id'])->update(['pay_extra' => $data['pay_extra']]);
+        $business = Business::findOrFail($data['id']);
+        return (bool) $business->update(['pay_extra' => $data['pay_extra'] ?? 0]);
     }
 
-    /**
-     * Update or create business money
-     *
-     * @param array $data
-     * @return bool
-     */
-    public function updateBusinessMoney($data)
+    public function updateBusinessMoney(array $data): bool
     {
-        if ($data['id']) {
-            return BusinessMoney::findOrFail($data['id'])->update([
-                'money' => $data['money'] ?? 0,
-                'is_money_checked' => $data['is_money_checked'],
-                'note' => $data['note'] ?? '',
-                'is_note_checked' => $data['is_note_checked'],
-            ]);
+        $payload = [
+            'money' => $data['money'] ?? 0,
+            'is_money_checked' => $data['is_money_checked'] ?? false,
+            'note' => $data['note'] ?? '',
+            'is_note_checked' => $data['is_note_checked'] ?? false,
+        ];
+
+        if (!empty($data['id'])) {
+            return (bool) BusinessMoney::findOrFail($data['id'])->update($payload);
         }
 
-        return BusinessMoney::create([
-            'business_id' => $data['business_id'],
-            'money' => $data['money'] ?? 0,
-            'is_money_checked' => $data['is_money_checked'],
-            'note' => $data['note'] ?? '',
-            'is_note_checked' => $data['is_note_checked'],
-        ]);
+        $payload['business_id'] = $data['business_id'];
+        return (bool) BusinessMoney::create($payload);
     }
 
-    /**
-     * Generate random money within range
-     *
-     * @param int $min
-     * @param int $max
-     * @return int
-     */
-    public function randomMoney($min, $max)
+    public function randomMoney(int $min, int $max): int
     {
         return random_int($min, $max);
     }
 
-    /**
-     * Calculate fee distribution
-     *
-     * @param int $businessId
-     * @param float $totalMoney
-     * @param int $minRangeMoney
-     * @param int $maxRangeMoney
-     * @return bool
-     */
-    public function calculateFee($businessId, $totalMoney, $minRangeMoney, $maxRangeMoney)
+    public function calculateFee(int $businessId, float $totalMoney, int $minRangeMoney, int $maxRangeMoney)
     {
         BusinessMoney::where('business_id', $businessId)->delete();
         $data = [];
 
-        while ($totalMoney > 0) {
-            $randomMoney = $this->randomMoney($minRangeMoney, $maxRangeMoney);
-            if ($totalMoney >= $randomMoney) {
-                $data[] = $this->createMoneyData($businessId, $randomMoney);
-                $totalMoney -= $randomMoney;
+        $remaining = (int) round($totalMoney);
+
+        while ($$remaining > 0) {
+            $rand = $this->randomMoney($minRangeMoney, $maxRangeMoney);
+
+            if ($remaining >= $rand) {
+                $data[] = $this->createMoneyData($businessId, $rand);
+                $remaining -= $rand;
             } else {
-                $totalMoney = $this->distributeRemainingMoney($data, $businessId, $totalMoney, $maxRangeMoney);
+                // try to distribute the remainder into existing entries
+                $remaining = $this->distributeRemainingMoney($data, $businessId, $remaining, $maxRangeMoney);
             }
         }
 
-        return BusinessMoney::insert($data);
+        return !empty($data) ? (bool) BusinessMoney::insert($data) : false;
     }
 
-    /**
-     * Create money data array
-     *
-     * @param int $businessId
-     * @param int $money
-     * @return array
-     */
     private function createMoneyData(int $businessId, int $money): array
     {
         return [
@@ -447,20 +368,11 @@ class BusinessService extends BaseService
             'money' => $money,
             'is_money_checked' => false,
             'is_note_checked' => false,
-            'created_at' => now('Asia/Ho_Chi_Minh'),
+            'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
         ];
     }
 
-    /**
-     * Distribute remaining money among existing entries
-     *
-     * @param array $data
-     * @param int $businessId
-     * @param int $remainingMoney
-     * @param int $max
-     * @return int
-     */
-    private function distributeRemainingMoney(array &$data, int $businessId, int $remainingMoney, $max): int
+    private function distributeRemainingMoney(array &$data, int $businessId, int $remainingMoney, int $max): int
     {
         foreach ($data as &$entry) {
             if ($entry['money'] + $remainingMoney <= $max) {
@@ -473,27 +385,15 @@ class BusinessService extends BaseService
         return 0;
     }
 
-    /**
-     * Delete a business
-     *
-     * @param int $id
-     * @return bool
-     */
     public function delete($id)
     {
         $business = Business::findOrFail($id);
-        $this->updateTotalInvestment($business->id, $business->total_money);
+        $this->updateTotalInvestment($business->id, (float) $business->total_money);
         return $business->delete();
     }
 
-    /**
-     * Update business note
-     *
-     * @param array $data
-     * @return mixed
-     */
     public function updateNote($data)
     {
-        return Setting::updateOrCreate(['key' => 'business_note'], ['value' => $data['business_note']]);
+        return Setting::updateOrCreate(['key' => 'business_note'], ['value' => $data['business_note'] ?? '']);
     }
 }

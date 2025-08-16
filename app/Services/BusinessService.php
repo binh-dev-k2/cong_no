@@ -346,7 +346,7 @@ class BusinessService extends BaseService
 
         $remaining = (int) round($totalMoney);
 
-        while ($$remaining > 0) {
+        while ($remaining > 0) {
             $rand = $this->randomMoney($minRangeMoney, $maxRangeMoney);
 
             if ($remaining >= $rand) {

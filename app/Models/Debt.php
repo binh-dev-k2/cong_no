@@ -11,7 +11,7 @@ class Debt extends Model
 {
     use HasFactory;
     use LogActivityTrait;
-    
+
     protected $table = "debts";
 
     protected $guarded = ['id'];
@@ -32,5 +32,10 @@ class Debt extends Model
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class, 'formality', 'formality');
+    }
+
+    public function machine(): BelongsTo
+    {
+        return $this->belongsTo(Machine::class, 'machine_id', 'id');
     }
 }

@@ -209,6 +209,7 @@ var DebitsList = function () {
                             return `<div class="d-flex flex-column align-items-center">
                                     ${row.card ? `<img src="${row?.card.bank.logo}" class="h-30px" alt="${row?.card.bank.code}">` : '<div class="text-center text-danger">Không có ngân hàng</div>'}
                                         ${formatNumber(row.card_number)}
+                                        ${row.machine_id ? `<span class="badge bg-success">Máy: ${row.machine.name}</span>` : ''}
                                     </div>
                                     `;
                         }

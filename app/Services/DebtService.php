@@ -18,7 +18,7 @@ class DebtService
         $skip = ($pageNumber - 1) * $pageLength;
 
         $query = Debt::query()
-            ->with(['card.bank']);
+            ->with(['card.bank', 'machine']);
 
         if (isset($data['search'])) {
             $search = $data['search'];

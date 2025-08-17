@@ -267,6 +267,7 @@ class BusinessService extends BaseService
             'status' => Debt::STATUS_UNPAID,
             'total_amount' => $fee + $payExtra,
             'business_id' => $business->id,
+            'machine_id' => $business->machine_id,
         ];
 
         Debt::create($debtData);

@@ -274,11 +274,12 @@
                             return [displayKey, value == 1 ? 'Có' : 'Không'];
                         }
 
-                        if (key === 'fee') {
-                            return [displayKey, formatNumber(value)];
+                        if (key === 'fee' || key === 'total_money' || key === 'pay_extra' || key ===
+                            'money') {
+                            return [displayKey, value ? formatNumber(value) : ''];
                         }
 
-                        return [displayKey, value];
+                        return [displayKey, value ? value : ''];
                     })
                 );
             }

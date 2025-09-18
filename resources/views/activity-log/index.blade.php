@@ -196,6 +196,12 @@
             loadStatistics();
             bindEvents();
 
+            function formatNumber(number) {
+                const str = number.toString();
+                const formattedStr = str.replace(/(.{4})/g, '$1 ');
+                return formattedStr.trim();
+            }
+
             // Format time function
             function formatTime(time) {
                 const dateTime = new Date(time);

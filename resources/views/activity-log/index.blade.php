@@ -196,10 +196,12 @@
             loadStatistics();
             bindEvents();
 
-            function formatNumber(number) {
-                const str = number.toString();
-                const formattedStr = str.replace(/(.{4})/g, '$1 ');
-                return formattedStr.trim();
+            function formatMoney(amount) {
+                return amount?.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    })
+                    .replaceAll('.', ',').slice(0, -1) ?? 0;
             }
 
             // Format time function
@@ -276,7 +278,7 @@
 
                         if (key === 'fee' || key === 'total_money' || key === 'pay_extra' || key ===
                             'money') {
-                            return [displayKey, value ? formatNumber(value) : ''];
+                            return [displayKey, value ? formatMoney(value) : ''];
                         }
 
                         return [displayKey, value ? value : ''];
